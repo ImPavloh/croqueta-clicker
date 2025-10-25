@@ -1,0 +1,16 @@
+.navbar{
+    display: flex;
+    background: #b4b4b4;
+    padding: 10px;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.nav-button{
+    display: flex;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #707070;
+}

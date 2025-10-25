@@ -10,4 +10,5 @@ export const routes: Routes = [
     { path: 'stats', component: Stats },
     { path: 'options', component: Options },
     { path: 'skins', component: Skins },
+    { path: '**', redirectTo: '' }
 ];
