@@ -1,0 +1,80 @@
+import { Component, Input } from '@angular/core';
+import { PointsService } from '../../services/points';
+import { NgClass } from '@angular/common';
+
+@Component({
+  selector: 'app-producer',
+  imports: [NgClass],
+  templateUrl: './producer.html',
+  styleUrl: './producer.css',
+})
+export class Producer {
+  constructor(public pointsService: PointsService) {}
+
+  // ID del productor
+  @Input() id: number = 0;
+  // Nombre del productor
+  @Input() name: string = '';
+  // Imagen del productor
+  @Input() image: string = '';
+  // Costo base del productor
+  @Input() priceBase: number = 1;
+  // Multiplicador de costo del productor
+  @Input() priceMult: number = 1.05;
+  // Puntos base generados por el productor
+  @Input() pointsBase: number = 3;
+  // Suma de puntos generados por el productor
+  @Input() pointsSum: number = 1;
+
+
+  quantity: number = 0;
+  price: number = 0;
+  points: number = 0;
+
+  ngOnInit() {
+    this.loadFromStorage();
+    this.price = this.calculatePrice(this.quantity);
+    this.points = this.calculatePoints(this.quantity);
+  }
+
+  // Método para calcular el precio actual del productor
+  calculatePrice(quantity: number): number {
+    return Math.floor(this.priceBase * Math.pow(this.priceMult, quantity));
+  }
+
+  // Método para calcular los puntos generados por el productor
+  calculatePoints(quantity: number): number {
+    return this.pointsBase + this.pointsSum * quantity;
+  }
+
+  // Método para comprar el productor
+  buyProducer() {
+    console.log('Buying producer:', this.name);
+    const cost = this.calculatePrice(this.quantity);
+    if (this.pointsService.points() >= cost) {
+      this.pointsService.substractPoints(cost);
+      this.pointsService.upgradePointsPerSecond(this.pointsService.pointsPerSecond() + this.calculatePoints(this.quantity));
+      this.quantity += 1;
+      this.price = this.calculatePrice(this.quantity);
+      this.points = this.calculatePoints(this.quantity);
+      this.saveToStorage();
+      this.pointsService.saveToStorage();
+    }
+  }
+
+  // persistencia simple en localStorage
+  loadFromStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // cargar puntos
+    const points = localStorage.getItem('producer_' + this.id + '_quantity');
+    if (points) this.quantity = (Number(points) || 0);
+  }
+
+  saveToStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // guardar puntos
+    localStorage.setItem('producer_' + this.id + '_quantity', String(this.quantity));
+  }
+}

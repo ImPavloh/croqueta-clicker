@@ -9,32 +9,52 @@ export class PointsService {
   private _pointsPerSecond = signal<number>(0);
   private _pointsPerClick = signal<number>(1);
   private _multiply = signal<number>(1);
-  private _substract = signal<number>(0);
 
   // getter público (read-only signal)
   readonly points = this._points.asReadonly();
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
   readonly multiply = this._multiply.asReadonly();
-  readonly substract = this._substract.asReadonly();
 
-  // métodos
+  constructor() {
+    // Solo ejecutar en navegador
+    if (typeof window !== 'undefined') {
+      // Llamar addPointPerSecond cada segundo
+      setInterval(() => this.addPointPerSecond(), 1000);
+
+      // Detectar F12 y llamar reset
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'F10') {
+          this.resetStorage();
+          window.location.reload();
+        }
+      });
+    }
+  }
+
+
+  // métodos para modificar el estado
+  // añadir puntos
   addPointsPerClick() {
     this._points.update((v) => v + this.pointsPerClick() * this.multiply());
   }
-  upgradePointPerClick(newPoints: number) {
-    this._pointsPerClick.set(newPoints);
+  // añadir puntos por segundo
+  addPointPerSecond() {
+    this._points.update((v) => v + this.pointsPerSecond());
   }
-  addPointsPerSecond() {
-    this._points.update((v) => v + (this.pointsPerSecond() * this.multiply()) / 2);
+  // actualizar puntos por click
+  upgradePointPerClick(number: number) {
+    this._pointsPerClick.set(number);
   }
-  // TODO: Mirar como hacer la resta
-  substractPoints() {
-    this._points.update((v) => v - this.substract());
+  // actualizar puntos por segundo
+  upgradePointsPerSecond(number: number) {
+    this._pointsPerSecond.set(number);
   }
-  reset() {
-    this._points.set(0);
+  // restar puntos
+  substractPoints(number: number) {
+    this._points.update((v) => v - number);
   }
+  
 
   // TODO: Implementar lógica de puntos por click
 
@@ -67,5 +87,12 @@ export class PointsService {
     localStorage.setItem('pointsPerClick', String(this._pointsPerClick()));
     // guardar multipicador por click
     localStorage.setItem('multiply', String(this._multiply()));
+  }
+
+  resetStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // a la mierda tu partida 🗿
+    localStorage.clear();
   }
 }

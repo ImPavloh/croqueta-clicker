@@ -1,0 +1,14 @@
+<button (click)="buyProducer()" class="flex w-full p-3 items-center justify-between border border-gray-300 rounded-lg hover:bg-gray-100 "
+    [ngClass]="price > pointsService.points() ? 'cursor-not-allowed' : 'cursor-pointer'">
+    <div class="flex">
+        <img class="flex size-16" src="{{image}}" alt="{{name}}" />
+        <div class="flex flex-col items-start justify-center">
+            <p class="flex text-3xl">{{name}}</p>
+            <p [ngClass]="price > pointsService.points() ? 'text-red-500' : ''">{{price}} ¢</p>
+        </div>
+    </div>
+    <div class="flex flex-col items-end justify-center">
+        <p class="flex text-3xl">{{quantity}}</p>
+        <p class="flex">+{{points}} cp/s</p>
+    </div>
+</button>
