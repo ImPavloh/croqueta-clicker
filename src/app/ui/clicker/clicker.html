@@ -1,5 +1,5 @@
-<div class="clicker">
-  <button (click)="onClick()" class="croqueta">
-    🥐 +{{ pointsService.pointsPerClick() }}
-  </button>
+<div class="flex justify-center items-center h-full w-full">
+  <span (click)="onClick()" (keydown)="preventKey($event)" tabindex="-1" class="croqueta">
+    +{{ pointsService.pointsPerClick() }}
+  </span>
 </div>

@@ -1,7 +1,31 @@
-.clicker .croqueta {
-  padding: 12px 20px;
-  font-size: 1.2rem;
-  border-radius: 10px;
+.croqueta {
+  background: url('/images/croqueta.png') center/cover no-repeat;
+  background-size: contain;
+  width: 120px;
+  height: 120px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
   user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.croqueta:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+}
+
+.croqueta:active {
+  transform: scale(0.95);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
