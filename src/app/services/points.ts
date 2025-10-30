@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { FloatingService } from './floating.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class PointsService {
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
   readonly multiply = this._multiply.asReadonly();
 
-  constructor() {
+  constructor(private floatingService: FloatingService) {
     // Solo ejecutar en navegador
     if (typeof window !== 'undefined') {
       // Llamar addPointPerSecond cada segundo
@@ -32,15 +33,24 @@ export class PointsService {
     }
   }
 
-
   // métodos para modificar el estado
   // añadir puntos
   addPointsPerClick() {
-    this._points.update((v) => v + this.pointsPerClick() * this.multiply());
+    const amount = this.pointsPerClick() * this.multiply();
+    this._points.update((v) => v + amount);
+
+    // mostrar texto flotante junto a la croqueta
+    if (typeof window !== 'undefined' && amount > 0) {
+      this.floatingService.show('+' + amount);
+    }
   }
   // añadir puntos por segundo
   addPointPerSecond() {
-    this._points.update((v) => v + this.pointsPerSecond());
+    const amount = this.pointsPerSecond();
+    this._points.update((v) => v + amount);
+    if (typeof window !== 'undefined' && amount > 0) {
+      this.floatingService.show('+' + amount);
+    }
   }
   // actualizar puntos por click
   upgradePointPerClick(number: number) {
@@ -54,7 +64,6 @@ export class PointsService {
   substractPoints(number: number) {
     this._points.update((v) => v - number);
   }
-  
 
   // TODO: Implementar lógica de puntos por click
 

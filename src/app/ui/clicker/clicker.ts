@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PointsService } from '../../services/points';
+import { Floating } from '../floating/floating';
 
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule],
+  imports: [CommonModule, Floating],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
 })
