@@ -25,11 +25,14 @@ export class Producer {
   @Input() pointsBase: number = 3;
   // Suma de puntos generados por el productor
   @Input() pointsSum: number = 1;
+  // Descripción del productor
+  @Input() description: string = '';
 
 
   quantity: number = 0;
   price: number = 0;
   points: number = 0;
+  unlocked: boolean = true;
 
   ngOnInit() {
     this.loadFromStorage();

@@ -51,6 +51,7 @@ export class PointsService {
     if (typeof window !== 'undefined' && amount > 0) {
       this.floatingService.show('+' + amount);
     }
+    this.saveToStorage();
   }
   // actualizar puntos por click
   upgradePointPerClick(number: number) {
