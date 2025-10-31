@@ -10,7 +10,7 @@ export class PlayerStats {
   private _expPerClick = signal<number>(1);
   private _expToNext = signal<number>(0);
   private _currentExp = signal<number>(0);
-  private _achievements = signal<number>(0);
+  private _archivements = signal<number>(0);
   private _timePlaying = signal<number>(0);
 
   // getter público (read-only signal)
@@ -18,7 +18,7 @@ export class PlayerStats {
   readonly level = this._level.asReadonly();
   readonly currentExp = this._currentExp.asReadonly();
   readonly expPerClick = this._expPerClick.asReadonly();
-  readonly archivements = this._achievements.asReadonly();
+  readonly archivements = this._archivements.asReadonly();
   readonly timePlaying = this._timePlaying.asReadonly();
 
   //Constructor
@@ -88,4 +88,53 @@ export class PlayerStats {
   /**
    * TODO: archivements y timePlaying
    */
+
+  loadFromStorage(){
+    if (typeof localStorage == "undefined") return;
+
+    const epc = localStorage.getItem("expPerClick");
+    if (epc) this._expPerClick.set(Number(epc));
+
+    const etn = localStorage.getItem("expToNext");
+    if (etn) this._expToNext.set(Number(etn));
+
+    const arch = localStorage.getItem("archivements");
+    if (arch) this._archivements.set(Number(arch));
+
+    const lvl =localStorage.getItem("level");
+    if(lvl) this._level.set(Number(lvl));
+
+    const tc = localStorage.getItem("totalClicks");
+    if (tc) this._totalClicks.set(Number(tc));
+
+    const ce = localStorage.getItem("currentExp");
+    if (ce) this._currentExp.set(Number(ce));
+
+    const tp = localStorage.getItem("timePlaying");
+    if (tp) this._timePlaying.set(Number(tp));
+  }
+  saveToStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // guardar experiencia por click
+    localStorage.setItem('expPerClick', String(this._expPerClick()));
+    // guardar experiencia necesaria para el siguiente nivel
+    localStorage.setItem('expToNext', String(this._expToNext()));
+    // guardar logros
+    localStorage.setItem('archivements', String(this._archivements()));
+    // guardar mnivel
+    localStorage.setItem('level', String(this._level()));
+    // guardar los clicks totales realizados
+    localStorage.setItem('totalClicks', String(this._totalClicks()));
+    // guardar la experiencia actual
+    localStorage.setItem('currentExp', String(this._currentExp()));
+    // guardar el tiempo jugado
+    localStorage.setItem('timePlaying', String(this._timePlaying()));
+  }
+  resetStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // a la mierda tu partida 🗿
+    localStorage.clear();
+  }
 }

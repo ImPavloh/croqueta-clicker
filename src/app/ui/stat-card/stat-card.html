@@ -1,0 +1,36 @@
+<div class="stat-card">
+  <div class="stat-card__header">
+    @if (config.icon) {
+      <i [class]="config.icon"></i>
+    }
+    <h3>{{ config.title }}</h3>
+  </div>
+
+  @if (!loading) {
+    <div class="stat-card__value">
+      @switch (config.format) {
+        @case ('percentage') {
+          <span>{{ config.value | percent:'1.1-1' }}</span>
+        }
+        @case ('currency') {
+          <span>{{ config.value | currency:'EUR':'symbol':'1.0-0' }}</span>
+        }
+        @case ('number') {
+          <span>{{ config.value | number:'1.0-0' }}</span>
+        }
+        @case ('time') {
+          <span>{{ formatTime(config.value) }}</span>
+        }
+        @default {
+          <span>{{ config.value }}</span>
+        }
+      }
+    </div>
+  }
+
+  @if (config.description) {
+    <div class="stat-card__description">
+      {{ config.description }}
+    </div>
+  }
+</div>
