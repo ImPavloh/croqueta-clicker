@@ -1,5 +1,5 @@
 .floating-text {
-  z-index: 9999;
+  z-index: 100;
   position: absolute;
   left: 50%;
   top: 50%;

@@ -1,12 +1,17 @@
 <main>
-    <div class="main-container">
-        <div class="clicker-container">
-            <app-counter/>
-            <app-clicker/>
-        </div>
-        <div class="menu-container">
-            <app-navbar/>
-            <router-outlet/>
-        </div>
+  <div class="main-container">
+    @if (splashShown()) {
+    <span class="splash" (click)="hideSplash()"></span>
+    <span class="croqueta-splash"></span>
+    }
+
+    <div class="clicker-container">
+      <app-counter />
+      <app-clicker />
     </div>
+    <div class="menu-container">
+      <app-navbar />
+      <router-outlet />
+    </div>
+  </div>
 </main>
