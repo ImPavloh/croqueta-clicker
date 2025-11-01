@@ -1,11 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { PointsService } from '../../services/points.service';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-upgrade',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })
 export class Upgrade {
+  constructor(public pointsService: PointsService) {}
 
+  // ID de la mejora
+  @Input() id: number = 0;
+  // Nombre de la mejora
+  @Input() name: string = '';
+  // Imagen de la mejora
+  @Input() image: string = '';
+  // Precio de la mejora
+  @Input() price: number = 1;
+  // Clicks generados por la mejora
+  @Input() clicks: number = 3;
+
+  unlocked: boolean = true;
+  bought: boolean = false;
+
+  ngOnInit() {
+    this.loadFromStorage();
+  }
+
+  // Método para comprar la mejora
+  buyUpgrade() {
+    console.log('Buying upgrade:', this.name);
+    if (this.pointsService.points() >= this.price && !this.bought) {
+      this.pointsService.substractPoints(this.price);
+      this.pointsService.upgradePointPerClick(this.pointsService.pointsPerClick() + this.clicks);
+      this.bought = true;
+      this.saveToStorage();
+      this.pointsService.saveToStorage();
+    }
+  }
+
+  // persistencia simple en localStorage
+  loadFromStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // cargar estado de compra
+    const clicks = localStorage.getItem('upgrade_' + this.id + '_bought');
+    if (clicks) this.bought = (Boolean(clicks) || false);
+  }
+
+  saveToStorage() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // guardar estado de compra
+    localStorage.setItem('upgrade_' + this.id + '_bought', String(this.bought));
+  }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PointsService } from '../../services/points';
+import { PointsService } from '../../services/points.service';
 import { Floating } from '../floating/floating';
 
 @Component({

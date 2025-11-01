@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { Navbar } from './ui/navbar/navbar';
 import { Clicker } from './ui/clicker/clicker';
 import { Counter } from './ui/counter/counter';
-import { PointsService } from './services/points';
+import { PointsService } from './services/points.service';
 
 @Component({
   selector: 'app-root',

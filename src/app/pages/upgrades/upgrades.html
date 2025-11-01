@@ -1,18 +1,39 @@
 <!--upgrades-->
-<div>
-    <app-upgrade></app-upgrade>
+<div class="flex flex-row gap-2 p-2 overflow-x-auto">
+    <app-upgrade
+    [id]="1"
+    [name]="'Upgrade1'"
+    [image]="'/images/croqueta.png'"
+    [price]="200"
+    [clicks]="5"/>
+    <app-upgrade
+    [id]="2"
+    [name]="'Upgrade2'"
+    [image]="'/images/croqueta.png'"
+    [price]="1000"
+    [clicks]="50"/>
 </div>
+<hr>
 <!--producers-->
-<div>
+<div class="flex flex-col gap-2 p-2 overflow-y-auto">
     <app-producer
     [id]="1"
-    [name]="'Test'"
+    [name]="'Producer1'"
     [image]="'/images/croqueta.png'"
-    [priceBase]="20"
+    [priceBase]="50"
     [priceMult]="1.5"
     [pointsBase]="1"
-    [pointsSum]="2"
+    [pointsSum]="1"
     [description]="'pavloh me debe 500€, pagame matao'"/>
+    <app-producer
+    [id]="1"
+    [name]="'Producer2'"
+    [image]="'/images/croqueta.png'"
+    [priceBase]="2000"
+    [priceMult]="1.5"
+    [pointsBase]="20"
+    [pointsSum]="5"
+    [description]="'croquetas croquetas croquetas croquetas croquetas'"/>
 </div>
 
 

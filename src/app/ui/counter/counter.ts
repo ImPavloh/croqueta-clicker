@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PointsService } from '../../services/points';
+import { PointsService } from '../../services/points.service';
 
 @Component({
   selector: 'app-counter',

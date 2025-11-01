@@ -1,4 +1,4 @@
-import { PlayerStats } from './../../services/player-stats';
+import { PlayerStats } from '../../services/player-stats.service';
 import { Component } from '@angular/core';
 import { Stat } from '../../ui/stat/stat';
 import { StatCardComponent,StatCardConfig } from "../../ui/stat-card/stat-card";
@@ -11,7 +11,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './stats.css',
 })
 export class Stats {
-  constructor(public playerStats: PlayerStats){}
+  // He tenido que comentar todo esto porque sino da error al compilar, peldon
+  /*constructor(public playerStats: PlayerStats){}
 
   statConfig: StatCardConfig = {
     title: 'Clicks Totales',
@@ -19,5 +20,5 @@ export class Stats {
     description: 'En las últimas 24 horas',
     icon: 'person',
     format: 'number'
-  };
+  };*/
 }
