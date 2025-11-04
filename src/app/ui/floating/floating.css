@@ -13,11 +13,16 @@
 
   pointer-events: none;
   user-select: none;
+  -moz-user-select: none;
 
   transform: translateY(0);
   transform: translate(-50%, 0);
+  -moz-transform: translateY(0);
+  -moz-transform: translate(-50%, 0);
   transition: transform 900ms ease-out, opacity 900ms ease-out;
+  -moz-transition: -moz-transform 900ms ease-out, opacity 900ms ease-out;
   will-change: transform, opacity;
+  -moz-will-change: transform, opacity;
 
   animation: parriba 900ms ease-out forwards;
 }

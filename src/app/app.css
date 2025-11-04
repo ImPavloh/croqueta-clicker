@@ -36,6 +36,9 @@
     borderRadius 0.2s 2.3s linear forwards;
   will-change: top, height, padding, border-radius;
   -webkit-font-smoothing: antialiased;
+  -moz-box-sizing: initial;
+  animation: puff 0.5s 1.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards,
+    borderRadius 0.2s 2.3s linear forwards;
 }
 
 .croqueta-splash {
@@ -60,6 +63,10 @@
     materia 0.5s 2.5s cubic-bezier(0.86, 0, 0.07, 1) forwards, hide 2s 2.9s ease forwards;
   will-change: width, height, opacity, top, background, border-radius;
   -webkit-font-smoothing: antialiased;
+  -moz-filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+  animation: init 0.5s 0.2s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards,
+    moveDown 1s 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards,
+    materia 0.5s 2.5s cubic-bezier(0.86, 0, 0.07, 1) forwards, hide 2s 2.9s ease forwards;
 }
 
 @keyframes init {
