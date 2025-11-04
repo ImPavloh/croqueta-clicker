@@ -5,7 +5,7 @@
   background: #f3eac2;
   border-bottom: 1px solid #b86715;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+  
   padding: 10px;
   gap: 10px;
 }
@@ -19,4 +19,9 @@
 
   color: #8b4a00;
   border: 2px solid #b86715;
+}
+
+.navbar > app-newsline {
+  flex: 1 1 auto;   /* crecer, encoger, base automática */
+  min-width: 0;     /* CRUCIAL: permite que el elemento se reduzca */
 }

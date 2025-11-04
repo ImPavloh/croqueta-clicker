@@ -100,3 +100,32 @@
     filter: brightness(1);
   }
 }
+
+/* Skins */
+.croqueta-normal {
+  background-image: url('/assets/skins/croqueta-normal.png');
+}
+
+.croqueta-jamon {
+  background-image: url('/assets/skins/croqueta-jamon.png');
+}
+
+.croqueta-pollo {
+  background-image: url('/assets/skins/croqueta-pollo.png');
+}
+
+.croqueta-queso {
+  background-image: url('/assets/skins/croqueta-queso.png');
+}
+
+.croqueta-bacalao {
+  background-image: url('/assets/skins/croqueta-bacalao.png');
+}
+
+.croqueta-setas {
+  background-image: url('/assets/skins/croqueta-setas.png');
+}
+
+.croqueta-dorada {
+  background-image: url('/assets/skins/croqueta-dorada.png');
+}

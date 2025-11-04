@@ -1,5 +1,5 @@
 <!--upgrades-->
-<div class="flex flex-col gap-2 p-2 overflow-x-auto">
+<div class="flex flex-row gap-2 p-2 overflow-x-auto">
   <app-upgrade
     [id]="1"
     [name]="'Upgrade1'"
@@ -17,35 +17,104 @@
 </div>
 <hr class="text-amber-800 my-2 w-[75%] m-auto" />
 <!--producers-->
-<div class="flex flex-col gap-2 p-2 overflow-y-auto">
+<div class="flex flex-col gap-2 p-2">
   <app-producer
     [id]="1"
-    [name]="'Producer1'"
-    [image]="'/images/croqueta.png'"
-    [priceBase]="50"
-    [priceMult]="1.2"
+    [name]="'Click'"
+    [image]="'/assets/producers/click.png'"
+    [priceBase]="25"
+    [priceMult]="1.15"
     [pointsBase]="1"
     [pointsSum]="1"
-    [description]="'berto me debe 500€, paga'"
+    [description]="'Hace clicks automáticos por ti.'"
   />
+
   <app-producer
     [id]="2"
-    [name]="'Producer2'"
-    [image]="'/images/croqueta.png'"
-    [priceBase]="200"
-    [priceMult]="1.5"
-    [pointsBase]="20"
-    [pointsSum]="5"
-    [description]="'croquetas croquetas croquetas'"
+    [name]="'Cocinero'"
+    [image]="'/assets/producers/cocinero.png'"
+    [priceBase]="150"
+    [priceMult]="1.18"
+    [pointsBase]="5"
+    [pointsSum]="3"
+    [description]="'Un cocinero profesional que hace croquetas por ti.'"
   />
+
   <app-producer
     [id]="3"
-    [name]="'Producer3'"
-    [image]="'/images/croqueta.png'"
-    [priceBase]="500"
-    [priceMult]="2"
-    [pointsBase]="50"
-    [pointsSum]="10"
-    [description]="'explosión de croquetas'"
+    [name]="'Freidora'"
+    [image]="'/assets/producers/freidora.png'"
+    [priceBase]="1_200"
+    [priceMult]="1.20"
+    [pointsBase]="30"
+    [pointsSum]="8"
+    [description]="'Una freidora industrial que produce croquetas a gran escala.'"
   />
+
+  <app-producer
+    [id]="4"
+    [name]="'Fábrica'"
+    [image]="'/assets/producers/fabrica.png'"
+    [priceBase]="8_000"
+    [priceMult]="1.22"
+    [pointsBase]="150"
+    [pointsSum]="25"
+    [description]="'Una fábrica automatizada de croquetas. Aprobada por Chicote.'"
+  />
+
+  <app-producer
+    [id]="5"
+    [name]="'Universidad Gastronómica'"
+    [image]="'/assets/producers/universidad.png'"
+    [priceBase]="40_000"
+    [priceMult]="1.23"
+    [pointsBase]="900"
+    [pointsSum]="80"
+    [description]="'Investigación y desarrollo de croquetas.'"
+  />
+
+  <app-producer
+    [id]="6"
+    [name]="'CroquetaBot'"
+    [image]="'/assets/producers/croquetabot.png'"
+    [priceBase]="200_000"
+    [priceMult]="1.25"
+    [pointsBase]="5_000"
+    [pointsSum]="400"
+    [description]="'Robot avanzado que produce croquetas a gran ritmo.'"
+  />
+
+  <app-producer
+    [id]="7"
+    [name]="'Iglesia de la Croqueta'"
+    [image]="'/assets/producers/iglesia.png'"
+    [priceBase]="1_500_000"
+    [priceMult]="1.27"
+    [pointsBase]="30_000"
+    [pointsSum]="2_500"
+    [description]="'Veneración y promoción de la croqueta.'"
+  />
+
+  <app-producer
+    [id]="8"
+    [name]="'Portal Croqueta'"
+    [image]="'/assets/producers/portal.png'"
+    [priceBase]="20_000_000"
+    [priceMult]="1.30"
+    [pointsBase]="200_000"
+    [pointsSum]="20_000"
+    [description]="'Un portal interdimensional que trae croquetas de otros universos.'"
+  />
+
+  <app-producer
+    [id]="9"
+    [name]="'Singularidad Fritanga'"
+    [image]="'/assets/producers/singularidad.png'"
+    [priceBase]="500_000_000"
+    [priceMult]="1.35"
+    [pointsBase]="2_000_000"
+    [pointsSum]="250_000"
+    [description]="'IA que domina el universo y produce croquetas infinitas.'"
+  />
+
 </div>

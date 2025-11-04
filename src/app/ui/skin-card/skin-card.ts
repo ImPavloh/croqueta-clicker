@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { SkinsService } from '../../services/skins.service';
 
 @Component({
   selector: 'app-skin-card',
@@ -7,6 +8,8 @@ import { Component, Input } from '@angular/core';
   styleUrl: './skin-card.css',
 })
 export class SkinCard {
+  constructor(private skinsService: SkinsService) {}
+
   // ID de la skin
   @Input() id: number = 0;
   // Nombre de la skin
@@ -15,4 +18,8 @@ export class SkinCard {
   @Input() description: string = '';
   // Imagen de la skin
   @Input() image: string = '';
+
+  onClick() {
+    this.skinsService.updateSkin(this.id);
+  }
 }

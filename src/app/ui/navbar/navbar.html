@@ -1,6 +1,11 @@
-<nav class="navbar">
-  <a class="nav-button" routerLink="/">Mejoras</a>
-  <a class="nav-button" routerLink="/stats">Estadísticas</a>
-  <a class="nav-button" routerLink="/options">Opciones</a>
-  <a class="nav-button" routerLink="/skins">Skins</a>
+<nav class="navbar justify-between">
+  <div class="flex gap-2">
+    <a class="nav-button" routerLink="/">Mejoras</a>
+    <a class="nav-button" routerLink="/stats">Estadísticas</a>
+  </div>
+  <app-newsline [level]="1"/>
+  <div class="flex gap-2">
+    <a class="nav-button" routerLink="/skins">Skins</a>
+    <a class="nav-button" routerLink="/options">Opciones</a>
+  </div>
 </nav>

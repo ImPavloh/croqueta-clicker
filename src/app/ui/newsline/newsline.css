@@ -1,0 +1,40 @@
+.newsline-container {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    /* Oculta el texto que se sale de la caja */
+    color: #8b4a00;
+    /* Color del texto */
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.newsline-content {
+    /* Hacemos que el contenido (los 2 spans) sea una sola línea larga */
+    white-space: nowrap;
+    display: inline-block;
+
+    /* Ajusta '180s' para cambiar la velocidad (más segundos = más lento) */
+    animation: marquee 180s linear infinite;
+}
+
+.newsline-content span {
+    padding-right: 30px;
+}
+
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pausar la animación si el usuario pasa el ratón por encima */
+.newsline-container:hover .newsline-content {
+    animation-play-state: paused;
+    cursor: pointer;
+}
