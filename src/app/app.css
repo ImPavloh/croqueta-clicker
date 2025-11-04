@@ -8,13 +8,29 @@
 .menu-container {
   display: flex;
   flex-direction: column;
+
   width: 60vw;
+  height: 100vh;
+
+  overflow-y: auto;
+  margin-right: 20px;
+
+  background: #f3eac2;
+  background: linear-gradient(180deg, rgba(243, 234, 194, 1) 0%, rgba(204, 183, 139, 1) 100%);
 }
 
 .clicker-container {
+  width: 40vw;
+  margin: 20px;
+  padding: 20px;
+
+  outline: 2px solid #f3eac2;
+  border-radius: 12px;
+
   display: flex;
   flex-direction: column;
-  width: 40vw;
+  align-items: center;
+  justify-content: center;
 }
 
 .splash {

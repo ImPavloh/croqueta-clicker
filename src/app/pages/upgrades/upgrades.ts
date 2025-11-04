@@ -6,8 +6,6 @@ import { Upgrade } from '../../ui/upgrade/upgrade';
   selector: 'app-upgrades',
   imports: [Producer, Upgrade],
   templateUrl: './upgrades.html',
-  styleUrl: './upgrades.css'
+  styleUrl: './upgrades.css',
 })
-export class Upgrades {
-
-}
+export class Upgrades {}

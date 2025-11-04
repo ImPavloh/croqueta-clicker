@@ -1,16 +1,22 @@
-.navbar{
-    display: flex;
-    background: #b4b4b4;
-    padding: 10px;
-    gap: 10px;
-    justify-content: space-between;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+
+  background: #f3eac2;
+  border-bottom: 1px solid #b86715;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  padding: 10px;
+  gap: 10px;
 }
 
-.nav-button{
-    display: flex;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #707070;
+.nav-button {
+  display: flex;
+  padding: 10px 30px;
+  border-radius: 25px;
+
+  text-decoration: none;
+
+  color: #8b4a00;
+  border: 2px solid #b86715;
 }

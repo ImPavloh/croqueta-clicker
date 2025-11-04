@@ -4,3 +4,9 @@
 * {
   font-family: 'Chewy', system-ui;
 }
+
+body {
+  background: url('/images/bg.jpg') no-repeat center/cover;
+  backdrop-filter: blur(2px) brightness(0.8);
+  overflow: hidden;
+}

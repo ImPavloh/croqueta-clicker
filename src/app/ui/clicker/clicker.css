@@ -1,31 +1,102 @@
 .croqueta {
-  background: url('/images/croqueta.png') center/cover no-repeat;
+  z-index: 2;
+  background: url('/assets/skins/croqueta-jamon.png') center/cover no-repeat;
   background-size: contain;
-  width: 120px;
-  height: 120px;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
-  color: #ffffff;
+
+  color: rgb(255, 243, 216);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  cursor: pointer;
+
+  width: 240px;
+  height: 240px;
+
   font-size: 1.5rem;
   font-weight: bold;
+  text-align: center;
   line-height: 1;
+
+  cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   transition: all 0.2s ease;
   position: relative;
+
+  animation: tilt 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.croqueta-bg-light {
+  z-index: 1;
+  background: url('/images/lightrays.png') center/cover no-repeat;
+  background-size: contain;
+
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 300px;
+  height: 300px;
+
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0.6;
+
+  animation: rotateLight 10s linear infinite;
+  will-change: transform, filter;
 }
 
 .croqueta:hover {
-  transform: scale(1.1);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
 }
 
 .croqueta:active {
-  transform: scale(0.95);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(-5deg) scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: rotate(5deg) scale(0.9);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+}
+
+@keyframes rotateLight {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    filter: brightness(1);
+  }
+  20% {
+    filter: brightness(1.5);
+  }
+  40% {
+    filter: brightness(1);
+  }
+  60% {
+    filter: brightness(0.5);
+  }
+  80% {
+    filter: brightness(0.75);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+    filter: brightness(1);
+  }
 }
