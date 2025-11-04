@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
+import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 
 @Component({
   selector: 'app-upgrade',
-  imports: [NgClass],
+  imports: [NgClass, ShortNumberPipe],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })

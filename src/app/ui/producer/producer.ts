@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
+import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 
 @Component({
   selector: 'app-producer',
-  imports: [NgClass],
+  imports: [NgClass, ShortNumberPipe],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })

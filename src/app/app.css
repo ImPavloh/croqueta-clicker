@@ -12,11 +12,10 @@
   width: 60vw;
   height: 100vh;
 
-  overflow-y: auto;
+  overflow: hidden;
   margin-right: 20px;
 
   background: #f3eac2;
-  background: linear-gradient(180deg, rgba(243, 234, 194, 1) 0%, rgba(204, 183, 139, 1) 100%);
 }
 
 .clicker-container {

@@ -1,0 +1,22 @@
+:host {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #b89c5a #f3eac2;
+}
+
+:host::-webkit-scrollbar {
+  width: 10px;
+}
+
+:host::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 100%);
+  border-radius: 8px;
+  border: 2px solid #f3eac2;
+}
+
+:host::-webkit-scrollbar-track {
+  background: #f3eac2;
+  border-radius: 8px;
+}

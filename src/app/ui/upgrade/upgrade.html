@@ -14,7 +14,7 @@
         class="text-xs"
         [ngClass]="pointsService.points() >= price ? 'text-black' : 'text-red-500'"
       >
-        {{ price }} ¢
+        {{ price | short }} ¢
       </p>
     </div>
   </div>
