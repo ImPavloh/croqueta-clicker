@@ -46,8 +46,8 @@ export class Upgrade {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar estado de compra
-    const clicks = localStorage.getItem('upgrade_' + this.id + '_bought');
-    if (clicks) this.bought = (Boolean(clicks) || false);
+    const bought = localStorage.getItem('upgrade_' + this.id + '_bought');
+    if (bought) this.bought = (Boolean(bought) || false);
   }
 
   saveToStorage() {
