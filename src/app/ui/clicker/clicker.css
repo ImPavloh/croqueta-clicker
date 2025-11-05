@@ -1,6 +1,6 @@
 .croqueta {
   z-index: 2;
-  background: url('/assets/skins/croqueta-jamon.png') center/cover no-repeat;
+  background: url('/assets/skins/croqueta-jamon.webp') center/cover no-repeat;
   background-size: contain;
 
   color: rgb(255, 243, 216);
@@ -108,29 +108,29 @@
 
 /* Skins */
 .croqueta-normal {
-  background-image: url('/assets/skins/croqueta-normal.png');
+  background-image: url('/assets/skins/croqueta-normal.webp');
 }
 
 .croqueta-jamon {
-  background-image: url('/assets/skins/croqueta-jamon.png');
+  background-image: url('/assets/skins/croqueta-jamon.webp');
 }
 
 .croqueta-pollo {
-  background-image: url('/assets/skins/croqueta-pollo.png');
+  background-image: url('/assets/skins/croqueta-pollo.webp');
 }
 
 .croqueta-queso {
-  background-image: url('/assets/skins/croqueta-queso.png');
+  background-image: url('/assets/skins/croqueta-queso.webp');
 }
 
 .croqueta-bacalao {
-  background-image: url('/assets/skins/croqueta-bacalao.png');
+  background-image: url('/assets/skins/croqueta-bacalao.webp');
 }
 
 .croqueta-setas {
-  background-image: url('/assets/skins/croqueta-setas.png');
+  background-image: url('/assets/skins/croqueta-setas.webp');
 }
 
 .croqueta-dorada {
-  background-image: url('/assets/skins/croqueta-dorada.png');
+  background-image: url('/assets/skins/croqueta-dorada.webp');
 }

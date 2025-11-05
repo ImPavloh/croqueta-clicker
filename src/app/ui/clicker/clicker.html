@@ -6,7 +6,7 @@
     class="croqueta"
     [ngClass]="croquetaClass"
   >
-    +{{ pointsService.pointsPerClick() }}
+    +{{ pointsService.pointsPerClick() | short }}
   </span>
   <span class="croqueta-bg-light"></span>
   <app-floating></app-floating>

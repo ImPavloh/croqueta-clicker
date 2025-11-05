@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { PointsService } from '../../services/points.service';
 import { Floating } from '../floating/floating';
 import { SkinsService } from '../../services/skins.service';
+import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule, Floating],
+  imports: [CommonModule, Floating, ShortNumberPipe],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
 })

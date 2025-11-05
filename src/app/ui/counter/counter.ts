@@ -5,7 +5,7 @@ import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 
 @Component({
   selector: 'app-counter',
-  imports: [ CommonModule, ShortNumberPipe ],
+  imports: [CommonModule, ShortNumberPipe],
   templateUrl: './counter.html',
   styleUrl: './counter.css',
 })

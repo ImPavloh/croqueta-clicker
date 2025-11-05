@@ -18,20 +18,20 @@
   height: 100%;
   position: relative;
   padding: 1rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 
   .corner {
     width: 0.5rem;
     height: 0.5rem;
     border: 1px solid var(--border);
     position: absolute;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 
     &::after,
     &::before {
       content: '';
       position: absolute;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     &::after {
