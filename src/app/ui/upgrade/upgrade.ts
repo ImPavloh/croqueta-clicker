@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
+import { CornerCard } from '../corner-card/corner-card';
 
 @Component({
   selector: 'app-upgrade',
-  imports: [NgClass, ShortNumberPipe],
+  imports: [NgClass, ShortNumberPipe, CornerCard],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })
@@ -48,7 +49,7 @@ export class Upgrade {
     if (typeof localStorage === 'undefined') return;
     // cargar estado de compra
     const bought = localStorage.getItem('upgrade_' + this.id + '_bought');
-    if (bought) this.bought = (Boolean(bought) || false);
+    if (bought) this.bought = Boolean(bought) || false;
   }
 
   saveToStorage() {

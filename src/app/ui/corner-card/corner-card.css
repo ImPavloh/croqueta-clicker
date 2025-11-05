@@ -1,0 +1,125 @@
+:host {
+  --border: #b86715;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.corner-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  background: #f3e2c2;
+  border: 2px solid var(--border);
+
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+
+  .corner {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--border);
+    position: absolute;
+    transition: all 0.3s ease;
+
+    &::after,
+    &::before {
+      content: '';
+      position: absolute;
+      transition: all 0.3s ease;
+    }
+
+    &::after {
+      width: 2rem;
+      height: calc(1rem - 1px);
+    }
+
+    &::before {
+      width: calc(1rem - 1px);
+      height: 2rem;
+    }
+
+    &.left {
+      left: -0.5rem;
+
+      &::after {
+        left: calc(-2px + 1rem);
+        border-left: 1px solid var(--border);
+      }
+
+      &::before {
+        left: -1px;
+        border-left: 1px solid var(--border);
+      }
+    }
+
+    &.right {
+      right: -0.5rem;
+
+      &::after {
+        right: calc(-2px + 1rem);
+        border-right: 1px solid var(--border);
+      }
+
+      &::before {
+        right: -1px;
+        border-right: 1px solid var(--border);
+      }
+    }
+
+    &.top {
+      top: -0.5rem;
+
+      &::after {
+        top: -1px;
+        border-top: 1px solid var(--border);
+      }
+
+      &::before {
+        top: calc(-2px + 1rem);
+        border-top: 1px solid var(--border);
+      }
+    }
+
+    &.bottom {
+      bottom: -0.5rem;
+
+      &::after {
+        bottom: -1px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      &::before {
+        bottom: calc(-2px + 1rem);
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:hover .corner {
+    &.left.top {
+      transform: translate(-4px, -4px);
+    }
+
+    &.right.top {
+      transform: translate(4px, -4px);
+    }
+
+    &.left.bottom {
+      transform: translate(-4px, 4px);
+    }
+
+    &.right.bottom {
+      transform: translate(4px, 4px);
+    }
+  }
+}

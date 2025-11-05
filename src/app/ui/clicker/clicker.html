@@ -1,5 +1,11 @@
 <div class="relative flex justify-center items-center h-full w-full">
-  <span (click)="onClick()" (keydown)="preventKey($event)" tabindex="-1" class="croqueta" [ngClass]="croquetaClass">
+  <span
+    (click)="onClick()"
+    (keydown)="preventKey($event)"
+    tabindex="-1"
+    class="croqueta"
+    [ngClass]="croquetaClass"
+  >
     +{{ pointsService.pointsPerClick() }}
   </span>
   <span class="croqueta-bg-light"></span>

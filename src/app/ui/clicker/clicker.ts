@@ -5,7 +5,6 @@ import { Floating } from '../floating/floating';
 import { SkinsService } from '../../services/skins.service';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-clicker',
   imports: [CommonModule, Floating],
@@ -15,23 +14,27 @@ import { Subscription } from 'rxjs';
 export class Clicker {
   croquetaClass = '';
   private skinSub?: Subscription;
-  
-  constructor(public pointsService: PointsService, private skinsService: SkinsService) { }
+  private afkTimeout?: any;
+  private readonly afkDelay = 5000;
+
+  constructor(public pointsService: PointsService, private skinsService: SkinsService) {}
 
   onClick() {
     this.pointsService.addPointsPerClick();
     // guardar puntos tras cada click
     this.pointsService.saveToStorage();
+    this.resetAfkTimer();
   }
 
   ngOnInit() {
     // suscribirse a los cambios del skin
-    this.skinSub = this.skinsService.skinChanged$.subscribe(id => {
+    this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
       this.updateCroquetaStyle(id);
     });
 
     // inicializar con el valor actual
     this.updateCroquetaStyle(this.skinsService.skinId());
+    this.startAfkTimer();
   }
 
   preventKey(event: KeyboardEvent) {
@@ -63,14 +66,27 @@ export class Clicker {
         break;
       case 7:
         this.croquetaClass = 'croqueta-dorada';
-        break; 
+        break;
       default:
         this.croquetaClass = 'croqueta-normal';
         break;
     }
   }
 
+  startAfkTimer() {
+    this.afkTimeout = setTimeout(() => {
+      this.croquetaClass += ' afk';
+    }, this.afkDelay);
+  }
+
+  resetAfkTimer() {
+    clearTimeout(this.afkTimeout);
+    this.croquetaClass = this.croquetaClass.replace(' afk', '');
+    this.startAfkTimer();
+  }
+
   ngOnDestroy() {
     this.skinSub?.unsubscribe(); // limpiar la suscripción
+    clearTimeout(this.afkTimeout);
   }
 }

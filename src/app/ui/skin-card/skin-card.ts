@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { SkinsService } from '../../services/skins.service';
+import { CornerCard } from '../corner-card/corner-card';
 
 @Component({
   selector: 'app-skin-card',
-  imports: [],
+  imports: [CornerCard],
   templateUrl: './skin-card.html',
   styleUrl: './skin-card.css',
 })

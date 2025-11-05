@@ -26,8 +26,11 @@
   transition: all 0.2s ease;
   position: relative;
 
-  animation: tilt 4s ease-in-out infinite;
   will-change: transform;
+}
+
+.croqueta.afk {
+  animation: tilt-afk 4s ease-in-out infinite;
 }
 
 .croqueta-bg-light {
@@ -53,14 +56,16 @@
 }
 
 .croqueta:hover {
+  transform: scale(1.02);
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
 }
 
 .croqueta:active {
+  transform: scale(0.98);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
-@keyframes tilt {
+@keyframes tilt-afk {
   0% {
     transform: rotate(-5deg) scale(1);
   }

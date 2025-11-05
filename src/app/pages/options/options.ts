@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { PageContainer } from '../../ui/page-container/page-container';
 
 @Component({
   selector: 'app-options',
-  imports: [],
+  imports: [PageContainer],
   templateUrl: './options.html',
-  styleUrl: './options.css'
+  styleUrl: './options.css',
 })
-export class Options {
-
-}
+export class Options {}

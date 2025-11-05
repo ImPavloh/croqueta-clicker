@@ -1,43 +1,52 @@
-<div class="flex flex-wrap gap-4 items-center justify-center p-8">
-  <app-skin-card
-  [id]="1"
-  [name]="'Croqueta Normal'"
-  [description]="'Una croqueta pocha del mercadona'"
-  [image]="'/assets/skins/croqueta-normal.png'"/>
+<app-page-container>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-4">
+    <app-skin-card
+      [id]="1"
+      [name]="'Normal'"
+      [description]="'Una croqueta pocha del Wercadona'"
+      [image]="'/assets/skins/croqueta-normal.png'"
+    />
 
-  <app-skin-card
-  [id]="2"
-  [name]="'Croqueta de Jamón'"
-  [description]="'Una croqueta deliciosa de jamón ibérico'"
-  [image]="'/assets/skins/croqueta-jamon.png'"/>
+    <app-skin-card
+      [id]="2"
+      [name]="'Jamón'"
+      [description]="'Una croqueta deliciosa de jamón ibérico'"
+      [image]="'/assets/skins/croqueta-jamon.png'"
+    />
 
-  <app-skin-card
-  [id]="3"
-  [name]="'Croqueta de Pollo'"
-  [description]="'Una corqueta de pollo jugosa y sabrosa'"
-  [image]="'/assets/skins/croqueta-pollo.png'"/>
+    <app-skin-card
+      [id]="3"
+      [name]="'Pollo'"
+      [description]="'Una corqueta de pollo jugosa y sabrosa'"
+      [image]="'/assets/skins/croqueta-pollo.png'"
+    />
 
-  <app-skin-card
-  [id]="4"
-  [name]="'Croqueta de Queso'"
-  [description]="'Una croqueta de queso cremosa y deliciosa'"
-  [image]="'/assets/skins/croqueta-queso.png'"/>
+    <app-skin-card
+      [id]="4"
+      [name]="'Queso'"
+      [description]="'Una croqueta de queso cremosa y deliciosa'"
+      [image]="'/assets/skins/croqueta-queso.png'"
+    />
 
-  <app-skin-card
-  [id]="5"
-  [name]="'Croqueta de Bacalao'"
-  [description]="'Una croqueta de bacalao tradicional y sabrosa'"
-  [image]="'/assets/skins/croqueta-bacalao.png'"/>
+    <app-skin-card
+      [id]="5"
+      [name]="'Bacalao'"
+      [description]="'Una croqueta de bacalao tradicional y sabrosa'"
+      [image]="'/assets/skins/croqueta-bacalao.png'"
+    />
 
-  <app-skin-card
-  [id]="6"
-  [name]="'Croqueta de Setas'"
-  [description]="'Una croqueta de setas exquisita y aromática'"
-  [image]="'/assets/skins/croqueta-setas.png'"/>
+    <app-skin-card
+      [id]="6"
+      [name]="'Setas'"
+      [description]="'Una croqueta de setas exquisita y aromática'"
+      [image]="'/assets/skins/croqueta-setas.png'"
+    />
 
-  <app-skin-card
-  [id]="7"
-  [name]="'Croqueta Dorada'"
-  [description]="'Una croqueta de lujo, probablemente tóxica, pero muy brillante.'"
-  [image]="'/assets/skins/croqueta-dorada.png'"/>
-</div>
+    <app-skin-card
+      [id]="7"
+      [name]="'Dorada'"
+      [description]="'Una croqueta de lujo, probablemente tóxica, pero muy brillante.'"
+      [image]="'/assets/skins/croqueta-dorada.png'"
+    />
+  </div>
+</app-page-container>

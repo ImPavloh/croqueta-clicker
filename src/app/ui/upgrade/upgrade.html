@@ -4,24 +4,26 @@
   class="flex p-3 items-center justify-between border border-b-amber-800 rounded-lg hover:bg-amber"
   [ngClass]="pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
 >
-  <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
-  @if (unlocked) {
-  <div class="flex flex-col">
-    <img class="flex size-16" src="{{ image }}" alt="{{ name }}" />
-    <div class="flex flex-col items-start justify-center">
-      <p class="flex text-base">{{ name }}</p>
-      <p
-        class="text-xs"
-        [ngClass]="pointsService.points() >= price ? 'text-black' : 'text-red-500'"
-      >
-        {{ price | short }} ¢
-      </p>
+  <app-corner-card>
+    <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
+    @if (unlocked) {
+    <div class="flex flex-col">
+      <img class="flex size-16" src="{{ image }}" alt="{{ name }}" />
+      <div class="flex flex-col items-start justify-center">
+        <p class="flex text-base">{{ name }}</p>
+        <p
+          class="text-xs"
+          [ngClass]="pointsService.points() >= price ? 'text-black' : 'text-red-500'"
+        >
+          {{ price | short }} ¢
+        </p>
+      </div>
     </div>
-  </div>
-  } @else {
-  <div class="flex w-16 h-16 justify-center items-center italic opacity-50">
-    <p>???</p>
-  </div>
-  }
+    } @else {
+    <div class="flex w-16 h-16 justify-center items-center italic opacity-50">
+      <p>???</p>
+    </div>
+    }
+  </app-corner-card>
 </button>
 }

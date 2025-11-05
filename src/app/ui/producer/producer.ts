@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
+import { CornerCard } from '../corner-card/corner-card';
 
 @Component({
   selector: 'app-producer',
-  imports: [NgClass, ShortNumberPipe],
+  imports: [NgClass, ShortNumberPipe, CornerCard],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })
@@ -28,7 +29,6 @@ export class Producer {
   @Input() pointsSum: number = 1;
   // Descripción del productor
   @Input() description: string = '';
-
 
   quantity: number = 0;
   price: number = 0;
@@ -57,7 +57,9 @@ export class Producer {
     const cost = this.calculatePrice(this.quantity);
     if (this.pointsService.points() >= cost) {
       this.pointsService.substractPoints(cost);
-      this.pointsService.upgradePointsPerSecond(this.pointsService.pointsPerSecond() + this.calculatePoints(this.quantity));
+      this.pointsService.upgradePointsPerSecond(
+        this.pointsService.pointsPerSecond() + this.calculatePoints(this.quantity)
+      );
       this.quantity += 1;
       this.price = this.calculatePrice(this.quantity);
       this.points = this.calculatePoints(this.quantity);
@@ -72,7 +74,7 @@ export class Producer {
     if (typeof localStorage === 'undefined') return;
     // cargar puntos
     const points = localStorage.getItem('producer_' + this.id + '_quantity');
-    if (points) this.quantity = (Number(points) || 0);
+    if (points) this.quantity = Number(points) || 0;
   }
 
   saveToStorage() {
