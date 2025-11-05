@@ -63,11 +63,8 @@ export class PlayerStats {
   /**
    * Comprueba si se ha subido de nivel
    */
-  public checkLevelUp():void{
-    this._expToNext.update(e => e - this.expPerClick());
-    //Comprobación que se haya superado el nivel
-    if(this._currentExp >= this._expToNext){
-
+  public checkLevelUp(): void {
+    while (this._currentExp() >= this._expToNext()) {
       const expExtra = this._currentExp() - this._expToNext();
       this.levelUp(expExtra);
     }
