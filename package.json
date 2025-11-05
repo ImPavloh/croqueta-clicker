@@ -1,6 +1,25 @@
 {
   "name": "croqueta-clicker",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Proyecto Angula. Juego incremental inspirado en Cookie Clicker, desarrollado por Pavloh y colaboradores.",
+  "author": {
+    "name": "Pavloh",
+    "url": "https://croquetaclicker.pavloh.com"
+  },
+  "contributors": [
+    {
+      "name": "Pavloh",
+      "github": "https://github.com/ImPavloh"
+    },
+    {
+      "name": "Roberto Cichón",
+      "github": "https://github.com/RobertoCichon"
+    },
+    {
+      "name": "Víctor RG",
+      "github": "https://github.com/VictorRG15"
+    }
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -49,5 +68,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
