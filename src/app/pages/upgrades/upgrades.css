@@ -1,0 +1,29 @@
+.upgrades {
+  mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
+}
+
+.producers-container {
+  height: 75%;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #b89c5a #f3eac2;
+  mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+}
+
+.producers-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.producers-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 100%);
+  border-radius: 8px;
+  border: 2px solid #f3eac2;
+}
+
+.producers-container::-webkit-scrollbar-track {
+  background: #f3eac2;
+  border-radius: 8px;
+}

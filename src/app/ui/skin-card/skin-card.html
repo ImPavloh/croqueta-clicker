@@ -1,4 +1,7 @@
-<button (click)="onClick()" class="w-full h-full">
+<button (click)="onClick()"
+  class="w-full h-full cursor-pointer transition-all duration-200 ease-in-out"
+  [ngClass]="{'outline outline-amber-600 scale-[1.02]': isSelected}"
+>
   <app-corner-card>
     <img class="w-auto" src="{{ image }}" alt="{{ name }}" />
     <div class="text-center flex flex-col gap-2 justify-between h-full">

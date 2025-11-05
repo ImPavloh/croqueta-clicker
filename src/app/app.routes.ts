@@ -7,6 +7,7 @@ import { Skins } from './pages/skins/skins';
 
 export const routes: Routes = [
     { path: '', component: Upgrades},
+    { path: 'upgrades', component: Upgrades},
     { path: 'stats', component: Stats },
     { path: 'options', component: Options },
     { path: 'skins', component: Skins },

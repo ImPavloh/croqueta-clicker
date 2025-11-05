@@ -2,11 +2,10 @@ import { Component, computed } from '@angular/core';
 import { PlayerStats } from '../../services/player-stats.service';
 import { StatCardComponent, StatCardConfig } from "../../ui/stat-card/stat-card";
 import { CommonModule } from '@angular/common';
-import { PageContainer } from '../../ui/page-container/page-container';
 
 @Component({
   selector: 'app-stats',
-  imports: [StatCardComponent, CommonModule, PageContainer],
+  imports: [StatCardComponent, CommonModule],
   templateUrl: './stats.html',
   styleUrl: './stats.css',
 })
