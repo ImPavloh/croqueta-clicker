@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class PlayerStats {
+export class PlayerStats{
   // state
   private _totalClicks = signal<number>(0);
   private _level = signal<number>(0);
@@ -13,17 +13,21 @@ export class PlayerStats {
   private _archivements = signal<number>(0);
   private _timePlaying = signal<number>(0);
 
+  private intervalId: any;
+  private isTimerRunning  = false;
+
   // getter público (read-only signal)
   readonly totalClicks = this._totalClicks.asReadonly();
   readonly level = this._level.asReadonly();
   readonly currentExp = this._currentExp.asReadonly();
+  readonly expToNext = this._expToNext.asReadonly();
   readonly expPerClick = this._expPerClick.asReadonly();
   readonly archivements = this._archivements.asReadonly();
   readonly timePlaying = this._timePlaying.asReadonly();
 
   //Constructor
   constructor() {
-    this.calculateExpToNext(); // Calcular EXP necesaria al inicializar
+    console.log('🔴 PlayerStats CONSTRUCTOR ejecutado');
   }
 
   //metodos
@@ -82,8 +86,26 @@ export class PlayerStats {
     //Verificar si con la exp sobrante se puede subir de nivel
     this.checkLevelUp();
   }
+
+  startTimer() {
+    if (this.isTimerRunning) return;
+
+    this.isTimerRunning = true;
+    this.intervalId = setInterval(() => {
+      this._timePlaying.update(current => {
+        console.log('🕐 Time playing:', current + 1);
+        return current + 1;
+      });
+    }, 1000);
+  }
+  stopTimer() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.isTimerRunning = false;
+    }
+  }
   /**
-   * TODO: archivements y timePlaying
+   * TODO: archivements
    */
 
   loadFromStorage(){
