@@ -1,3 +1,4 @@
+import { PlayerStats } from './../../services/player-stats.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PointsService } from '../../services/points.service';
@@ -18,12 +19,17 @@ export class Clicker {
   private afkTimeout?: any;
   private readonly afkDelay = 5000;
 
-  constructor(public pointsService: PointsService, private skinsService: SkinsService) {}
+  constructor(
+    public pointsService: PointsService,
+    private skinsService: SkinsService,
+    public playerStats: PlayerStats) {}
 
   onClick() {
     this.pointsService.addPointsPerClick();
+    this.playerStats.addClick();
     // guardar puntos tras cada click
     this.pointsService.saveToStorage();
+    this.playerStats.saveToStorage();
     this.resetAfkTimer();
   }
 

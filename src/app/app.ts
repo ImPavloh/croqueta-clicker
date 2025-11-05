@@ -5,6 +5,7 @@ import { Navbar } from './ui/navbar/navbar';
 import { Clicker } from './ui/clicker/clicker';
 import { Counter } from './ui/counter/counter';
 import { PointsService } from './services/points.service';
+import { PlayerStats } from './services/player-stats.service';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +20,12 @@ export class App implements OnInit {
   protected readonly splashShown = signal(true);
 
   // cargar puntos al iniciar la app
-  constructor(points: PointsService) {
+  constructor(
+    points: PointsService,
+    playerStats: PlayerStats
+  ) {
     points.loadFromStorage();
+    playerStats.loadFromStorage();
   }
 
   ngOnInit(): void {
