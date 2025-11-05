@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Navbar } from './ui/navbar/navbar';
@@ -13,7 +13,7 @@ import { PlayerStats } from './services/player-stats.service';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
 
   // splash control (visible al inicio)
@@ -22,7 +22,7 @@ export class App implements OnInit {
   // cargar puntos al iniciar la app
   constructor(
     points: PointsService,
-    playerStats: PlayerStats
+    private playerStats: PlayerStats
   ) {
     points.loadFromStorage();
     playerStats.loadFromStorage();
@@ -31,8 +31,14 @@ export class App implements OnInit {
   ngOnInit(): void {
     // ocultar splash automáticamente tras 2s
     if (typeof window !== 'undefined') {
-      setTimeout(() => this.splashShown.set(false), 5000);
+      setTimeout(() => {
+        this.splashShown.set(false);
+        this.playerStats.startTimer();
+      }, 5000);
     }
+  }
+  ngOnDestroy(){
+     this.playerStats.stopTimer();
   }
 
   protected hideSplash(): void {

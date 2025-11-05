@@ -22,9 +22,23 @@ export class Stats {
   }));
 
   totalTimePlaying = computed<StatCardConfig> (() => ({
-    title: 'Timepo jugado',
+    title: 'Tiempo jugado',
     value: this.playerStats.timePlaying(),
     icon: 'reloj',
     format: 'time'
+  }));
+
+  levelCurrent = computed<StatCardConfig> (() => ({
+    title: 'Nivel: ',
+    value: this.playerStats.level(),
+    icon: 'level',
+    format: 'number'
+  }));
+
+  expNecessary = computed<StatCardConfig> (() => ({
+    title: 'Próximo Nivel: ',
+    value: this.playerStats.currentExp()/this.playerStats.expToNext(),
+    icon: 'level',
+    format: 'percentage'
   }));
 }

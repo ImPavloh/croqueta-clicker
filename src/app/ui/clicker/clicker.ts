@@ -27,6 +27,7 @@ export class Clicker {
   onClick() {
     this.pointsService.addPointsPerClick();
     this.playerStats.addClick();
+    this.playerStats.checkLevelUp();
     // guardar puntos tras cada click
     this.pointsService.saveToStorage();
     this.playerStats.saveToStorage();
