@@ -21,6 +21,7 @@
   border: 2px solid #b86715;
 
   transition: background 0.3s, color 0.3s;
+  white-space: nowrap;
 }
 
 .nav-button:hover {
@@ -37,4 +38,41 @@
 .navbar > app-newsline {
   flex: 1 1 auto; /* crecer, encoger, base automática */
   min-width: 0; /* CRUCIAL: permite que el elemento se reduzca */
+}
+
+/* para tablets */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .nav-button {
+    padding: 8px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+/* para móviles */
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .nav-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  .navbar > app-newsline {
+    order: 3;
+    flex: 1 1 100%;
+    margin: 5px 0 0 0;
+  }
+
+  .navbar .flex {
+    gap: 6px;
+  }
 }

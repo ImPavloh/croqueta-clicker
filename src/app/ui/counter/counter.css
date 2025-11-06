@@ -1,0 +1,28 @@
+.counter {
+  width: 100%;
+}
+
+.counter p {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+/* para tablets */
+@media (max-width: 1024px) {
+  .counter p {
+    font-size: 1.3rem;
+  }
+}
+
+/* para móviles */
+@media (max-width: 640px) {
+  .counter p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .counter p {
+    font-size: 0.9rem;
+  }
+}

@@ -1,6 +1,26 @@
 .page-content {
-  overflow: hidden;
+  overflow-y: auto;
   height: 100%;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #b89c5a #f3eac2;
+  mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+}
+
+.page-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.page-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 100%);
+  border-radius: 8px;
+  border: 2px solid #f3eac2;
+}
+
+.page-content::-webkit-scrollbar-track {
+  background: #f3eac2;
+  border-radius: 8px;
 }
 
 .main-container {
@@ -178,5 +198,31 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .menu-container {
+    width: 100vw;
+    height: 60vh;
+    margin-right: 0;
+
+    order: 2;
+  }
+
+  .clicker-container {
+    width: 100vw;
+    height: 40vh;
+    padding: 10px;
+    margin: 0;
+
+    outline: none;
+    border-radius: 0;
+
+    order: 1;
   }
 }

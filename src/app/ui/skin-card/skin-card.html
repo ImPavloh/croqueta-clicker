@@ -1,6 +1,7 @@
-<button (click)="onClick()"
+<button
+  (click)="onClick()"
   class="w-full h-full cursor-pointer transition-all duration-200 ease-in-out"
-  [ngClass]="{'outline outline-amber-600 scale-[1.02]': isSelected}"
+  [ngClass]="{ 'outline outline-amber-600 scale-[1.02]': isSelected }"
 >
   <app-corner-card>
     <img class="w-auto" src="{{ image }}" alt="{{ name }}" />

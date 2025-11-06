@@ -1,7 +1,7 @@
 @if (!bought) {
 <button
   (click)="buyUpgrade()"
-  class="pr-8 h-full w-2xs"
+  class="pr-8 h-full w-3xs"
   [ngClass]="pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
 >
   <app-corner-card>

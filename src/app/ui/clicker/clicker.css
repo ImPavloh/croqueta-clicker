@@ -134,3 +134,44 @@
 .croqueta-dorada {
   background-image: url('/assets/skins/croqueta-dorada.webp');
 }
+
+/* para tablets */
+@media (max-width: 1024px) {
+  .croqueta {
+    width: 200px;
+    height: 200px;
+    font-size: 1.3rem;
+  }
+
+  .croqueta-bg-light {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* para móviles */
+@media (max-width: 640px) {
+  .croqueta {
+    width: 160px;
+    height: 160px;
+    font-size: 1.1rem;
+  }
+
+  .croqueta-bg-light {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .croqueta {
+    width: 140px;
+    height: 140px;
+    font-size: 1rem;
+  }
+
+  .croqueta-bg-light {
+    width: 180px;
+    height: 180px;
+  }
+}

@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  overflow: hidden !important;
+  height: 100%;
+}
+
 .upgrades {
   mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
@@ -6,7 +12,6 @@
 .producers-container {
   height: 75%;
   overflow-y: auto;
-  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #b89c5a #f3eac2;
   mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
@@ -26,4 +31,18 @@
 .producers-container::-webkit-scrollbar-track {
   background: #f3eac2;
   border-radius: 8px;
+}
+
+/* para móviles */
+@media (max-width: 640px) {
+  .upgrades {
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .producers-container {
+    height: auto;
+    max-height: 60vh;
+    padding: 0.25rem;
+  }
 }
