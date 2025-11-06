@@ -22,20 +22,6 @@ export class PointsService {
     if (typeof window !== 'undefined') {
       // Llamar addPointPerSecond cada segundo
       setInterval(() => this.addPointPerSecond(), 1000);
-
-      // Detectar F10 y llamar reset
-      window.addEventListener('keydown', (event) => {
-        if (event.key === 'F10') {
-          // resetear valores del signal antes de limpiar storage
-          this._points.set(0);
-          this._pointsPerSecond.set(0);
-          this._pointsPerClick.set(1);
-          this._multiply.set(1);
-
-          this.resetStorage();
-          window.location.reload();
-        }
-      });
     }
   }
 
@@ -105,10 +91,4 @@ export class PointsService {
     localStorage.setItem('multiply', String(this._multiply()));
   }
 
-  resetStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // a la mierda tu partida 🗿
-    localStorage.clear();
-  }
 }

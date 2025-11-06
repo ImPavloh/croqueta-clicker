@@ -1,1 +1,65 @@
-<p>options works!</p>
+<div class="p-4 gap-8 flex flex-col">
+    <!-- VOLUMEN -->
+    <app-corner-card>
+        <p class="text-2xl">Volumen</p>
+        <div class="flex justify-between flex-row gap-4">
+            <div class="flex flex-col">
+                <span>General:</span>
+                <span>Música:</span>
+                <span>SFX:</span>
+            </div>
+            <div class="flex flex-col">
+                <div class="flex gap-2">
+                    <input type="range" min="0" max="100" step="1"
+                           [ngModel]="optionsService.generalVolume()"
+                           (ngModelChange)="optionsService.setGeneralVolume($event);"/>
+                    <span>{{optionsService.generalVolume()}}%</span>
+                </div>
+                <div class="flex gap-2">
+                    <input type="range" min="0" max="100" step="1"
+                           [ngModel]="optionsService.musicVolume()"
+                           (ngModelChange)="optionsService.setMusicVolume($event);"/>
+                    <span>{{optionsService.musicVolume()}}%</span>
+                </div>
+                <div class="flex gap-2">
+                    <input type="range" min="0" max="100" step="1"
+                           [ngModel]="optionsService.sfxVolume()"
+                           (ngModelChange)="optionsService.setSfxVolume($event);"/>
+                    <span>{{optionsService.sfxVolume()}}%</span>
+                </div>
+            </div>
+        </div>
+    </app-corner-card>
+    <app-corner-card>
+        <p class="text-2xl">Partida</p>
+        <div>
+            <button (click)="restartGame()" class="text-red-600 rounded-4xl border-2 
+            border-red-600 py-2 px-4 cursor-pointer transition-all hover:scale-105 
+            active:bg-red-950 active:scale-95">Reiniciar partida</button>
+        </div>
+    </app-corner-card>
+    <app-corner-card>
+        <!-- PORFAVOR que alguien se acuerde de cambiar todas las gilipolleces de los creditos antes de entregar esto -->
+        <p class="text-2xl">Créditos</p>
+            <div class="flex flex-col gap-4 items-center">
+                <div class="flex flex-col items-center">
+                    <span>Desarrollo y diseño:</span>
+                    <div class="flex gap-4">
+                        <a href="https://media.tenor.com/WDs10IEMMaUAAAAe/traumaditto-ditto.png" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Victor Rodriguez</a>
+                        <a href="https://es.wikipedia.org/wiki/Pablo_Casado" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Pablo Casado</a>
+                        <a href="https://spinning.fish/" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Roberto Cichón</a>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span>Assets y programación:</span>
+                    <div class="flex gap-4">
+                        <p class="text-[#8b4a00]">ChatGPT</p>
+                        <p class="text-[#8b4a00]">Gemini</p>
+                        <p class="text-[#8b4a00]">Un peruano de Fiverr al que le he pagado 2.50€</p>
+                    </div>
+                </div>
+                <hr class="text-amber-800 mt-2 w-[75%] m-auto" />
+                <a href="https://youtu.be/aRsWk4JZa5k?si=7a7p9xFAtibme4W1" target="_blank" class="opacity-50 transition-all hover:opacity-100 hover:scale-105">Whiteroot Studios © 2067</a>
+            </div>
+    </app-corner-card>
+</div>

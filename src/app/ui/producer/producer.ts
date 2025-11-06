@@ -3,6 +3,8 @@ import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 import { CornerCard } from '../corner-card/corner-card';
+import { Subscription } from 'rxjs';
+import { PlayerStats } from '../../services/player-stats.service';
 
 @Component({
   selector: 'app-producer',
@@ -11,7 +13,7 @@ import { CornerCard } from '../corner-card/corner-card';
   styleUrl: './producer.css',
 })
 export class Producer {
-  constructor(public pointsService: PointsService) {}
+  constructor(public pointsService: PointsService, public playerStats: PlayerStats) { }
 
   // ID del productor
   @Input() id: number = 0;
@@ -29,6 +31,12 @@ export class Producer {
   @Input() pointsSum: number = 1;
   // Descripción del productor
   @Input() description: string = '';
+  // Experiencia necesaria para desbloquear el productor
+  @Input() level: number = 0;
+  // Experiencia por comprar el productor
+  @Input() exp: number = 1;
+
+  private levelSub?: Subscription;
 
   quantity: number = 0;
   price: number = 0;
@@ -39,6 +47,14 @@ export class Producer {
     this.loadFromStorage();
     this.price = this.calculatePrice(this.quantity);
     this.points = this.calculatePoints(this.quantity);
+    this.levelSub = this.playerStats.level$.subscribe((level) => {
+      this.checkLevel(level);
+    });
+  }
+
+  // Comprobar si el productor está desbloqueado
+  checkLevel(currentLevel: number) {
+    this.unlocked = currentLevel >= this.level;
   }
 
   // Método para calcular el precio actual del productor
@@ -65,6 +81,7 @@ export class Producer {
       this.points = this.calculatePoints(this.quantity);
       this.saveToStorage();
       this.pointsService.saveToStorage();
+      this.playerStats.addExp(this.exp);
     }
   }
 
@@ -82,5 +99,9 @@ export class Producer {
     if (typeof localStorage === 'undefined') return;
     // guardar puntos
     localStorage.setItem('producer_' + this.id + '_quantity', String(this.quantity));
+  }
+
+  ngOnDestroy() {
+    this.levelSub?.unsubscribe(); // limpiar la suscripción
   }
 }

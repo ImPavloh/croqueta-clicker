@@ -3,6 +3,8 @@ import { PointsService } from '../../services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '../../pipes/short-number.pipe';
 import { CornerCard } from '../corner-card/corner-card';
+import { PlayerStats } from '../../services/player-stats.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-upgrade',
@@ -11,7 +13,7 @@ import { CornerCard } from '../corner-card/corner-card';
   styleUrl: './upgrade.css',
 })
 export class Upgrade {
-  constructor(public pointsService: PointsService) {}
+  constructor(public pointsService: PointsService, public playerStats: PlayerStats) {}
 
   // ID de la mejora
   @Input() id: number = 0;
@@ -23,12 +25,26 @@ export class Upgrade {
   @Input() price: number = 1;
   // Clicks generados por la mejora
   @Input() clicks: number = 3;
+  // Experiencia necesaria para desbloquear la mejora
+  @Input() level: number = 0;
+  // Experiencia por comprar la mejora
+  @Input() exp: number = 1;
 
+  private levelSub?: Subscription;
+  
   unlocked: boolean = true;
   bought: boolean = false;
 
   ngOnInit() {
     this.loadFromStorage();
+    this.levelSub = this.playerStats.level$.subscribe((level) => {
+      this.checkLevel(level);
+    });
+  }
+
+  // Comprobar si la mejora está desbloqueada
+  checkLevel(currentLevel: number) {
+    this.unlocked = currentLevel >= this.level;
   }
 
   // Método para comprar la mejora
@@ -40,6 +56,7 @@ export class Upgrade {
       this.bought = true;
       this.saveToStorage();
       this.pointsService.saveToStorage();
+      this.playerStats.addExp(this.exp);
     }
   }
 
@@ -57,5 +74,9 @@ export class Upgrade {
     if (typeof localStorage === 'undefined') return;
     // guardar estado de compra
     localStorage.setItem('upgrade_' + this.id + '_bought', String(this.bought));
+  }
+  
+  ngOnDestroy() {
+    this.levelSub?.unsubscribe(); // limpiar la suscripción
   }
 }

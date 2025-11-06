@@ -1,60 +1,71 @@
 import { Injectable, signal } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PlayerStats{
-  // state
+export class PlayerStats {
+  // state (signals)
   private _totalClicks = signal<number>(0);
-  private _level = signal<number>(0);
+  private _currentExp = signal<number>(0);
   private _expPerClick = signal<number>(1);
   private _expToNext = signal<number>(0);
-  private _currentExp = signal<number>(0);
   private _archivements = signal<number>(0);
   private _timePlaying = signal<number>(0);
+  
+  // BehaviorSubject para el nivel actual
+  public _level = new BehaviorSubject<number>(0);
 
   private intervalId: any;
   private isTimerRunning  = false;
 
-  // getter público (read-only signal)
+  // getter público (read-only signals)
   readonly totalClicks = this._totalClicks.asReadonly();
-  readonly level = this._level.asReadonly();
   readonly currentExp = this._currentExp.asReadonly();
   readonly expToNext = this._expToNext.asReadonly();
   readonly expPerClick = this._expPerClick.asReadonly();
   readonly archivements = this._archivements.asReadonly();
   readonly timePlaying = this._timePlaying.asReadonly();
 
-  //Constructor
+  // getter para nivel (BehaviorSubject)
+  readonly level$ = this._level.asObservable();
+
+  // Constructor
   constructor() {
     console.log('🔴 PlayerStats CONSTRUCTOR ejecutado');
+    // inicializar expToNext en base al nivel inicial
+    this.calculateExpToNext();
   }
 
-  //metodos
+  // métodos
 
   /**
    * Por cada click se actualiza el número de total de clicks en 1
    */
   addClick(): void {
-    this._totalClicks.update(clicks => clicks +1)
-    this._currentExp.update(total => total + this._expPerClick())
+    this._totalClicks.update(clicks => clicks + 1);
+    this._currentExp.update(total => total + this._expPerClick());
+    this.checkLevelUp();
+  }
+
+  addExp(exp: number): void {
+    this._currentExp.update(total => total + exp);
     this.checkLevelUp();
   }
 
   /**
-   * Actualiza la experiecien por click
+   * Actualiza la experiencia por click
    * @param newExp Nueva exp por click
    */
-  upgradeExpPerClick(newExp:number){
+  upgradeExpPerClick(newExp: number) {
     this._expPerClick.set(newExp);
   }
 
   /**
-   * Calcula la experiencia necesaria por nivel a través de un formula cuadratica
+   * Calcula la experiencia necesaria por nivel a través de una fórmula cuadrática
    */
   private calculateExpToNext(): void {
-    // Suponiendo que el nivel depende de los clics
-    const n = this._level();
+    const n = this._level.value;
     const a = 50;
     const b = 50;
 
@@ -73,17 +84,22 @@ export class PlayerStats{
       this.levelUp(expExtra);
     }
   }
+
   /**
    * Acción cuando se sube de nivel
    */
-  private levelUp(expExtra:number):void{
-    //Actualización de nivel
-    this._level.update(level => level +1);
-    //Actualizar la exp actual con la exp sobrante
+  private levelUp(expExtra: number): void {
+    // Actualización de nivel
+    const nextLevel = this._level.value + 1;
+    this._level.next(nextLevel);
+
+    // Actualizar la exp actual con la exp sobrante
     this._currentExp.set(expExtra);
-    //Volver a calcular cuanta exp necesita el nivel
+
+    // Volver a calcular cuanta exp necesita el nivel
     this.calculateExpToNext();
-    //Verificar si con la exp sobrante se puede subir de nivel
+
+    // Verificar si con la exp sobrante se puede subir de nivel
     this.checkLevelUp();
   }
 
@@ -98,17 +114,19 @@ export class PlayerStats{
       });
     }, 1000);
   }
+
   stopTimer() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.isTimerRunning = false;
     }
   }
+
   /**
    * TODO: archivements
    */
 
-  loadFromStorage(){
+  loadFromStorage() {
     if (typeof localStorage == "undefined") return;
 
     const epc = localStorage.getItem("expPerClick");
@@ -120,8 +138,8 @@ export class PlayerStats{
     const arch = localStorage.getItem("archivements");
     if (arch) this._archivements.set(Number(arch));
 
-    const lvl =localStorage.getItem("level");
-    if(lvl) this._level.set(Number(lvl));
+    const lvl = localStorage.getItem("level");
+    if (lvl) this._level.next(Number(lvl));
 
     const tc = localStorage.getItem("totalClicks");
     if (tc) this._totalClicks.set(Number(tc));
@@ -131,7 +149,11 @@ export class PlayerStats{
 
     const tp = localStorage.getItem("timePlaying");
     if (tp) this._timePlaying.set(Number(tp));
+
+    // después de cargar el nivel, recalcular expToNext por si usas el valor guardado
+    this.calculateExpToNext();
   }
+
   saveToStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
@@ -141,19 +163,13 @@ export class PlayerStats{
     localStorage.setItem('expToNext', String(this._expToNext()));
     // guardar logros
     localStorage.setItem('archivements', String(this._archivements()));
-    // guardar mnivel
-    localStorage.setItem('level', String(this._level()));
+    // guardar nivel
+    localStorage.setItem('level', String(this._level.value));
     // guardar los clicks totales realizados
     localStorage.setItem('totalClicks', String(this._totalClicks()));
     // guardar la experiencia actual
     localStorage.setItem('currentExp', String(this._currentExp()));
     // guardar el tiempo jugado
     localStorage.setItem('timePlaying', String(this._timePlaying()));
-  }
-  resetStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // a la mierda tu partida 🗿
-    localStorage.clear();
   }
 }

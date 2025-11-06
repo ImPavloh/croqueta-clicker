@@ -29,7 +29,7 @@ export class Stats {
 
   levelCurrent = computed<StatCardConfig> (() => ({
     title: 'Nivel: ',
-    value: this.playerStats.level(),
+    value: this.playerStats._level.getValue(),
     icon: 'level',
     format: 'number'
   }));
