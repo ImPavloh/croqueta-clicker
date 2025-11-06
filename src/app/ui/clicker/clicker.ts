@@ -6,6 +6,7 @@ import { Floating } from '../floating/floating';
 import { SkinsService } from '@services/skins.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { Subscription } from 'rxjs';
+import { AchievementsService } from '@services/achievements.service';
 
 @Component({
   selector: 'app-clicker',
@@ -22,7 +23,8 @@ export class Clicker {
   constructor(
     public pointsService: PointsService,
     private skinsService: SkinsService,
-    public playerStats: PlayerStats
+    public playerStats: PlayerStats,
+    private achievementsService: AchievementsService
   ) {}
 
   onClick() {
@@ -33,6 +35,16 @@ export class Clicker {
     this.pointsService.saveToStorage();
     this.playerStats.saveToStorage();
     this.resetAfkTimer();
+    this.checkAchievements();
+  }
+
+  checkAchievements() {
+    if (this.pointsService.points() >= 1) {
+      this.achievementsService.unlockAchievement('primera_croqueta');
+    }
+    if (this.pointsService.points() >= 100) {
+      this.achievementsService.unlockAchievement('100_croquetas');
+    }
   }
 
   ngOnInit() {

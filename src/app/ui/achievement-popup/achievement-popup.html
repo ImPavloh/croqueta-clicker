@@ -1,0 +1,13 @@
+<div class="achievement-popup">
+    @if (current) {
+    <div class="card" [class.show]="visible" role="status" aria-atomic="true">
+        <div class="icon">
+            <img [src]="current.icon" [alt]="current.title" />
+        </div>
+        <div class="content">
+            <div class="title">{{ current.title }}</div>
+            <div class="desc">{{ current.description }}</div>
+        </div>
+    </div>
+    }
+</div>

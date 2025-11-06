@@ -1,0 +1,36 @@
+.achievement-popup {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 6vh;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Card base */
+.card {
+  pointer-events: auto;
+  background: rgba(255,255,255,0.98);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 300px;
+  max-width: 420px;
+
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+  transition: opacity 300ms ease, transform 300ms cubic-bezier(.2,.9,.2,1);
+}
+
+.card.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.icon img { width:48px; height:48px; object-fit:cover; border-radius:8px; }
+.title { font-weight:700; font-size:1rem; }
+.desc { font-size:0.85rem; opacity:0.95; margin-top:4px; }
+.secret { font-style:italic; color:#666; font-size:0.9rem; margin-top:4px; }

@@ -6,10 +6,11 @@ import { Clicker } from '@ui/clicker/clicker';
 import { Counter } from '@ui/counter/counter';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
+import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Clicker, Counter],
+  imports: [RouterOutlet, Navbar, Clicker, Counter, AchievementPopup],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

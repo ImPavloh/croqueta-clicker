@@ -1,0 +1,47 @@
+<div class="achievements-container">
+    <div class="header">
+        <h3>Logros</h3>
+        <div class="count">{{ unlockedCount }} / {{ totalCount }}</div>
+    </div>
+
+    <ul class="list">
+        @for (item of achievementsWithState; track item) {
+        <li>
+            <div class="left">
+                @if (item.icon) {
+                <div class="icon"><img [src]="item.icon" [alt]="item.title" /></div>
+                }
+                <div class="meta">
+                    <div class="title">{{item.title}}</div>
+
+                    @if (!item.unlocked && !item.secret && item.description) {
+                    <div class="hint">
+                        {{ item.description }}
+                    </div>
+                    }
+
+                    @if (!item.unlocked && item.secret) {
+                    <div class="secret">
+                        ???
+                    </div>
+                    }
+
+                    @if (item.unlocked && item.description) {
+                    <div class="desc-unlocked">
+                        {{ item.description }}
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <div class="status">
+                @if (item.unlocked) {
+                <span class="unlocked">Desbloqueado</span>
+                } @else {
+                <span class="locked">Bloqueado</span>
+                }
+            </div>
+        </li>
+        }
+    </ul>
+</div>

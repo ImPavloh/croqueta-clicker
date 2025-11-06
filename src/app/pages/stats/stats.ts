@@ -2,10 +2,11 @@ import { Component, computed } from '@angular/core';
 import { PlayerStats } from '@services/player-stats.service';
 import { StatCardComponent, StatCardConfig } from '@ui/stat-card/stat-card';
 import { CommonModule } from '@angular/common';
+import { AchievementList } from '@ui/achievement-list/achievement-list';
 
 @Component({
   selector: 'app-stats',
-  imports: [StatCardComponent, CommonModule],
+  imports: [StatCardComponent, CommonModule, AchievementList],
   templateUrl: './stats.html',
   styleUrl: './stats.css',
 })

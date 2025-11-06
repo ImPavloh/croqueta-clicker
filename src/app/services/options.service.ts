@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { AchievementsService } from './achievements.service';
 
 
 @Injectable({
@@ -19,21 +20,33 @@ export class OptionsService {
     setGeneralVolume(value: number) {
         this._generalVolume.set(value);
         this.saveToStorage();
+        this.checkAchievements();
     }
     setMusicVolume(value: number) {
         this._musicVolume.set(value);
         this.saveToStorage();
+        this.checkAchievements();
     }
     setSfxVolume(value: number) {
         this._sfxVolume.set(value);
         this.saveToStorage();
+        this.checkAchievements();
     }
 
-    constructor() {
+    constructor(public achievementsService: AchievementsService) {
         this.loadFromStorage();
+    }
+
+    checkAchievements() {
+        // ejemplo: desbloquear un logro si el volumen general es 0 (silencio)
+        if (this._generalVolume() === 67 && this._musicVolume() === 67 && this._sfxVolume() === 67) {
+            this.achievementsService.unlockAchievement('six_seven');
+        }
     }
     restartGame() {
         // resetear valores del pointsService antes de limpiar storage porque hace lo que le sale de los huevos
+        // parece que AHORA esta funcionando sin resetear manualmente, pero lo dejo comentado por si acaso
+        // me cago en todo igualmente
         /*
           this._points.set(0);
           this._pointsPerSecond.set(0);
