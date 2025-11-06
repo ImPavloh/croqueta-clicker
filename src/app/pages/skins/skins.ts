@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SkinCard } from '../../ui/skin-card/skin-card';
+import { SkinCard } from '@ui/skin-card/skin-card';
 
 @Component({
   selector: 'app-skins',

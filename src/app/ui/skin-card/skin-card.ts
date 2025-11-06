@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SkinsService } from '../../services/skins.service';
+import { SkinsService } from '@services/skins.service';
 import { CornerCard } from '../corner-card/corner-card';
 
 @Component({

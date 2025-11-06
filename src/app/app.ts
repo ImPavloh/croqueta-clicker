@@ -1,11 +1,11 @@
 import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { Navbar } from './ui/navbar/navbar';
-import { Clicker } from './ui/clicker/clicker';
-import { Counter } from './ui/counter/counter';
-import { PointsService } from './services/points.service';
-import { PlayerStats } from './services/player-stats.service';
+import { Navbar } from '@ui/navbar/navbar';
+import { Clicker } from '@ui/clicker/clicker';
+import { Counter } from '@ui/counter/counter';
+import { PointsService } from '@services/points.service';
+import { PlayerStats } from '@services/player-stats.service';
 
 @Component({
   selector: 'app-root',

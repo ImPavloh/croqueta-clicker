@@ -1,10 +1,10 @@
-import { PlayerStats } from './../../services/player-stats.service';
+import { PlayerStats } from '@services/player-stats.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PointsService } from '../../services/points.service';
+import { PointsService } from '@services/points.service';
 import { Floating } from '../floating/floating';
-import { SkinsService } from '../../services/skins.service';
-import { ShortNumberPipe } from '../../pipes/short-number.pipe';
+import { SkinsService } from '@services/skins.service';
+import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -22,7 +22,8 @@ export class Clicker {
   constructor(
     public pointsService: PointsService,
     private skinsService: SkinsService,
-    public playerStats: PlayerStats) {}
+    public playerStats: PlayerStats
+  ) {}
 
   onClick() {
     this.pointsService.addPointsPerClick();
