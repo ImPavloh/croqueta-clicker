@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NEWS_DATA, NewsItem } from '../data/news.data';
+import { NEWS_DATA, NewsItem } from '@data/news.data';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NewsService {
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Obtiene las noticias para un nivel específico, ordenadas aleatoriamente.
@@ -14,7 +13,7 @@ export class NewsService {
    * @returns Un array de NewsItem ordenado aleatoriamente.
    */
   getNewsByLevel(level: number): NewsItem[] {
-    const filtered = NEWS_DATA.filter(item => item.level === level);
+    const filtered = NEWS_DATA.filter((item) => item.level === level);
     // Devolvemos una copia barajada para no mutar el array original
     return this.shuffleArray([...filtered]);
   }
@@ -35,9 +34,7 @@ export class NewsService {
       currentIndex--;
 
       // Intercambiarlo con el elemento actual
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]
-      ];
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
     return array;
   }

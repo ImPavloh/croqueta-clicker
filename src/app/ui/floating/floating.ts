@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FloatingService, FloatingMessage } from '../../services/floating.service';
+import { FloatingService, FloatingMessage } from '@services/floating.service';
 
 @Component({
   selector: 'app-floating',

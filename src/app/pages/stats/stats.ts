@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';
-import { PlayerStats } from '../../services/player-stats.service';
-import { StatCardComponent, StatCardConfig } from "../../ui/stat-card/stat-card";
+import { PlayerStats } from '@services/player-stats.service';
+import { StatCardComponent, StatCardConfig } from '@ui/stat-card/stat-card';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -17,27 +17,27 @@ export class Stats {
     title: 'Clicks Totales',
     value: this.playerStats.totalClicks(),
     icon: 'person',
-    format: 'number'
+    format: 'number',
   }));
 
-  totalTimePlaying = computed<StatCardConfig> (() => ({
+  totalTimePlaying = computed<StatCardConfig>(() => ({
     title: 'Tiempo jugado',
     value: this.playerStats.timePlaying(),
     icon: 'reloj',
-    format: 'time'
+    format: 'time',
   }));
 
-  levelCurrent = computed<StatCardConfig> (() => ({
+  levelCurrent = computed<StatCardConfig>(() => ({
     title: 'Nivel: ',
     value: this.playerStats.level(),
     icon: 'level',
-    format: 'number'
+    format: 'number',
   }));
 
-  expNecessary = computed<StatCardConfig> (() => ({
+  expNecessary = computed<StatCardConfig>(() => ({
     title: 'Próximo Nivel: ',
-    value: this.playerStats.currentExp()/this.playerStats.expToNext(),
+    value: this.playerStats.currentExp() / this.playerStats.expToNext(),
     icon: 'level',
-    format: 'percentage'
+    format: 'percentage',
   }));
 }

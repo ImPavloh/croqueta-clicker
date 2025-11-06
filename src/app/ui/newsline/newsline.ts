@@ -1,11 +1,11 @@
-import { 
-  Component, 
+import {
+  Component,
   input, // Nueva función para inputs
   computed, // Para estado derivado
   inject, // Para inyección de dependencias
-  ChangeDetectionStrategy 
+  ChangeDetectionStrategy,
 } from '@angular/core';
-import { NewsService } from '../../services/news.service';
+import { NewsService } from '@services/news.service';
 
 @Component({
   selector: 'app-newsline',
@@ -13,13 +13,12 @@ import { NewsService } from '../../services/news.service';
   imports: [], // No se necesita CommonModule para @for
   templateUrl: './newsline.html', // Enlazamos un HTML externo
   styleUrl: './newsline.css', // Enlazamos un CSS externo
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsLine {
-
   // Inyectamos el servicio usando la nueva función inject()
   private newsService = inject(NewsService);
-  
+
   // Definimos el input
   level = input<number>(1);
 
@@ -28,21 +27,17 @@ export class NewsLine {
   private newsString = computed(() => {
     // Obtenemos las noticias aleatorias del servicio
     const shuffledNews = this.newsService.getNewsByLevel(this.level());
-    
+
     if (shuffledNews.length === 0) {
       return 'No hay noticias disponibles para este nivel. ';
     }
 
     // Unimos todas las noticias en un solo string
     const separator = '  •  ';
-    return shuffledNews.map(item => item.news).join(separator) + separator;
+    return shuffledNews.map((item) => item.news).join(separator) + separator;
   });
 
   // Creamos un array con dos copias del string para el @for
   // Esto es necesario para la animación de bucle infinito.
-  protected displayItems = computed(() => [
-    this.newsString(), 
-    this.newsString()
-  ]);
-  
+  protected displayItems = computed(() => [this.newsString(), this.newsString()]);
 }
