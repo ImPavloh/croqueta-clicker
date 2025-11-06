@@ -1,67 +1,38 @@
-.achievements-container {
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.header {
+.achievement-list-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+    flex-direction: column;
+    height: 100%;
 }
 
-.count {
-    font-weight: 700;
+.achievement-list-scrollable {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 8px 16px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #b89c5a #f3eac2;
+    mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
 }
 
-.list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 8px;
+.achievement-list-scrollable::-webkit-scrollbar {
+    width: 10px;
 }
 
-li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+.achievement-list-scrollable::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 100%);
     border-radius: 8px;
-    background: #f8f8f8;
+    border: 2px solid #f3eac2;
 }
 
-.left {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+.achievement-list-scrollable::-webkit-scrollbar-track {
+    background: #f3eac2;
+    border-radius: 8px;
 }
 
-.icon img {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    object-fit: cover;
+app-corner-card {
+    transition: all 0.3s ease;
 }
 
-.title {
-    font-weight: 600;
-}
-
-.hint,
-.secret,
-.desc-unlocked {
-    font-size: 0.9rem;
-    color: #555;
-    margin-top: 4px;
-}
-
-.status .unlocked {
-    color: green;
-    font-weight: 700;
-}
-
-.status .locked {
-    color: #999;
+.grayscale {
+    filter: grayscale(100%);
 }

@@ -6,6 +6,8 @@ export interface FloatingMessage {
   rx: number;
   ry: number;
   duration: number;
+  x?: number;
+  y?: number;
 }
 
 @Injectable({
@@ -19,15 +21,27 @@ export class FloatingService {
 
   constructor() {}
 
-  // mostrar el mensaje flotante (puntos por segundo)
-  show(text: string, options?: { duration?: number }) {
+  // mostrar el mensaje flotante (puntos/croquetas)
+  show(text: string, options?: { duration?: number; x?: number; y?: number }) {
     const duration = options?.duration ?? 900;
     const uid = ++this.lastId;
 
-    const rx = Math.round((Math.random() - 0.5) * 80); // -40..40
-    const ry = Math.round((Math.random() - 0.5) * 40); // -20..20
+    let rx: number;
+    let ry: number;
+    let x: number | undefined;
+    let y: number | undefined;
 
-    const msg: FloatingMessage = { uid, text, rx, ry, duration };
+    if (options?.x !== undefined && options?.y !== undefined) {
+      x = options.x;
+      y = options.y - 40; // un poco más arriba del click (ajuste visual))
+      rx = 0;
+      ry = 0;
+    } else {
+      rx = Math.round((Math.random() - 0.5) * 80); // -40..40
+      ry = Math.round((Math.random() - 0.5) * 40); // -20..20
+    }
+
+    const msg: FloatingMessage = { uid, text, rx, ry, duration, x, y };
     this._messages.update((a) => [...a, msg]);
 
     // borrar

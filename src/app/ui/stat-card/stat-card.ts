@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CornerCard } from '@ui/corner-card/corner-card';
 
 export interface StatCardConfig {
   title: string;
@@ -12,7 +13,7 @@ export interface StatCardConfig {
 @Component({
   standalone: true,
   selector: 'app-stat-card',
-  imports: [CommonModule],
+  imports: [CommonModule, CornerCard],
   templateUrl: './stat-card.html',
   styleUrl: './stat-card.css',
 })

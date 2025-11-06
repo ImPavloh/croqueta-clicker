@@ -1,5 +1,7 @@
-<ng-container *ngFor="let m of floating.messages(); trackBy: trackByUid">
-  <span class="floating-text" [style.left]="getLeft(m)" [style.top]="getTop(m)">
-    {{ m.text }}
-  </span>
-</ng-container>
+<div class="floating-container">
+  @for (m of floating.messages(); track m.uid) {
+    <span class="floating-text" [style.left]="getLeft(m)" [style.top]="getTop(m)">
+      +{{ m.text | short}}
+    </span>
+  }
+</div>

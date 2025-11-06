@@ -1,0 +1,34 @@
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.8);
+
+  will-change: transform, opacity;
+  animation: particle-fly 1s ease-out forwards;
+}
+
+@keyframes particle-fly {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(calc(var(--vx) * 50px), calc(var(--vy) * 50px)) scale(0);
+    opacity: 0;
+  }
+}

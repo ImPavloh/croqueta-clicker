@@ -1,47 +1,76 @@
-<div class="achievements-container">
-    <div class="header">
-        <h3>Logros</h3>
-        <div class="count">{{ unlockedCount }} / {{ totalCount }}</div>
+<div class="achievement-list-container">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-sm">
+            Logros
+        </h2>
+        <div class="text-2xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-xs">
+            {{ unlockedCount }} / {{ totalCount }}
+        </div>
     </div>
 
-    <ul class="list">
-        @for (item of achievementsWithState; track item) {
-        <li>
-            <div class="left">
-                @if (item.icon) {
-                <div class="icon"><img [src]="item.icon" [alt]="item.title" /></div>
-                }
-                <div class="meta">
-                    <div class="title">{{item.title}}</div>
+    <div class="achievement-list-scrollable">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            @for (item of achievementsWithState; track item.id) {
+        <app-corner-card
+            [size]="'md'"
+            [active]="item.unlocked"
+            [variant]="item.unlocked ? 'primary' : 'default'"
+            [showCorners]="true"
+            cornerStyle="simple"
+        >
+            <div class="relative flex items-start gap-4 w-full">
+                <div class="shrink-0">
+                    @if (item.icon) {
+                        <img
+                            [src]="item.icon"
+                            [alt]="item.title"
+                            class="w-16 h-16 rounded-lg object-cover"
+                            [class.grayscale]="!item.unlocked"
+                            [class.opacity-50]="!item.unlocked"
+                        />
+                    }
+                </div>
+
+                <!-- Contenido del logro -->
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-xl mb-1"
+                        [class.text-amber-800]="item.unlocked"
+                        [class.text-gray-600]="!item.unlocked"
+                        [class.text-shadow-amber-950]="item.unlocked"
+                        [class.text-shadow-xs]="item.unlocked">
+                        {{ item.title }}
+                    </h3>
 
                     @if (!item.unlocked && !item.secret && item.description) {
-                    <div class="hint">
-                        {{ item.description }}
-                    </div>
+                        <p class="text-sm text-gray-600 italic">
+                            {{ item.description }}
+                        </p>
                     }
 
                     @if (!item.unlocked && item.secret) {
-                    <div class="secret">
-                        ???
-                    </div>
+                        <p class="text-sm text-gray-500 italic tracking-wider">
+                            ??? Logro secreto ???
+                        </p>
                     }
 
                     @if (item.unlocked && item.description) {
-                    <div class="desc-unlocked">
-                        {{ item.description }}
-                    </div>
+                        <p class="text-sm text-amber-800 font-medium">
+                            {{ item.description }}
+                        </p>
                     }
                 </div>
-            </div>
 
-            <div class="status">
-                @if (item.unlocked) {
-                <span class="unlocked">Desbloqueado</span>
-                } @else {
-                <span class="locked">Bloqueado</span>
-                }
+                <span
+                    class="absolute top-0 right-0 inline-flex items-center px-3 py-1 rounded-full text-xs border shadow-lg"
+                    [ngClass]="item.unlocked
+                        ? 'bg-amber-200 text-amber-800 border-amber-400'
+                        : 'bg-gray-200 text-gray-600 border-gray-400'"
+                >
+                    {{ item.unlocked ? 'Completado' : 'Bloqueado' }}
+                </span>
             </div>
-        </li>
-        }
-    </ul>
+        </app-corner-card>
+            }
+        </div>
+    </div>
 </div>

@@ -1,4 +1,11 @@
-<app-corner-card>
+<app-corner-card
+  type="button"
+  [disabled]="pointsService.points() < price || !unlocked"
+  [hoverable]="pointsService.points() >= price && unlocked"
+  [active]="false"
+  [clickable]="true"
+  [showBorder]="true"
+  >
   <button
     (click)="buyProducer()"
     class="flex w-full items-center justify-between"
@@ -22,7 +29,7 @@
       <p class="flex italic opacity-50">"{{ description }}"</p>
     </div>
     } @else {
-    <div class="flex w-full h-16 justify-center items-center italic opacity-50">
+    <div class="flex w-full h-16 justify-center items-center italic opacity-70 text-amber-800">
       <p>???</p>
     </div>
     }

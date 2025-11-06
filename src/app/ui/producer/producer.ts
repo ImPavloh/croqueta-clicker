@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
-import { CornerCard } from '../corner-card/corner-card';
+import { CornerCard } from '@ui/corner-card/corner-card';
 import { Subscription } from 'rxjs';
-import { PlayerStats } from '../../services/player-stats.service';
+import { PlayerStats } from '@services/player-stats.service';
 
 @Component({
   selector: 'app-producer',

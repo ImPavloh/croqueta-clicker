@@ -4,7 +4,14 @@
   class="pr-8 h-full w-3xs"
   [ngClass]="pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
 >
-  <app-corner-card>
+  <app-corner-card
+    type="button"
+    [disabled]="pointsService.points() < price || !unlocked"
+    [hoverable]="pointsService.points() >= price && unlocked"
+    [active]="false"
+    [clickable]="true"
+    [showBorder]="false"
+    >
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
     @if (unlocked) {
     <div class="flex flex-col items-center gap-2">
@@ -20,7 +27,7 @@
       </div>
     </div>
     } @else {
-    <div class="flex w-16 h-16 justify-center items-center italic opacity-50">
+    <div class="flex h-28 justify-center items-center italic opacity-70 text-amber-800">
       <p>???</p>
     </div>
     }

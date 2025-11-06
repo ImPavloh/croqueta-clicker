@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
-import { CornerCard } from '../corner-card/corner-card';
-import { PlayerStats } from '../../services/player-stats.service';
+import { CornerCard } from '@ui/corner-card/corner-card';
+import { PlayerStats } from '@services/player-stats.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -31,7 +31,7 @@ export class Upgrade {
   @Input() exp: number = 1;
 
   private levelSub?: Subscription;
-  
+
   unlocked: boolean = true;
   bought: boolean = false;
 
@@ -75,7 +75,7 @@ export class Upgrade {
     // guardar estado de compra
     localStorage.setItem('upgrade_' + this.id + '_bought', String(this.bought));
   }
-  
+
   ngOnDestroy() {
     this.levelSub?.unsubscribe(); // limpiar la suscripción
   }

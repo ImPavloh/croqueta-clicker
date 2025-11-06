@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
-import { NewsLine } from '../newsline/newsline';
+import { NewsLine } from '@ui/newsline/newsline';
 
 @Component({
   selector: 'app-navbar',

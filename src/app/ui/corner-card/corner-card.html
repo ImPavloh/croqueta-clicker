@@ -1,8 +1,33 @@
-<div class="corner-card">
-  <div class="corner top left"></div>
-  <div class="corner top right"></div>
-  <div class="corner bottom left"></div>
-  <div class="corner bottom right"></div>
+<div
+  [ngClass]="{
+    'corner-card': true,
+    'corner-card--button': type() === 'button',
+    'corner-card--active': active(),
+    'corner-card--disabled': disabled(),
+    'corner-card--clickable': clickable() || type() === 'button',
+    'corner-card--no-hover': !hoverable(),
+    'corner-card--no-corners': !showCorners(),
+    'corner-card--no-border': !showBorder(),
+    'corner-card--corners-classic': cornerStyle() === 'classic',
+    'corner-card--corners-simple': cornerStyle() === 'simple',
+    'corner-card--sm': size() === 'sm',
+    'corner-card--md': size() === 'md',
+    'corner-card--lg': size() === 'lg',
+    'corner-card--primary': variant() === 'primary',
+    'corner-card--success': variant() === 'success',
+    'corner-card--warning': variant() === 'warning',
+    'corner-card--danger': variant() === 'danger'
+  }"
+  [attr.role]="type() === 'button' ? 'button' : null"
+  [attr.tabindex]="type() === 'button' && !disabled() ? 0 : null"
+  [attr.disabled]="type() === 'button' && disabled() ? true : null"
+>
+  @if (showCorners()) {
+    <div class="corner top left"></div>
+    <div class="corner top right"></div>
+    <div class="corner bottom left"></div>
+    <div class="corner bottom right"></div>
+  }
 
   <ng-content></ng-content>
 </div>

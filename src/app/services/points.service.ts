@@ -27,13 +27,13 @@ export class PointsService {
 
   // métodos para modificar el estado
   // añadir puntos
-  addPointsPerClick() {
+  addPointsPerClick(x?: number, y?: number) {
     const amount = this.pointsPerClick() * this.multiply();
     this._points.update((v) => v + amount);
 
     // mostrar texto flotante junto a la croqueta
     if (typeof window !== 'undefined' && amount > 0) {
-      this.floatingService.show('+' + amount);
+      this.floatingService.show('+' + amount, { x, y });
     }
   }
   // añadir puntos por segundo
@@ -57,8 +57,6 @@ export class PointsService {
   substractPoints(number: number) {
     this._points.update((v) => v - number);
   }
-
-  // TODO: Implementar lógica de puntos por click
 
   // persistencia simple en localStorage
   loadFromStorage() {

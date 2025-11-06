@@ -15,7 +15,7 @@ export class Stats {
 
   // Usar computed para que se actualice automáticamente
   totalClicksView = computed<StatCardConfig>(() => ({
-    title: 'Clicks Totales',
+    title: 'Clicks totales',
     value: this.playerStats.totalClicks(),
     icon: 'person',
     format: 'number',
@@ -36,7 +36,7 @@ export class Stats {
   }));
 
   expNecessary = computed<StatCardConfig>(() => ({
-    title: 'Próximo Nivel: ',
+    title: 'Próximo nivel: ',
     value: this.playerStats.currentExp() / this.playerStats.expToNext(),
     icon: 'level',
     format: 'percentage',

@@ -25,6 +25,10 @@ export class ShortNumberPipe implements PipeTransform {
     // está en ingles, pero los sufijos son universales en el contexto de números grandes
     // lo mismo con el k, que sería m en español xD
     const units: { value: number; symbol: string }[] = [
+      { value: 1e27, symbol: 'R' }, // mil ronnabytes
+      { value: 1e24, symbol: 'Y' }, // mil yottabytes
+      { value: 1e21, symbol: 'Z' }, // mil zettabytes
+      { value: 1e18, symbol: 'E' }, // mil exabytes
       { value: 1e15, symbol: 'P' }, // mil billones
       { value: 1e12, symbol: 'T' }, // billón
       { value: 1e9, symbol: 'B' },  // mil millones

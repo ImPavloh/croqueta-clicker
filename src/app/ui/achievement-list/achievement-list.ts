@@ -1,13 +1,14 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AchievementsService } from '../../services/achievements.service';
-import { ACHIEVEMENTS, Achievement } from '../../data/achievements.data';
+import { AchievementsService } from '@services/achievements.service';
+import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
+import { CornerCard } from '@ui/corner-card/corner-card';
 
 @Component({
   selector: 'app-achievement-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CornerCard],
   templateUrl: './achievement-list.html',
   styleUrls: ['./achievement-list.css'],
 })

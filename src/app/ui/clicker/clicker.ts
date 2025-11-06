@@ -2,15 +2,17 @@ import { PlayerStats } from '@services/player-stats.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PointsService } from '@services/points.service';
-import { Floating } from '../floating/floating';
+import { Floating } from '@ui/floating/floating';
 import { SkinsService } from '@services/skins.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
+import { ParticlesService } from '@services/particles.service';
+import { Particles } from '@ui/particles/particles';
 
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule, Floating, ShortNumberPipe],
+  imports: [CommonModule, Floating, ShortNumberPipe, Particles],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
 })
@@ -24,11 +26,23 @@ export class Clicker {
     public pointsService: PointsService,
     private skinsService: SkinsService,
     public playerStats: PlayerStats,
-    private achievementsService: AchievementsService
+    private achievementsService: AchievementsService,
+    private particlesService: ParticlesService
   ) {}
 
-  onClick() {
-    this.pointsService.addPointsPerClick();
+  onClick(event?: MouseEvent) {
+    // obtener las coordenadas relativas al contenedor
+    let x: number | undefined;
+    let y: number | undefined;
+
+    if (event) {
+      const target = event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      x = event.clientX - rect.left;
+      y = event.clientY - rect.top;
+    }
+
+    this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
     this.playerStats.checkLevelUp();
     // guardar puntos tras cada click
@@ -36,6 +50,11 @@ export class Clicker {
     this.playerStats.saveToStorage();
     this.resetAfkTimer();
     this.checkAchievements();
+
+    // generar partículas en la posición del click
+    if (x !== undefined && y !== undefined) {
+      this.particlesService.spawn(x, y, 8);
+    }
   }
 
   checkAchievements() {

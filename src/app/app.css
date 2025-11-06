@@ -1,7 +1,6 @@
 .page-content {
   overflow-y: auto;
   height: 100%;
-  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #b89c5a #f3eac2;
   mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
