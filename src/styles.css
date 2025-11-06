@@ -6,7 +6,7 @@
 }
 
 body {
-  background: url('/images/bg.jpg') no-repeat center/cover;
+  background: url('/images/bg.webp') no-repeat center/cover;
   backdrop-filter: blur(2px) brightness(0.8);
   overflow: hidden;
 }

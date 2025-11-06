@@ -92,7 +92,7 @@
   justify-content: center;
 
   opacity: 0;
-  background: url('/images/cc.png') no-repeat center/contain;
+  background: url('/images/cc.webp') no-repeat center/contain;
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
 
   transform: translate(-50%, -50%);
@@ -173,7 +173,7 @@
 @keyframes materia {
   0% {
     filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
-    background: url('/images/logo.png') no-repeat center/contain;
+    background: url('/images/logo.webp') no-repeat center/contain;
 
     border-radius: 20px;
     width: 30vw;
@@ -181,7 +181,7 @@
   100% {
     top: 50%;
 
-    background: url('/images/logo.png') no-repeat center/contain;
+    background: url('/images/logo.webp') no-repeat center/contain;
 
     border-radius: 20px;
     width: 30vw;

@@ -20,10 +20,7 @@ export class App implements OnInit, OnDestroy {
   protected readonly splashShown = signal(true);
 
   // cargar puntos al iniciar la app
-  constructor(
-    points: PointsService,
-    private playerStats: PlayerStats
-  ) {
+  constructor(points: PointsService, private playerStats: PlayerStats) {
     points.loadFromStorage();
     playerStats.loadFromStorage();
   }
@@ -37,8 +34,8 @@ export class App implements OnInit, OnDestroy {
       }, 5000);
     }
   }
-  ngOnDestroy(){
-     this.playerStats.stopTimer();
+  ngOnDestroy() {
+    this.playerStats.stopTimer();
   }
 
   protected hideSplash(): void {
