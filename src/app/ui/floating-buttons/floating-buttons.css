@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow, border-color;
   animation: pulse 2s ease-in-out infinite;
   position: relative;
   overflow: hidden;
@@ -108,5 +109,19 @@
   to {
     opacity: 1;
     transform: translateX(0) rotate(0deg);
+  }
+}
+
+/* moviles */
+@media (max-width: 768px) {
+  .floating-buttons {
+    top: auto;
+    bottom: 20px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
 }

@@ -19,12 +19,7 @@
 }
 
 .newsline-container:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(184, 156, 90, 0.2) 0%,
-    rgba(184, 156, 90, 0.1) 50%,
-    rgba(184, 156, 90, 0.2) 100%
-  );
+  background: linear-gradient(135deg, #f7f1d4 0%, #ece1b8 50%, #f7f1d4 100%);
   border-color: rgba(184, 156, 90, 0.5);
 }
 

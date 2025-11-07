@@ -2,7 +2,6 @@ import { PlayerStats } from '@services/player-stats.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { PointsService } from '@services/points.service';
-import { Floating } from '@ui/floating/floating';
 import { SkinsService } from '@services/skins.service';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
@@ -10,7 +9,7 @@ import { ParticlesService } from '@services/particles.service';
 
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule, Floating],
+  imports: [CommonModule],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
 })
