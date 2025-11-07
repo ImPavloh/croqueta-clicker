@@ -3,6 +3,7 @@ import { PlayerStats } from '@services/player-stats.service';
 import { StatCardComponent, StatCardConfig } from '@ui/stat-card/stat-card';
 import { CommonModule } from '@angular/common';
 import { AchievementList } from '@ui/achievement-list/achievement-list';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stats',
@@ -12,6 +13,19 @@ import { AchievementList } from '@ui/achievement-list/achievement-list';
 })
 export class Stats {
   constructor(public playerStats: PlayerStats) {}
+
+  private levelSub?: Subscription;
+  private level: number = 0;
+
+  ngOnInit() {
+    this.levelSub = this.playerStats.level$.subscribe((level) => {
+      this.level = level;
+    });
+  }
+
+  ngOnDestroy() {
+    this.levelSub?.unsubscribe();
+  }
 
   // Usar computed para que se actualice automáticamente
   totalClicksView = computed<StatCardConfig>(() => ({
@@ -30,7 +44,7 @@ export class Stats {
 
   levelCurrent = computed<StatCardConfig>(() => ({
     title: 'Nivel: ',
-    value: this.playerStats._level.getValue(),
+    value: this.level,
     icon: 'level',
     format: 'number',
   }));
