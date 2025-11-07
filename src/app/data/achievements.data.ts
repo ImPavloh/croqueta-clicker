@@ -11,11 +11,21 @@ export const ACHIEVEMENTS: Achievement[] = [
   // CLICKS
   // ------------------------------------------------------------
   { id: 'primera_croqueta', title: 'Primera croqueta', description: 'Cocina tu primera croqueta.', icon: '/assets/producers/click.webp' },
-  { id: '100_croquetas', title: '100 croquetas', description: 'Cocina 100 croquetas.', icon: '/assets/producers/click.webp' },
-  { id: '1000_croquetas', title: 'Mil croquetas', description: 'Cocina 1,000 croquetas.', icon: '/assets/producers/click.webp' },
-  { id: '10000_croquetas', title: 'Diez mil croquetas', description: 'Cocina 10,000 croquetas.', icon: '/assets/producers/click.webp' },
-  { id: '100000_croquetas', title: 'Cien mil croquetas', description: 'Cocina 100,000 croquetas.', icon: '/assets/producers/click.webp' },
-  { id: 'un_millon_croquetas', title: 'Un millón', description: 'Cocina 1,000,000 croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '100_croquetas', title: '100 croquetas', description: 'Cocina 100 de croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '1k_croquetas', title: 'Mil croquetas', description: 'Cocina 1k de croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '10k_croquetas', title: 'Diez mil croquetas', description: 'Cocina 10k de croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '100k_croquetas', title: 'Cien mil croquetas', description: 'Cocina 100k de croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '1m_croquetas', title: 'Un millón', description: 'Cocina 1M croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '100m_croquetas', title: 'Cien millones', description: 'Cocina 100M de croquetas.', icon: '/assets/producers/click.webp' },
+  { id: '1b_croquetas', title: 'Un billón', description: 'Cocina 1B de croquetas...', icon: '/assets/producers/click.webp' },
+  { id: '1t_croquetas', title: 'Un trillón', description: '¿Un 1T de croquetas...?', icon: '/assets/producers/click.webp' },
+  { id: '1qa_croquetas', title: 'Un quadrillón', description: '¿Y si sales a la calle un rato?', icon: '/assets/producers/click.webp' },
+  { id: '1qi_croquetas', title: 'Un quatrillón', description: 'Creo que ya es suficiente...', icon: '/assets/producers/click.webp' },
+  { id: '1sx_croquetas', title: 'Un sextillón', description: 'Me estoy empezando a preocupar.', icon: '/assets/producers/click.webp' },
+  { id: '1sp_croquetas', title: 'Un septillón', description: '¿Has pensado en buscar trabajo?', icon: '/assets/producers/click.webp' },
+  { id: '1oc_croquetas', title: 'Un octillón', description: 'Nuevo objetivo: Tocar hierba.', icon: '/assets/producers/click.webp' },
+  { id: '1nn_croquetas', title: 'Un nonillón', description: 'No sabia que existia ese numero.', icon: '/assets/producers/click.webp' },
+  { id: '1dc_croquetas', title: 'Un decillón', description: 'Para, porfavor.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
   // 🏭 PRODUCTORES (Automatización de croquetas)
