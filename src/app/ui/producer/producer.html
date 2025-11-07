@@ -5,14 +5,10 @@
   [active]="false"
   [clickable]="true"
   [showBorder]="true"
-  >
-  <button
-    (click)="buyProducer()"
-    class="flex w-full items-center justify-between"
-    [ngClass]="
-      pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
-    "
-  >
+  (click)="buyProducer()"
+  [ngClass]="pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
+>
+  <div class="flex w-full items-center justify-between">
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
     @if (unlocked) {
     <div class="flex h-16">
@@ -33,5 +29,5 @@
       <p>???</p>
     </div>
     }
-  </button>
+  </div>
 </app-corner-card>

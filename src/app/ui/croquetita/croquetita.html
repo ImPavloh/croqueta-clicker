@@ -1,0 +1,29 @@
+<div class="croquetita-container">
+  <!-- croquetita :3 -->
+  <button
+    class="croquetita-character"
+    (click)="toggleHelper()"
+    [class.talking]="isOpen()"
+    title="Haz click en Croquetita para recibir ayuda"
+  >
+    <img src="assets/croquetita/croquetita.webp" class="croquetita-face" />
+    @if (!isOpen()) {
+    <span class="croquetita-bubble-indicator">💬</span>
+    }
+  </button>
+
+  @if (isOpen()) {
+  <div class="croquetita-dialog" [class.animate]="isAnimating()">
+    <button class="close-btn" (click)="close()" title="Cerrar">✕</button>
+    <div class="croquetita-message">
+      {{ currentMessage() }}
+    </div>
+    <div class="croquetita-actions">
+      <button class="action-btn" (click)="close()">Entendido</button>
+      <button class="action-btn secondary" (click)="resetTutorial()" title="Reiniciar tutorial">
+        Reiniciar
+      </button>
+    </div>
+  </div>
+  }
+</div>

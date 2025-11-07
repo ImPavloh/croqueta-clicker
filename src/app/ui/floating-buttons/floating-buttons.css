@@ -115,13 +115,11 @@
 /* moviles */
 @media (max-width: 768px) {
   .floating-buttons {
-    top: auto;
     bottom: 20px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
+    right: 20px;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    transform: translateY(0);
   }
 }

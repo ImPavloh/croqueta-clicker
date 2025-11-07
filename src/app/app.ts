@@ -6,6 +6,7 @@ import { Clicker } from '@ui/clicker/clicker';
 import { Counter } from '@ui/counter/counter';
 import { Particles } from '@ui/particles/particles';
 import { Floating } from '@ui/floating/floating';
+import { Croquetita } from '@ui/croquetita/croquetita';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
@@ -23,6 +24,7 @@ import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
     AchievementPopup,
     Particles,
     Floating,
+    Croquetita,
     NewsLine,
     Modal,
     FloatingButtons,

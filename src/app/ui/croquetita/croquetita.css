@@ -1,0 +1,203 @@
+.croquetita-container {
+  position: absolute;
+  bottom: 12px;
+  left: 5px;
+  z-index: 100;
+}
+
+.croquetita-character {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+.croquetita-character:hover {
+  transform: scale(1.05);
+}
+
+.croquetita-character.talking {
+  animation: bounce 0.5s ease;
+}
+
+.croquetita-face {
+  font-size: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.croquetita-bubble-indicator {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.croquetita-dialog {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  width: 320px;
+  max-width: 90vw;
+  background: white;
+  border: 3px solid #ff8c00;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.3s ease;
+}
+
+.croquetita-dialog.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* triangulo inferior que apunta a croquetita */
+.croquetita-dialog::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 30px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #ff8c00;
+}
+
+.croquetita-dialog::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 33px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid white;
+  z-index: 1;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #ff8c00;
+}
+
+.croquetita-message {
+  color: #333;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.croquetita-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+}
+
+.action-btn.secondary {
+  background: linear-gradient(135deg, #666 0%, #555 100%);
+  padding: 6px 12px;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .croquetita-character {
+    width: 60px;
+    height: 60px;
+  }
+
+  .croquetita-face {
+    font-size: 30px;
+  }
+
+  .croquetita-bubble-indicator {
+    font-size: 18px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .croquetita-dialog {
+    width: 280px;
+    bottom: 80px;
+    left: 0;
+  }
+
+  .croquetita-message {
+    font-size: 13px;
+  }
+}
