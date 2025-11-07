@@ -49,6 +49,7 @@
     "@angular/router": "^20.3.0",
     "@tailwindcss/postcss": "^4.1.16",
     "autoprefixer": "^10.4.21",
+    "break_infinity.js": "^2.2.0",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.16",

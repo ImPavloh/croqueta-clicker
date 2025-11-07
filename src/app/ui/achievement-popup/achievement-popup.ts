@@ -4,6 +4,7 @@ import { AchievementsService } from '@services/achievements.service';
 import { Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { CornerCard } from '@ui/corner-card/corner-card';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-achievement-popup',
@@ -22,7 +23,7 @@ export class AchievementPopup implements OnDestroy {
   private readonly DISPLAY_MS = 3500;
   private readonly FADE_MS = 300;
 
-  constructor(private svc: AchievementsService) {
+  constructor(private svc: AchievementsService, private audioService: AudioService) {
     // Suscribimos a la cola para arrancar el procesamiento cuando haya elementos
     this.subs.add(
       this.svc.queue$.subscribe(queue => {
@@ -57,6 +58,8 @@ export class AchievementPopup implements OnDestroy {
     return new Promise(resolve => {
       this.current = item;
       this.visible = true;
+      // SFX
+      this.audioService.playSfx("/assets/sfx/achievement.mp3",1)
 
       if (this.hideTimeout) clearTimeout(this.hideTimeout);
 

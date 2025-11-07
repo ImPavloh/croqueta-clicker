@@ -5,6 +5,8 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { PlayerStats } from '@services/player-stats.service';
 import { Subscription } from 'rxjs';
+import { AudioService } from '@services/audio.service';
+import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-upgrade',
@@ -13,7 +15,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './upgrade.css',
 })
 export class Upgrade {
-  constructor(public pointsService: PointsService, public playerStats: PlayerStats) {}
+  constructor(public pointsService: PointsService, public playerStats: PlayerStats, private audioService: AudioService) {}
 
   // ID de la mejora
   @Input() id: number = 0;
@@ -21,7 +23,7 @@ export class Upgrade {
   @Input() name: string = '';
   // Imagen de la mejora
   @Input() image: string = '';
-  // Precio de la mejora
+  // Precio de la mejora (se recibe como number, usamos Decimal internamente)
   @Input() price: number = 1;
   // Clicks generados por la mejora
   @Input() clicks: number = 3;
@@ -50,16 +52,49 @@ export class Upgrade {
   // Método para comprar la mejora
   buyUpgrade() {
     console.log('Buying upgrade:', this.name);
-    const pointsClick = this.pointsService.pointsPerClick() + this.clicks;
-    const newExp = Math.floor(Math.pow(pointsClick, 0.8) + pointsClick / 3);
-    if (this.pointsService.points() >= this.price && !this.bought) {
-      this.pointsService.substractPoints(this.price);
-      this.pointsService.upgradePointPerClick(pointsClick);
+
+    // pointsPerClick es Decimal (desde PointsService), sumamos clicks (number)
+    const pointsClickDecimal: Decimal = this.pointsService.pointsPerClick().plus(this.clicks);
+
+    // newExp = floor(pointsClick^0.8 + pointsClick / 3)
+    // Usamos Decimal para evitar pérdida de precisión en el cálculo intermedio
+    let newExpDecimal = pointsClickDecimal.pow(0.8).plus(pointsClickDecimal.dividedBy(3)).floor();
+
+    // convertir a number de forma segura (si el valor es demasiado grande, capear)
+    let newExp: number;
+    try {
+      newExp = newExpDecimal.toNumber();
+      if (!isFinite(newExp) || Number.isNaN(newExp)) {
+        // capear en caso de overflow
+        newExp = Number.MAX_SAFE_INTEGER;
+      }
+    } catch {
+      newExp = Number.MAX_SAFE_INTEGER;
+    }
+
+    const priceDecimal = new Decimal(this.price);
+
+    // comprobar si hay suficientes puntos y si no está ya comprada
+    if (this.pointsService.points().gte(priceDecimal) && !this.bought) {
+      // restar puntos usando Decimal
+      this.pointsService.substractPoints(priceDecimal);
+
+      // actualizar puntos por click (pointsClickDecimal es Decimal)
+      this.pointsService.upgradePointPerClick(pointsClickDecimal);
+
+      // actualizar la experiencia por click (playerStats suele usar number)
       this.playerStats.upgradeExpPerClick(newExp);
+
       this.bought = true;
       this.saveToStorage();
       this.pointsService.saveToStorage();
       this.playerStats.addExp(this.exp);
+
+      // SFX compra
+      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    } else {
+      // SFX error
+      this.audioService.playSfx('/assets/sfx/error.mp3', 1);
     }
   }
 
@@ -67,9 +102,9 @@ export class Upgrade {
   loadFromStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
-    // cargar estado de compra
+    // cargar estado de compra (guardamos 'true' / 'false' como string)
     const bought = localStorage.getItem('upgrade_' + this.id + '_bought');
-    if (bought) this.bought = Boolean(bought) || false;
+    if (bought !== null) this.bought = bought === 'true';
   }
 
   saveToStorage() {
