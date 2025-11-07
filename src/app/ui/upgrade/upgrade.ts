@@ -51,10 +51,11 @@ export class Upgrade {
   buyUpgrade() {
     console.log('Buying upgrade:', this.name);
     const pointsClick = this.pointsService.pointsPerClick() + this.clicks;
+    const newExp = Math.floor(Math.pow(pointsClick, 0.8) + pointsClick / 3);
     if (this.pointsService.points() >= this.price && !this.bought) {
       this.pointsService.substractPoints(this.price);
       this.pointsService.upgradePointPerClick(pointsClick);
-      this.playerStats.upgradeExpPerClick(pointsClick/2);
+      this.playerStats.upgradeExpPerClick(newExp);
       this.bought = true;
       this.saveToStorage();
       this.pointsService.saveToStorage();

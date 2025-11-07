@@ -1,10 +1,12 @@
 <div class="stats-container">
   <div class="stats-cards-fixed">
-    <div class="grid grid-cols-4 md:grid-cols-4 gap-8">
-      <app-stat-card [config]="totalClicksView()"></app-stat-card>
-      <app-stat-card [config]="totalTimePlaying()"></app-stat-card>
-      <app-stat-card [config]="levelCurrent()"></app-stat-card>
-      <app-stat-card [config]="expNecessary()"></app-stat-card>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      @for (stat of stats; track stat.id) {
+        <app-stat-card
+          [config]="stat"
+          [value]="getValue(stat.key)"
+        ></app-stat-card>
+      }
     </div>
   </div>
   <div class="achievement-list-wrapper">

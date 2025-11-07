@@ -12,19 +12,16 @@
     <div class="mb-1">
       @switch (config.format) {
         @case ('percentage') {
-          <span class="text-2xl font-bold text-amber-600">{{ config.value | percent:'1.1-1' }}</span>
-        }
-        @case ('currency') {
-          <span class="text-2xl font-bold text-green-600">{{ config.value | currency:'EUR':'symbol':'1.0-0' }}</span>
+          <span class="text-2xl font-bold text-amber-600">{{ value | percent:'1.1-1' }}</span>
         }
         @case ('number') {
-          <span class="text-2xl font-bold text-amber-700">{{ config.value | number:'1.0-0' }}</span>
+          <span class="text-2xl font-bold text-amber-700">{{ value | number:'1.0-0' }}</span>
         }
         @case ('time') {
-          <span class="text-2xl font-bold text-amber-800">{{ formatTime(config.value) }}</span>
+          <span class="text-2xl font-bold text-amber-800">{{ formatTime(value) }}</span>
         }
         @default {
-          <span class="text-2xl font-bold text-amber-700">{{ config.value }}</span>
+          <span class="text-2xl font-bold text-amber-700">{{ value }}</span>
         }
       }
     </div>

@@ -1,9 +1,12 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { PlayerStats } from '@services/player-stats.service';
-import { StatCardComponent, StatCardConfig } from '@ui/stat-card/stat-card';
+import { StatCardComponent } from '@ui/stat-card/stat-card';
 import { CommonModule } from '@angular/common';
 import { AchievementList } from '@ui/achievement-list/achievement-list';
-import { Subscription } from 'rxjs';
+import { STATS } from '@data/stats.data';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+
 
 @Component({
   selector: 'app-stats',
@@ -12,47 +15,26 @@ import { Subscription } from 'rxjs';
   styleUrl: './stats.css',
 })
 export class Stats {
-  constructor(public playerStats: PlayerStats) {}
+  private playerStats = inject(PlayerStats);
 
-  private levelSub?: Subscription;
-  private level: number = 0;
+  level = toSignal(this.playerStats._level, { initialValue: 0 });
 
-  ngOnInit() {
-    this.levelSub = this.playerStats.level$.subscribe((level) => {
-      this.level = level;
-    });
+  stats = STATS;
+
+  // Computar valores reactivamente
+  values = computed(() => {
+    return {
+      totalClicks: this.playerStats.totalClicks(),
+      timePlaying: this.playerStats.timePlaying(),
+      level: this.level(),
+      expProgress: this.playerStats.expToNext() > 0
+        ? this.playerStats.currentExp() / this.playerStats.expToNext() : 0
+    };
+  });
+
+   getValue(key: string): number {
+    // Usar aserción de tipo
+    const statsValues = this.values() as any;
+    return statsValues[key] || 0;
   }
-
-  ngOnDestroy() {
-    this.levelSub?.unsubscribe();
-  }
-
-  // Usar computed para que se actualice automáticamente
-  totalClicksView = computed<StatCardConfig>(() => ({
-    title: 'Clicks totales',
-    value: this.playerStats.totalClicks(),
-    icon: 'person',
-    format: 'number',
-  }));
-
-  totalTimePlaying = computed<StatCardConfig>(() => ({
-    title: 'Tiempo jugado',
-    value: this.playerStats.timePlaying(),
-    icon: 'reloj',
-    format: 'time',
-  }));
-
-  levelCurrent = computed<StatCardConfig>(() => ({
-    title: 'Nivel: ',
-    value: this.level,
-    icon: 'level',
-    format: 'number',
-  }));
-
-  expNecessary = computed<StatCardConfig>(() => ({
-    title: 'Próximo nivel: ',
-    value: this.playerStats.currentExp() / this.playerStats.expToNext(),
-    icon: 'level',
-    format: 'percentage',
-  }));
 }

@@ -1,0 +1,49 @@
+import { StatCardConfig } from "@ui/stat-card/stat-card";
+
+
+export const STATS: StatCardConfig[] = [
+
+  // ============================================================
+  // 🖱️ INTERACCIÓN - Estadísticas relacionadas con los clics
+  // ============================================================
+  {
+    id: 'total_clicks',
+    title: 'Clicks totales',
+    key: 'totalClicks', // nombre usado en PlayerStats
+    icon: 'mouse',
+    format: 'number',
+    description: 'Cantidad total de clics realizados por el jugador.',
+  },
+
+  // ============================================================
+  // ⏱️ TIEMPO DE JUEGO - Seguimiento de la duración de la sesión
+  // ============================================================
+  {
+    id: 'time_playing',
+    title: 'Tiempo jugado',
+    key: 'timePlaying',
+    icon: 'clock',
+    format: 'time',
+    description: 'Tiempo total que has pasado jugando.',
+  },
+
+  // ============================================================
+  // 🧩 NIVEL Y EXPERIENCIA - Progreso del jugador
+  // ============================================================
+  {
+    id: 'level_current',
+    title: 'Nivel actual',
+    key: 'level',
+    icon: 'level-up',
+    format: 'number',
+    description: 'Nivel actual alcanzado por el jugador.',
+  },
+  {
+    id: 'exp_progress',
+    title: 'Progreso al siguiente nivel',
+    key: 'expProgress', // se calculará: currentExp / expToNext
+    icon: 'progress',
+    format: 'percentage',
+    description: 'Porcentaje de progreso hacia el próximo nivel.',
+  },
+];
