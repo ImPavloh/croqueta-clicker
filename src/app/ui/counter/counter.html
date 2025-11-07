@@ -1,12 +1,15 @@
 <div class="counter text-white text-shadow-black text-center w-full gap-2 flex flex-col">
-  <p class="text-2xl sm:text-3xl md:text-4xl">{{ pointsService.points() | short }} croquetas</p>
-  @if (pointsService.pointsPerSecond() !== 0) {
-  <p class="text-xl sm:text-2xl md:text-3xl">
-    ( +{{ pointsService.pointsPerSecond() | short }} ¢ / seg )
+  <p class="text-2xl sm:text-3xl md:text-4xl">
+    {{ pointsService.points() | short }} croquetas
   </p>
+
+  @if (pointsService.pointsPerSecond().neq(0)) {
+    <p class="text-xl sm:text-2xl md:text-3xl">
+      (+{{ pointsService.pointsPerSecond() | short }} ¢ / seg)
+    </p>
   } @else {
     <p class="text-sm sm:text-base md:text-lg">
-      Haz clic para empezar a ganar croquetas
+      ¡Compra un productor para empezar a ganar croquetas automáticamente!
     </p>
   }
 </div>

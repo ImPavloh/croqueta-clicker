@@ -5,7 +5,8 @@
   color: rgb(255, 243, 216);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 
-  border-radius: 50% / 30%;
+  /*esto estaba en 50% / 30%, lo he tenido que tocar para que se vean bien algunas skins, si eso buscamos una alternativa*/
+  border-radius: 90% / 30%;
 
   width: 187px; /* un poco de hardcodeo nunca viene mal */
   height: 350px;
@@ -134,6 +135,42 @@
 
 .croqueta-dorada {
   background-image: url('/assets/skins/croqueta-dorada.webp');
+}
+/**/
+.croqueta-quemada{
+  background-image: url('/assets/skins/croqueta-quemada.webp');
+}
+
+.croqueta-cosmica{
+  background-image: url('/assets/skins/croqueta-cosmica.webp');
+}
+
+.croqueta-rey{
+  background-image: url('/assets/skins/croqueta-rey.webp');
+}
+
+.croqueta-papa{
+  background-image: url('/assets/skins/croqueta-papa.webp');
+}
+
+.croqueta-dios{
+  background-image: url('/assets/skins/croqueta-dios.webp');
+}
+
+.croqueta-phillipe{
+  background-image: url('/assets/skins/croqueta-phillipe.webp');
+}
+
+.croqueta-cookie{
+  background-image: url('/assets/skins/croqueta-cookie.webp');
+}
+
+.croqueta-platano{
+  background-image: url('/assets/skins/croqueta-platano.webp');
+}
+
+.croqueta-real{
+  background-image: url('/assets/skins/croqueta-real.webp');
 }
 
 /* para tablets */

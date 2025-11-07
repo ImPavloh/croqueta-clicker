@@ -1,54 +1,59 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import Decimal from 'break_infinity.js';
 
 @Pipe({
   name: 'short',
   standalone: true,
 })
 export class ShortNumberPipe implements PipeTransform {
-  transform(value: number | string | null | undefined, maxDecimals = 2): string {
-    const num = typeof value === 'string' ? parseFloat(value) : (value ?? 0);
-    if (!isFinite(num)) return String(value ?? '0');
+  transform(value: Decimal | number | string | null | undefined, maxDecimals = 2): string {
+    if (value == null) return '0';
 
-    const sign = num < 0 ? '-' : '';
-    const abs = Math.abs(num);
-
-    // si el número es menor a 10.000 mostrarlo completo (ya es mu corto)
-    if (abs < 10000) {
-      if (Number.isInteger(num)) {
-        return `${sign}${Math.abs(num)}`;
-      } else {
-        return `${sign}${Math.abs(num).toFixed(maxDecimals).replace(/\.0+$/, '').replace(/(\.[0-9]*[1-9])0+$/, '$1')}`;
-      }
+    // Convertir a Decimal de forma segura
+    let num: Decimal;
+    try {
+      num = value instanceof Decimal ? value : new Decimal(value);
+    } catch {
+      return String(value);
     }
 
-    // B es mil millones (billion en inglés), T es billón (trillion en inglés)
-    // está en ingles, pero los sufijos son universales en el contexto de números grandes
-    // lo mismo con el k, que sería m en español xD
-    const units: { value: number; symbol: string }[] = [
-      { value: 1e33, symbol: 'Dc' }, // decillón
-      { value: 1e30, symbol: 'Nn' }, // nonillón
-      { value: 1e27, symbol: 'Oc' }, // octillón
-      { value: 1e24, symbol: 'Sp' }, // septillón
-      { value: 1e21, symbol: 'Sx' }, // sextillón
-      { value: 1e18, symbol: 'Qi' }, // cuadrillón
-      { value: 1e15, symbol: 'Qa' }, // cuatrillón
-      { value: 1e12, symbol: 'T' }, // billón
-      { value: 1e9, symbol: 'B' },  // mil millones
-      { value: 1e6, symbol: 'M' },  // millón
-      { value: 1e3, symbol: 'K' },  // mil
+    const sign = num.lt(0) ? '-' : '';
+    const abs = num.abs();
+
+    // Mostrar número completo si es menor a 10,000
+    if (abs.lt(10000)) {
+      const formatted = abs.toFixed(maxDecimals).replace(/\.0+$/, '').replace(/(\.[0-9]*[1-9])0+$/, '$1');
+      return `${sign}${formatted}`;
+    }
+
+    // Escalas con sufijos
+    const units: { value: Decimal; symbol: string }[] = [
+      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
+      { value: new Decimal(1e30), symbol: 'Nn' }, // nonillón
+      { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
+      { value: new Decimal(1e24), symbol: 'Sp' }, // septillón
+      { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
+      { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
+      { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
+      { value: new Decimal(1e12), symbol: 'T' },  // trillón
+      { value: new Decimal(1e9), symbol: 'B' },   // mil millones
+      { value: new Decimal(1e6), symbol: 'M' },   // millón
+      { value: new Decimal(1e3), symbol: 'K' },   // mil
     ];
 
     for (const u of units) {
-      if (abs >= u.value) {
-        const normalized = abs / u.value;
-        const decimals = normalized < 10 ? Math.min(2, maxDecimals) : normalized < 100 ? Math.min(1, maxDecimals) : 0;
+      if (abs.gte(u.value)) {
+        const normalized = abs.div(u.value);
+        const decimals =
+          normalized.lt(10) ? Math.min(2, maxDecimals)
+          : normalized.lt(100) ? Math.min(1, maxDecimals)
+          : 0;
 
-        // quita ceros innecesarios
-        const formatted = Number(normalized.toFixed(decimals)).toString();
+        const formatted = normalized.toFixed(decimals).replace(/\.0+$/, '').replace(/(\.[0-9]*[1-9])0+$/, '$1');
         return `${sign}${formatted}${u.symbol}`;
       }
     }
 
-    return `${sign}${Math.round(num).toString()}`;
+    return `${sign}${abs.toFixed(0)}`;
   }
 }

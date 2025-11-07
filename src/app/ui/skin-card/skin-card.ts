@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkinsService } from '@services/skins.service';
 import { CornerCard } from '@ui/corner-card/corner-card';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-skin-card',
@@ -10,7 +11,7 @@ import { CornerCard } from '@ui/corner-card/corner-card';
   styleUrl: './skin-card.css',
 })
 export class SkinCard {
-  constructor(private skinsService: SkinsService) {}
+  constructor(private skinsService: SkinsService, private audioService: AudioService) {}
 
   // ID de la skin
   @Input() id: number = 0;
@@ -27,5 +28,7 @@ export class SkinCard {
 
   onClick() {
     this.skinsService.updateSkin(this.id);
+    // SFX
+    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
   }
 }

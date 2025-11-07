@@ -22,16 +22,14 @@ export class NewsLine {
   // Seleccionar nivel de noticias a mostrar
   private level: number = 1;
   private levelSub?: Subscription;
-  onNgInit() {
+  ngOnInit() {
     this.levelSub = this.playerStats.level$.subscribe((level) => {
-      if (level > 10){
-        this.level = 2;
+      this.level = 1;
+      if (level > 30){
+        this.level = 3;
       }
-      else if (level > 20){
+      else if (level > 15){
         this.level = 2;
-      }
-      else{
-        this.level = 1;
       }
     });
   }

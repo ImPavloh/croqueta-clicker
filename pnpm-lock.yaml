@@ -32,6 +32,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
+      break_infinity.js:
+        specifier: ^2.2.0
+        version: 2.2.0
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -1369,6 +1372,9 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
+  break_infinity.js@2.2.0:
+    resolution: {integrity: sha512-Li+150FfqGDj4gcJrgEJatFAR0OmfZyZLBGFKSHgjWKqKgWRm7GA+OmSSHwDFqkdOOjoY+R8X/jyDX/9MQEjmA==}
+
   browserslist@4.27.0:
     resolution: {integrity: sha512-AXVQwdhot1eqLihwasPElhX2tAZiBjWdJ9i/Zcj2S6QYIjkx62OKSfnobkriB81C3l4w0rVy3Nt4jaTBltYEpw==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -2427,6 +2433,9 @@ packages:
     resolution: {integrity: sha512-lcqexq73AMv6QNLo7SOpz0JJoaGdS3rBFgF122NZVl1bApo2mfu+XzUBU/X/XsiJu+iUmKpekRayqQYAs+PhkA==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
+
+  pad-end@1.0.2:
+    resolution: {integrity: sha512-pHkQejQ2oo08iXEDDFYxUK1xPe8L5fpbLSpkKk+ytimW70S8golMYFP9nAPTLXW6DTt+bF5QLcbswx5imMszHg==}
 
   parse5-html-rewriting-stream@8.0.0:
     resolution: {integrity: sha512-wzh11mj8KKkno1pZEu+l2EVeWsuKDfR5KNWZOTsslfUX8lPDZx77m9T0kIoAVkFtD1nx6YF8oh4BnPHvxMtNMw==}
@@ -4262,6 +4271,10 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
+  break_infinity.js@2.2.0:
+    dependencies:
+      pad-end: 1.0.2
+
   browserslist@4.27.0:
     dependencies:
       baseline-browser-mapping: 2.8.25
@@ -5418,6 +5431,8 @@ snapshots:
       tar: 6.2.1
     transitivePeerDependencies:
       - supports-color
+
+  pad-end@1.0.2: {}
 
   parse5-html-rewriting-stream@8.0.0:
     dependencies:

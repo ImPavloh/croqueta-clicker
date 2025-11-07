@@ -1,16 +1,16 @@
 <app-corner-card
   type="button"
-  [disabled]="pointsService.points() < price || !unlocked"
-  [hoverable]="pointsService.points() >= price && unlocked"
+  [disabled]="pointsService.points().lt(price) || !unlocked"
+  [hoverable]="pointsService.points().gte(price) && unlocked"
   [active]="false"
   [clickable]="true"
   [showBorder]="true"
-  >
+>
   <button
     (click)="buyProducer()"
     class="flex w-full items-center justify-between"
     [ngClass]="
-      pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
+      pointsService.points().lt(price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
     "
   >
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
@@ -19,7 +19,7 @@
       <img class="flex size-16 mr-4" src="{{ image }}" alt="{{ name }}" />
       <div class="flex flex-col items-start justify-center">
         <p class="flex text-3xl">{{ name }}</p>
-        <p [ngClass]="pointsService.points() >= price ? 'text-black' : 'text-red-500'">
+        <p [ngClass]="pointsService.points().gte(price) ? 'text-black' : 'text-red-500'">
           {{ price | short }} ¢
         </p>
       </div>

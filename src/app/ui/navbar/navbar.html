@@ -5,15 +5,16 @@
       routerLink="/"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
+      (click)="onClick()"
       >Mejoras</a
     >
-    <a class="nav-button" routerLink="/stats" routerLinkActive="active">Estadísticas</a>
+    <a class="nav-button" routerLink="/stats" routerLinkActive="active" (click)="onClick()">Estadísticas</a>
   </div>
   @if (!isMobile) {
   <app-newsline />
   }
   <div class="flex gap-2">
-    <a class="nav-button" routerLink="/skins" routerLinkActive="active">Skins</a>
-    <a class="nav-button" routerLink="/options" routerLinkActive="active">Opciones</a>
+    <a class="nav-button" routerLink="/skins" routerLinkActive="active" (click)="onClick()">Skins</a>
+    <a class="nav-button" routerLink="/options" routerLinkActive="active" (click)="onClick()">Opciones</a>
   </div>
 </nav>

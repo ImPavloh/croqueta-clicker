@@ -8,7 +8,7 @@ export interface Achievement {
 
 export const ACHIEVEMENTS: Achievement[] = [
   // ------------------------------------------------------------
-  // CLICKS
+  // CLICKS (Implementado)
   // ------------------------------------------------------------
   { id: 'primera_croqueta', title: 'Primera croqueta', description: 'Cocina tu primera croqueta.', icon: '/assets/producers/click.webp' },
   { id: '100_croquetas', title: '100 croquetas', description: 'Cocina 100 de croquetas.', icon: '/assets/producers/click.webp' },
@@ -28,7 +28,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: '1dc_croquetas', title: 'Un decillón', description: 'Para, porfavor.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
-  // 🏭 PRODUCTORES (Automatización de croquetas)
+  // 🏭 PRODUCTORES
   // ------------------------------------------------------------
   { id: 'primer_productor', title: 'Primer productor', description: 'Compra tu primer productor.', icon: '/assets/producers/click.webp' },
   { id: '10_productores', title: 'Fábrica pequeña', description: 'Compra 10 productores.', icon: '/assets/producers/click.webp' },
@@ -47,10 +47,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'todas_mejoras', title: 'Mejorado al máximo', description: 'Compra todas las mejoras.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
-  // 🕹️ INTERACCIÓN Y GAMEPLAY
+  // 🕹️ INTERACCIÓN Y GAMEPLAY (Implementado)
   // ------------------------------------------------------------
-  { id: 'click_rapido', title: 'Dedos veloces', description: 'Haz 100 clics en 10 segundos.', icon: '/assets/producers/click.webp' },
-  { id: 'no_clics_1min', title: 'Zen', description: 'No hagas clics durante 1 minuto.', icon: '/assets/producers/click.webp', secret: true },
+  { id: 'click_rapido', title: 'Dedos veloces', description: 'Haz 70 clicks en 10 segundos.', icon: '/assets/producers/click.webp', secret: true },
+  { id: 'speedrun', title: 'Speedrun', description: 'Haz 100 clicks en 10 segundos.', icon: '/assets/producers/click.webp', secret: true },
+  { id: 'autoclicker', title: 'Autoclicker', description: '¿250 clicks en 10 segundos? Lo dudo...', icon: '/assets/producers/click.webp', secret: true },
+  { id: 'no_clicks_1h', title: 'Zen', description: 'No hagas clicks durante 1 hora.', icon: '/assets/producers/click.webp', secret: true },
 
   // ------------------------------------------------------------
   // 📰 NOTICIAS Y CONTENIDO
