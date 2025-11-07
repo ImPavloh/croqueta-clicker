@@ -63,10 +63,10 @@ export class Croquetita {
 
     // Verificar condición de puntos
     if (msg.minPoints !== undefined) {
-      if (points < msg.minPoints) return false;
+      if (points.lt(msg.minPoints)) return false;
     }
     if (msg.maxPoints !== undefined) {
-      if (points > msg.maxPoints) return false;
+      if (points.gt(msg.maxPoints)) return false;
     }
 
     // Verificar condición de clicks
@@ -116,6 +116,7 @@ export class Croquetita {
     }
   }
 
+  // TODO: MEJORABLEEEEE
   private showAutoMessage() {
     const relevantMessages = this.messages
       .filter(
