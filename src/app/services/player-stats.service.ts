@@ -10,9 +10,8 @@ export class PlayerStats {
   private _currentExp = signal<number>(0);
   private _expPerClick = signal<number>(1);
   private _expToNext = signal<number>(0);
-  private _archivements = signal<number>(0);
   private _timePlaying = signal<number>(0);
-  
+
   // BehaviorSubject para el nivel actual
   public _level = new BehaviorSubject<number>(0);
 
@@ -24,7 +23,6 @@ export class PlayerStats {
   readonly currentExp = this._currentExp.asReadonly();
   readonly expToNext = this._expToNext.asReadonly();
   readonly expPerClick = this._expPerClick.asReadonly();
-  readonly archivements = this._archivements.asReadonly();
   readonly timePlaying = this._timePlaying.asReadonly();
 
   // getter para nivel (BehaviorSubject)
@@ -32,7 +30,6 @@ export class PlayerStats {
 
   // Constructor
   constructor() {
-    console.log('🔴 PlayerStats CONSTRUCTOR ejecutado');
     // inicializar expToNext en base al nivel inicial
     this.calculateExpToNext();
   }
@@ -109,7 +106,6 @@ export class PlayerStats {
     this.isTimerRunning = true;
     this.intervalId = setInterval(() => {
       this._timePlaying.update(current => {
-        console.log('🕐 Time playing:', current + 1);
         return current + 1;
       });
     }, 1000);
@@ -122,10 +118,6 @@ export class PlayerStats {
     }
   }
 
-  /**
-   * TODO: archivements
-   */
-
   loadFromStorage() {
     if (typeof localStorage == "undefined") return;
 
@@ -134,9 +126,6 @@ export class PlayerStats {
 
     const etn = localStorage.getItem("expToNext");
     if (etn) this._expToNext.set(Number(etn));
-
-    const arch = localStorage.getItem("archivements");
-    if (arch) this._archivements.set(Number(arch));
 
     const lvl = localStorage.getItem("level");
     if (lvl) this._level.next(Number(lvl));
@@ -161,8 +150,6 @@ export class PlayerStats {
     localStorage.setItem('expPerClick', String(this._expPerClick()));
     // guardar experiencia necesaria para el siguiente nivel
     localStorage.setItem('expToNext', String(this._expToNext()));
-    // guardar logros
-    localStorage.setItem('archivements', String(this._archivements()));
     // guardar nivel
     localStorage.setItem('level', String(this._level.value));
     // guardar los clicks totales realizados

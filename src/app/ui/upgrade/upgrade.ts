@@ -50,9 +50,11 @@ export class Upgrade {
   // Método para comprar la mejora
   buyUpgrade() {
     console.log('Buying upgrade:', this.name);
+    const pointsClick = this.pointsService.pointsPerClick() + this.clicks;
     if (this.pointsService.points() >= this.price && !this.bought) {
       this.pointsService.substractPoints(this.price);
-      this.pointsService.upgradePointPerClick(this.pointsService.pointsPerClick() + this.clicks);
+      this.pointsService.upgradePointPerClick(pointsClick);
+      this.playerStats.upgradeExpPerClick(pointsClick/2);
       this.bought = true;
       this.saveToStorage();
       this.pointsService.saveToStorage();
