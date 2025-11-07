@@ -4,15 +4,13 @@ import { Component } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { Floating } from '@ui/floating/floating';
 import { SkinsService } from '@services/skins.service';
-import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { ParticlesService } from '@services/particles.service';
-import { Particles } from '@ui/particles/particles';
 
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule, Floating, ShortNumberPipe, Particles],
+  imports: [CommonModule, Floating],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
 })
@@ -31,15 +29,21 @@ export class Clicker {
   ) {}
 
   onClick(event?: MouseEvent) {
-    // obtener las coordenadas relativas al contenedor
+    // obtener las coordenadas relativas al contenedor principal (clicker-container)
     let x: number | undefined;
     let y: number | undefined;
+    let containerWidth = 500;
 
     if (event) {
       const target = event.currentTarget as HTMLElement;
-      const rect = target.getBoundingClientRect();
-      x = event.clientX - rect.left;
-      y = event.clientY - rect.top;
+      const clickerContainer = target.closest('.clicker-container');
+
+      if (clickerContainer) {
+        const rect = clickerContainer.getBoundingClientRect();
+        x = event.clientX - rect.left;
+        y = event.clientY - rect.top;
+        containerWidth = rect.width;
+      }
     }
 
     this.pointsService.addPointsPerClick(x, y);
@@ -55,6 +59,9 @@ export class Clicker {
     if (x !== undefined && y !== undefined) {
       this.particlesService.spawn(x, y, 8);
     }
+
+    // generar partículas de croquetas cayendo
+    this.particlesService.spawnFallingCroquetas(containerWidth, 5);
   }
 
   checkAchievements() {

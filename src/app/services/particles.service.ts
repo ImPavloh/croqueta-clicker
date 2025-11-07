@@ -9,6 +9,8 @@ export interface Particle {
   color: string;
   size: number;
   duration: number;
+  type: 'circle' | 'croqueta';
+  rotation: number;
 }
 
 @Injectable({
@@ -25,13 +27,7 @@ export class ParticlesService {
   // crear partículas desde una posición específica
   spawn(x: number, y: number, count: number = 8) {
     const particles: Particle[] = [];
-    const colors = [
-      '#FFD700',
-      '#FFA500',
-      '#FF8C00',
-      '#FFFFE0',
-      '#FFF8DC',
-    ];
+    const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFFE0', '#FFF8DC'];
 
     for (let i = 0; i < count; i++) {
       const uid = ++this.lastId;
@@ -47,6 +43,41 @@ export class ParticlesService {
         color: colors[Math.floor(Math.random() * colors.length)],
         size: 4 + Math.random() * 6,
         duration: 600 + Math.random() * 400,
+        type: 'circle',
+        rotation: 0,
+      };
+
+      particles.push(particle);
+
+      // eliminar partícula después de su duración
+      setTimeout(() => {
+        this._particles.update((arr) => arr.filter((p) => p.uid !== uid));
+      }, particle.duration);
+    }
+
+    this._particles.update((arr) => [...arr, ...particles]);
+  }
+
+  // crear partículas de croquetas cayendo desde arriba
+  spawnFallingCroquetas(containerWidth: number, count: number = 5) {
+    const particles: Particle[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const uid = ++this.lastId;
+      const x = Math.random() * containerWidth;
+      const y = -50;
+
+      const particle: Particle = {
+        uid,
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: 3 + Math.random() * 2,
+        color: '',
+        size: 30 + Math.random() * 20,
+        duration: 1500 + Math.random() * 500,
+        type: 'croqueta',
+        rotation: Math.random() * 360,
       };
 
       particles.push(particle);

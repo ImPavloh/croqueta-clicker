@@ -1,76 +1,82 @@
 <div class="achievement-list-container">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-sm">
-            Logros
-        </h2>
-        <div class="text-2xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-xs">
-            {{ unlockedCount }} / {{ totalCount }}
-        </div>
+  <div class="flex justify-between items-center gap-4 mb-6">
+    <h2 class="text-3xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-sm shrink-0">
+      Logros
+    </h2>
+    <div class="grow w-full bg-amber-950/80 rounded-full h-4 overflow-hidden shadow-md">
+      <div
+        class="h-4 bg-linear-to-r from-yellow-500 to-yellow-700 rounded-full transition-all duration-500 ease-in-out"
+        [style.width.%]="(unlockedCount / totalCount) * 100"
+      ></div>
     </div>
+    <div
+      class="text-2xl font-bold text-yellow-500 text-shadow-amber-950 text-shadow-xs shrink-0 min-w-20 text-center"
+    >
+      {{ unlockedCount }} / {{ totalCount }}
+    </div>
+  </div>
 
-    <div class="achievement-list-scrollable">
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            @for (item of achievementsWithState; track item.id) {
-        <app-corner-card
-            [size]="'md'"
-            [active]="item.unlocked"
-            [variant]="item.unlocked ? 'primary' : 'default'"
-            [showCorners]="true"
-            cornerStyle="simple"
-        >
-            <div class="relative flex items-start gap-4 w-full">
-                <div class="shrink-0">
-                    @if (item.icon) {
-                        <img
-                            [src]="item.icon"
-                            [alt]="item.title"
-                            class="w-16 h-16 rounded-lg object-cover"
-                            [class.grayscale]="!item.unlocked"
-                            [class.opacity-50]="!item.unlocked"
-                        />
-                    }
-                </div>
-
-                <!-- Contenido del logro -->
-                <div class="flex-1 min-w-0">
-                    <h3 class="text-xl mb-1"
-                        [class.text-amber-800]="item.unlocked"
-                        [class.text-gray-600]="!item.unlocked"
-                        [class.text-shadow-amber-950]="item.unlocked"
-                        [class.text-shadow-xs]="item.unlocked">
-                        {{ item.title }}
-                    </h3>
-
-                    @if (!item.unlocked && !item.secret && item.description) {
-                        <p class="text-sm text-gray-600 italic">
-                            {{ item.description }}
-                        </p>
-                    }
-
-                    @if (!item.unlocked && item.secret) {
-                        <p class="text-sm text-gray-500 italic tracking-wider">
-                            ??? Logro secreto ???
-                        </p>
-                    }
-
-                    @if (item.unlocked && item.description) {
-                        <p class="text-sm text-amber-800 font-medium">
-                            {{ item.description }}
-                        </p>
-                    }
-                </div>
-
-                <span
-                    class="absolute top-0 right-0 inline-flex items-center px-3 py-1 rounded-full text-xs border shadow-lg"
-                    [ngClass]="item.unlocked
-                        ? 'bg-amber-200 text-amber-800 border-amber-400'
-                        : 'bg-gray-200 text-gray-600 border-gray-400'"
-                >
-                    {{ item.unlocked ? 'Completado' : 'Bloqueado' }}
-                </span>
-            </div>
-        </app-corner-card>
+  <div class="achievement-list-scrollable">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      @for (item of achievementsWithState; track item.id) {
+      <app-corner-card
+        [size]="'md'"
+        [active]="item.unlocked"
+        [variant]="item.unlocked ? 'primary' : 'default'"
+        [showCorners]="true"
+        cornerStyle="simple"
+      >
+        <div class="relative flex items-start gap-4 w-full">
+          <div class="shrink-0">
+            @if (item.icon) {
+            <img
+              [src]="item.icon"
+              [alt]="item.title"
+              class="w-16 h-16 rounded-lg object-cover"
+              [class.grayscale]="!item.unlocked"
+              [class.opacity-50]="!item.unlocked"
+            />
             }
+          </div>
+
+          <!-- Contenido del logro -->
+          <div class="flex-1 min-w-0">
+            <h3
+              class="text-xl mb-1"
+              [class.text-amber-800]="item.unlocked"
+              [class.text-gray-600]="!item.unlocked"
+              [class.text-shadow-amber-950]="item.unlocked"
+              [class.text-shadow-xs]="item.unlocked"
+            >
+              {{ item.title }}
+            </h3>
+
+            @if (!item.unlocked && !item.secret && item.description) {
+            <p class="text-sm text-gray-600 italic">
+              {{ item.description }}
+            </p>
+            } @if (!item.unlocked && item.secret) {
+            <p class="text-sm text-gray-500 italic tracking-wider">??? Logro secreto ???</p>
+            } @if (item.unlocked && item.description) {
+            <p class="text-sm text-amber-800 font-medium">
+              {{ item.description }}
+            </p>
+            }
+          </div>
+
+          <span
+            class="absolute top-0 right-0 inline-flex items-center px-3 py-1 rounded-full text-xs border shadow-lg"
+            [ngClass]="
+              item.unlocked
+                ? 'bg-amber-200/80 text-amber-800 border-amber-400'
+                : 'bg-gray-200/80 text-gray-600 border-gray-400'
+            "
+          >
+            {{ item.unlocked ? 'Completado' : 'Bloqueado' }}
+          </span>
         </div>
+      </app-corner-card>
+      }
     </div>
+  </div>
 </div>

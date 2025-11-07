@@ -3,8 +3,7 @@
   justify-content: space-between;
 
   background: #f3eac2;
-  border-bottom: 1px solid #b86715;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: #00000048 0px 2px 4px, #0000001e 0px 5px 10px -3px, #0000001f 0px -3px 0px inset;
 
   padding: 10px;
   gap: 10px;
@@ -13,7 +12,7 @@
 .nav-button {
   display: flex;
   padding: 10px 30px;
-  border-radius: 25px;
+  border-radius: 15px;
 
   text-decoration: none;
 
@@ -43,6 +42,7 @@
 /* para tablets */
 @media (max-width: 1024px) {
   .navbar {
+    border-radius: 15px;
     padding: 8px;
     gap: 8px;
   }

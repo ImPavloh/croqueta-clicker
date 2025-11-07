@@ -1,15 +1,28 @@
 <div class="particles-container">
-  @for (particle of particlesService.particles(); track trackByUid($index, particle)) {
-    <div
-      class="particle"
-      [style.left.px]="particle.x"
-      [style.top.px]="particle.y"
-      [style.background-color]="particle.color"
-      [style.width.px]="particle.size"
-      [style.height.px]="particle.size"
-      [style.--vx]="particle.vx"
-      [style.--vy]="particle.vy"
-      [style.animation-duration.ms]="particle.duration"
-    ></div>
-  }
+  @for (particle of particlesService.particles(); track trackByUid($index, particle)) { @if
+  (particle.type === 'circle') {
+  <div
+    class="particle"
+    [style.left.px]="particle.x"
+    [style.top.px]="particle.y"
+    [style.background-color]="particle.color"
+    [style.width.px]="particle.size"
+    [style.height.px]="particle.size"
+    [style.--vx]="particle.vx"
+    [style.--vy]="particle.vy"
+    [style.animation-duration.ms]="particle.duration"
+  ></div>
+  } @else if (particle.type === 'croqueta') {
+  <div
+    class="particle-croqueta"
+    [style.left.px]="particle.x"
+    [style.top.px]="particle.y"
+    [style.width.px]="particle.size"
+    [style.height.px]="particle.size"
+    [style.--vx]="particle.vx"
+    [style.--vy]="particle.vy"
+    [style.--rotation]="particle.rotation + 'deg'"
+    [style.animation-duration.ms]="particle.duration"
+  ></div>
+  } }
 </div>

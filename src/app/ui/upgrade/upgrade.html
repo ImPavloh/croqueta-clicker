@@ -1,7 +1,7 @@
 @if (!bought) {
 <button
   (click)="buyUpgrade()"
-  class="pr-8 h-full w-3xs"
+  class="pr-8 h-full max-w-3xs w-full min-w-48"
   [ngClass]="pointsService.points() < price || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
 >
   <app-corner-card
@@ -11,7 +11,7 @@
     [active]="false"
     [clickable]="true"
     [showBorder]="false"
-    >
+  >
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
     @if (unlocked) {
     <div class="flex flex-col items-center gap-2">
