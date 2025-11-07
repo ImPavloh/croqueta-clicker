@@ -33,7 +33,7 @@ export class FloatingService {
 
     if (options?.x !== undefined && options?.y !== undefined) {
       x = options.x;
-      y = options.y - 40; // un poco más arriba del click (ajuste visual))
+      y = options.y - 60; // un poco más arriba del click (ajuste visual))
       rx = 0;
       ry = 0;
     } else {
