@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ACHIEVEMENTS, Achievement } from '../data/achievements.data';
+import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 
 const STORAGE_KEY = 'croquetas_achievements_v1';
 
@@ -8,7 +8,8 @@ const STORAGE_KEY = 'croquetas_achievements_v1';
 export class AchievementsService {
   // BehaviorSubject que mantiene el mapa id -> boolean
   private unlockedMapSubject = new BehaviorSubject<Record<string, boolean>>({});
-  readonly unlockedMap$: Observable<Record<string, boolean>> = this.unlockedMapSubject.asObservable();
+  readonly unlockedMap$: Observable<Record<string, boolean>> =
+    this.unlockedMapSubject.asObservable();
 
   // BehaviorSubject que actúa como cola de logros a mostrar (FIFO)
   private queueSubject = new BehaviorSubject<Achievement[]>([]);
@@ -39,7 +40,7 @@ export class AchievementsService {
   }
 
   getAchievementById(id: string): Achievement | undefined {
-    return ACHIEVEMENTS.find(a => a.id === id);
+    return ACHIEVEMENTS.find((a) => a.id === id);
   }
 
   // snapshot helper (valor síncrono)
@@ -65,7 +66,7 @@ export class AchievementsService {
 
     // encola para popup si no está ya en la cola
     const q = this.queueSubject.getValue();
-    const exists = q.some(x => x.id === ach.id);
+    const exists = q.some((x) => x.id === ach.id);
     if (!exists) {
       this.queueSubject.next([...q, ach]);
     }
@@ -76,7 +77,7 @@ export class AchievementsService {
   // Devuelve snapshot de todos los logros con su estado actual
   getAllWithState(): Array<Achievement & { unlocked: boolean }> {
     const map = this.unlockedMapSnapshot();
-    return ACHIEVEMENTS.map(a => ({ ...a, unlocked: !!map[a.id] }));
+    return ACHIEVEMENTS.map((a) => ({ ...a, unlocked: !!map[a.id] }));
   }
 
   // Consumir (sacar) siguiente logro de la cola (lo usa el popup)
@@ -92,7 +93,9 @@ export class AchievementsService {
   resetAll(): void {
     this.unlockedMapSubject.next({});
     this.queueSubject.next([]);
-    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
   }
 
   // getters útiles para templates/otros (síncronos)

@@ -7,14 +7,14 @@
   pointer-events: none;
 }
 
-/* Card base */
 .card {
   min-width: 300px;
   max-width: 420px;
 
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   opacity: 0;
   transform: translateY(18px) scale(0.98);
-  transition: opacity 300ms ease, transform 300ms cubic-bezier(.2,.9,.2,1);
+  transition: opacity 300ms ease, transform 300ms cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
 .card.show {
@@ -22,7 +22,9 @@
   transform: translateY(0) scale(1);
 }
 
-.icon img { width:48px; height:48px; object-fit:cover; border-radius:8px; }
-.title { font-weight:700; font-size:1rem; }
-.desc { font-size:0.85rem; opacity:0.95; margin-top:4px; }
-.secret { font-style:italic; color:#666; font-size:0.9rem; margin-top:4px; }
+.icon img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}

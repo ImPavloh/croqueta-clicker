@@ -1,0 +1,21 @@
+@if (modalService.currentModal()) {
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ getModalTitle() }}</h2>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      @switch (modalService.currentModal()) { @case ('upgrades') {
+      <app-upgrades />
+      } @case ('stats') {
+      <app-stats />
+      } @case ('skins') {
+      <app-skins />
+      } @case ('options') {
+      <app-options />
+      } }
+    </div>
+  </div>
+</div>
+}

@@ -1,15 +1,14 @@
 .croqueta {
   z-index: 10;
-  background: url('/assets/skins/croqueta-jamon.webp') center/cover no-repeat;
-  background-size: contain;
+  background: url('/assets/skins/croqueta-jamon.webp') center/contain no-repeat;
 
   color: rgb(255, 243, 216);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 
-  border-radius: 100%;
+  border-radius: 50% / 30%;
 
-  width: 500px;
-  height: 500px;
+  width: 187px; /* un poco de hardcodeo nunca viene mal */
+  height: 350px;
 
   font-size: 3rem;
   font-weight: bold;
@@ -45,8 +44,8 @@
   top: 50%;
   left: 50%;
 
-  width: 600px;
-  height: 600px;
+  width: 550px;
+  height: 550px;
 
   pointer-events: none;
   user-select: none;
@@ -140,7 +139,7 @@
 /* para tablets */
 @media (max-width: 1024px) {
   .croqueta {
-    width: 250px;
+    width: 134px;
     height: 250px;
     font-size: 1.2rem;
   }
@@ -154,7 +153,7 @@
 /* para móviles */
 @media (max-width: 640px) {
   .croqueta {
-    width: 200px;
+    width: 107px;
     height: 200px;
     font-size: 1.1rem;
   }

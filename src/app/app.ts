@@ -8,10 +8,23 @@ import { Particles } from '@ui/particles/particles';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
+import { NewsLine } from '@ui/newsline/newsline';
+import { Modal } from '@ui/modal/modal';
+import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Clicker, Counter, AchievementPopup, Particles],
+  imports: [
+    RouterOutlet,
+    Navbar,
+    Clicker,
+    Counter,
+    AchievementPopup,
+    Particles,
+    NewsLine,
+    Modal,
+    FloatingButtons,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -26,6 +39,8 @@ export class App implements OnInit, OnDestroy {
     points.loadFromStorage();
     playerStats.loadFromStorage();
   }
+
+  public isMobile: boolean = window.innerWidth <= 1024;
 
   ngOnInit(): void {
     // ocultar splash automáticamente tras 2s

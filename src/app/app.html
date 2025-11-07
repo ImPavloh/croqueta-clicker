@@ -5,16 +5,23 @@
     <span class="croqueta-splash"></span>
     }
     <app-achievement-popup />
+    @if (isMobile) {
+    <app-newsline />
+    <app-modal />
+    <app-floating-buttons />
+    }
     <div class="clicker-container">
       <app-particles />
       <app-clicker />
       <app-counter />
     </div>
+    @if (!isMobile) {
     <div class="menu-container">
       <app-navbar />
       <div class="page-content">
         <router-outlet />
       </div>
     </div>
+    }
   </div>
 </main>

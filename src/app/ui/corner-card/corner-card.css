@@ -291,7 +291,7 @@
 
 /* Hover effect (solo si hoverable es true) */
 .corner-card:hover:not(.corner-card--disabled):not(.corner-card--no-hover) {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .corner-card:hover:not(.corner-card--disabled):not(.corner-card--no-hover) .corner.left.top {

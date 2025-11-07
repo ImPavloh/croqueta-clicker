@@ -1,4 +1,4 @@
-<nav class="navbar justify-between">
+<nav class="navbar justify-between items-center">
   <div class="flex gap-2">
     <a
       class="nav-button"
@@ -9,7 +9,9 @@
     >
     <a class="nav-button" routerLink="/stats" routerLinkActive="active">Estadísticas</a>
   </div>
-  <app-newsline/>
+  @if (!isMobile) {
+  <app-newsline />
+  }
   <div class="flex gap-2">
     <a class="nav-button" routerLink="/skins" routerLinkActive="active">Skins</a>
     <a class="nav-button" routerLink="/options" routerLinkActive="active">Opciones</a>
