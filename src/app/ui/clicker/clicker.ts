@@ -103,12 +103,8 @@ export class Clicker implements OnInit, OnDestroy {
   // Logros (thresholds como Decimal)
   achievements: { id: string; threshold: Decimal }[] = [
     { id: 'primera_croqueta', threshold: new Decimal('1') },
-    { id: '100_croquetas', threshold: new Decimal('1e2') },
     { id: '1k_croquetas', threshold: new Decimal('1e3') },
-    { id: '10k_croquetas', threshold: new Decimal('1e4') },
-    { id: '100k_croquetas', threshold: new Decimal('1e5') },
     { id: '1m_croquetas', threshold: new Decimal('1e6') },
-    { id: '100m_croquetas', threshold: new Decimal('1e8') },
     { id: '1b_croquetas', threshold: new Decimal('1e9') },
     { id: '1t_croquetas', threshold: new Decimal('1e12') },
     { id: '1qa_croquetas', threshold: new Decimal('1e15') },

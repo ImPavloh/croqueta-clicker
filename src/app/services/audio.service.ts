@@ -1,4 +1,4 @@
-// src/app/services/web-audio.service.ts
+// src/app/services/audio.service.ts
 import { Injectable, OnDestroy } from '@angular/core';
 import { OptionsService } from './options.service';
 import { combineLatest, Subscription } from 'rxjs';
@@ -32,9 +32,24 @@ export class AudioService implements OnDestroy {
   // --- Inicialización lazy del AudioContext y nodos ---
   private ensureCtx() {
     if (this.ctx) return;
+
+    // Limpieza: si hay audio elements creados por instancias previas del servicio, pararlos.
+    try {
+      const old = Array.from(document.querySelectorAll('audio[data-audioservice="true"]')) as HTMLAudioElement[];
+      for (const a of old) {
+        try {
+          a.pause();
+          a.currentTime = 0;
+          if (a.parentElement) a.parentElement.removeChild(a);
+        } catch {}
+      }
+    } catch (e) {
+      // no crítico
+    }
+
     const AC = (window as any).AudioContext || (window as any).webkitAudioContext;
     this.ctx = new AC();
-    
+
     if (this.ctx == null) return;
     this.masterGain = this.ctx.createGain();
     this.sfxGain = this.ctx.createGain();
@@ -46,9 +61,11 @@ export class AudioService implements OnDestroy {
     this.masterGain.connect(this.ctx.destination);
 
     // Inicializar gains con valores actuales de options (0..1)
-    this.masterGain.gain.value = this.options.getGeneral();
-    this.sfxGain.gain.value = this.options.getSfx();
-    this.musicGain.gain.value = this.options.getMusic();
+    const now = this.ctx.currentTime;
+    // usar setValueAtTime para evitar valores por defecto raros
+    this.masterGain.gain.setValueAtTime(this.options.getGeneral(), now);
+    this.sfxGain.gain.setValueAtTime(this.options.getSfx(), now);
+    this.musicGain.gain.setValueAtTime(this.options.getMusic(), now);
 
     // Suscribirse a cambios de sliders (observables 0..1 que devuelves en OptionsService)
     this.optionsSub = combineLatest([
@@ -57,27 +74,37 @@ export class AudioService implements OnDestroy {
       this.options.musicVolume$
     ]).subscribe(([g, s, m]) => {
       if (!this.ctx) return;
-      const now = this.ctx.currentTime;
+      const t = this.ctx!.currentTime;
       // rampillos cortos para suavizar cambios bruscos
-      this.masterGain.gain.cancelScheduledValues(now);
-      this.masterGain.gain.linearRampToValueAtTime(this.clamp(g), now + 0.05);
+      this.masterGain.gain.cancelScheduledValues(t);
+      this.masterGain.gain.linearRampToValueAtTime(this.clamp(g), t + 0.05);
 
-      this.sfxGain.gain.cancelScheduledValues(now);
-      this.sfxGain.gain.linearRampToValueAtTime(this.clamp(s), now + 0.05);
+      this.sfxGain.gain.cancelScheduledValues(t);
+      this.sfxGain.gain.linearRampToValueAtTime(this.clamp(s), t + 0.05);
 
-      this.musicGain.gain.cancelScheduledValues(now);
-      this.musicGain.gain.linearRampToValueAtTime(this.clamp(m), now + 0.05);
+      this.musicGain.gain.cancelScheduledValues(t);
+      this.musicGain.gain.linearRampToValueAtTime(this.clamp(m), t + 0.05);
     });
   }
 
   // --- Resume (usar en primer gesto del usuario) ---
+  // resumeIfNeeded mejorado
   async resumeIfNeeded() {
+    // Asegurar contexto y nodos
     this.ensureCtx();
     if (!this.ctx) return;
-    if (this.ctx.state === 'suspended') {
-      await this.ctx.resume();
+    try {
+      // Mostrar estado para debug
+      console.log('[AudioService] AudioContext state BEFORE resume:', this.ctx.state);
+      if (this.ctx.state === 'suspended') {
+        await this.ctx.resume();
+        console.log('[AudioService] AudioContext resumed.');
+      }
+    } catch (e) {
+      console.warn('[AudioService] resumeIfNeeded error:', e);
     }
   }
+
 
   // ---------------- SFX (pueden superponerse) ----------------
   /**
@@ -94,11 +121,10 @@ export class AudioService implements OnDestroy {
       try {
         const resp = await fetch(url, { cache: 'force-cache' });
         const ab = await resp.arrayBuffer();
-        // decodeAudioData puede devolver promise en navegadores modernos
         buffer = await this.ctx.decodeAudioData(ab);
-        this.sfxBufferCache.set(url, buffer);
+        this.sfx_buffer_cache_set(url, buffer); // usa helper por compatibilidad con TS estricto
       } catch (e) {
-        console.warn('WebAudioService: fallo al cargar/decodificar SFX', url, e);
+        console.warn('AudioService: fallo al cargar/decodificar SFX', url, e);
         return;
       }
     }
@@ -108,7 +134,7 @@ export class AudioService implements OnDestroy {
     src.buffer = buffer;
 
     const localGain = this.ctx.createGain();
-    localGain.gain.value = this.clamp(volumeMultiplier);
+    localGain.gain.setValueAtTime(this.clamp(volumeMultiplier), this.ctx.currentTime);
 
     // conectar: src -> localGain -> sfxGain -> master -> destination
     src.connect(localGain);
@@ -124,6 +150,11 @@ export class AudioService implements OnDestroy {
     };
 
     return src; // devuelve la fuente si quieres controlarla (stop etc.)
+  }
+
+  // Helper para evitar error de minificación/compilación si usas strictPropertyInitialization
+  private sfx_buffer_cache_set(url: string, buffer: AudioBuffer) {
+    this.sfxBufferCache.set(url, buffer);
   }
 
   // ---------------- Música (no superponer, crossfade) ----------------
@@ -152,6 +183,16 @@ export class AudioService implements OnDestroy {
     audio.loop = loop;
     audio.preload = 'auto';
     audio.crossOrigin = 'anonymous';
+
+    // marcar elemento para que instancias futuras lo encuentren y limpien (HMR / recompilaciones)
+    try {
+      audio.setAttribute('data-audioservice', 'true');
+      audio.style.display = 'none';
+      // fijar volumen inicial según options como fallback (0..1)
+      try { audio.volume = this.options.getMusic(); } catch {}
+      // añadir al DOM para poder localizarlo/limpiarlo si hay HMR
+      document.body.appendChild(audio);
+    } catch {}
 
     const srcNode = this.ctx.createMediaElementSource(audio);
     const trackGain = this.ctx.createGain();
@@ -188,6 +229,8 @@ export class AudioService implements OnDestroy {
         try {
           old.audio.pause();
           old.audio.currentTime = 0;
+          // eliminar del DOM si lo añadimos
+          if (old.audio.parentElement) old.audio.parentElement.removeChild(old.audio);
         } catch {}
         try { old.srcNode.disconnect(); } catch {}
         try { old.trackGain.disconnect(); } catch {}
@@ -204,7 +247,12 @@ export class AudioService implements OnDestroy {
   stopMusic(fadeOutSec = 0.5) {
     if (!this.ctx) {
       if (this.currentMusic) {
-        try { this.currentMusic.audio.pause(); } catch {}
+        try {
+          this.currentMusic.audio.pause();
+          if (this.currentMusic.audio.parentElement) {
+            this.currentMusic.audio.parentElement.removeChild(this.currentMusic.audio);
+          }
+        } catch {}
         this.currentMusic = null;
       }
       return;
@@ -221,6 +269,9 @@ export class AudioService implements OnDestroy {
       try {
         this.currentMusic!.audio.pause();
         this.currentMusic!.audio.currentTime = 0;
+        if (this.currentMusic!.audio.parentElement) {
+          this.currentMusic!.audio.parentElement.removeChild(this.currentMusic!.audio);
+        }
         this.currentMusic!.srcNode.disconnect();
         this.currentMusic!.trackGain.disconnect();
       } catch {}
@@ -240,5 +291,27 @@ export class AudioService implements OnDestroy {
       try { this.ctx.close(); } catch {}
       this.ctx = null;
     }
+
+    // cleanup audio elements actuales
+    if (this.currentMusic) {
+      try {
+        this.currentMusic.audio.pause();
+        if (this.currentMusic.audio.parentElement) {
+          this.currentMusic.audio.parentElement.removeChild(this.currentMusic.audio);
+        }
+      } catch {}
+      this.currentMusic = null;
+    }
+
+    // también intentar eliminar cualquier audio marcado (por ejemplo, si alguna quedó)
+    try {
+      const left = Array.from(document.querySelectorAll('audio[data-audioservice="true"]')) as HTMLAudioElement[];
+      for (const a of left) {
+        try {
+          a.pause();
+          if (a.parentElement) a.parentElement.removeChild(a);
+        } catch {}
+      }
+    } catch {}
   }
 }

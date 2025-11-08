@@ -74,7 +74,6 @@ export class App implements OnInit, OnDestroy {
 
       this.audioService.playMusic(url, true, 2);
     });
-    this.audioService.resumeIfNeeded();
   }
   ngOnDestroy() {
     this.playerStats.stopTimer();

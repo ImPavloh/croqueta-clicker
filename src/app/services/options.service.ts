@@ -1,5 +1,4 @@
-// src/app/services/options.service.ts
-import { Injectable, signal, Signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 
@@ -17,7 +16,7 @@ export class OptionsService {
   readonly musicVolume = this._musicVolume.asReadonly();
   readonly sfxVolume = this._sfxVolume.asReadonly();
 
-  // --- Observables normalizados 0..1 (para WebAudioService) ---
+  // --- Observables normalizados 0..1 (para AudioService) ---
   private _generalVolume$ = new BehaviorSubject<number>(1); // 0..1
   private _musicVolume$ = new BehaviorSubject<number>(1);
   private _sfxVolume$ = new BehaviorSubject<number>(1);
@@ -29,8 +28,6 @@ export class OptionsService {
 
   constructor(public achievementsService: AchievementsService) {
     this.loadFromStorage();
-    // Inicializar los BehaviorSubjects con el estado actual de los signals
-    this.syncSubjectsWithSignals();
   }
 
   // ----------------- setters públicos (reciben 0..100) -----------------
@@ -60,7 +57,7 @@ export class OptionsService {
   }
 
   // ----------------- getters sincrónicos (devuelven 0..1) -----------------
-  // WebAudioService y otros esperan valores 0..1, por eso estos getters devuelven 0..1
+  // AudioService y otros esperan valores 0..1, por eso estos getters devuelven 0..1
   getGeneral(): number {
     return this.toUnit(this._generalVolume());
   }
@@ -80,14 +77,8 @@ export class OptionsService {
     return Math.max(0, Math.min(1, v100 / 100));
   }
 
-  private syncSubjectsWithSignals() {
-    this._generalVolume$.next(this.toUnit(this._generalVolume()));
-    this._musicVolume$.next(this.toUnit(this._musicVolume()));
-    this._sfxVolume$.next(this.toUnit(this._sfxVolume()));
-  }
-
   checkAchievements() {
-    // ejemplo: desbloquear un logro si el volumen es exactamente 67 (tu ejemplo original)
+    // ejemplo: desbloquear un logro si el volumen es exactamente 67
     if (this._generalVolume() === 67 && this._musicVolume() === 67 && this._sfxVolume() === 67) {
       this.achievementsService.unlockAchievement('six_seven');
     }
@@ -103,16 +94,13 @@ export class OptionsService {
   loadFromStorage() {
     if (typeof localStorage === 'undefined') return;
     const generalVolume = localStorage.getItem('generalVolume');
-    if (generalVolume !== null) this._generalVolume.set(Number(generalVolume) || 100);
+    if (generalVolume !== null) this._generalVolume.set(Number(generalVolume));
 
     const musicVolume = localStorage.getItem('musicVolume');
-    if (musicVolume !== null) this._musicVolume.set(Number(musicVolume) || 100);
+    if (musicVolume !== null) this._musicVolume.set(Number(musicVolume));
 
     const sfxVolume = localStorage.getItem('sfxVolume');
-    if (sfxVolume !== null) this._sfxVolume.set(Number(sfxVolume) || 100);
-
-    // sincroniza subjects con los signals cargados
-    this.syncSubjectsWithSignals();
+    if (sfxVolume !== null) this._sfxVolume.set(Number(sfxVolume));
   }
 
   saveToStorage() {
