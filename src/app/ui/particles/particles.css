@@ -7,6 +7,9 @@
   pointer-events: none;
   overflow: hidden;
   z-index: 100;
+
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .particle {
@@ -16,6 +19,7 @@
   box-shadow: 0 0 4px rgba(255, 215, 0, 0.8);
 
   will-change: transform, opacity;
+  transform: translateZ(0);
   animation: particle-fly 1s ease-out forwards;
   z-index: 150;
 }
@@ -28,33 +32,34 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 
   will-change: transform, opacity;
+  transform: translateZ(0);
   animation: croqueta-fall 1.5s ease-in forwards;
 }
 
 @keyframes particle-fly {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 1;
   }
   50% {
     opacity: 0.8;
   }
   100% {
-    transform: translate(calc(var(--vx) * 50px), calc(var(--vy) * 50px)) scale(0);
+    transform: translate3d(calc(var(--vx) * 50px), calc(var(--vy) * 50px), 0) scale(0);
     opacity: 0;
   }
 }
 
 @keyframes croqueta-fall {
   0% {
-    transform: translate(0, 0) rotate(var(--rotation)) scale(1);
+    transform: translate3d(0, 0, 0) rotate(var(--rotation)) scale(1);
     opacity: 1;
   }
   50% {
     opacity: 0.9;
   }
   100% {
-    transform: translate(calc(var(--vx) * 100px), calc(var(--vy) * 200px))
+    transform: translate3d(calc(var(--vx) * 100px), calc(var(--vy) * 200px), 0)
       rotate(calc(var(--rotation) + 360deg)) scale(0.5);
     opacity: 0;
   }

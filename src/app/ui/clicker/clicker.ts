@@ -1,9 +1,8 @@
 import { PlayerStats } from '@services/player-stats.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { SkinsService } from '@services/skins.service';
-import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { ParticlesService } from '@services/particles.service';
 import { AudioService } from '@services/audio.service';
@@ -14,10 +13,15 @@ import Decimal from 'break_infinity.js';
   imports: [CommonModule],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Clicker implements OnInit, OnDestroy {
-  croquetaClass = '';
-  private skinSub?: Subscription;
+  currentSkin = signal<string>('croqueta-normal');
+  previousSkin = signal<string>('croqueta-normal');
+  showPrevious = signal(false);
+
+  isAfk = signal(false);
+
   private afkTimeout?: any;
   private readonly afkDelay = 5000;
 
@@ -36,7 +40,20 @@ export class Clicker implements OnInit, OnDestroy {
     private achievementsService: AchievementsService,
     private particlesService: ParticlesService,
     private audioService: AudioService
-  ) {}
+  ) {
+    this.skinsService.skinChanged$.subscribe((id) => {
+      const newSkin = this.getSkinClass(id);
+      if (newSkin !== this.currentSkin()) {
+        this.previousSkin.set(this.currentSkin());
+        this.showPrevious.set(true);
+        this.currentSkin.set(newSkin);
+
+        setTimeout(() => {
+          this.showPrevious.set(false);
+        }, 600);
+      }
+    });
+  }
 
   onClick(event?: MouseEvent) {
     // ME CAGO EN LA OST DE CRISTO PORQUE NO SE REPRODUCE JODEEEEEEEEEEEEEEEEEEEEEEEEEEEER
@@ -61,8 +78,8 @@ export class Clicker implements OnInit, OnDestroy {
     this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
     this.playerStats.checkLevelUp();
-    // guardar puntos tras cada click
-    this.pointsService.saveToStorage();
+    // guardar con debounce
+    this.pointsService.debouncedSave();
     this.playerStats.saveToStorage();
 
     this.recordClickTimestampAndCheck(); // cuenta clicks en los últimos 10s y desbloquea si toca
@@ -73,14 +90,14 @@ export class Clicker implements OnInit, OnDestroy {
 
     // generar partículas en la posición del click
     if (x !== undefined && y !== undefined) {
-      this.particlesService.spawn(x, y, 8);
+      this.particlesService.spawn(x, y, 6);
     }
 
     // generar partículas de croquetas cayendo
-    this.particlesService.spawnFallingCroquetas(containerWidth, 5);
+    this.particlesService.spawnFallingCroquetas(containerWidth, 3);
 
     // SFX
-    this.audioService.playSfx("/assets/sfx/click01.mp3",1)
+    this.audioService.playSfx('/assets/sfx/click01.mp3', 1);
   }
 
   // Logros (thresholds como Decimal)
@@ -115,13 +132,6 @@ export class Clicker implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // suscribirse a los cambios del skin
-    this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
-      this.updateCroquetaStyle(id);
-    });
-
-    // inicializar con el valor actual
-    this.updateCroquetaStyle(this.skinsService.skinId());
     this.startAfkTimer();
 
     // iniciar timer para el logro "no_clics_1h"
@@ -135,71 +145,55 @@ export class Clicker implements OnInit, OnDestroy {
     }
   }
 
-  updateCroquetaStyle(id: number) {
+  // esto lleva ya demasiado tiempo aqui asi, seria mejor hacer algo que gestione las skins mejor y no tan hardcodeado (usar data al menos)
+  private getSkinClass(id: number): string {
     switch (id) {
       case 1:
-        this.croquetaClass = 'croqueta-normal';
-        break;
+        return 'croqueta-normal';
       case 2:
-        this.croquetaClass = 'croqueta-jamon';
-        break;
+        return 'croqueta-jamon';
       case 3:
-        this.croquetaClass = 'croqueta-pollo';
-        break;
+        return 'croqueta-pollo';
       case 4:
-        this.croquetaClass = 'croqueta-queso';
-        break;
+        return 'croqueta-queso';
       case 5:
-        this.croquetaClass = 'croqueta-bacalao';
-        break;
+        return 'croqueta-bacalao';
       case 6:
-        this.croquetaClass = 'croqueta-setas';
-        break;
+        return 'croqueta-setas';
       case 7:
-        this.croquetaClass = 'croqueta-dorada';
-        break;
+        return 'croqueta-dorada';
       case 8:
-        this.croquetaClass = 'croqueta-quemada';
-        break;
+        return 'croqueta-quemada';
       case 9:
-        this.croquetaClass = 'croqueta-cosmica';
-        break;
+        return 'croqueta-cosmica';
       case 10:
-        this.croquetaClass = 'croqueta-rey';
-        break;
+        return 'croqueta-rey';
       case 11:
-        this.croquetaClass = 'croqueta-papa';
-        break;
+        return 'croqueta-papa';
       case 12:
-        this.croquetaClass = 'croqueta-dios';
-        break;
+        return 'croqueta-dios';
       case 13:
-        this.croquetaClass = 'croqueta-phillipe';
-        break;
+        return 'croqueta-phillipe';
       case 14:
-        this.croquetaClass = 'croqueta-cookie';
-        break;
+        return 'croqueta-cookie';
       case 15:
-        this.croquetaClass = 'croqueta-platano';
-        break;
+        return 'croqueta-platano';
       case 16:
-        this.croquetaClass = 'croqueta-real';
-        break;
+        return 'croqueta-real';
       default:
-        this.croquetaClass = 'croqueta-normal';
-        break;
+        return 'croqueta-normal';
     }
   }
 
   startAfkTimer() {
     this.afkTimeout = setTimeout(() => {
-      this.croquetaClass += ' afk';
+      this.isAfk.set(true);
     }, this.afkDelay);
   }
 
   resetAfkTimer() {
     clearTimeout(this.afkTimeout);
-    this.croquetaClass = this.croquetaClass.replace(' afk', '');
+    this.isAfk.set(false);
     this.startAfkTimer();
   }
 
@@ -259,7 +253,6 @@ export class Clicker implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------------------
 
   ngOnDestroy() {
-    this.skinSub?.unsubscribe(); // limpiar la suscripción
     clearTimeout(this.afkTimeout);
     clearTimeout(this.noClicksTimeout);
   }

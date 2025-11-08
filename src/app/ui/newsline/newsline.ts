@@ -4,6 +4,7 @@ import {
   input,
   computed,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NewsService } from '@services/news.service';
 import { Subscription } from 'rxjs';
@@ -17,7 +18,11 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsLine {
-  constructor(private newsService:NewsService, private playerStats:PlayerStats) {}
+  constructor(
+    private newsService: NewsService,
+    private playerStats: PlayerStats,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   // Seleccionar nivel de noticias a mostrar
   private level: number = 1;
@@ -25,12 +30,12 @@ export class NewsLine {
   ngOnInit() {
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       this.level = 1;
-      if (level > 30){
+      if (level > 30) {
         this.level = 3;
-      }
-      else if (level > 15){
+      } else if (level > 15) {
         this.level = 2;
       }
+      this.cdr.markForCheck();
     });
   }
 

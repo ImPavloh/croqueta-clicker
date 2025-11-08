@@ -21,11 +21,17 @@ export class ParticlesService {
   readonly particles = this._particles.asReadonly();
 
   private lastId = 0;
+  private readonly maxParticles = 100;
 
   constructor() {}
 
   // crear partículas desde una posición específica
   spawn(x: number, y: number, count: number = 8) {
+    // limitar partículas activas para evitar lag (importante xD) ~ sobretodo como se haga spam de clics
+    if (this._particles().length >= this.maxParticles) {
+      return;
+    }
+
     const particles: Particle[] = [];
     const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFFE0', '#FFF8DC'];
 
@@ -60,6 +66,11 @@ export class ParticlesService {
 
   // crear partículas de croquetas cayendo desde arriba
   spawnFallingCroquetas(containerWidth: number, count: number = 5) {
+    // lo mismo de antes, limitar particulas activas
+    if (this._particles().length >= this.maxParticles) {
+      return;
+    }
+
     const particles: Particle[] = [];
 
     for (let i = 0; i < count; i++) {

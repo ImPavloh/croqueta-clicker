@@ -3,9 +3,13 @@
     (click)="onClick($event)"
     (keydown)="preventKey($event)"
     tabindex="-1"
-    class="croqueta"
-    [ngClass]="croquetaClass"
+    class="croqueta-container"
+    [class.afk]="isAfk()"
   >
+    @if (showPrevious()) {
+    <span class="croqueta croqueta-layer croqueta-previous" [class]="previousSkin()"></span>
+    }
+    <span class="croqueta croqueta-layer croqueta-current" [class]="currentSkin()"></span>
   </span>
   <span class="croqueta-bg-light"></span>
 </div>

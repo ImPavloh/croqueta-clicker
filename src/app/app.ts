@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Navbar } from '@ui/navbar/navbar';
@@ -33,6 +33,7 @@ import { AudioService } from '@services/audio.service';
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
@@ -41,7 +42,11 @@ export class App implements OnInit, OnDestroy {
   protected readonly splashShown = signal(true);
 
   // cargar puntos al iniciar la app
-  constructor(points: PointsService, private playerStats: PlayerStats, private audioService: AudioService) {
+  constructor(
+    points: PointsService,
+    private playerStats: PlayerStats,
+    private audioService: AudioService
+  ) {
     points.loadFromStorage();
     playerStats.loadFromStorage();
   }

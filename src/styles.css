@@ -3,10 +3,45 @@
 
 * {
   font-family: 'Chewy', system-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: url('/images/bg.webp') no-repeat center/cover;
   backdrop-filter: blur(2px) brightness(0.8);
   overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+img,
+video {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Prevenir FOUC (Flash of Unstyled Content) https://dev.to/lyqht/what-the-fouc-is-happening-flash-of-unstyled-content-413j */
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+/* DOM oculto hasta que angular cargue */
+.cloak {
+  visibility: hidden;
+}
+
+.cloak.loaded {
+  visibility: visible;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }

@@ -18,6 +18,10 @@ export class PointsService {
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
   readonly multiply = this._multiply.asReadonly();
 
+  // debounce para guardado automático
+  private saveTimeout?: any;
+  private readonly saveDebounceMs = 5000; // cada 5 segs máximo
+
   constructor(private floatingService: FloatingService) {
     // Solo ejecutar en navegador
     if (typeof window !== 'undefined') {
@@ -48,7 +52,7 @@ export class PointsService {
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());
     }
-    this.saveToStorage();
+    this.debouncedSave();
   }
 
   // actualizar puntos por click (recibe number | string | Decimal)
@@ -84,6 +88,16 @@ export class PointsService {
     // cargar multiplicador por click
     const cmc = localStorage.getItem('multiply');
     if (cmc) this._multiply.set(new Decimal(cmc));
+  }
+
+  debouncedSave() {
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
+
+    this.saveTimeout = setTimeout(() => {
+      this.saveToStorage();
+    }, this.saveDebounceMs);
   }
 
   saveToStorage() {

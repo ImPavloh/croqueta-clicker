@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
@@ -9,6 +9,7 @@ import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
   imports: [CommonModule],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Croquetita {
   isOpen = signal(false);
@@ -27,7 +28,7 @@ export class Croquetita {
       if (!this.shownMessages.has('welcome')) {
         this.showAutoMessage();
       }
-    }, 2000);
+    }, 5000);
 
     // Revisar nuevos mensajes cada 30 segundos
     setInterval(() => {

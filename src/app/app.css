@@ -5,6 +5,10 @@
   scrollbar-color: #b89c5a #f3eac2;
   padding: 20px;
   background: linear-gradient(to bottom, #f3eac2, #f8f2dc);
+
+  will-change: scroll-position;
+  transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
 }
 
 .page-content::-webkit-scrollbar {
@@ -29,6 +33,9 @@
   flex-direction: row;
   height: 100vh;
   width: 100vw;
+
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .menu-container {
