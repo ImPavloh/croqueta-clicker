@@ -1,7 +1,7 @@
-import { StatCardConfig } from "@ui/stat-card/stat-card";
+import { StatModel } from "app/models/stat-model";
 
 
-export const STATS: StatCardConfig[] = [
+export const STATS: StatModel[] = [
 
   // ============================================================
   // 🖱️ INTERACCIÓN - Estadísticas relacionadas con los clics

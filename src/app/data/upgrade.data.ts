@@ -1,13 +1,6 @@
-export interface Upgrade {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  clicks: number;
-  level: number;
-  exp: number;
-}
-export const UPGRADES: Upgrade[] = [
+import { UpgradeModel } from "app/models/upgrade-model";
+
+export const UPGRADES: UpgradeModel[] = [
 
   // ============================================================
   // 🥇 EARLY GAME - Primeras mejoras para arrancar el juego

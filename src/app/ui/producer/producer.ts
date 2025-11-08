@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { ProducerModel } from './../../models/producer-model';
+import { Component, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
@@ -15,30 +16,17 @@ import Decimal from 'break_infinity.js';
   styleUrl: './producer.css',
 })
 export class Producer {
-  constructor(public pointsService: PointsService, public playerStats: PlayerStats, private audioService: AudioService) { }
 
-  // ID del productor
-  @Input() id: number = 0;
-  // Nombre del productor
-  @Input() name: string = '';
-  // Imagen del productor
-  @Input() image: string = '';
-  // Costo base del productor (se recibe como number, se convierte a Decimal en cálculos)
-  @Input() priceBase: number = 1;
-  // Multiplicador de costo del productor
-  @Input() priceMult: number = 1.05;
-  // Puntos base generados por el productor
-  @Input() pointsBase: number = 3;
-  // Suma de puntos generados por el productor por unidad
-  @Input() pointsSum: number = 1;
-  // Descripción del productor
-  @Input() description: string = '';
-  // Experiencia necesaria para desbloquear el productor
-  @Input() level: number = 0;
-  // Experiencia por comprar el productor
-  @Input() exp: number = 1;
+  private playerStats = inject(PlayerStats);
+  public pointsService = inject(PointsService);
+  private audioService = inject(AudioService);
+
 
   private levelSub?: Subscription;
+
+  // ID del productor
+  @Input() config!: ProducerModel;
+  @Input() loading: boolean = false;
 
   // cantidad (entera)
   quantity: number = 0;
@@ -58,14 +46,14 @@ export class Producer {
 
   // Comprobar si el productor está desbloqueado
   checkLevel(currentLevel: number) {
-    this.unlocked = currentLevel >= this.level;
+    this.unlocked = currentLevel >= this.config.level;
   }
 
   // Método para calcular el precio actual del productor (devuelve Decimal, redondeado hacia abajo)
   calculatePrice(quantity: number): Decimal {
     // price = floor(priceBase * priceMult^quantity)
-    const base = new Decimal(this.priceBase);
-    const mult = new Decimal(this.priceMult);
+    const base = new Decimal(this.config.priceBase);
+    const mult = new Decimal(this.config.priceMult);
     // usar pow sobre mult
     const value = base.times(mult.pow(quantity));
     return value.floor();
@@ -74,14 +62,14 @@ export class Producer {
   // Método para calcular los puntos generados por el productor (devuelve Decimal)
   calculatePoints(quantity: number): Decimal {
     // points = pointsBase + pointsSum * quantity
-    const base = new Decimal(this.pointsBase);
-    const sum = new Decimal(this.pointsSum).times(quantity);
+    const base = new Decimal(this.config.priceBase);
+    const sum = new Decimal(this.config.pointsSum).times(quantity);
     return base.plus(sum);
   }
 
   // Método para comprar el productor
   buyProducer() {
-    console.log('Buying producer:', this.name);
+    console.log('Buying producer:', this.config.name);
     const cost = this.calculatePrice(this.quantity);
     // comparar Decimal con Decimal
     if (this.pointsService.points().gte(cost)) {
@@ -98,7 +86,7 @@ export class Producer {
       this.points = this.calculatePoints(this.quantity);
       this.saveToStorage();
       this.pointsService.saveToStorage();
-      this.playerStats.addExp(this.exp);
+      this.playerStats.addExp(this.config.exp);
       // SFX
       this.audioService.playSfx("/assets/sfx/click02.mp3",1)
     }
@@ -113,7 +101,7 @@ export class Producer {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar cantidad
-    const q = localStorage.getItem('producer_' + this.id + '_quantity');
+    const q = localStorage.getItem('producer_' + this.config.id + '_quantity');
     if (q) this.quantity = Number(q) || 0;
   }
 
@@ -121,7 +109,7 @@ export class Producer {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar cantidad
-    localStorage.setItem('producer_' + this.id + '_quantity', String(this.quantity));
+    localStorage.setItem('producer_' + this.config.id + '_quantity', String(this.quantity));
   }
 
   ngOnDestroy() {

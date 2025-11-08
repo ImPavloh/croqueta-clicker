@@ -1,17 +1,7 @@
-export interface Producer {
-  id: number;
-  name: string;
-  image: string;
-  priceBase: number;
-  priceMult: number;
-  pointsBase: number;
-  pointsSum: number;
-  description: string;
-  level: number;
-  exp: number;
-}
+import { ProducerModel } from "app/models/producer-model";
 
-export const PRODUCERS: Producer[] = [
+
+export const PRODUCERS: ProducerModel[] = [
 
   // ============================================================
   // 🥚 EARLY GAME - Primeras fuentes automáticas de croquetas

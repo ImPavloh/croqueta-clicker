@@ -2,12 +2,12 @@
 <button
   (click)="buyUpgrade()"
   class="pr-8 h-full max-w-3xs w-full min-w-48"
-  [ngClass]="pointsService.points().lt(price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
+  [ngClass]="pointsService.points().lt(config.price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'"
 >
   <app-corner-card
     type="button"
-    [disabled]="pointsService.points().lt(price) || !unlocked"
-    [hoverable]="pointsService.points().gte(price) && unlocked"
+    [disabled]="pointsService.points().lt(config.price) || !unlocked"
+    [hoverable]="pointsService.points().gte(config.price) && unlocked"
     [active]="false"
     [clickable]="true"
     [showBorder]="false"
@@ -15,14 +15,14 @@
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
     @if (unlocked) {
     <div class="flex flex-col items-center gap-2">
-      <img class="flex size-16" src="{{ image }}" alt="{{ name }}" />
+      <img class="flex size-16" src="{{ config.image }}" alt="{{ config.name }}" />
       <div class="flex flex-col justify-center">
-        <p class="flex text-base">{{ name }}</p>
+        <p class="flex text-base">{{ config.name }}</p>
         <p
           class="text-xs"
-          [ngClass]="pointsService.points().gte(price) ? 'text-black' : 'text-red-500'"
+          [ngClass]="pointsService.points().gte(config.price) ? 'text-black' : 'text-red-500'"
         >
-          {{ price | short }} ¢
+          {{ config.price | short }} ¢
         </p>
       </div>
     </div>

@@ -1,16 +1,9 @@
-import { STATS } from './../../data/stats.data';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CornerCard } from '@ui/corner-card/corner-card';
+import { StatModel } from 'app/models/stat-model';
 
-export interface StatCardConfig {
-  id: string;                // identificador único
-  title: string;             // título mostrado
-  key: string;               // referencia al valor en PlayerStats
-  icon: string;              // nombre del icono
-  format: 'number' | 'percentage' | 'time';
-  description?: string;      // texto opcional para tooltip o ayuda
-}
+
 
 @Component({
   standalone: true,
@@ -21,7 +14,7 @@ export interface StatCardConfig {
 })
 
 export class StatCardComponent {
-  @Input() config!: StatCardConfig;
+  @Input() config!: StatModel;
   @Input() value: number = 0;
   @Input() loading: boolean = false;
 

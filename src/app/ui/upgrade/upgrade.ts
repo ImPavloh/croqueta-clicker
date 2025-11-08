@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
@@ -7,6 +7,7 @@ import { PlayerStats } from '@services/player-stats.service';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
 import Decimal from 'break_infinity.js';
+import { UpgradeModel } from 'app/models/upgrade-model';
 
 @Component({
   selector: 'app-upgrade',
@@ -15,22 +16,12 @@ import Decimal from 'break_infinity.js';
   styleUrl: './upgrade.css',
 })
 export class Upgrade {
-  constructor(public pointsService: PointsService, public playerStats: PlayerStats, private audioService: AudioService) {}
 
-  // ID de la mejora
-  @Input() id: number = 0;
-  // Nombre de la mejora
-  @Input() name: string = '';
-  // Imagen de la mejora
-  @Input() image: string = '';
-  // Precio de la mejora (se recibe como number, usamos Decimal internamente)
-  @Input() price: number = 1;
-  // Clicks generados por la mejora
-  @Input() clicks: number = 3;
-  // Experiencia necesaria para desbloquear la mejora
-  @Input() level: number = 0;
-  // Experiencia por comprar la mejora
-  @Input() exp: number = 1;
+  private playerStats = inject(PlayerStats);
+  public pointsService = inject(PointsService);
+  private audioService = inject(AudioService);
+
+  @Input() config!: UpgradeModel;
 
   private levelSub?: Subscription;
 
@@ -46,15 +37,15 @@ export class Upgrade {
 
   // Comprobar si la mejora está desbloqueada
   checkLevel(currentLevel: number) {
-    this.unlocked = currentLevel >= this.level;
+    this.unlocked = currentLevel >= this.config.level;
   }
 
   // Método para comprar la mejora
   buyUpgrade() {
-    console.log('Buying upgrade:', this.name);
+    console.log('Buying upgrade:', this.config.name);
 
     // pointsPerClick es Decimal (desde PointsService), sumamos clicks (number)
-    const pointsClickDecimal: Decimal = this.pointsService.pointsPerClick().plus(this.clicks);
+    const pointsClickDecimal: Decimal = this.pointsService.pointsPerClick().plus(this.config.clicks);
 
     // newExp = floor(pointsClick^0.8 + pointsClick / 3)
     // Usamos Decimal para evitar pérdida de precisión en el cálculo intermedio
@@ -72,7 +63,7 @@ export class Upgrade {
       newExp = Number.MAX_SAFE_INTEGER;
     }
 
-    const priceDecimal = new Decimal(this.price);
+    const priceDecimal = new Decimal(this.config.price);
 
     // comprobar si hay suficientes puntos y si no está ya comprada
     if (this.pointsService.points().gte(priceDecimal) && !this.bought) {
@@ -88,7 +79,7 @@ export class Upgrade {
       this.bought = true;
       this.saveToStorage();
       this.pointsService.saveToStorage();
-      this.playerStats.addExp(this.exp);
+      this.playerStats.addExp(this.config.exp);
 
       // SFX compra
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
@@ -103,7 +94,7 @@ export class Upgrade {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar estado de compra (guardamos 'true' / 'false' como string)
-    const bought = localStorage.getItem('upgrade_' + this.id + '_bought');
+    const bought = localStorage.getItem('upgrade_' + this.config.id + '_bought');
     if (bought !== null) this.bought = bought === 'true';
   }
 
@@ -111,7 +102,7 @@ export class Upgrade {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar estado de compra
-    localStorage.setItem('upgrade_' + this.id + '_bought', String(this.bought));
+    localStorage.setItem('upgrade_' + this.config.id + '_bought', String(this.bought));
   }
 
   ngOnDestroy() {
