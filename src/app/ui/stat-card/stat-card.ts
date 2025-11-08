@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CornerCard } from '@ui/corner-card/corner-card';
-import { StatModel } from 'app/models/stat-model';
+import { StatModel } from 'app/models/stat.model';
 
 
 

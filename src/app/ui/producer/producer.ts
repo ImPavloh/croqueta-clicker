@@ -1,4 +1,4 @@
-import { ProducerModel } from './../../models/producer-model';
+import { ProducerModel } from '../../models/producer.model';
 import { Component, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';

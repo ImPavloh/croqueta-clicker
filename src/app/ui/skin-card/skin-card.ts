@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkinsService } from '@services/skins.service';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { AudioService } from '@services/audio.service';
+import { SkinModel } from 'app/models/skin.model';
 
 @Component({
   selector: 'app-skin-card',
@@ -11,23 +12,17 @@ import { AudioService } from '@services/audio.service';
   styleUrl: './skin-card.css',
 })
 export class SkinCard {
-  constructor(private skinsService: SkinsService, private audioService: AudioService) {}
+  private skinsService = inject(SkinsService);
+  private audioService = inject(AudioService);
 
-  // ID de la skin
-  @Input() id: number = 0;
-  // Nombre de la skin
-  @Input() name: string = '';
-  // Descripción de la skin
-  @Input() description: string = '';
-  // Imagen de la skin
-  @Input() image: string = '';
+  @Input() config!: SkinModel;
 
   get isSelected(): boolean {
-    return this.skinsService.skinId() === this.id;
+    return this.skinsService.skinId() === this.config.id;
   }
 
   onClick() {
-    this.skinsService.updateSkin(this.id);
+    this.skinsService.updateSkin(this.config.id);
     // SFX
     this.audioService.playSfx("/assets/sfx/click02.mp3",1)
   }

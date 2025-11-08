@@ -1,4 +1,4 @@
-import { StatModel } from "app/models/stat-model";
+import { StatModel } from "app/models/stat.model";
 
 
 export const STATS: StatModel[] = [

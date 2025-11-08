@@ -1,4 +1,4 @@
-import { ProducerModel } from "app/models/producer-model";
+import { ProducerModel } from "app/models/producer.model";
 
 
 export const PRODUCERS: ProducerModel[] = [

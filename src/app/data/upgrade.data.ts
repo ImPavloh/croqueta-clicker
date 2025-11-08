@@ -1,4 +1,4 @@
-import { UpgradeModel } from "app/models/upgrade-model";
+import { UpgradeModel } from "app/models/upgrade.model";
 
 export const UPGRADES: UpgradeModel[] = [
 
