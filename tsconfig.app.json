@@ -8,6 +8,7 @@
     "baseUrl": "src",
     "paths": {
       "@data/*": ["app/data/*"],
+      "@models/*": ["app/models/*"],
       "@pages/*": ["app/pages/*"],
       "@pipes/*": ["app/pipes/*"],
       "@services/*": ["app/services/*"],
