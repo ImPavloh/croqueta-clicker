@@ -78,8 +78,6 @@ export class Clicker implements OnInit, OnDestroy {
     this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
     this.playerStats.checkLevelUp();
-    // guardar con debounce
-    this.pointsService.debouncedSave();
     this.playerStats.saveToStorage();
 
     this.recordClickTimestampAndCheck(); // cuenta clicks en los últimos 10s y desbloquea si toca
