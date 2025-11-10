@@ -1,20 +1,38 @@
 <nav class="navbar justify-between items-center">
   <div class="flex gap-2">
-    <a
-      class="nav-button"
-      routerLink="/"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
+    <app-button
+      variant="nav"
+      [routerLink]="'/'"
+      [routerLinkActiveExact]="true"
       (click)="onClick()"
-      >Mejoras</a
     >
-    <a class="nav-button" routerLink="/stats" routerLinkActive="active" (click)="onClick()">Estadísticas</a>
+      Mejoras
+    </app-button>
+    <app-button
+      variant="nav"
+      [routerLink]="'/stats'"
+      (click)="onClick()"
+    >
+      Estadísticas
+    </app-button>
   </div>
   @if (!isMobile) {
   <app-newsline />
   }
   <div class="flex gap-2">
-    <a class="nav-button" routerLink="/skins" routerLinkActive="active" (click)="onClick()">Skins</a>
-    <a class="nav-button" routerLink="/options" routerLinkActive="active" (click)="onClick()">Opciones</a>
+    <app-button
+      variant="nav"
+      [routerLink]="'/skins'"
+      (click)="onClick()"
+    >
+      Skins
+    </app-button>
+    <app-button
+      variant="nav"
+      [routerLink]="'/options'"
+      (click)="onClick()"
+    >
+      Opciones
+    </app-button>
   </div>
 </nav>

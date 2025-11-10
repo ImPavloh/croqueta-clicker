@@ -4,10 +4,11 @@ import { Upgrades } from '@pages/upgrades/upgrades';
 import { Stats } from '@pages/stats/stats';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
+import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-modal',
-  imports: [Upgrades, Stats, Skins, Options],
+  imports: [Upgrades, Stats, Skins, Options, ButtonComponent],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
@@ -32,5 +33,17 @@ export class Modal {
       default:
         return '';
     }
+  }
+
+  closeConfirm() {
+    this.modalService.closeConfirm();
+  }
+
+  confirmAction() {
+    this.modalService.confirm();
+  }
+
+  cancelAction() {
+    this.modalService.cancel();
   }
 }

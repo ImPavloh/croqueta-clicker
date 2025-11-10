@@ -4,6 +4,18 @@
   height: 100%;
 }
 
+.achievement-list-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  background: rgba(255, 248, 220, 0.95);
+  border: 2px solid #d4a574;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 6px;
+}
+
 .achievement-list-scrollable {
   overflow-y: auto;
   flex: 1;

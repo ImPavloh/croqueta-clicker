@@ -1,0 +1,26 @@
+<ng-template #projected>
+  <ng-content></ng-content>
+</ng-template>
+
+@if (routerLink) {
+  <a
+    [routerLink]="routerLink"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
+    [class]="'btn btn-' + variant"
+    [class.disabled]="disabled"
+    [class.full-width]="fullWidth"
+  >
+    <ng-container [ngTemplateOutlet]="projected"></ng-container>
+  </a>
+} @else {
+  <button
+    [type]="type"
+    [disabled]="disabled"
+    [class]="'btn btn-' + variant"
+    [class.active]="active"
+    [class.full-width]="fullWidth"
+  >
+    <ng-container [ngTemplateOutlet]="projected"></ng-container>
+  </button>
+}

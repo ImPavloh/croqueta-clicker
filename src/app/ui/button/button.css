@@ -1,0 +1,170 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 35px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+}
+
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn.full-width {
+  width: 100%;
+}
+
+/* Efecto de brillo */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 3px rgba(255, 255, 255, 0.6);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Variante Primary (estilo options/modal) */
+.btn-primary {
+  color: #6b5633;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #b89c5a;
+}
+
+.btn-primary:hover {
+  background: rgba(184, 156, 90, 0.2);
+  border-color: #8b7043;
+}
+
+/* Variante Danger */
+.btn-danger {
+  color: #fff;
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #dc2626 100%);
+  border-color: #991b1b;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 50%, #ef4444 100%);
+  border-color: #b91c1c;
+}
+
+/* Variante Success */
+.btn-success {
+  color: #fff;
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #16a34a 100%);
+  border-color: #15803d;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #22c55e 0%, #4ade80 50%, #22c55e 100%);
+  border-color: #166534;
+}
+
+/* Variante Warning */
+.btn-warning {
+  color: #fff;
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 50%, #ea580c 100%);
+  border-color: #c2410c;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 50%, #f97316 100%);
+  border-color: #9a3412;
+}
+
+/* Variante Nav (estilo navbar) */
+.btn-nav {
+  color: #6b5633;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #b89c5a;
+}
+
+.btn-nav:hover {
+  background: rgba(184, 156, 90, 0.2);
+  border-color: #8b7043;
+}
+
+.btn-nav.active {
+  background: linear-gradient(135deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
+  color: #fff;
+  border-color: #8b7043;
+  box-shadow: 0 4px 15px rgba(184, 156, 90, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transform: translateY(0);
+}
+
+.btn-nav.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px rgba(184, 156, 90, 0.5), inset 0 1px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Variante Control (estilo shop-controls) */
+.btn-control {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8b4513;
+  background: linear-gradient(to bottom, #fff5e1, #f5deb3);
+  border-color: #d4a574;
+  border-radius: 8px;
+  min-width: 45px;
+  transform: translateZ(0);
+}
+
+.btn-control:hover {
+  background: linear-gradient(to bottom, #ffe4b5, #f5deb3);
+  border-color: #c9a05f;
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-control:active {
+  transform: translateY(0) translateZ(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-control.active {
+  background: linear-gradient(to bottom, #ff8c00, #ff7700);
+  color: white;
+  border-color: #cc6600;
+  box-shadow: 0 0 12px rgba(255, 140, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.btn-control.active:hover {
+  background: linear-gradient(to bottom, #ff9500, #ff8500);
+  border-color: #d67000;
+}

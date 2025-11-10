@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FloatingService, FloatingMessage } from '@services/floating.service';
+import { OptionsService } from '@services/options.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 
 @Component({
@@ -11,6 +12,7 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
 })
 export class Floating {
   private pos = new Map<number, { left: string; top: string }>();
+  protected optionsService = inject(OptionsService);
 
   constructor(public floating: FloatingService) {}
 

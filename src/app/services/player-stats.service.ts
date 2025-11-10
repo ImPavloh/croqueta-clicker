@@ -17,6 +17,7 @@ export class PlayerStats {
 
   private intervalId: any;
   private isTimerRunning  = false;
+  private isInitializing = true;
 
   // getter público (read-only signals)
   readonly totalClicks = this._totalClicks.asReadonly();
@@ -30,6 +31,12 @@ export class PlayerStats {
 
   // Constructor
   constructor() {
+    this.loadFromStorage();
+
+    setTimeout(() => {
+      this.isInitializing = false;
+    }, 2000);
+
     // inicializar expToNext en base al nivel inicial
     this.calculateExpToNext();
   }
@@ -144,6 +151,8 @@ export class PlayerStats {
   }
 
   saveToStorage() {
+    if (this.isInitializing) return;
+
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar experiencia por click

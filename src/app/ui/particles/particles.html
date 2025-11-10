@@ -1,3 +1,4 @@
+@if (optionsService.showParticles()) {
 <div class="particles-container">
   @for (particle of particlesService.particles(); track trackByUid($index, particle)) { @if
   (particle.type === 'circle') {
@@ -26,3 +27,4 @@
   ></div>
   } }
 </div>
+}

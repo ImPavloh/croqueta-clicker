@@ -1,3 +1,4 @@
+@if (optionsService.showFloatingText()) {
 <div class="floating-container">
   @for (m of floating.messages(); track m.uid) {
     <span class="floating-text" [style.left]="getLeft(m)" [style.top]="getTop(m)">
@@ -5,3 +6,4 @@
     </span>
   }
 </div>
+}

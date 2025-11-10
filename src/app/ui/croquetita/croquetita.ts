@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
+import { OptionsService } from '@services/options.service';
 import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
 
 @Component({
@@ -18,6 +19,7 @@ export class Croquetita {
 
   private messages: TutorialMessage[] = TUTORIAL_MESSAGES;
   private shownMessages = new Set<string>();
+  protected optionsService = inject(OptionsService);
 
   constructor(private pointsService: PointsService, private playerStats: PlayerStats) {
     this.loadShownMessages();

@@ -11,6 +11,7 @@ export class PointsService {
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
   private _multiply = signal<Decimal>(new Decimal(1));
+  private isInitializing = true;
 
   // getter público (read-only signal)
   readonly points = this._points.asReadonly();
@@ -19,6 +20,13 @@ export class PointsService {
   readonly multiply = this._multiply.asReadonly();
 
   constructor(private floatingService: FloatingService) {
+    this.loadFromStorage();
+
+    // permitir guardados después de 2segs (evita guardados durante la carga inicial, lo mismo no es la mejor solucion pero funciona lol)
+    setTimeout(() => {
+      this.isInitializing = false;
+    }, 2000);
+
     // Solo ejecutar en navegador
     if (typeof window !== 'undefined') {
       // Llamar addPointPerSecond cada segundo
@@ -90,6 +98,9 @@ export class PointsService {
   }
 
   saveToStorage() {
+    // en carga inicial no guardar aún
+    if (this.isInitializing) return;
+
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar puntos como string

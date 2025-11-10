@@ -2,26 +2,94 @@ import { Component } from '@angular/core';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { FormsModule } from '@angular/forms';
 import { OptionsService } from '@services/options.service';
+import { ModalService } from '@services/modal.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { PointsService } from '@services/points.service';
+import { ButtonComponent } from '@ui/button/button';
+import { RangeSlider } from '@ui/range-slider/range-slider';
+import { ToggleSwitch } from '@ui/toggle-switch/toggle-switch';
 import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-options',
-  imports: [CornerCard, FormsModule],
+  imports: [CornerCard, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch],
   templateUrl: './options.html',
   styleUrl: './options.css'
 })
 export class Options {
   constructor(
     public optionsService: OptionsService,
+    private modalService: ModalService,
     private playerStats: PlayerStats,
     private pointsService: PointsService
   ) {}
 
   restartGame() {
-    // TODO: confirmar con modal
-    this.optionsService.restartGame()
+    this.modalService.showConfirm({
+      title: 'Reiniciar partida',
+      message: '¿Estás seguro de que quieres reiniciar tu progreso? Esta acción no se puede deshacer y perderás todas tus croquetas, mejoras y estadísticas.',
+      confirmText: 'Sí, reiniciar',
+      cancelText: 'Cancelar',
+      onConfirm: () => {
+        this.optionsService.restartGame();
+      }
+    });
+  }
+
+  // mostrar diálogo para exportar partida no un alert sino el modal:
+  exportProgress() {
+    try {
+      this.optionsService.exportProgress();
+      // Mostrar un modal en lugar de alert
+      this.modalService.showConfirm({
+        title: 'Partida descargada',
+        message: 'La partida se ha descargado correctamente.',
+        confirmText: 'Aceptar',
+        onConfirm: () => {}
+      });
+    } catch (error) {
+      this.modalService.showConfirm({
+        title: 'Error',
+        message: 'Error al descargar la partida: ' + error,
+        confirmText: 'Aceptar',
+        onConfirm: () => {}
+      });
+    }
+  }
+
+  importProgress() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        this.modalService.showConfirm({
+          title: 'Importar partida',
+          message: `¿Quieres cargar esta partida? Tu progreso actual será reemplazado completamente.`,
+          confirmText: 'Cargar',
+          cancelText: 'Cancelar',
+          onConfirm: () => {
+            this.optionsService.importProgress(file)
+              .then(() => {
+                window.location.replace(window.location.href);
+              })
+              .catch((error) => {
+                  this.modalService.showConfirm({
+                    title: 'Error',
+                    message: 'Error al cargar la partida: ' + error,
+                    confirmText: 'Aceptar',
+                    onConfirm: () => {}
+                  });
+              });
+
+          }
+        });
+      }
+    };
+
+    input.click();
   }
 
   shareGame() {

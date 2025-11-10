@@ -7,11 +7,12 @@ import {
 } from '@services/shop-controls.service';
 import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
+import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-shop-controls',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './shop-controls.html',
   styleUrl: './shop-controls.css',
 })

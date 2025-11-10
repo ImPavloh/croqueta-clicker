@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParticlesService, Particle } from '@services/particles.service';
+import { OptionsService } from '@services/options.service';
 
 @Component({
   selector: 'app-particles',
@@ -11,6 +12,7 @@ import { ParticlesService, Particle } from '@services/particles.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Particles {
+  protected optionsService = inject(OptionsService);
   constructor(public particlesService: ParticlesService) {}
 
   trackByUid(index: number, particle: Particle): number {

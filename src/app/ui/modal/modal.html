@@ -19,3 +19,27 @@
   </div>
 </div>
 }
+
+<!-- diálogo de confirmación -->
+@if (modalService.confirmDialog()) {
+<div class="modal-overlay" (click)="closeConfirm()">
+  <div class="confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="confirm-header">
+      <h2>{{ modalService.confirmDialog()!.title }}</h2>
+    </div>
+    <div class="confirm-body">
+      <p>{{ modalService.confirmDialog()!.message }}</p>
+    </div>
+    <div class="confirm-actions" [class.single-button]="!modalService.confirmDialog()!.cancelText">
+      @if (modalService.confirmDialog()!.cancelText) {
+        <app-button variant="primary" (click)="cancelAction()">
+          {{ modalService.confirmDialog()!.cancelText }}
+        </app-button>
+      }
+      <app-button variant="primary" (click)="confirmAction()">
+        {{ modalService.confirmDialog()!.confirmText }}
+      </app-button>
+    </div>
+  </div>
+</div>
+}

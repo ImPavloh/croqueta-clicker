@@ -1,58 +1,66 @@
 <div class="p-4 gap-8 flex flex-col">
     <!-- VOLUMEN -->
     <app-corner-card>
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+        <div class="flex flex-col md:flex-row gap-6 w-full">
             <div class="flex flex-col gap-6 w-full h-full">
                 <p class="text-2xl text-center">Volumen</p>
                 <div class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between gap-4">
-                        <span class="min-w-20">General:</span>
-                        <input type="range" min="0" max="100"
-                            step="1"
-                            class="flex-1"
-                            [ngModel]="optionsService.generalVolume()"
-                            (ngModelChange)="optionsService.setGeneralVolume($event);"/>
-                        <span class="min-w-12 text-right">{{optionsService.generalVolume()}}%</span>
-                    </div>
-                    <div class="flex items-center justify-between gap-4">
-                        <span class="min-w-20">Música:</span>
-                        <input type="range" min="0" max="100" step="1"
-                            class="flex-1"
-                            [ngModel]="optionsService.musicVolume()"
-                            (ngModelChange)="optionsService.setMusicVolume($event);"/>
-                        <span class="min-w-12 text-right">{{optionsService.musicVolume()}}%</span>
-                    </div>
-                    <div class="flex items-center justify-between gap-4">
-                        <span class="min-w-20">SFX:</span>
-                        <input type="range" min="0" max="100" step="1"
-                            class="flex-1"
-                            [ngModel]="optionsService.sfxVolume()"
-                            (ngModelChange)="optionsService.setSfxVolume($event);"/>
-                        <span class="min-w-12 text-right">{{optionsService.sfxVolume()}}%</span>
-                    </div>
+                    <app-range-slider 
+                        label="General:"
+                        [value]="optionsService.generalVolume()"
+                        (valueChange)="optionsService.setGeneralVolume($event)"
+                    />
+                    <app-range-slider 
+                        label="Música:"
+                        [value]="optionsService.musicVolume()"
+                        (valueChange)="optionsService.setMusicVolume($event)"
+                    />
+                    <app-range-slider 
+                        label="SFX:"
+                        [value]="optionsService.sfxVolume()"
+                        (valueChange)="optionsService.setSfxVolume($event)"
+                    />
                 </div>
             </div>
             <div class="flex flex-col gap-6 w-full h-full">
-                <p class="text-2xl text-center">Partida</p>
-                <div class="flex flex-col gap-6 items-center justify-center w-full md:w-2/3 m-auto">
-                    <app-corner-card
-                      [type]="'button'"
-                      (click)="restartGame()"
-                      [variant]="'danger'"
-                      [hoverable]="true"
-                    >
-                    Reiniciar progreso
-                  </app-corner-card>
-                    <app-corner-card
-                      [type]="'button'"
-                      (click)="shareGame()"
-                      [variant]="'success'"
-                      [hoverable]="true"
-                    >
-                    Compartir progreso
-                  </app-corner-card>
+                <p class="text-2xl text-center">Interfaz</p>
+                <div class="max-w-2xs w-full mx-auto flex flex-col gap-4">
+                    <app-toggle-switch 
+                        label="Mostrar mascota:"
+                        [checked]="optionsService.showCroquetita()"
+                        (checkedChange)="optionsService.setShowCroquetita($event)"
+                    />
+                    <app-toggle-switch 
+                        label="Mostrar partículas:"
+                        [checked]="optionsService.showParticles()"
+                        (checkedChange)="optionsService.setShowParticles($event)"
+                    />
+                    <app-toggle-switch 
+                        label="Mostrar texto flotante:"
+                        [checked]="optionsService.showFloatingText()"
+                        (checkedChange)="optionsService.setShowFloatingText($event)"
+                    />
                 </div>
             </div>
+        </div>
+    </app-corner-card>
+
+    <!-- PARTIDA -->
+    <app-corner-card>
+        <p class="text-2xl text-center mb-4">Partida</p>
+        <div class="flex flex-col md:flex-row gap-4">
+            <app-button variant="primary" (click)="exportProgress()">
+                Descargar progreso
+            </app-button>
+            <app-button variant="warning" (click)="importProgress()">
+                Cargar progreso
+            </app-button>
+            <app-button variant="success" (click)="shareGame()">
+                Compartir progreso
+            </app-button>
+            <app-button variant="danger" (click)="restartGame()">
+                Reiniciar progreso
+            </app-button>
         </div>
     </app-corner-card>
     <app-corner-card>

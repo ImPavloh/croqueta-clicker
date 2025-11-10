@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { AudioService } from '@services/audio.service';
 import { NewsLine } from '@ui/newsline/newsline';
+import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterModule, RouterLink, NewsLine],
+  imports: [RouterModule, RouterLink, NewsLine, ButtonComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
