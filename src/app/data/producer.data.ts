@@ -15,8 +15,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1,
     pointsSum: 1,
     description: 'Hace clicks automáticos por ti.',
-    level: 0,
-    exp: 1,
+    level: 3,
+    exp: 1
   },
   {
     id: 2,
@@ -27,8 +27,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 5,
     pointsSum: 3,
     description: 'Un cocinero profesional que hace croquetas por ti.',
-    level: 2,
-    exp: 8,
+    level: 7,
+    exp: 8
   },
   {
     id: 3,
@@ -39,8 +39,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 30,
     pointsSum: 8,
     description: 'Una freidora industrial que produce croquetas a gran escala.',
-    level: 5,
-    exp: 50,
+    level: 10,
+    exp: 50
   },
   {
     id: 4,
@@ -51,8 +51,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 150,
     pointsSum: 25,
     description: 'Una fábrica automatizada de croquetas. Aprobada por Chicote.',
-    level: 8,
-    exp: 250,
+    level: 15,
+    exp: 250
   },
 
   // ============================================================
@@ -67,8 +67,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 900,
     pointsSum: 80,
     description: 'Investigación y desarrollo de croquetas.',
-    level: 12,
-    exp: 1300,
+    level: 20,
+    exp: 1300
   },
   {
     id: 6,
@@ -79,8 +79,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 5_000,
     pointsSum: 400,
     description: 'Robot avanzado que produce croquetas a gran ritmo.',
-    level: 16,
-    exp: 7500,
+    level: 25,
+    exp: 7500
   },
 
   // ============================================================
@@ -95,8 +95,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 30_000,
     pointsSum: 2_500,
     description: 'Veneración y promoción de la croqueta.',
-    level: 20,
-    exp: 45000,
+    level: 35,
+    exp: 45_000
   },
   {
     id: 8,
@@ -107,8 +107,8 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 200_000,
     pointsSum: 20_000,
     description: 'Un portal interdimensional que trae croquetas de otros universos.',
-    level: 24,
-    exp: 300000,
+    level: 45,
+    exp: 300_000
   },
   {
     id: 9,
@@ -119,7 +119,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 2_000_000,
     pointsSum: 250_000,
     description: 'IA que domina el universo y produce croquetas infinitas.',
-    level: 28,
-    exp: 3000000,
+    level: 60,
+    exp: 3_000_000
   },
 ];

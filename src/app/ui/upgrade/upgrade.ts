@@ -50,19 +50,6 @@ export class Upgrade {
 
     // newExp = floor(pointsClick^0.8 + pointsClick / 3)
     // Usamos Decimal para evitar pérdida de precisión en el cálculo intermedio
-    let newExpDecimal = pointsClickDecimal.pow(0.8).plus(pointsClickDecimal.dividedBy(3)).floor();
-
-    // convertir a number de forma segura (si el valor es demasiado grande, capear)
-    let newExp: number;
-    try {
-      newExp = newExpDecimal.toNumber();
-      if (!isFinite(newExp) || Number.isNaN(newExp)) {
-        // capear en caso de overflow
-        newExp = Number.MAX_SAFE_INTEGER;
-      }
-    } catch {
-      newExp = Number.MAX_SAFE_INTEGER;
-    }
 
     const priceDecimal = new Decimal(this.config.price);
 
@@ -74,8 +61,7 @@ export class Upgrade {
       // actualizar puntos por click (pointsClickDecimal es Decimal)
       this.pointsService.upgradePointPerClick(pointsClickDecimal);
 
-      // actualizar la experiencia por click (playerStats suele usar number)
-      this.playerStats.upgradeExpPerClick(newExp);
+      this.playerStats.upgradeExpPerClick(pointsClickDecimal);
 
       this.bought = true;
       this.saveToStorage();

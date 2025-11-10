@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import Decimal from 'break_infinity.js';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -61,20 +62,32 @@ export class PlayerStats {
    * Actualiza la experiencia por click
    * @param newExp Nueva exp por click
    */
-  upgradeExpPerClick(newExp: number) {
-    this._expPerClick.set(newExp);
+  upgradeExpPerClick(pointsPerClick: Decimal): void {
+  // curva suavizada: XP ≈ (puntosPorClick ^ 0.8) + (puntosPorClick / 3)
+  let newExpDecimal = pointsPerClick.pow(0.8).plus(pointsPerClick.dividedBy(3)).floor();
+
+  // convertir a number de forma segura
+  let newExp: number;
+  try {
+    newExp = newExpDecimal.toNumber();
+    if (!isFinite(newExp) || Number.isNaN(newExp)) {
+      newExp = Number.MAX_SAFE_INTEGER;
+    }
+  } catch {
+    newExp = Number.MAX_SAFE_INTEGER;
   }
+
+  this._expPerClick.set(Math.max(1, newExp)); // nunca menos de 1
+}
 
   /**
    * Calcula la experiencia necesaria por nivel a través de una fórmula cuadrática
    */
   private calculateExpToNext(): void {
     const n = this._level.value;
-    const a = 50;
-    const b = 50;
-
-    // Fórmula cuadrática para comprobar la exp necesaria por nivel
-    const expNeeded = a * Math.pow(n, 2) + b * n;
+    const baseExp = 100;        // XP base del nivel 1
+    const growth = 1.20;        // crecimiento por nivel (ajustable)
+    const expNeeded = Math.floor(baseExp * Math.pow(growth, n));
 
     this._expToNext.set(expNeeded);
   }
