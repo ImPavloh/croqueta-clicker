@@ -10,21 +10,46 @@
     pointsService.points().lt(price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
   "
 >
-  <div class="flex w-full items-center justify-between">
+  <div class="flex w-full items-center justify-between gap-4">
     <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
     @if (unlocked) {
-    <div class="flex h-16">
-      <img class="flex size-16 mr-4" src="{{ config.image }}" alt="{{ config.name }}" />
-      <div class="flex flex-col items-start justify-center">
-        <p class="flex text-3xl">{{ config.name }}</p>
-        <p [ngClass]="pointsService.points().gte(price) ? 'text-black' : 'text-red-500'">
-          {{ price | short }} ¢
-        </p>
+    <div class="flex items-center gap-4 flex-1">
+      <img class="size-20 shrink-0" src="{{ config.image }}" alt="{{ config.name }}" />
+      <div class="flex flex-col justify-center gap-1">
+        <p class="text-2xl leading-tight">{{ config.name }}</p>
+        <div class="flex items-baseline gap-2">
+          <p
+            class="text-base"
+            [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'"
+          >
+            {{ price | short }} ¢
+          </p>
+          @if (shopControls.buyAmount() > 1) {
+          <span class="text-xs opacity-60">(x{{ shopControls.buyAmount() }})</span>
+          }
+        </div>
+        <p class="text-xs italic opacity-60 leading-tight">{{ config.description }}</p>
       </div>
     </div>
-    <div class="flex flex-col items-end justify-center">
-      <p class="flex text-3xl">{{ quantity | short }}</p>
-      <p class="flex italic opacity-50">"{{ config.description }}"</p>
+
+    <div class="flex items-center gap-6 shrink-0">
+      <div class="flex flex-col items-center min-w-[60px]">
+        <p class="text-xs opacity-60 uppercase tracking-wide">Tienes</p>
+        <p class="text-3xl font-bold text-amber-700">{{ quantity }}</p>
+      </div>
+
+      <div class="h-16 w-px bg-amber-800 opacity-20"></div>
+
+      <div class="flex flex-col items-end min-w-[140px]">
+        @if (quantity > 0) {
+        <p class="text-xs opacity-60 uppercase tracking-wide">Producción</p>
+        <p class="text-2xl font-bold text-green-700">{{ calculateTotalPoints() | short }} ¢/s</p>
+        } @else {
+        <p class="text-xs opacity-60 uppercase tracking-wide">Producirá</p>
+        <p class="text-xl font-semibold text-gray-600">{{ points | short }} ¢/s</p>
+        <p class="text-xs opacity-50">por unidad</p>
+        }
+      </div>
     </div>
     } @else {
     <div class="flex w-full h-16 justify-center items-center italic opacity-70 text-amber-800">

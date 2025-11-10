@@ -1,0 +1,106 @@
+<div class="shop-controls">
+  <!-- cantidad de compra -->
+  <div class="control-group">
+    <p class="label">Comprar:</p>
+    <div class="buttons">
+      <button
+        class="control-btn"
+        [class.active]="shopControls.buyAmount() === 1"
+        (click)="selectAmount(1)"
+        title="Comprar de 1 en 1"
+      >
+        x1
+      </button>
+      <button
+        class="control-btn"
+        [class.active]="shopControls.buyAmount() === 10"
+        (click)="selectAmount(10)"
+        title="Comprar de 10 en 10"
+      >
+        x10
+      </button>
+      <button
+        class="control-btn"
+        [class.active]="shopControls.buyAmount() === 100"
+        (click)="selectAmount(100)"
+        title="Comprar de 100 en 100"
+      >
+        x100
+      </button>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <!-- ordenación -->
+  <div class="control-group">
+    <p class="label">Ordenar:</p>
+    <div class="buttons">
+      <button
+        class="control-btn icon-btn"
+        [class.active]="shopControls.sortOrder() === 'default'"
+        (click)="selectSort('default')"
+        title="Orden por defecto"
+      >
+        📋
+      </button>
+      <button
+        class="control-btn icon-btn"
+        [class.active]="shopControls.sortOrder() === 'price-asc'"
+        (click)="selectSort('price-asc')"
+        title="Precio: Menor a Mayor"
+      >
+        💰↑
+      </button>
+      <button
+        class="control-btn icon-btn"
+        [class.active]="shopControls.sortOrder() === 'price-desc'"
+        (click)="selectSort('price-desc')"
+        title="Precio: Mayor a Menor"
+      >
+        💰↓
+      </button>
+      <button
+        class="control-btn icon-btn"
+        [class.active]="shopControls.sortOrder() === 'name'"
+        (click)="selectSort('name')"
+        title="Orden alfabético"
+      >
+        A-Z
+      </button>
+    </div>
+  </div>
+
+  <div class="separator"></div>
+
+  <!-- filtros -->
+  <div class="control-group">
+    <p class="label">Mostrar:</p>
+    <div class="buttons">
+      <button
+        class="control-btn filter-btn"
+        [class.active]="shopControls.filter() === 'all'"
+        (click)="selectFilter('all')"
+        title="Mostrar todos"
+      >
+        Todos
+      </button>
+      <button
+        class="control-btn filter-btn"
+        [class.active]="shopControls.filter() === 'affordable'"
+        (click)="selectFilter('affordable')"
+        title="Solo los que puedes comprar"
+      >
+        Comprables
+      </button>
+      <button
+        class="control-btn filter-btn"
+        [class.active]="shopControls.filter() === 'owned'"
+        (click)="selectFilter('owned')"
+        title="Solo los que ya tienes"
+      >
+        Poseídos
+      </button>
+    </div>
+  </div>
+</div>
