@@ -7,7 +7,8 @@ import { PlayerStats } from '@services/player-stats.service';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
 import Decimal from 'break_infinity.js';
-import { UpgradeModel } from 'app/models/upgrade.model';
+import { UpgradeModel } from '@models/upgrade.model';
+
 
 @Component({
   selector: 'app-upgrade',

@@ -4,10 +4,11 @@ import { Upgrade } from '@ui/upgrade/upgrade';
 import { ShopControls } from '@ui/shop-controls/shop-controls';
 import { PRODUCERS } from '@data/producer.data';
 import { UPGRADES } from '@data/upgrade.data';
-import { ProducerModel } from '@models/producer-model';
+import { ProducerModel } from '@models/producer.model';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { PointsService } from '@services/points.service';
 import Decimal from 'break_infinity.js';
+
 
 @Component({
   selector: 'app-upgrades',

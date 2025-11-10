@@ -1,5 +1,4 @@
-import { ProducerModel } from './../../models/producer-model';
-import { Component, inject, Input } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
@@ -8,8 +7,9 @@ import { Subscription } from 'rxjs';
 import { PlayerStats } from '@services/player-stats.service';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
-import { ProducerModel } from '@models/producer-model';
+import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
+
 
 @Component({
   selector: 'app-producer',
@@ -18,18 +18,13 @@ import Decimal from 'break_infinity.js';
   styleUrl: './producer.css',
 })
 export class Producer {
-  constructor(
-    public pointsService: PointsService,
-    public playerStats: PlayerStats,
-    private audioService: AudioService,
-    public shopControls: ShopControlsService
-  ) {
-    // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
-    effect(() => {
-      this.updatePriceAndPoints();
-    });
-  }
+    private playerStats = inject(PlayerStats);
+    public pointsService = inject(PointsService);
+    private audioService = inject(AudioService);
+    public shopControls =  inject(ShopControlsService);
 
+    // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
+    inintEfect = effect(() => this.updatePriceAndPoints());
 
   private levelSub?: Subscription;
 
