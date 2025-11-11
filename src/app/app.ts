@@ -1,3 +1,4 @@
+import { AchievementsService } from '@services/achievements.service';
 import { Component, signal, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -45,7 +46,8 @@ export class App implements OnInit, OnDestroy {
   constructor(
     points: PointsService,
     private playerStats: PlayerStats,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private achievementsService: AchievementsService
   ) {
     points.loadFromStorage();
     playerStats.loadFromStorage();
@@ -68,6 +70,7 @@ export class App implements OnInit, OnDestroy {
       let url = '/assets/ost/bechamel.mp3';
       if (level > 30) {
         url = '/assets/ost/phillipethepope.mp3';
+        this.achievementsService.unlockAchievement("achievement_ost")
       } else if (level > 15) {
         url = '/assets/ost/croquetauniversity.mp3';
       }
