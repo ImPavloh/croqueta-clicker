@@ -6,6 +6,7 @@
   --border-disabled: #eadaa2;
   --background-disabled: #ede3be;
   display: block;
+  position: relative;
   width: 100%;
   height: 100%;
 }

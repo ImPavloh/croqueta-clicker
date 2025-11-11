@@ -1,0 +1,9 @@
+<div class="relative" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  <ng-content></ng-content>
+
+  @if (showTooltip && text) {
+  <div class="tooltip" [class]="'tooltip-' + position">
+    {{ text }}
+  </div>
+  }
+</div>
