@@ -1,23 +1,21 @@
 <!--upgrades-->
 <div class="upgrades flex flex-row p-4">
   @for (upgrade of upgrades; track upgrade.id) {
-      <app-upgrade
-        [config]="upgrade"
-        ></app-upgrade>
+  <app-upgrade [config]="upgrade"></app-upgrade>
   }
 </div>
 <!--<hr class="text-amber-800 my-2 w-[75%] m-auto" />-->
 <!--producers-->
-<app-shop-controls />
+<div class="p-4">
+  <app-shop-controls />
+</div>
 <div class="producers-container">
   <div class="flex flex-col gap-8 p-4">
     @for (producer of filteredAndSortedProducers(); track producer.id) {
-        <app-producer
-          [config]="producer"
-        ></app-producer>
-      } @empty {
-      <div class="flex justify-center items-center p-8 text-amber-800 italic opacity-70">
-        <p>No hay productores que coincidan con los filtros seleccionados</p>
+    <app-producer [config]="producer"></app-producer>
+    } @empty {
+    <div class="flex justify-center items-center p-8 text-amber-800 italic opacity-70">
+      <p>No hay productores que coincidan con los filtros seleccionados</p>
     </div>
     }
   </div>

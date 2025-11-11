@@ -17,65 +17,58 @@
   </div>
 
   <div class="achievement-list-scrollable">
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cold-2 md:grid-cols-3 gap-4">
       @for (item of achievementsWithState; track item.id) {
-      <app-corner-card
-        [size]="'md'"
-        [active]="item.unlocked"
-        [variant]="item.unlocked ? 'primary' : 'default'"
-        [showCorners]="true"
-        cornerStyle="simple"
-      >
-        <div class="relative flex items-start gap-4 w-full">
-          <div class="shrink-0">
-            @if (item.icon) {
-            <img
-              [src]="item.icon"
-              [alt]="item.title"
-              class="w-16 h-16 rounded-lg object-cover"
-              [class.grayscale]="!item.unlocked"
-              [class.opacity-50]="!item.unlocked"
-            />
-            }
-          </div>
+      <app-tooltip [text]="getTooltipText(item)" [position]="'bottom'">
+        <app-corner-card
+          [size]="'md'"
+          [active]="item.unlocked"
+          [variant]="item.unlocked ? 'primary' : 'default'"
+          [showCorners]="true"
+          cornerStyle="simple"
+        >
+          <div class="relative flex items-center gap-4 w-full">
+            <div class="flex items-center gap-3">
+              @if (item.icon) {
+              <div class="shrink-0">
+                <img
+                  [src]="item.icon"
+                  [alt]="item.title"
+                  class="w-10 h-10 rounded-sm object-cover drop-shadow-2xl transition-all duration-300"
+                  [class.grayscale]="!item.unlocked"
+                  [class.opacity-50]="!item.unlocked"
+                  [class.brightness-110]="item.unlocked"
+                />
+              </div>
+              }
+            </div>
 
-          <!-- Contenido del logro -->
-          <div class="flex-1 min-w-0">
-            <h3
-              class="text-xl mb-1"
-              [class.text-amber-800]="item.unlocked"
-              [class.text-gray-600]="!item.unlocked"
-              [class.text-shadow-amber-950]="item.unlocked"
-              [class.text-shadow-xs]="item.unlocked"
+            <!-- Contenido del logro -->
+            <div class="flex-1 min-w-0">
+              <h3
+                class="text-lg mb-1 truncate"
+                [class.text-amber-800]="item.unlocked"
+                [class.text-gray-600]="!item.unlocked"
+                [class.text-shadow-amber-950]="item.unlocked"
+                [class.text-shadow-xs]="item.unlocked"
+              >
+                {{ item.title }}
+              </h3>
+            </div>
+
+            <span
+              class="absolute top-0 right-0 inline-flex items-center px-2 py-1 rounded-full text-xs border shadow-lg"
+              [ngClass]="
+                item.unlocked
+                  ? 'bg-amber-200/80 text-amber-800 border-amber-400'
+                  : 'bg-gray-200/80 text-gray-600 border-gray-400'
+              "
             >
-              {{ item.title }}
-            </h3>
-
-            @if (!item.unlocked && !item.secret && item.description) {
-            <p class="text-sm text-gray-600 italic">
-              {{ item.description }}
-            </p>
-            } @if (!item.unlocked && item.secret) {
-            <p class="text-sm text-gray-500 italic tracking-wider">??? Logro secreto ???</p>
-            } @if (item.unlocked && item.description) {
-            <p class="text-sm text-amber-800 font-medium">
-              {{ item.description }}
-            </p>
-            }
+              {{ item.unlocked ? '✓' : '🔒' }}
+            </span>
           </div>
-
-          <span
-            class="absolute top-0 right-0 inline-flex items-center px-3 py-1 rounded-full text-xs border shadow-lg"
-            [ngClass]="
-              item.unlocked
-                ? 'bg-amber-200/80 text-amber-800 border-amber-400'
-                : 'bg-gray-200/80 text-gray-600 border-gray-400'
-            "
-          >
-            {{ item.unlocked ? 'Completado' : 'Bloqueado' }}
-          </span>
-        </div>
-      </app-corner-card>
+        </app-corner-card>
+      </app-tooltip>
       }
     </div>
   </div>

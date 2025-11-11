@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 
 export type BuyAmount = 1 | 10 | 100;
 export type SortOrder = 'default' | 'price-asc' | 'price-desc' | 'name';
-export type FilterType = 'all' | 'affordable' | 'owned';
+export type FilterType = 'all' | 'affordable';
 
 @Injectable({
   providedIn: 'root',
@@ -68,7 +68,7 @@ export class ShopControlsService {
 
     // cargar filtro
     const storedFilter = localStorage.getItem('shopFilter') as FilterType;
-    if (storedFilter && ['all', 'affordable', 'owned'].includes(storedFilter)) {
+    if (storedFilter && ['all', 'affordable'].includes(storedFilter)) {
       this._filter.set(storedFilter);
     }
   }

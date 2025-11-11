@@ -4,11 +4,12 @@ import { AchievementsService } from '@services/achievements.service';
 import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { CornerCard } from '@ui/corner-card/corner-card';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-achievement-list',
   standalone: true,
-  imports: [CommonModule, CornerCard],
+  imports: [CommonModule, CornerCard, Tooltip],
   templateUrl: './achievement-list.html',
   styleUrls: ['./achievement-list.css'],
 })
@@ -38,5 +39,12 @@ export class AchievementList implements OnDestroy {
 
   get totalCount(): number {
     return this.svc.getTotalCount();
+  }
+
+  getTooltipText(item: Achievement & { unlocked: boolean }): string {
+    if (!item.unlocked && item.secret) {
+      return '??? Logro secreto ???';
+    }
+    return item.description || 'Sin descripción';
   }
 }

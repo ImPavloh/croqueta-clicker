@@ -9,7 +9,6 @@ import { ShopControlsService } from '@services/shop-controls.service';
 import { PointsService } from '@services/points.service';
 import Decimal from 'break_infinity.js';
 
-
 @Component({
   selector: 'app-upgrades',
   imports: [Producer, Upgrade, ShopControls],
@@ -17,7 +16,6 @@ import Decimal from 'break_infinity.js';
   styleUrl: './upgrades.css',
 })
 export class Upgrades {
-
   upgrades = UPGRADES;
   producers = PRODUCERS;
 
@@ -36,14 +34,7 @@ export class Upgrades {
         const price = this.calculateBulkPrice(p, this.getProducerQuantity(p.id), buyAmount);
         return this.pointsService.points().gte(price);
       });
-    } else if (filter === 'owned') {
-      // Solo los que ya tienes
-      filtered = filtered.filter((p) => {
-        const quantity = this.getProducerQuantity(p.id);
-        return quantity > 0;
-      });
     }
-
     // 2. Aplicar ordenación
     const sort = this.shopControls.sortOrder();
     if (sort === 'price-asc') {

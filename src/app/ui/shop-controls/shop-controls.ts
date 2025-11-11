@@ -8,11 +8,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
 import { ButtonComponent } from '@ui/button/button';
+import { ToggleSwitch } from '@ui/toggle-switch/toggle-switch';
 
 @Component({
   selector: 'app-shop-controls',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, ToggleSwitch],
   templateUrl: './shop-controls.html',
   styleUrl: './shop-controls.css',
 })

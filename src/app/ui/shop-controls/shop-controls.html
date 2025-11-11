@@ -75,32 +75,15 @@
 
   <!-- filtros -->
   <div class="control-group">
-    <p class="label">Mostrar</p>
+    <p class="label">Mostrar solo comprables</p>
     <div class="buttons">
-      <app-button
-        variant="control"
-        [active]="shopControls.filter() === 'all'"
-        (click)="selectFilter('all')"
-        title="Mostrar todos"
+      <app-toggle-switch
+        [checked]="shopControls.filter() === 'affordable'"
+        (checkedChange)="selectFilter($event ? 'affordable' : 'all')"
+        title="Alternar entre mostrar todos o solo los comprables"
       >
-        Todos
-      </app-button>
-      <app-button
-        variant="control"
-        [active]="shopControls.filter() === 'affordable'"
-        (click)="selectFilter('affordable')"
-        title="Solo los que puedes comprar"
-      >
-        Comprables
-      </app-button>
-      <app-button
-        variant="control"
-        [active]="shopControls.filter() === 'owned'"
-        (click)="selectFilter('owned')"
-        title="Solo los que ya tienes"
-      >
-        Poseídos
-      </app-button>
+        {{ shopControls.filter() === 'affordable' ? 'Comprables' : 'Todos' }}
+      </app-toggle-switch>
     </div>
   </div>
 </div>
