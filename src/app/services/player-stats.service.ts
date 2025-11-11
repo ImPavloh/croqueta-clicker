@@ -2,12 +2,15 @@ import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { BehaviorSubject } from 'rxjs';
 import { OptionsService } from './options.service';
+import { AchievementsService } from './achievements.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerStats {
   private optionsService = inject(OptionsService);
+  private achievementsService = inject(AchievementsService);
+
   // state (signals)
   private _totalClicks = signal<number>(0);
   private _currentExp = signal<number>(0);
@@ -132,6 +135,51 @@ export class PlayerStats {
 
     // Verificar si con la exp sobrante se puede subir de nivel
     this.checkLevelUp();
+
+    this.checkAchievements();
+  }
+
+  private checkAchievements(){
+    var level = this._level.value;
+
+    switch (level) {
+      case 5:
+        this.achievementsService.unlockAchievement("nivel_5")
+        break;
+      case 10:
+        this.achievementsService.unlockAchievement("nivel_10")
+        break;
+      case 15:
+        this.achievementsService.unlockAchievement("nivel_15")
+        break;
+      case 20:
+        this.achievementsService.unlockAchievement("nivel_20")
+        break;
+      case 25:
+        this.achievementsService.unlockAchievement("nivel_25")
+        break;
+      case 30:
+        this.achievementsService.unlockAchievement("nivel_30")
+        break;
+      case 50:
+        this.achievementsService.unlockAchievement("nivel_50")
+        break;
+      case 60:
+        this.achievementsService.unlockAchievement("nivel_60")
+        break;
+      case 80:
+        this.achievementsService.unlockAchievement("nivel_80")
+        break;
+      case 100:
+        this.achievementsService.unlockAchievement("nivel_100")
+        break;
+      case 1000:
+        this.achievementsService.unlockAchievement("nivel_1000")
+        break;
+      case 10000:
+        this.achievementsService.unlockAchievement("nivel_10000")
+        break;
+    }
   }
 
   startTimer() {

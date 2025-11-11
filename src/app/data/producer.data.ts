@@ -15,7 +15,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1,
     pointsSum: 1,
     description: 'Hace clicks automáticos por ti.',
-    level: 3,
+    level: 0,
     exp: 1
   },
   {
