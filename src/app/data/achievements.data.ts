@@ -24,6 +24,20 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: '1dc_croquetas', title: 'Un decillón', description: 'Para, porfavor.', icon: '/assets/achievements/clicks/12.webp' },
 
   // ------------------------------------------------------------
+  // 🎯 SUBIDA DE NIVEL - NUEVOS LOGROS
+  // ------------------------------------------------------------
+  { id: 'nivel_5', title: 'Aprendiz croquetero', description: 'Alcanza el nivel 5.', icon: '/assets/achievements/level/5.webp' },
+  { id: 'nivel_10', title: 'Cocinero novato', description: 'Alcanza el nivel 10.', icon: '/assets/achievements/level/10.webp' },
+  { id: 'nivel_15', title: 'Chef croquetero', description: 'Alcanza el nivel 15.', icon: '/assets/achievements/level/15.webp' },
+  { id: 'nivel_20', title: 'Maestro fritador', description: 'Alcanza el nivel 20.', icon: '/assets/achievements/level/20.webp' },
+  { id: 'nivel_25', title: 'Experto en empanado', description: 'Alcanza el nivel 25.', icon: '/assets/achievements/level/25.webp' },
+  { id: 'nivel_30', title: 'Leyenda croquetera', description: 'Alcanza el nivel 30.', icon: '/assets/achievements/level/30.webp' },
+  { id: 'nivel_50', title: 'Gran Maestro', description: 'Alcanza el nivel 50.', icon: '/assets/achievements/level/35.webp' },
+  { id: 'nivel_60', title: 'Croqueta Suprema', description: 'Alcanza el nivel 60.', icon: '/assets/achievements/level/40.webp' },
+  { id: 'nivel_80', title: 'Dios de la Fritura', description: 'Alcanza el nivel 80.', icon: '/assets/achievements/level/45.webp' },
+  { id: 'nivel_100', title: 'Emperador Croquetero', description: 'Alcanza el nivel 100.', icon: '/assets/achievements/level/50.webp' },
+
+  // ------------------------------------------------------------
   // 🏭 PRODUCTORES
   // ------------------------------------------------------------
   { id: 'primer_productor', title: 'Primer productor', description: 'Compra tu primer productor.', icon: '/assets/producers/click.webp' },
