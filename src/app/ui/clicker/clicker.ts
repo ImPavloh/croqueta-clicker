@@ -7,6 +7,7 @@ import { AchievementsService } from '@services/achievements.service';
 import { ParticlesService } from '@services/particles.service';
 import { AudioService } from '@services/audio.service';
 import Decimal from 'break_infinity.js';
+import { SKINS } from '@data/skin.data';
 
 @Component({
   selector: 'app-clicker',
@@ -16,8 +17,10 @@ import Decimal from 'break_infinity.js';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Clicker implements OnInit, OnDestroy {
-  currentSkin = signal<string>('croqueta-normal');
-  previousSkin = signal<string>('croqueta-normal');
+  skins = SKINS;
+
+  currentSkin = signal<number>(1);
+  previousSkin = signal<number>(1);
   showPrevious = signal(false);
 
   isAfk = signal(false);
@@ -42,7 +45,7 @@ export class Clicker implements OnInit, OnDestroy {
     private audioService: AudioService
   ) {
     this.skinsService.skinChanged$.subscribe((id) => {
-      const newSkin = this.getSkinClass(id);
+      const newSkin = id;
       if (newSkin !== this.currentSkin()) {
         this.previousSkin.set(this.currentSkin());
         this.showPrevious.set(true);
@@ -53,6 +56,11 @@ export class Clicker implements OnInit, OnDestroy {
         }, 600);
       }
     });
+  }
+  //Condigue la url de la skin seleccionada
+  getSkinImage(skinId: number): string {
+    const skin = this.skins.find(s => s.id === skinId);
+    return `url('${skin?.image}')`;
   }
 
   onClick(event?: MouseEvent) {
@@ -136,46 +144,6 @@ export class Clicker implements OnInit, OnDestroy {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
-    }
-  }
-
-  // esto lleva ya demasiado tiempo aqui asi, seria mejor hacer algo que gestione las skins mejor y no tan hardcodeado (usar data al menos)
-  private getSkinClass(id: number): string {
-    switch (id) {
-      case 1:
-        return 'croqueta-normal';
-      case 2:
-        return 'croqueta-jamon';
-      case 3:
-        return 'croqueta-pollo';
-      case 4:
-        return 'croqueta-queso';
-      case 5:
-        return 'croqueta-bacalao';
-      case 6:
-        return 'croqueta-setas';
-      case 7:
-        return 'croqueta-dorada';
-      case 8:
-        return 'croqueta-quemada';
-      case 9:
-        return 'croqueta-cosmica';
-      case 10:
-        return 'croqueta-rey';
-      case 11:
-        return 'croqueta-papa';
-      case 12:
-        return 'croqueta-dios';
-      case 13:
-        return 'croqueta-phillipe';
-      case 14:
-        return 'croqueta-cookie';
-      case 15:
-        return 'croqueta-platano';
-      case 16:
-        return 'croqueta-real';
-      default:
-        return 'croqueta-normal';
     }
   }
 
