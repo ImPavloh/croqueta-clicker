@@ -4,10 +4,11 @@ import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { OptionsService } from '@services/options.service';
 import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
+import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-croquetita',
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -170,6 +171,7 @@ export class Croquetita {
     }
   }
 
+  // dejado para pruebas
   resetTutorial() {
     this.shownMessages.clear();
     this.saveShownMessages();

@@ -31,7 +31,7 @@
 .main-container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: 100svh;
   width: 100vw;
 
   transform: translateZ(0);
@@ -43,7 +43,7 @@
   flex-direction: column;
 
   width: 60vw;
-  height: 100vh;
+  height: 100svh;
 
   margin: 20px 20px 0 0;
 
@@ -263,7 +263,7 @@
 
   .clicker-container {
     width: 100vw;
-    height: 100vh;
+    height: 100svh;
     margin: 0;
     border-radius: 0;
     border: none;

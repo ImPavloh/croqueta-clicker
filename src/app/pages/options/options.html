@@ -48,21 +48,21 @@
     <!-- PARTIDA -->
     <app-corner-card>
         <p class="text-2xl text-center mb-4">Partida</p>
-        <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col items-center md:flex-row gap-4">
             <app-button variant="success" (click)="saveProgress()">
                 Guardar ahora
             </app-button>
             <app-button variant="primary" (click)="exportProgress()">
-                Descargar progreso
+                Descargar partida
             </app-button>
             <app-button variant="warning" (click)="importProgress()">
-                Cargar progreso
+                Cargar partida
             </app-button>
             <app-button variant="success" (click)="shareGame()">
                 Compartir progreso
             </app-button>
             <app-button variant="danger" (click)="restartGame()">
-                Reiniciar progreso
+                Reiniciar partida
             </app-button>
         </div>
     </app-corner-card>
@@ -75,12 +75,6 @@
                         <a href="https://pavloh.com" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Pablo Casado</a>
                         <a href="https://spinning.fish/" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Roberto Cichón</a>
                         <a href="https://media.tenor.com/WDs10IEMMaUAAAAe/traumaditto-ditto.png" class="text-[#8b4a00] hover:scale-105 transition-all" target="_blank">Victor Rodriguez</a>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center">
-                    <span>Assets y programación:</span>
-                    <div class="flex flex-wrap gap-4 justify-center">
-                        <p class="text-[#8b4a00]">Un peruano de Fiverr que nos ha pagado 250€</p>
                     </div>
                 </div>
                 <hr class="text-amber-800 mt-2 w-[75%] m-auto" />

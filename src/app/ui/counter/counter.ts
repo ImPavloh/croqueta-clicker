@@ -10,8 +10,5 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
   styleUrl: './counter.css',
 })
 export class Counter {
-  // inyecta servicio
   constructor(public pointsService: PointsService) {}
-
-  
 }

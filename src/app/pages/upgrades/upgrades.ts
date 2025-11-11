@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Producer } from '@ui/producer/producer';
 import { Upgrade } from '@ui/upgrade/upgrade';
 import { ShopControls } from '@ui/shop-controls/shop-controls';
@@ -7,6 +7,7 @@ import { UPGRADES } from '@data/upgrade.data';
 import { ProducerModel } from '@models/producer.model';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { PointsService } from '@services/points.service';
+import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 
 @Component({
@@ -19,28 +20,29 @@ export class Upgrades {
   upgrades = UPGRADES;
   producers = PRODUCERS;
 
+  private optionsService = inject(OptionsService);
+
   constructor(private shopControls: ShopControlsService, private pointsService: PointsService) {}
 
-  // Computed que filtra y ordena los productores según los controles
   filteredAndSortedProducers = computed(() => {
     let filtered = [...this.producers];
 
-    // 1. Aplicar filtro
+    const buyAmount = this.shopControls.buyAmount();
     const filter = this.shopControls.filter();
+    const sort = this.shopControls.sortOrder();
+    const currentPoints = this.pointsService.points();
+
     if (filter === 'affordable') {
       // Solo los que puedes comprar
       filtered = filtered.filter((p) => {
-        const buyAmount = this.shopControls.buyAmount();
         const price = this.calculateBulkPrice(p, this.getProducerQuantity(p.id), buyAmount);
-        return this.pointsService.points().gte(price);
+        return currentPoints.gte(price);
       });
     }
-    // 2. Aplicar ordenación
-    const sort = this.shopControls.sortOrder();
+
     if (sort === 'price-asc') {
       // Precio ascendente
       filtered.sort((a, b) => {
-        const buyAmount = this.shopControls.buyAmount();
         const qtyA = this.getProducerQuantity(a.id);
         const qtyB = this.getProducerQuantity(b.id);
         const priceA = this.calculateBulkPrice(a, qtyA, buyAmount);
@@ -50,7 +52,6 @@ export class Upgrades {
     } else if (sort === 'price-desc') {
       // Precio descendente
       filtered.sort((a, b) => {
-        const buyAmount = this.shopControls.buyAmount();
         const qtyA = this.getProducerQuantity(a.id);
         const qtyB = this.getProducerQuantity(b.id);
         const priceA = this.calculateBulkPrice(a, qtyA, buyAmount);
@@ -61,7 +62,6 @@ export class Upgrades {
       // Orden alfabético
       filtered.sort((a, b) => a.name.localeCompare(b.name));
     }
-    // 'default' no hace nada, mantiene el orden original
 
     return filtered;
   });
@@ -69,7 +69,7 @@ export class Upgrades {
   // Obtener cantidad de un productor desde localStorage
   private getProducerQuantity(id: number): number {
     if (typeof localStorage === 'undefined') return 0;
-    const q = localStorage.getItem('producer_' + id + '_quantity');
+    const q = this.optionsService.getGameItem('producer_' + id + '_quantity');
     return q ? Number(q) || 0 : 0;
   }
 

@@ -11,6 +11,7 @@ import { Croquetita } from '@ui/croquetita/croquetita';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
+import { LevelUpPopup } from '@ui/level-up-popup/level-up-popup';
 import { NewsLine } from '@ui/newsline/newsline';
 import { Modal } from '@ui/modal/modal';
 import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
@@ -26,6 +27,7 @@ import { AutosaveService } from '@services/autosave.service';
     Clicker,
     Counter,
     AchievementPopup,
+    LevelUpPopup,
     Particles,
     Floating,
     Croquetita,

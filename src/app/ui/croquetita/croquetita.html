@@ -15,15 +15,11 @@
 
   @if (isOpen()) {
   <div class="croquetita-dialog" [class.animate]="isAnimating()">
-    <button class="close-btn" (click)="close()" title="Cerrar">✕</button>
-    <div class="croquetita-message">
+    <div class="croquetita-message text-balance">
       {{ currentMessage() }}
     </div>
     <div class="croquetita-actions">
-      <button class="action-btn" (click)="close()">Entendido</button>
-      <button class="action-btn secondary" (click)="resetTutorial()" title="Reiniciar tutorial">
-        Reiniciar
-      </button>
+      <app-button variant="primary"  (click)="close()">Entendido</app-button>
     </div>
   </div>
   }

@@ -24,7 +24,7 @@ video {
 /* Prevenir FOUC (Flash of Unstyled Content) https://dev.to/lyqht/what-the-fouc-is-happening-flash-of-unstyled-content-413j */
 app-root {
   display: block;
-  min-height: 100vh;
+  min-height: 100svh;
 }
 
 /* DOM oculto hasta que angular cargue */

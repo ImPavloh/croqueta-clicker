@@ -10,7 +10,6 @@
 }
 
 .producers-container {
-  height: 75%;
   overflow-y: auto;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
@@ -43,7 +42,7 @@
 
   .producers-container {
     height: auto;
-    max-height: 60vh;
+    max-height: 60svh;
     padding: 0.25rem;
   }
 }

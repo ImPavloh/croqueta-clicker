@@ -5,7 +5,7 @@
     </h2>
     <div class="grow w-full bg-amber-950/80 rounded-full h-4 overflow-hidden shadow-md">
       <div
-        class="h-4 bg-linear-to-r from-yellow-500 to-yellow-700 rounded-full transition-all duration-500 ease-in-out"
+        class="h-4 bg-linear-to-r to-yellow-600 from-yellow-700 rounded-full transition-all duration-500 ease-in-out"
         [style.width.%]="(unlockedCount / totalCount) * 100"
       ></div>
     </div>
@@ -17,7 +17,7 @@
   </div>
 
   <div class="achievement-list-scrollable">
-    <div class="grid grid-cols-1 sm:grid-cold-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       @for (item of achievementsWithState; track item.id) {
       <app-tooltip [text]="getTooltipText(item)" [position]="'bottom'">
         <app-corner-card

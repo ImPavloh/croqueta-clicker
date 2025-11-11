@@ -2,6 +2,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { BehaviorSubject } from 'rxjs';
 import { OptionsService } from './options.service';
+import { LevelUpService } from './level-up.service';
 import { AchievementsService } from './achievements.service';
 
 @Injectable({
@@ -9,6 +10,7 @@ import { AchievementsService } from './achievements.service';
 })
 export class PlayerStats {
   private optionsService = inject(OptionsService);
+  private levelUpService = inject(LevelUpService);
   private achievementsService = inject(AchievementsService);
 
   // state (signals)
@@ -123,6 +125,11 @@ export class PlayerStats {
     // Actualización de nivel
     const nextLevel = this._level.value + 1;
     this._level.next(nextLevel);
+
+    // Notificar al servicio de level-up solo si no estamos en inicialización
+    if (!this.isInitializing) {
+      this.levelUpService.notifyLevelUp(nextLevel);
+    }
 
     // Actualizar la exp actual con la exp sobrante
     this._currentExp.set(expExtra);
