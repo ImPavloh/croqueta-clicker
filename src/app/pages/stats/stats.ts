@@ -6,10 +6,11 @@ import { AchievementList } from '@ui/achievement-list/achievement-list';
 import { STATS } from '@data/stats.data';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CornerCard } from '@ui/corner-card/corner-card';
+import { ShortNumberPipe } from '@pipes/short-number.pipe';
 
 @Component({
   selector: 'app-stats',
-  imports: [StatCardComponent, CommonModule, AchievementList, CornerCard],
+  imports: [StatCardComponent, CommonModule, AchievementList, CornerCard, ShortNumberPipe],
   templateUrl: './stats.html',
   styleUrl: './stats.css',
 })

@@ -134,6 +134,7 @@
 
 .exp-numbers {
   text-align: center;
+  text-wrap: nowrap;
   font-size: 0.875rem;
   font-weight: 600;
   color: #4b5563;

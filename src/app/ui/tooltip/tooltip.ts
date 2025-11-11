@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Tooltip {
   @Input() text: string = '';
-  @Input() position: 'top' | 'bottom' | 'left' | 'right' = 'top';
+  @Input() position: 'top' | 'bottom' | 'left' | 'right' = 'bottom';
   @Input() disabled: boolean = false;
 
   showTooltip = false;

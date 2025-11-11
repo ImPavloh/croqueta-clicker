@@ -48,12 +48,12 @@
             </svg>
 
             <div class="level-text">
-              <div class="level-number">{{ getValue('level') }}</div>
+              <div class="level-number">{{ getValue('level') | short }}</div>
               <div class="level-label">Nivel</div>
               <div class="exp-numbers">
                 <span
-                  >{{ currentExp() | number : '1.0-0' }} /
-                  {{ expToNext() | number : '1.0-0' }} XP</span
+                  >{{ currentExp() | short }} /
+                  {{ expToNext() | short }} XP</span
                 >
               </div>
             </div>

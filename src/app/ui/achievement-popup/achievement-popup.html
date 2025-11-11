@@ -2,12 +2,16 @@
   @if (current) {
   <div class="card" [class.show]="visible" role="status" aria-atomic="true">
     <app-corner-card>
-      <div class="icon">
-        <img [src]="current.icon" [alt]="current.title" />
-      </div>
-      <div class="text-center">
-        <div class="font-bold text-base">{{ current.title }}</div>
-        <div class="mt-4 text-sm opacity-95">{{ current.description }}</div>
+      <div class="content-wrapper">
+        <div class="icon">
+          <img [src]="current.icon" [alt]="current.title" />
+          <div class="icon-glow"></div>
+        </div>
+        <div class="text-content">
+          <div class="achievement-label">¡LOGRO DESBLOQUEADO!</div>
+          <div class="achievement-title">{{ current.title }}</div>
+          <div class="achievement-description">{{ current.description }}</div>
+        </div>
       </div>
     </app-corner-card>
   </div>

@@ -46,9 +46,13 @@
   width: 320px;
   max-width: 90vw;
   background: white;
-  border: 3px solid #ff8c00;
+  border: 3px solid #f3eac2;
+  background: linear-gradient(135deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(184, 156, 90, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3), inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   border-radius: 15px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(20px) scale(0.9);
@@ -70,7 +74,7 @@
   height: 0;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-top: 15px solid #ff8c00;
+  border-top: 15px solid #f3eac2;
 }
 
 .croquetita-dialog::before {
@@ -82,65 +86,20 @@
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 12px solid white;
+  border-top: 12px solid #ccb78b;
   z-index: 1;
 }
 
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: transparent;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-}
-
-.close-btn:hover {
-  color: #ff8c00;
-}
-
 .croquetita-message {
-  color: #333;
+  color: #faf6e6;
   font-size: 20px;
-  line-height: 1.6;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .croquetita-actions {
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-}
-
-.action-btn {
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
-}
-
-.action-btn.secondary {
-  background: linear-gradient(135deg, #666 0%, #555 100%);
-  padding: 6px 12px;
 }
 
 @keyframes float {

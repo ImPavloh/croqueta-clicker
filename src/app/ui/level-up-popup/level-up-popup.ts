@@ -1,35 +1,33 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AchievementsService } from '@services/achievements.service';
-import { Achievement } from '@data/achievements.data';
+import { LevelUpService, LevelUpNotification } from '@services/level-up.service';
 import { CommonModule } from '@angular/common';
-import { CornerCard } from '@ui/corner-card/corner-card';
 import { AudioService } from '@services/audio.service';
 
 @Component({
-  selector: 'app-achievement-popup',
+  selector: 'app-level-up-popup',
   standalone: true,
-  imports: [CommonModule, CornerCard],
-  templateUrl: './achievement-popup.html',
-  styleUrls: ['./achievement-popup.css'],
+  imports: [CommonModule],
+  templateUrl: './level-up-popup.html',
+  styleUrls: ['./level-up-popup.css'],
 })
-export class AchievementPopup implements OnDestroy {
-  current: Achievement | null = null;
+export class LevelUpPopup implements OnDestroy {
+  current: LevelUpNotification | null = null;
   visible = false;
   private isProcessing = false;
   private hideTimeout: any = null;
   private subs = new Subscription();
 
-  private readonly DISPLAY_MS = 3500;
-  private readonly FADE_MS = 300;
+  private readonly DISPLAY_MS = 2500;
+  private readonly FADE_MS = 400;
 
   constructor(
-    private svc: AchievementsService,
+    private levelUpService: LevelUpService,
     private audioService: AudioService,
     private cdr: ChangeDetectorRef
   ) {
     this.subs.add(
-      this.svc.queue$.subscribe(queue => {
+      this.levelUpService.queue$.subscribe(queue => {
         if (queue.length > 0 && !this.isProcessing) {
           this.processQueue().catch(err => console.error(err));
         }
@@ -48,7 +46,7 @@ export class AchievementPopup implements OnDestroy {
     this.isProcessing = true;
     try {
       while (true) {
-        const next = this.svc.consumeNext();
+        const next = this.levelUpService.consumeNext();
         if (!next) break;
         await this.showFor(next);
       }
@@ -57,13 +55,12 @@ export class AchievementPopup implements OnDestroy {
     }
   }
 
-  private showFor(item: Achievement): Promise<void> {
+  private showFor(notification: LevelUpNotification): Promise<void> {
     return new Promise(resolve => {
-      this.current = item;
+      this.current = notification;
       this.visible = true;
       this.cdr.detectChanges();
-
-      this.audioService.playSfx("/assets/sfx/achievement.mp3",1)
+      this.audioService.playSfx("/assets/sfx/achievement.mp3", 1);
 
       if (this.hideTimeout) clearTimeout(this.hideTimeout);
 
