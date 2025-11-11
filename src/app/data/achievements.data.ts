@@ -24,6 +24,20 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: '1dc_croquetas', title: 'Un decillón', description: 'Para, porfavor.', icon: '/assets/achievements/clicks/12.webp' },
 
   // ------------------------------------------------------------
+  // 🎯 SUBIDA DE NIVEL - NUEVOS LOGROS
+  // ------------------------------------------------------------
+  { id: 'nivel_5', title: 'Aprendiz croquetero', description: 'Alcanza el nivel 5.', icon: '/assets/achievements/level/5.webp' },
+  { id: 'nivel_10', title: 'Cocinero novato', description: 'Alcanza el nivel 10.', icon: '/assets/achievements/level/10.webp' },
+  { id: 'nivel_15', title: 'Chef croquetero', description: 'Alcanza el nivel 15.', icon: '/assets/achievements/level/15.webp' },
+  { id: 'nivel_20', title: 'Maestro fritador', description: 'Alcanza el nivel 20.', icon: '/assets/achievements/level/20.webp' },
+  { id: 'nivel_25', title: 'Experto en empanado', description: 'Alcanza el nivel 25.', icon: '/assets/achievements/level/25.webp' },
+  { id: 'nivel_30', title: 'Leyenda croquetera', description: 'Alcanza el nivel 30.', icon: '/assets/achievements/level/30.webp' },
+  { id: 'nivel_50', title: 'Gran Maestro', description: 'Alcanza el nivel 50.', icon: '/assets/achievements/level/35.webp' },
+  { id: 'nivel_60', title: 'Croqueta Suprema', description: 'Alcanza el nivel 60.', icon: '/assets/achievements/level/40.webp' },
+  { id: 'nivel_80', title: 'Dios de la Fritura', description: 'Alcanza el nivel 80.', icon: '/assets/achievements/level/45.webp' },
+  { id: 'nivel_100', title: 'Emperador Croquetero', description: 'Alcanza el nivel 100.', icon: '/assets/achievements/level/50.webp' },
+
+  // ------------------------------------------------------------
   // 🏭 PRODUCTORES
   // ------------------------------------------------------------
   { id: 'primer_productor', title: 'Primer productor', description: 'Compra tu primer productor.', icon: '/assets/producers/click.webp' },
@@ -31,10 +45,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: '100_productores', title: 'Fábrica grande', description: 'Compra 100 productores.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
-  // 🧥 SKINS Y PERSONALIZACIÓN
+  // 🧥 SKINS Y PERSONALIZACIÓN (Implementado)
   // ------------------------------------------------------------
-  { id: 'primer_skin', title: 'Cambio de look', description: 'Compra tu primer skin.', icon: '/assets/producers/click.webp' },
-  { id: 'todas_skins', title: 'Fashionista', description: 'Desbloquea todas las skins.', icon: '/assets/producers/click.webp' },
+  { id: 'primer_skin', title: 'Cambio de look', description: 'Cambia de skin por primera vez.', icon: '/assets/producers/click.webp' },
+  { id: 'todas_skins', title: 'Fashionista', description: 'Prueba todas las skins.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
   // ⚙️ MEJORAS Y ACTUALIZACIONES
@@ -57,7 +71,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'todas_noticias', title: 'Periodista', description: 'Lee todas las noticias.', icon: '/assets/producers/click.webp' },
 
   // ------------------------------------------------------------
-  // 📈 SISTEMA DE LOGROS EN SÍ MISMO
+  // 📈 SISTEMA DE LOGROS (Implementado)
   // ------------------------------------------------------------
   { id: 'primer_achievement', title: 'Logro desbloqueado', description: 'Desbloquea tu primer logro.', icon: '/assets/producers/click.webp' },
   { id: 'todos_achievements', title: 'Maestro de logros', description: 'Desbloquea todos los logros.', icon: '/assets/producers/click.webp' },
@@ -75,7 +89,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'achievement_speedrun', title: 'Speedrun', description: 'Llega a 10,000 croquetas en menos de 5 minutos.', icon: '/assets/producers/click.webp', secret: true },
 
   // ------------------------------------------------------------
-  // 🎵 AUDIO Y OST
+  // 🎵 AUDIO Y OST (Implementado)
   // ------------------------------------------------------------
   { id: 'achievement_ost', title: 'Melómano', description: 'Escucha toda la OST.', icon: '/assets/producers/click.webp' },
 
@@ -95,7 +109,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'achievement_croqueta_legendaria', title: 'Croqueta legendaria', description: 'Consigue una croqueta legendaria.', icon: '/assets/producers/click.webp', secret: true },
 
   // ------------------------------------------------------------
-  // 🤪 LOGROS DE BROMA / TESTEO
+  // 🤪 LOGROS DE BROMA / TESTEO (implementado)
   // ------------------------------------------------------------
   { id: 'six_seven', title: 'Six Seven', description: 'jeje sixseven', icon: '/assets/producers/click.webp', secret: true },
 ];

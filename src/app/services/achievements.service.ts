@@ -71,7 +71,18 @@ export class AchievementsService {
       this.queueSubject.next([...q, ach]);
     }
 
+    this.checkAchievements();
     return true;
+  }
+
+  // jaja referencia circular ._.
+  private checkAchievements(){
+    if (this.getUnlockedCount() >= 1){
+      this.unlockAchievement("primer_achievement")
+    }
+    if (this.getUnlockedCount() >= this.getTotalCount() -1){
+      this.unlockAchievement("todos_achievements")
+    }
   }
 
   // Devuelve snapshot de todos los logros con su estado actual
@@ -105,4 +116,6 @@ export class AchievementsService {
   getTotalCount(): number {
     return ACHIEVEMENTS.length;
   }
+
+
 }
