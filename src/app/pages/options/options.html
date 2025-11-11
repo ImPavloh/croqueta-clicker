@@ -5,17 +5,17 @@
             <div class="flex flex-col gap-6 w-full h-full">
                 <p class="text-2xl text-center">Volumen</p>
                 <div class="flex flex-col gap-4">
-                    <app-range-slider 
+                    <app-range-slider
                         label="General:"
                         [value]="optionsService.generalVolume()"
                         (valueChange)="optionsService.setGeneralVolume($event)"
                     />
-                    <app-range-slider 
+                    <app-range-slider
                         label="Música:"
                         [value]="optionsService.musicVolume()"
                         (valueChange)="optionsService.setMusicVolume($event)"
                     />
-                    <app-range-slider 
+                    <app-range-slider
                         label="SFX:"
                         [value]="optionsService.sfxVolume()"
                         (valueChange)="optionsService.setSfxVolume($event)"
@@ -25,17 +25,17 @@
             <div class="flex flex-col gap-6 w-full h-full">
                 <p class="text-2xl text-center">Interfaz</p>
                 <div class="max-w-2xs w-full mx-auto flex flex-col gap-4">
-                    <app-toggle-switch 
+                    <app-toggle-switch
                         label="Mostrar mascota:"
                         [checked]="optionsService.showCroquetita()"
                         (checkedChange)="optionsService.setShowCroquetita($event)"
                     />
-                    <app-toggle-switch 
+                    <app-toggle-switch
                         label="Mostrar partículas:"
                         [checked]="optionsService.showParticles()"
                         (checkedChange)="optionsService.setShowParticles($event)"
                     />
-                    <app-toggle-switch 
+                    <app-toggle-switch
                         label="Mostrar texto flotante:"
                         [checked]="optionsService.showFloatingText()"
                         (checkedChange)="optionsService.setShowFloatingText($event)"
@@ -49,6 +49,9 @@
     <app-corner-card>
         <p class="text-2xl text-center mb-4">Partida</p>
         <div class="flex flex-col md:flex-row gap-4">
+            <app-button variant="success" (click)="saveProgress()">
+                Guardar ahora
+            </app-button>
             <app-button variant="primary" (click)="exportProgress()">
                 Descargar progreso
             </app-button>

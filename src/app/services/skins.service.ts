@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AchievementsService } from './achievements.service';
+import { OptionsService } from './options.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SkinsService {
+    private optionsService = inject(OptionsService);
     // state
     private _skinId = new BehaviorSubject<number>(1);
     // getter público (read-only signal)
@@ -43,23 +45,38 @@ export class SkinsService {
     }
 
     // persistencia simple en localStorage
-    loadFromStorage() {
-        // si no hay localStorage, no hacer nada
+    public loadFromStorage() {
         if (typeof localStorage === 'undefined') return;
-        // cargar skin
-        const skin = localStorage.getItem('skin');
+
+        // cargar skin actual
+        const skin = this.optionsService.getGameItem('skin');
         if (skin) this._skinId.next(Number(skin) || 0);
+
         // cargar skins usadas
-        const skinsUsed = localStorage.getItem('skinsUsed');
-        if (skinsUsed) this.skinsUsed = new Set(JSON.parse(skinsUsed));
+        const skinsUsedStr = this.optionsService.getGameItem('skinsUsed');
+        if (skinsUsedStr) {
+            try {
+                const skinsArray = JSON.parse(skinsUsedStr);
+                this.skinsUsed = new Set(skinsArray);
+            } catch (e) {
+                console.warn('Error al cargar skinsUsed:', e);
+            }
+        }
     }
 
-    saveToStorage() {
-        // si no hay localStorage, no hacer nada
+    public saveToStorage() {
         if (typeof localStorage === 'undefined') return;
-        // guardar skin
-        localStorage.setItem('skin', String(this.skinId()));
+
+        // guardar skin actual
+        this.optionsService.setGameItem('skin', String(this.skinId()));
+
         // guardar skins usadas
-        localStorage.setItem('skinsUsed', JSON.stringify([...this.skinsUsed]));
+        this.optionsService.setGameItem('skinsUsed', JSON.stringify([...this.skinsUsed]));
+    }
+
+    // Reset a estado inicial
+    public reset() {
+        this._skinId.next(1);
+        this.skinsUsed.clear();
     }
 }

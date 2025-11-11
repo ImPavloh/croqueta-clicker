@@ -1,11 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { BehaviorSubject } from 'rxjs';
+import { OptionsService } from './options.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerStats {
+  private optionsService = inject(OptionsService);
   // state (signals)
   private _totalClicks = signal<number>(0);
   private _currentExp = signal<number>(0);
@@ -40,6 +42,9 @@ export class PlayerStats {
 
     // inicializar expToNext en base al nivel inicial
     this.calculateExpToNext();
+
+    // Iniciar el timer automáticamente
+    this.startTimer();
   }
 
   // métodos
@@ -51,11 +56,17 @@ export class PlayerStats {
     this._totalClicks.update(clicks => clicks + 1);
     this._currentExp.update(total => total + this._expPerClick());
     this.checkLevelUp();
+    // Guardar cada 10 clicks para evitar saturar localStorage
+    if (this._totalClicks() % 10 === 0) {
+      this.saveToStorage();
+    }
   }
 
   addExp(exp: number): void {
     this._currentExp.update(total => total + exp);
     this.checkLevelUp();
+    // guardar cuando se añade experiencia de forma externa (compra de productores/upgrades)
+    this.saveToStorage();
   }
 
   /**
@@ -116,6 +127,9 @@ export class PlayerStats {
     // Volver a calcular cuanta exp necesita el nivel
     this.calculateExpToNext();
 
+    // Guardar progreso al subir de nivel
+    this.saveToStorage();
+
     // Verificar si con la exp sobrante se puede subir de nivel
     this.checkLevelUp();
   }
@@ -126,7 +140,12 @@ export class PlayerStats {
     this.isTimerRunning = true;
     this.intervalId = setInterval(() => {
       this._timePlaying.update(current => {
-        return current + 1;
+        const newValue = current + 1;
+        // guardar cada 10 segundos
+        if (newValue % 10 === 0) {
+          this.saveToStorage();
+        }
+        return newValue;
       });
     }, 1000);
   }
@@ -135,50 +154,80 @@ export class PlayerStats {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.isTimerRunning = false;
+      this.saveToStorage();
     }
   }
 
-  loadFromStorage() {
+  public loadFromStorage() {
     if (typeof localStorage == "undefined") return;
 
-    const epc = localStorage.getItem("expPerClick");
-    if (epc) this._expPerClick.set(Number(epc));
+    console.log('[PlayerStats] Cargando desde localStorage...');
 
-    const etn = localStorage.getItem("expToNext");
-    if (etn) this._expToNext.set(Number(etn));
+    const epc = this.optionsService.getGameItem("expPerClick");
+    if (epc) {
+      console.log('[PlayerStats] expPerClick:', epc);
+      this._expPerClick.set(Number(epc));
+    }
 
-    const lvl = localStorage.getItem("level");
-    if (lvl) this._level.next(Number(lvl));
+    const etn = this.optionsService.getGameItem("expToNext");
+    if (etn) {
+      console.log('[PlayerStats] expToNext:', etn);
+      this._expToNext.set(Number(etn));
+    }
 
-    const tc = localStorage.getItem("totalClicks");
-    if (tc) this._totalClicks.set(Number(tc));
+    const lvl = this.optionsService.getGameItem("level");
+    if (lvl) {
+      console.log('[PlayerStats] level:', lvl);
+      this._level.next(Number(lvl));
+    }
 
-    const ce = localStorage.getItem("currentExp");
-    if (ce) this._currentExp.set(Number(ce));
+    const tc = this.optionsService.getGameItem("totalClicks");
+    if (tc) {
+      console.log('[PlayerStats] totalClicks:', tc);
+      this._totalClicks.set(Number(tc));
+    }
 
-    const tp = localStorage.getItem("timePlaying");
-    if (tp) this._timePlaying.set(Number(tp));
+    const ce = this.optionsService.getGameItem("currentExp");
+    if (ce) {
+      console.log('[PlayerStats] currentExp:', ce);
+      this._currentExp.set(Number(ce));
+    }
+
+    const tp = this.optionsService.getGameItem("timePlaying");
+    if (tp) {
+      console.log('[PlayerStats] timePlaying:', tp);
+      this._timePlaying.set(Number(tp));
+    }
 
     // después de cargar el nivel, recalcular expToNext por si usas el valor guardado
     this.calculateExpToNext();
   }
 
-  saveToStorage() {
+  public saveToStorage() {
     if (this.isInitializing) return;
 
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar experiencia por click
-    localStorage.setItem('expPerClick', String(this._expPerClick()));
+    this.optionsService.setGameItem('expPerClick', String(this._expPerClick()));
     // guardar experiencia necesaria para el siguiente nivel
-    localStorage.setItem('expToNext', String(this._expToNext()));
+    this.optionsService.setGameItem('expToNext', String(this._expToNext()));
     // guardar nivel
-    localStorage.setItem('level', String(this._level.value));
+    this.optionsService.setGameItem('level', String(this._level.value));
     // guardar los clicks totales realizados
-    localStorage.setItem('totalClicks', String(this._totalClicks()));
+    this.optionsService.setGameItem('totalClicks', String(this._totalClicks()));
     // guardar la experiencia actual
-    localStorage.setItem('currentExp', String(this._currentExp()));
+    this.optionsService.setGameItem('currentExp', String(this._currentExp()));
     // guardar el tiempo jugado
-    localStorage.setItem('timePlaying', String(this._timePlaying()));
+    this.optionsService.setGameItem('timePlaying', String(this._timePlaying()));
+  }
+
+  public reset() {
+    this._totalClicks.set(0);
+    this._currentExp.set(0);
+    this._expPerClick.set(1);
+    this._timePlaying.set(0);
+    this._level.next(0);
+    this.calculateExpToNext();
   }
 }

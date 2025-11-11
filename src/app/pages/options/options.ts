@@ -8,6 +8,9 @@ import { PointsService } from '@services/points.service';
 import { ButtonComponent } from '@ui/button/button';
 import { RangeSlider } from '@ui/range-slider/range-slider';
 import { ToggleSwitch } from '@ui/toggle-switch/toggle-switch';
+import { AutosaveService } from '@services/autosave.service';
+import { SkinsService } from '@services/skins.service';
+import { ShopControlsService } from '@services/shop-controls.service';
 import Decimal from 'break_infinity.js';
 
 @Component({
@@ -21,7 +24,10 @@ export class Options {
     public optionsService: OptionsService,
     private modalService: ModalService,
     private playerStats: PlayerStats,
-    private pointsService: PointsService
+    private pointsService: PointsService,
+    private autosaveService: AutosaveService,
+    private skinsService: SkinsService,
+    private shopControlsService: ShopControlsService
   ) {}
 
   restartGame() {
@@ -31,20 +37,47 @@ export class Options {
       confirmText: 'Sí, reiniciar',
       cancelText: 'Cancelar',
       onConfirm: () => {
+        // Resetear TODOS los servicios en memoria ANTES de borrar localStorage
+        this.pointsService.reset();
+        this.playerStats.reset();
+        this.skinsService.reset();
+        this.shopControlsService.reset();
+        this.optionsService.resetOptions();
+
+        // Ahora resetear localStorage y achievements, luego recargar
         this.optionsService.restartGame();
       }
+    });
+  }
+
+  // Guardar manualmente el progreso actual
+  saveProgress() {
+    const success = this.autosaveService.saveManually();
+
+    this.modalService.showConfirm({
+      title: success ? 'Partida guardada' : 'Error al guardar',
+      message: success
+        ? '¡Tu progreso se ha guardado correctamente en el navegador!'
+        : 'Hubo un error al guardar. Por favor, intenta de nuevo.',
+      confirmText: 'Aceptar',
+      cancelText: '',
+      onConfirm: () => {}
     });
   }
 
   // mostrar diálogo para exportar partida no un alert sino el modal:
   exportProgress() {
     try {
+      // Primero guardamos el estado actual antes de exportar
+      this.autosaveService.saveManually();
+
       this.optionsService.exportProgress();
       // Mostrar un modal en lugar de alert
       this.modalService.showConfirm({
         title: 'Partida descargada',
         message: 'La partida se ha descargado correctamente.',
         confirmText: 'Aceptar',
+        cancelText: '',
         onConfirm: () => {}
       });
     } catch (error) {
@@ -52,6 +85,7 @@ export class Options {
         title: 'Error',
         message: 'Error al descargar la partida: ' + error,
         confirmText: 'Aceptar',
+        cancelText: '',
         onConfirm: () => {}
       });
     }
@@ -71,11 +105,16 @@ export class Options {
           confirmText: 'Cargar',
           cancelText: 'Cancelar',
           onConfirm: () => {
+            this.autosaveService.setImporting(true);
+
             this.optionsService.importProgress(file)
               .then(() => {
-                window.location.replace(window.location.href);
+                setTimeout(() => {
+                  window.location.replace(window.location.origin + window.location.pathname);
+                }, 100);
               })
               .catch((error) => {
+                  this.autosaveService.setImporting(false);
                   this.modalService.showConfirm({
                     title: 'Error',
                     message: 'Error al cargar la partida: ' + error,

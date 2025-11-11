@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
-
-const STORAGE_KEY = 'croquetas_achievements_v1';
+import { GAME_PREFIX } from '@app/config/constants';
 
 @Injectable({ providedIn: 'root' })
 export class AchievementsService {
@@ -20,22 +19,29 @@ export class AchievementsService {
 
     // persistencia: cuando cambia unlockedMapSubject guardamos
     this.unlockedMap$.subscribe((map) => {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-      } catch (e) {
-        console.warn('No se pudo guardar achievements en localStorage', e);
-      }
+      this.saveToStorage();
     });
   }
 
   private loadFromStorage(): void {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      if (typeof localStorage === 'undefined') return;
+      const raw = localStorage.getItem(GAME_PREFIX + 'achievements');
       if (!raw) return;
       const parsed = JSON.parse(raw) as Record<string, boolean>;
       this.unlockedMapSubject.next(parsed ?? {});
     } catch (e) {
       console.warn('No se pudo leer achievements desde localStorage', e);
+    }
+  }
+
+  private saveToStorage(): void {
+    try {
+      if (typeof localStorage === 'undefined') return;
+      const map = this.unlockedMapSubject.getValue();
+      localStorage.setItem(GAME_PREFIX + 'achievements', JSON.stringify(map));
+    } catch (e) {
+      console.warn('No se pudo guardar achievements en localStorage', e);
     }
   }
 
@@ -105,7 +111,9 @@ export class AchievementsService {
     this.unlockedMapSubject.next({});
     this.queueSubject.next([]);
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(GAME_PREFIX + 'achievements');
+      }
     } catch {}
   }
 

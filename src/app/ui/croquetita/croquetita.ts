@@ -155,11 +155,11 @@ export class Croquetita {
 
   private saveShownMessages() {
     const messagesArray = Array.from(this.shownMessages);
-    localStorage.setItem('croquetita_shown_messages', JSON.stringify(messagesArray));
+    this.optionsService.setGameItem('croquetita_shown_messages', JSON.stringify(messagesArray));
   }
 
   private loadShownMessages() {
-    const stored = localStorage.getItem('croquetita_shown_messages');
+    const stored = this.optionsService.getGameItem('croquetita_shown_messages');
     if (stored) {
       try {
         const messagesArray = JSON.parse(stored);

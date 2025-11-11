@@ -1,6 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
+import { GAME_PREFIX } from '@app/config/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,16 @@ export class OptionsService {
   readonly sfxVolume$: Observable<number> = this._sfxVolume$.asObservable();
 
   constructor(public achievementsService: AchievementsService) {
+    /* debug
+    if (typeof localStorage !== 'undefined') {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(GAME_PREFIX)) {
+          console.log(`  ${key} = ${localStorage.getItem(key)?.substring(0, 50)}`);
+        }
+      }
+    }
+    */
     this.loadFromStorage();
   }
 
@@ -107,23 +118,44 @@ export class OptionsService {
 
   restartGame() {
     if (typeof localStorage === 'undefined') return;
-    localStorage.clear();
 
-    setTimeout(() => {
-      window.location.replace(window.location.href);
-    }, 0); // para que borre el storage antes de recargar
+    // borrar SOLO las keys del juego (con prefijo)
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(GAME_PREFIX)) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+
+    // También resetear achievements explícitamente
+    this.achievementsService.resetAll();
+
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   }
 
   // exportar progreso como json
   exportProgress(): void {
     if (typeof localStorage === 'undefined') return;
 
-    // capturar los datos del localStorage
-    const saveData: Record<string, string | null> = {};
+    this.performExport();
+  }
+
+  private performExport(): void {
+    // capturar SOLO los datos del juego (keys con prefijo)
+    const saveData: Record<string, string> = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key) {
-        saveData[key] = localStorage.getItem(key);
+      if (key && key.startsWith(GAME_PREFIX)) {
+        const value = localStorage.getItem(key);
+        if (value !== null) {
+          // guardar sin el prefijo para archivo más limpio
+          const keyWithoutPrefix = key.substring(GAME_PREFIX.length);
+          saveData[keyWithoutPrefix] = value;
+        }
       }
     }
 
@@ -167,23 +199,28 @@ export class OptionsService {
 
           if (imported.game === 'croqueta-clicker' && imported.data) {
             saveData = imported.data;
-            console.log('Cargando partida guardada el:', imported.timestamp);
           } else if (typeof imported === 'object' && !imported.game) {
             saveData = imported;
-            console.log('Cargando partida en formato antiguo');
           } else {
-            reject('Archivo no válido. No es una partida de Croqueta Clicker.');
+            reject('Archivo no válido. No es una partida de Croqueta Clicker');
             return;
           }
 
-          // limpiar storage actual
-          localStorage.clear();
+          // limpiar solo las keys (con prefijo)
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(GAME_PREFIX)) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(key => localStorage.removeItem(key));
 
-          // cargar los datos (no deberia de haber ningun dato null o undefined, pero por si acaso)
+          // cargar los datos con el prefijo
           let itemsLoaded = 0;
           for (const [key, value] of Object.entries(saveData)) {
             if (value !== null && value !== undefined) {
-              localStorage.setItem(key, value as string);
+              localStorage.setItem(GAME_PREFIX + key, value as string);
               itemsLoaded++;
             }
           }
@@ -200,34 +237,63 @@ export class OptionsService {
   }
 
   // persistencia simple en localStorage (valores 0..100)
-  loadFromStorage() {
+  public loadFromStorage() {
     if (typeof localStorage === 'undefined') return;
-    const generalVolume = localStorage.getItem('generalVolume');
+    const generalVolume = localStorage.getItem(GAME_PREFIX + 'generalVolume');
     if (generalVolume !== null) this._generalVolume.set(Number(generalVolume));
 
-    const musicVolume = localStorage.getItem('musicVolume');
+    const musicVolume = localStorage.getItem(GAME_PREFIX + 'musicVolume');
     if (musicVolume !== null) this._musicVolume.set(Number(musicVolume));
 
-    const sfxVolume = localStorage.getItem('sfxVolume');
+    const sfxVolume = localStorage.getItem(GAME_PREFIX + 'sfxVolume');
     if (sfxVolume !== null) this._sfxVolume.set(Number(sfxVolume));
 
-    const showCroquetita = localStorage.getItem('showCroquetita');
+    const showCroquetita = localStorage.getItem(GAME_PREFIX + 'showCroquetita');
     if (showCroquetita !== null) this._showCroquetita.set(showCroquetita === 'true');
 
-    const showParticles = localStorage.getItem('showParticles');
+    const showParticles = localStorage.getItem(GAME_PREFIX + 'showParticles');
     if (showParticles !== null) this._showParticles.set(showParticles === 'true');
 
-    const showFloatingText = localStorage.getItem('showFloatingText');
+    const showFloatingText = localStorage.getItem(GAME_PREFIX + 'showFloatingText');
     if (showFloatingText !== null) this._showFloatingText.set(showFloatingText === 'true');
   }
 
-  saveToStorage() {
+  public saveToStorage() {
     if (typeof localStorage === 'undefined') return;
-    localStorage.setItem('generalVolume', String(this._generalVolume()));
-    localStorage.setItem('musicVolume', String(this._musicVolume()));
-    localStorage.setItem('sfxVolume', String(this._sfxVolume()));
-    localStorage.setItem('showCroquetita', String(this._showCroquetita()));
-    localStorage.setItem('showParticles', String(this._showParticles()));
-    localStorage.setItem('showFloatingText', String(this._showFloatingText()));
+    localStorage.setItem(GAME_PREFIX + 'generalVolume', String(this._generalVolume()));
+    localStorage.setItem(GAME_PREFIX + 'musicVolume', String(this._musicVolume()));
+    localStorage.setItem(GAME_PREFIX + 'sfxVolume', String(this._sfxVolume()));
+    localStorage.setItem(GAME_PREFIX + 'showCroquetita', String(this._showCroquetita()));
+    localStorage.setItem(GAME_PREFIX + 'showParticles', String(this._showParticles()));
+    localStorage.setItem(GAME_PREFIX + 'showFloatingText', String(this._showFloatingText()));
+  }
+
+  // Reset opciones a valores por defecto
+  public resetOptions() {
+    this._generalVolume.set(100);
+    this._musicVolume.set(100);
+    this._sfxVolume.set(100);
+    this._showCroquetita.set(true);
+    this._showParticles.set(true);
+    this._showFloatingText.set(true);
+    this._generalVolume$.next(1);
+    this._musicVolume$.next(1);
+    this._sfxVolume$.next(1);
+  }
+
+  // helpers para que otros servicios usen el prefijo
+  getGameItem(key: string): string | null {
+    if (typeof localStorage === 'undefined') return null;
+    return localStorage.getItem(GAME_PREFIX + key);
+  }
+
+  setGameItem(key: string, value: string): void {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(GAME_PREFIX + key, value);
+  }
+
+  removeGameItem(key: string): void {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.removeItem(GAME_PREFIX + key);
   }
 }

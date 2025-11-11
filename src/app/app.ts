@@ -16,6 +16,7 @@ import { Modal } from '@ui/modal/modal';
 import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
+import { AutosaveService } from '@services/autosave.service';
 
 @Component({
   selector: 'app-root',
@@ -42,16 +43,13 @@ export class App implements OnInit, OnDestroy {
   // splash control (visible al inicio)
   protected readonly splashShown = signal(true);
 
-  // cargar puntos al iniciar la app
   constructor(
-    points: PointsService,
+    private points: PointsService,
     private playerStats: PlayerStats,
     private audioService: AudioService,
+    private autosaveService: AutosaveService,
     private achievementsService: AchievementsService
-  ) {
-    points.loadFromStorage();
-    playerStats.loadFromStorage();
-  }
+  ) {}
 
   private level: number = 1;
   private levelSub?: Subscription;

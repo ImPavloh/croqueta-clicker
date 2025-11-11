@@ -1,17 +1,20 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
+import { OptionsService } from './options.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PointsService {
+  private optionsService = inject(OptionsService);
   // state usando Decimal en lugar de number
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
   private _multiply = signal<Decimal>(new Decimal(1));
   private isInitializing = true;
+  private lastSaveTime: number = 0;
 
   // getter público (read-only signal)
   readonly points = this._points.asReadonly();
@@ -59,57 +62,86 @@ export class PointsService {
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());
     }
-    this.saveToStorage();
+    // guardar cada 30 segundos
+    const currentTime = Date.now();
+    if (!this.lastSaveTime || currentTime - this.lastSaveTime > 30000) {
+      this.saveToStorage();
+      this.lastSaveTime = currentTime;
+    }
   }
 
   // actualizar puntos por click (recibe number | string | Decimal)
   upgradePointPerClick(value: number | string | Decimal) {
     this._pointsPerClick.set(new Decimal(value));
+    this.saveToStorage();
   }
 
   // actualizar puntos por segundo (recibe number | string | Decimal)
   upgradePointsPerSecond(value: number | string | Decimal) {
     this._pointsPerSecond.set(new Decimal(value));
+    this.saveToStorage();
   }
 
   // restar puntos
   substractPoints(value: number | string | Decimal) {
     const d = new Decimal(value);
     this._points.update((v) => v.minus(d));
+    this.saveToStorage();
   }
 
   // persistencia simple en localStorage
-  loadFromStorage() {
+  public loadFromStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
 
+    console.log('[PointsService] Cargando desde localStorage...');
+
     // cargar puntos
-    const points = localStorage.getItem('points');
-    if (points) this._points.set(new Decimal(points));
+    const points = this.optionsService.getGameItem('points');
+    if (points) {
+      console.log('[PointsService] points:', points);
+      this._points.set(new Decimal(points));
+    }
     // cargar puntos por segundo
-    const cps = localStorage.getItem('pointsPerSecond');
-    if (cps) this._pointsPerSecond.set(new Decimal(cps));
+    const cps = this.optionsService.getGameItem('pointsPerSecond');
+    if (cps) {
+      console.log('[PointsService] pointsPerSecond:', cps);
+      this._pointsPerSecond.set(new Decimal(cps));
+    }
     // cargar puntos por click
-    const cpc = localStorage.getItem('pointsPerClick');
-    if (cpc) this._pointsPerClick.set(new Decimal(cpc));
+    const cpc = this.optionsService.getGameItem('pointsPerClick');
+    if (cpc) {
+      console.log('[PointsService] pointsPerClick:', cpc);
+      this._pointsPerClick.set(new Decimal(cpc));
+    }
     // cargar multiplicador por click
-    const cmc = localStorage.getItem('multiply');
-    if (cmc) this._multiply.set(new Decimal(cmc));
+    const cmc = this.optionsService.getGameItem('multiply');
+    if (cmc) {
+      console.log('[PointsService] multiply:', cmc);
+      this._multiply.set(new Decimal(cmc));
+    }
   }
 
-  saveToStorage() {
+  public saveToStorage() {
     // en carga inicial no guardar aún
     if (this.isInitializing) return;
 
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar puntos como string
-    localStorage.setItem('points', this._points().toString());
+    this.optionsService.setGameItem('points', this._points().toString());
     // guardar puntos por segundo
-    localStorage.setItem('pointsPerSecond', this._pointsPerSecond().toString());
+    this.optionsService.setGameItem('pointsPerSecond', this._pointsPerSecond().toString());
     // guardar puntos por click
-    localStorage.setItem('pointsPerClick', this._pointsPerClick().toString());
+    this.optionsService.setGameItem('pointsPerClick', this._pointsPerClick().toString());
     // guardar multiplicador por click
-    localStorage.setItem('multiply', this._multiply().toString());
+    this.optionsService.setGameItem('multiply', this._multiply().toString());
+  }
+
+  public reset() {
+    this._points.set(new Decimal(0));
+    this._pointsPerSecond.set(new Decimal(0));
+    this._pointsPerClick.set(new Decimal(1));
+    this._multiply.set(new Decimal(1));
   }
 }

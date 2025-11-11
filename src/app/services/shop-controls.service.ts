@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { OptionsService } from './options.service';
 
 export type BuyAmount = 1 | 10 | 100;
 export type SortOrder = 'default' | 'price-asc' | 'price-desc' | 'name';
@@ -8,6 +9,7 @@ export type FilterType = 'all' | 'affordable';
   providedIn: 'root',
 })
 export class ShopControlsService {
+  private optionsService = inject(OptionsService);
   // cantidad de compra actual
   private _buyAmount = signal<BuyAmount>(1);
   readonly buyAmount = this._buyAmount.asReadonly();
@@ -55,19 +57,19 @@ export class ShopControlsService {
     if (typeof localStorage === 'undefined') return;
 
     // cargar cantidad de compra
-    const stored = localStorage.getItem('buyAmount');
+    const stored = this.optionsService.getGameItem('buyAmount');
     if (stored === '10' || stored === '100') {
       this._buyAmount.set(Number(stored) as BuyAmount);
     }
 
     // cargar orden
-    const storedSort = localStorage.getItem('shopSortOrder') as SortOrder;
+    const storedSort = this.optionsService.getGameItem('shopSortOrder') as SortOrder;
     if (storedSort && ['default', 'price-asc', 'price-desc', 'name'].includes(storedSort)) {
       this._sortOrder.set(storedSort);
     }
 
     // cargar filtro
-    const storedFilter = localStorage.getItem('shopFilter') as FilterType;
+    const storedFilter = this.optionsService.getGameItem('shopFilter') as FilterType;
     if (storedFilter && ['all', 'affordable'].includes(storedFilter)) {
       this._filter.set(storedFilter);
     }
@@ -75,8 +77,14 @@ export class ShopControlsService {
 
   private saveToStorage() {
     if (typeof localStorage === 'undefined') return;
-    localStorage.setItem('buyAmount', String(this._buyAmount()));
-    localStorage.setItem('shopSortOrder', this._sortOrder());
-    localStorage.setItem('shopFilter', this._filter());
+    this.optionsService.setGameItem('buyAmount', String(this._buyAmount()));
+    this.optionsService.setGameItem('shopSortOrder', this._sortOrder());
+    this.optionsService.setGameItem('shopFilter', this._filter());
+  }
+
+  public reset() {
+    this._buyAmount.set(1);
+    this._sortOrder.set('default');
+    this._filter.set('all');
   }
 }

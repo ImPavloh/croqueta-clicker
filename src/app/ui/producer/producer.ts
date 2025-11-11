@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { PlayerStats } from '@services/player-stats.service';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
+import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
 
@@ -22,6 +23,7 @@ export class Producer {
     public pointsService = inject(PointsService);
     private audioService = inject(AudioService);
     public shopControls =  inject(ShopControlsService);
+    private optionsService = inject(OptionsService);
 
     // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
     inintEfect = effect(() => this.updatePriceAndPoints());
@@ -41,6 +43,11 @@ export class Producer {
   ngOnInit() {
     this.loadFromStorage();
     this.updatePriceAndPoints();
+
+    if (this.quantity > 0) {
+      const production = this.calculateTotalPoints();
+    }
+
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       this.checkLevel(level);
     });
@@ -135,7 +142,6 @@ export class Producer {
       this.updatePriceAndPoints();
 
       this.saveToStorage();
-      this.pointsService.saveToStorage();
 
       // añadir experiencia (multiplicada por cantidad comprada)
       this.playerStats.addExp(this.config.exp * buyAmount);
@@ -149,19 +155,19 @@ export class Producer {
   }
 
   // persistencia simple en localStorage (quantity sigue siendo number)
-  loadFromStorage() {
+  public loadFromStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar cantidad
-    const q = localStorage.getItem('producer_' + this.config.id + '_quantity');
+    const q = this.optionsService.getGameItem('producer_' + this.config.id + '_quantity');
     if (q) this.quantity = Number(q) || 0;
   }
 
-  saveToStorage() {
+  public saveToStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar cantidad
-    localStorage.setItem('producer_' + this.config.id + '_quantity', String(this.quantity));
+    this.optionsService.setGameItem('producer_' + this.config.id + '_quantity', String(this.quantity));
   }
 
   ngOnDestroy() {

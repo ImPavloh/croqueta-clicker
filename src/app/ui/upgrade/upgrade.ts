@@ -6,6 +6,7 @@ import { CornerCard } from '@ui/corner-card/corner-card';
 import { PlayerStats } from '@services/player-stats.service';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
+import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
@@ -21,6 +22,7 @@ export class Upgrade {
   private playerStats = inject(PlayerStats);
   public pointsService = inject(PointsService);
   private audioService = inject(AudioService);
+  private optionsService = inject(OptionsService);
 
   @Input() config!: UpgradeModel;
 
@@ -65,7 +67,6 @@ export class Upgrade {
 
       this.bought = true;
       this.saveToStorage();
-      this.pointsService.saveToStorage();
       this.playerStats.addExp(this.config.exp);
 
       // SFX compra
@@ -77,19 +78,19 @@ export class Upgrade {
   }
 
   // persistencia simple en localStorage
-  loadFromStorage() {
+  public loadFromStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar estado de compra (guardamos 'true' / 'false' como string)
-    const bought = localStorage.getItem('upgrade_' + this.config.id + '_bought');
+    const bought = this.optionsService.getGameItem('upgrade_' + this.config.id + '_bought');
     if (bought !== null) this.bought = bought === 'true';
   }
 
-  saveToStorage() {
+  public saveToStorage() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar estado de compra
-    localStorage.setItem('upgrade_' + this.config.id + '_bought', String(this.bought));
+    this.optionsService.setGameItem('upgrade_' + this.config.id + '_bought', String(this.bought));
   }
 
   ngOnDestroy() {
