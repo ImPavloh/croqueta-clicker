@@ -59,7 +59,7 @@ export class Clicker implements OnInit, OnDestroy {
   }
   //Condigue la url de la skin seleccionada
   getSkinImage(skinId: number): string {
-    const skin = this.skins.find(s => s.id === skinId);
+    const skin = this.skins.find((s) => s.id === skinId);
     return `url('${skin?.image}')`;
   }
 
@@ -98,11 +98,20 @@ export class Clicker implements OnInit, OnDestroy {
       this.particlesService.spawn(x, y, 6);
     }
 
-    // generar partículas de croquetas cayendo
-    this.particlesService.spawnFallingCroquetas(containerWidth, 3);
+    // generar partículas de croquetas cayendo con personalización según skin
+    const particleImage = this.getParticleImage();
+    this.particlesService.spawnFallingCroquetas(containerWidth, 3, particleImage);
 
     // SFX
     this.audioService.playSfx('/assets/sfx/click01.mp3', 1);
+  }
+
+  // obtener la imagen de partícula según la skin actual (o dejar la skin de la normal por defecto)
+  private getParticleImage(): string {
+    const currentSkinId = this.skinsService.skinId();
+    const skin = this.skins.find((s) => s.id === currentSkinId);
+
+    return skin?.particleImage || '/assets/skins/croqueta-normal.webp';
   }
 
   // Logros (thresholds como Decimal)

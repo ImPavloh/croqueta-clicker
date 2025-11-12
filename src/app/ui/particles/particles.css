@@ -36,6 +36,18 @@
   animation: croqueta-fall 1.5s ease-in forwards;
 }
 
+.particle-custom {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  background: var(--particle-image) center/contain no-repeat;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  animation: croqueta-fall 1.5s ease-in forwards;
+}
+
 @keyframes particle-fly {
   0% {
     transform: translate3d(0, 0, 0) scale(1);

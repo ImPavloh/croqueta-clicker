@@ -25,6 +25,19 @@
     [style.--rotation]="particle.rotation + 'deg'"
     [style.animation-duration.ms]="particle.duration"
   ></div>
+  } @else if (particle.type === 'custom') {
+  <div
+    class="particle-custom"
+    [style.left.px]="particle.x"
+    [style.top.px]="particle.y"
+    [style.width.px]="particle.size"
+    [style.height.px]="particle.size"
+    [style.--vx]="particle.vx"
+    [style.--vy]="particle.vy"
+    [style.--rotation]="particle.rotation + 'deg'"
+    [style.--particle-image]="'url(' + particle.image + ')'"
+    [style.animation-duration.ms]="particle.duration"
+  ></div>
   } }
 </div>
 }

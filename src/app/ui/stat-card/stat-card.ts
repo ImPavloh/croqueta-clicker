@@ -1,13 +1,12 @@
 import { Component, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CornerCard } from '@ui/corner-card/corner-card';
 import { StatModel } from 'app/models/stat.model';
 import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   standalone: true,
   selector: 'app-stat-card',
-  imports: [CommonModule, CornerCard, Tooltip],
+  imports: [CommonModule, Tooltip],
   templateUrl: './stat-card.html',
   styleUrl: './stat-card.css',
 })

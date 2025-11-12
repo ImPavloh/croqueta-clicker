@@ -21,6 +21,10 @@
   backface-visibility: hidden;
 }
 
+.croqueta-container:focus-within {
+  outline: none;
+}
+
 .croqueta-layer {
   position: absolute;
   top: 0;

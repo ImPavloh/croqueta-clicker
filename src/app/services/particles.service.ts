@@ -9,8 +9,9 @@ export interface Particle {
   color: string;
   size: number;
   duration: number;
-  type: 'circle' | 'croqueta';
+  type: 'circle' | 'croqueta' | 'custom';
   rotation: number;
+  image?: string;
 }
 
 @Injectable({
@@ -65,7 +66,7 @@ export class ParticlesService {
   }
 
   // crear partículas de croquetas cayendo desde arriba
-  spawnFallingCroquetas(containerWidth: number, count: number = 5) {
+  spawnFallingCroquetas(containerWidth: number, count: number = 5, customImage?: string) {
     // lo mismo de antes, limitar particulas activas
     if (this._particles().length >= this.maxParticles) {
       return;
@@ -87,8 +88,9 @@ export class ParticlesService {
         color: '',
         size: 30 + Math.random() * 20,
         duration: 1500 + Math.random() * 500,
-        type: 'croqueta',
+        type: 'custom',
         rotation: Math.random() * 360,
+        image: customImage,
       };
 
       particles.push(particle);
