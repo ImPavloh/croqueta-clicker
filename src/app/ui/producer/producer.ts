@@ -11,7 +11,6 @@ import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
 
-
 @Component({
   selector: 'app-producer',
   imports: [NgClass, ShortNumberPipe, CornerCard],
@@ -19,14 +18,14 @@ import Decimal from 'break_infinity.js';
   styleUrl: './producer.css',
 })
 export class Producer {
-    private playerStats = inject(PlayerStats);
-    public pointsService = inject(PointsService);
-    private audioService = inject(AudioService);
-    public shopControls =  inject(ShopControlsService);
-    private optionsService = inject(OptionsService);
+  private playerStats = inject(PlayerStats);
+  public pointsService = inject(PointsService);
+  private audioService = inject(AudioService);
+  public shopControls = inject(ShopControlsService);
+  private optionsService = inject(OptionsService);
 
-    // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
-    inintEfect = effect(() => this.updatePriceAndPoints());
+  // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
+  inintEfect = effect(() => this.updatePriceAndPoints());
 
   private levelSub?: Subscription;
 
@@ -115,8 +114,6 @@ export class Producer {
   // Método para comprar el productor
   buyProducer() {
     const buyAmount = this.shopControls.buyAmount();
-    console.log('Buying producer:', this.config.name, 'Amount:', buyAmount);
-
     const cost = this.calculateBulkPrice(this.quantity, buyAmount);
 
     // comparar Decimal con Decimal
@@ -167,7 +164,10 @@ export class Producer {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar cantidad
-    this.optionsService.setGameItem('producer_' + this.config.id + '_quantity', String(this.quantity));
+    this.optionsService.setGameItem(
+      'producer_' + this.config.id + '_quantity',
+      String(this.quantity)
+    );
   }
 
   ngOnDestroy() {

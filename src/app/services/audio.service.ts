@@ -35,7 +35,9 @@ export class AudioService implements OnDestroy {
 
     // Limpieza: si hay audio elements creados por instancias previas del servicio, pararlos.
     try {
-      const old = Array.from(document.querySelectorAll('audio[data-audioservice="true"]')) as HTMLAudioElement[];
+      const old = Array.from(
+        document.querySelectorAll('audio[data-audioservice="true"]')
+      ) as HTMLAudioElement[];
       for (const a of old) {
         try {
           a.pause();
@@ -71,7 +73,7 @@ export class AudioService implements OnDestroy {
     this.optionsSub = combineLatest([
       this.options.generalVolume$,
       this.options.sfxVolume$,
-      this.options.musicVolume$
+      this.options.musicVolume$,
     ]).subscribe(([g, s, m]) => {
       if (!this.ctx) return;
       const t = this.ctx!.currentTime;
@@ -95,16 +97,13 @@ export class AudioService implements OnDestroy {
     if (!this.ctx) return;
     try {
       // Mostrar estado para debug
-      console.log('[AudioService] AudioContext state BEFORE resume:', this.ctx.state);
       if (this.ctx.state === 'suspended') {
         await this.ctx.resume();
-        console.log('[AudioService] AudioContext resumed.');
       }
     } catch (e) {
       console.warn('[AudioService] resumeIfNeeded error:', e);
     }
   }
-
 
   // ---------------- SFX (pueden superponerse) ----------------
   /**
@@ -172,7 +171,9 @@ export class AudioService implements OnDestroy {
     if (this.currentMusic && this.currentMusic.url === url) {
       const cur = this.currentMusic;
       if (cur.audio.paused) {
-        try { await cur.audio.play(); } catch {}
+        try {
+          await cur.audio.play();
+        } catch {}
       }
       return;
     }
@@ -189,7 +190,9 @@ export class AudioService implements OnDestroy {
       audio.setAttribute('data-audioservice', 'true');
       audio.style.display = 'none';
       // fijar volumen inicial según options como fallback (0..1)
-      try { audio.volume = this.options.getMusic(); } catch {}
+      try {
+        audio.volume = this.options.getMusic();
+      } catch {}
       // añadir al DOM para poder localizarlo/limpiarlo si hay HMR
       document.body.appendChild(audio);
     } catch {}
@@ -232,8 +235,12 @@ export class AudioService implements OnDestroy {
           // eliminar del DOM si lo añadimos
           if (old.audio.parentElement) old.audio.parentElement.removeChild(old.audio);
         } catch {}
-        try { old.srcNode.disconnect(); } catch {}
-        try { old.trackGain.disconnect(); } catch {}
+        try {
+          old.srcNode.disconnect();
+        } catch {}
+        try {
+          old.trackGain.disconnect();
+        } catch {}
       }, (crossfadeSec + 0.05) * 1000);
     }
 
@@ -280,7 +287,9 @@ export class AudioService implements OnDestroy {
   }
 
   // ---------------- Utilities / cleanup ----------------
-  private clamp(v: number) { return Math.max(0, Math.min(1, v)); }
+  private clamp(v: number) {
+    return Math.max(0, Math.min(1, v));
+  }
 
   ngOnDestroy() {
     this.optionsSub?.unsubscribe();
@@ -288,7 +297,9 @@ export class AudioService implements OnDestroy {
       this.sfxBufferCache.clear();
     } catch {}
     if (this.ctx) {
-      try { this.ctx.close(); } catch {}
+      try {
+        this.ctx.close();
+      } catch {}
       this.ctx = null;
     }
 
@@ -305,7 +316,9 @@ export class AudioService implements OnDestroy {
 
     // también intentar eliminar cualquier audio marcado (por ejemplo, si alguna quedó)
     try {
-      const left = Array.from(document.querySelectorAll('audio[data-audioservice="true"]')) as HTMLAudioElement[];
+      const left = Array.from(
+        document.querySelectorAll('audio[data-audioservice="true"]')
+      ) as HTMLAudioElement[];
       for (const a of left) {
         try {
           a.pause();

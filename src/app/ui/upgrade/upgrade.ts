@@ -10,7 +10,6 @@ import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
-
 @Component({
   selector: 'app-upgrade',
   imports: [NgClass, ShortNumberPipe, CornerCard],
@@ -18,7 +17,6 @@ import { UpgradeModel } from '@models/upgrade.model';
   styleUrl: './upgrade.css',
 })
 export class Upgrade {
-
   private playerStats = inject(PlayerStats);
   public pointsService = inject(PointsService);
   private audioService = inject(AudioService);
@@ -45,10 +43,10 @@ export class Upgrade {
 
   // Método para comprar la mejora
   buyUpgrade() {
-    console.log('Buying upgrade:', this.config.name);
-
     // pointsPerClick es Decimal (desde PointsService), sumamos clicks (number)
-    const pointsClickDecimal: Decimal = this.pointsService.pointsPerClick().plus(this.config.clicks);
+    const pointsClickDecimal: Decimal = this.pointsService
+      .pointsPerClick()
+      .plus(this.config.clicks);
 
     // newExp = floor(pointsClick^0.8 + pointsClick / 3)
     // Usamos Decimal para evitar pérdida de precisión en el cálculo intermedio

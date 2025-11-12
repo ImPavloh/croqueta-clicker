@@ -4,10 +4,11 @@ import { SkinsService } from '@services/skins.service';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { AudioService } from '@services/audio.service';
 import { SkinModel } from 'app/models/skin.model';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-skin-card',
-  imports: [CornerCard, CommonModule],
+  imports: [CornerCard, CommonModule, Tooltip],
   templateUrl: './skin-card.html',
   styleUrl: './skin-card.css',
 })
@@ -24,6 +25,6 @@ export class SkinCard {
   onClick() {
     this.skinsService.updateSkin(this.config.id);
     // SFX
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 }

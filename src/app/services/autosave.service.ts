@@ -95,7 +95,6 @@ export class AutosaveService implements OnDestroy {
 
   // Métodos para controlar el flag de importación
   public setImporting(value: boolean) {
-    console.log('[AutosaveService] setImporting:', value);
     this.isImporting = value;
   }
 
@@ -107,7 +106,7 @@ export class AutosaveService implements OnDestroy {
   private saveProducersState() {
     if (typeof localStorage === 'undefined') return;
 
-    PRODUCERS.forEach(producer => {
+    PRODUCERS.forEach((producer) => {
       const quantity = this.optionsService.getGameItem(`producer_${producer.id}_quantity`);
       if (quantity === null) {
         this.optionsService.setGameItem(`producer_${producer.id}_quantity`, '0');
@@ -119,7 +118,7 @@ export class AutosaveService implements OnDestroy {
   private saveUpgradesState() {
     if (typeof localStorage === 'undefined') return;
 
-    UPGRADES.forEach(upgrade => {
+    UPGRADES.forEach((upgrade) => {
       const bought = this.optionsService.getGameItem(`upgrade_${upgrade.id}_bought`);
       if (bought === null) {
         this.optionsService.setGameItem(`upgrade_${upgrade.id}_bought`, 'false');

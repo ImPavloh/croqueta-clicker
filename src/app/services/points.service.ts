@@ -10,7 +10,6 @@ import { OptionsService } from './options.service';
 export class PointsService {
   private optionsService = inject(OptionsService);
   private goldenCroquetaService = inject(GoldenCroquetaService);
-  // state usando Decimal en lugar de number
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
@@ -48,9 +47,7 @@ export class PointsService {
       : 1;
 
     // amount = pointsPerClick * multiply * bonusMultiplier
-    const amount = this.pointsPerClick()
-      .times(this.multiply())
-      .times(bonusMultiplier);
+    const amount = this.pointsPerClick().times(this.multiply()).times(bonusMultiplier);
     // actualizar puntos: v + amount
     this._points.update((v) => v.plus(amount));
 
@@ -108,30 +105,24 @@ export class PointsService {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
 
-    console.log('[PointsService] Cargando desde localStorage...');
-
     // cargar puntos
     const points = this.optionsService.getGameItem('points');
     if (points) {
-      console.log('[PointsService] points:', points);
       this._points.set(new Decimal(points));
     }
     // cargar puntos por segundo
     const cps = this.optionsService.getGameItem('pointsPerSecond');
     if (cps) {
-      console.log('[PointsService] pointsPerSecond:', cps);
       this._pointsPerSecond.set(new Decimal(cps));
     }
     // cargar puntos por click
     const cpc = this.optionsService.getGameItem('pointsPerClick');
     if (cpc) {
-      console.log('[PointsService] pointsPerClick:', cpc);
       this._pointsPerClick.set(new Decimal(cpc));
     }
     // cargar multiplicador por click
     const cmc = this.optionsService.getGameItem('multiply');
     if (cmc) {
-      console.log('[PointsService] multiply:', cmc);
       this._multiply.set(new Decimal(cmc));
     }
   }

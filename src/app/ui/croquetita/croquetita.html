@@ -15,11 +15,9 @@
 
   @if (isOpen()) {
   <div class="croquetita-dialog" [class.animate]="isAnimating()">
+    <span (click)="close()" class="croquetita-close-btn">X</span>
     <div class="croquetita-message text-balance">
       {{ currentMessage() }}
-    </div>
-    <div class="croquetita-actions">
-      <app-button variant="primary"  (click)="close()">Entendido</app-button>
     </div>
   </div>
   }

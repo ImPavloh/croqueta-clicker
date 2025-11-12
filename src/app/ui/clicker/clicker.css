@@ -148,34 +148,14 @@
 
 /* para tablets */
 @media (max-width: 1024px) {
-  .croqueta-container {
-    width: 134px;
-    height: 250px;
-  }
-
   .croqueta-layer {
     font-size: 1.2rem;
-  }
-
-  .croqueta-bg-light {
-    width: 300px;
-    height: 300px;
   }
 }
 
 /* para móviles */
 @media (max-width: 640px) {
-  .croqueta-container {
-    width: 107px;
-    height: 200px;
-  }
-
   .croqueta-layer {
     font-size: 1.1rem;
-  }
-
-  .croqueta-bg-light {
-    width: 250px;
-    height: 250px;
   }
 }

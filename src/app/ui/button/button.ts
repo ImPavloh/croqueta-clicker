@@ -10,7 +10,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './button.css',
 })
 export class ButtonComponent {
-  @Input() variant: 'primary' | 'danger' | 'success' | 'warning' | 'nav' | 'control' = 'primary';
+  @Input() variant: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'nav' | 'control' =
+    'primary';
   @Input() active: boolean = false;
   @Input() disabled: boolean = false;
   @Input() type: 'button' | 'submit' | 'reset' = 'button';

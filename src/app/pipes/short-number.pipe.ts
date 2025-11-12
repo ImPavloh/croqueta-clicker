@@ -20,12 +20,6 @@ export class ShortNumberPipe implements PipeTransform {
     const sign = num.lt(0) ? '-' : '';
     const abs = num.abs();
 
-    // Mostrar número completo si es menor a 10,000
-    if (abs.lt(10000)) {
-      const formatted = abs.toFixed(maxDecimals).replace(/\.0+$/, '').replace(/(\.[0-9]*[1-9])0+$/, '$1');
-      return `${sign}${formatted}`;
-    }
-
     // Escalas con sufijos
     const units: { value: Decimal; symbol: string }[] = [
       { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
@@ -35,25 +29,53 @@ export class ShortNumberPipe implements PipeTransform {
       { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
       { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
       { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
-      { value: new Decimal(1e12), symbol: 'T' },  // trillón
-      { value: new Decimal(1e9), symbol: 'B' },   // mil millones
-      { value: new Decimal(1e6), symbol: 'M' },   // millón
-      { value: new Decimal(1e3), symbol: 'K' },   // mil
+      { value: new Decimal(1e12), symbol: 'T' }, // trillón
+      { value: new Decimal(1e9), symbol: 'B' }, // mil millones
+      { value: new Decimal(1e6), symbol: 'M' }, // millón
+      { value: new Decimal(1e3), symbol: 'K' }, // mil
     ];
 
     for (const u of units) {
       if (abs.gte(u.value)) {
         const normalized = abs.div(u.value);
-        const decimals =
-          normalized.lt(10) ? Math.min(2, maxDecimals)
-          : normalized.lt(100) ? Math.min(1, maxDecimals)
+        const decimals = normalized.lt(10)
+          ? Math.min(2, maxDecimals)
+          : normalized.lt(100)
+          ? Math.min(1, maxDecimals)
           : 0;
 
-        const formatted = normalized.toFixed(decimals).replace(/\.0+$/, '').replace(/(\.[0-9]*[1-9])0+$/, '$1');
-        return `${sign}${formatted}${u.symbol}`;
+        try {
+          const formatted = normalized
+            .toFixed(decimals)
+            .replace(/\.0+$/, '')
+            .replace(/(\.[0-9]*[1-9])0+$/, '$1');
+          return `${sign}${formatted}${u.symbol}`;
+        } catch {
+          // usar notación científica como fallback
+          return `${sign}${normalized.toExponential(2)}${u.symbol}`;
+        }
       }
     }
 
-    return `${sign}${abs.toFixed(0)}`;
+    // Mostrar número completo si es menor a 1000
+    if (abs.lt(10000)) {
+      try {
+        const formatted = abs
+          .toFixed(maxDecimals)
+          .replace(/\.0+$/, '')
+          .replace(/(\.[0-9]*[1-9])0+$/, '$1');
+        return `${sign}${formatted}`;
+      } catch {
+        // usar el valor sin formato como fallback
+        return `${sign}${abs.toString()}`;
+      }
+    }
+
+    // Fallback para números que no coincidan con ninguna escala
+    try {
+      return `${sign}${abs.toFixed(0)}`;
+    } catch {
+      return `${sign}${abs.toString()}`;
+    }
   }
 }

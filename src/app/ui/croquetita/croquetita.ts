@@ -20,6 +20,7 @@ export class Croquetita {
 
   private messages: TutorialMessage[] = TUTORIAL_MESSAGES;
   private shownMessages = new Set<string>();
+  private autoCloseTimeout?: number;
   protected optionsService = inject(OptionsService);
 
   constructor(private pointsService: PointsService, private playerStats: PlayerStats) {
@@ -51,13 +52,27 @@ export class Croquetita {
     this.isOpen.set(true);
     this.isAnimating.set(true);
     this.showRelevantMessage();
+
+    // cerrar automáticamente
+    this.clearAutoCloseTimeout();
+    this.autoCloseTimeout = window.setTimeout(() => {
+      this.close();
+    }, 8000);
   }
 
   close() {
+    this.clearAutoCloseTimeout();
     this.isAnimating.set(false);
     setTimeout(() => {
       this.isOpen.set(false);
     }, 200);
+  }
+
+  private clearAutoCloseTimeout() {
+    if (this.autoCloseTimeout) {
+      clearTimeout(this.autoCloseTimeout);
+      this.autoCloseTimeout = undefined;
+    }
   }
 
   private checkCondition(msg: TutorialMessage): boolean {

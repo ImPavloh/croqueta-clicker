@@ -1,9 +1,5 @@
-<div class="grid grid-cols-3 lg:grid-cols-4 gap-8 p-4">
+<div class="grid grid-cols-3 lg:grid-cols-4 lg:gap-8 gap-5 p-4">
   @for (skin of skins; track skin.id){
-    <app-skin-card
-      [config]="skin"
-    />
+  <app-skin-card [config]="skin" />
   }
-
-
 </div>

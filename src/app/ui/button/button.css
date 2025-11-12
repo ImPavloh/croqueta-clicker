@@ -56,13 +56,26 @@
 /* Variante Primary (estilo options/modal) */
 .btn-primary {
   color: #6b5633;
-  background: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #f5f0e1 0%, #e3d7b0 50%, #f5f0e1 100%);
   border-color: #b89c5a;
 }
 
 .btn-primary:hover {
-  background: rgba(184, 156, 90, 0.2);
+  background: linear-gradient(135deg, #e3d7b0 0%, #d1c299 50%, #e3d7b0 100%);
   border-color: #8b7043;
+}
+
+/* Variante Secondary */
+.btn-secondary {
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #3b82f6 100%);
+  border-color: #1e40af;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #60a5fa 100%);
+  border-color: #2563eb;
 }
 
 /* Variante Danger */
@@ -104,15 +117,15 @@
   border-color: #9a3412;
 }
 
-/* Variante Nav (estilo navbar) */
+/* Variante Nav (estilo navbar, es como el primary pero con ligeros cambios) */
 .btn-nav {
   color: #6b5633;
-  background: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #f5f0e1 0%, #e4daba 50%, #f5f0e1 100%);
   border-color: #b89c5a;
 }
 
 .btn-nav:hover {
-  background: rgba(184, 156, 90, 0.2);
+  background: linear-gradient(135deg, #e3d7b0 0%, #e9ddbb 50%, #e3d7b0 100%);
   border-color: #8b7043;
 }
 
@@ -194,12 +207,6 @@
 }
 
 @media (max-width: 480px) {
-  .btn {
-    padding: 8px 20px;
-    font-size: 13px;
-    border-radius: 10px;
-  }
-
   .btn-control {
     padding: 4px 8px;
     font-size: 11px;
@@ -214,12 +221,6 @@
 }
 
 @media (max-width: 360px) {
-  .btn {
-    padding: 6px 16px;
-    font-size: 12px;
-    border-radius: 8px;
-  }
-
   .btn-control {
     padding: 3px 6px;
     font-size: 10px;

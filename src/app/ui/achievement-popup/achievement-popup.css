@@ -13,14 +13,11 @@
   max-width: 420px;
   overflow: hidden;
 
-  box-shadow:
-    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 
   opacity: 0;
   transform: translateY(20px) scale(0.95);
-  transition:
-    opacity 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition: opacity 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -68,15 +65,6 @@
   text-align: left;
 }
 
-.achievement-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #f59e0b;
-  margin-bottom: 0.25rem;
-}
-
 .achievement-title {
   font-weight: 700;
   font-size: 1rem;
@@ -115,7 +103,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
     transform: translate(-50%, -50%) scale(1);
   }

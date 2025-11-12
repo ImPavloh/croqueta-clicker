@@ -6,7 +6,7 @@ import { LevelUpService } from './level-up.service';
 import { AchievementsService } from './achievements.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlayerStats {
   private optionsService = inject(OptionsService);
@@ -24,7 +24,7 @@ export class PlayerStats {
   public _level = new BehaviorSubject<number>(0);
 
   private intervalId: any;
-  private isTimerRunning  = false;
+  private isTimerRunning = false;
   private isInitializing = true;
 
   // getter público (read-only signals)
@@ -58,8 +58,8 @@ export class PlayerStats {
    * Por cada click se actualiza el número de total de clicks en 1
    */
   addClick(): void {
-    this._totalClicks.update(clicks => clicks + 1);
-    this._currentExp.update(total => total + this._expPerClick());
+    this._totalClicks.update((clicks) => clicks + 1);
+    this._currentExp.update((total) => total + this._expPerClick());
     this.checkLevelUp();
     // Guardar cada 10 clicks para evitar saturar localStorage
     if (this._totalClicks() % 10 === 0) {
@@ -68,7 +68,7 @@ export class PlayerStats {
   }
 
   addExp(exp: number): void {
-    this._currentExp.update(total => total + exp);
+    this._currentExp.update((total) => total + exp);
     this.checkLevelUp();
     // guardar cuando se añade experiencia de forma externa (compra de productores/upgrades)
     this.saveToStorage();
@@ -79,30 +79,30 @@ export class PlayerStats {
    * @param newExp Nueva exp por click
    */
   upgradeExpPerClick(pointsPerClick: Decimal): void {
-  // curva suavizada: XP ≈ (puntosPorClick ^ 0.8) + (puntosPorClick / 3)
-  let newExpDecimal = pointsPerClick.pow(0.8).plus(pointsPerClick.dividedBy(3)).floor();
+    // curva suavizada: XP ≈ (puntosPorClick ^ 0.8) + (puntosPorClick / 3)
+    let newExpDecimal = pointsPerClick.pow(0.8).plus(pointsPerClick.dividedBy(3)).floor();
 
-  // convertir a number de forma segura
-  let newExp: number;
-  try {
-    newExp = newExpDecimal.toNumber();
-    if (!isFinite(newExp) || Number.isNaN(newExp)) {
+    // convertir a number de forma segura
+    let newExp: number;
+    try {
+      newExp = newExpDecimal.toNumber();
+      if (!isFinite(newExp) || Number.isNaN(newExp)) {
+        newExp = Number.MAX_SAFE_INTEGER;
+      }
+    } catch {
       newExp = Number.MAX_SAFE_INTEGER;
     }
-  } catch {
-    newExp = Number.MAX_SAFE_INTEGER;
-  }
 
-  this._expPerClick.set(Math.max(1, newExp)); // nunca menos de 1
-}
+    this._expPerClick.set(Math.max(1, newExp)); // nunca menos de 1
+  }
 
   /**
    * Calcula la experiencia necesaria por nivel a través de una fórmula cuadrática
    */
   private calculateExpToNext(): void {
     const n = this._level.value;
-    const baseExp = 100;        // XP base del nivel 1
-    const growth = 1.20;        // crecimiento por nivel (ajustable)
+    const baseExp = 100; // XP base del nivel 1
+    const growth = 1.2; // crecimiento por nivel (ajustable)
     const expNeeded = Math.floor(baseExp * Math.pow(growth, n));
 
     this._expToNext.set(expNeeded);
@@ -146,45 +146,45 @@ export class PlayerStats {
     this.checkAchievements();
   }
 
-  private checkAchievements(){
+  private checkAchievements() {
     var level = this._level.value;
 
     switch (level) {
       case 5:
-        this.achievementsService.unlockAchievement("nivel_5")
+        this.achievementsService.unlockAchievement('nivel_5');
         break;
       case 10:
-        this.achievementsService.unlockAchievement("nivel_10")
+        this.achievementsService.unlockAchievement('nivel_10');
         break;
       case 15:
-        this.achievementsService.unlockAchievement("nivel_15")
+        this.achievementsService.unlockAchievement('nivel_15');
         break;
       case 20:
-        this.achievementsService.unlockAchievement("nivel_20")
+        this.achievementsService.unlockAchievement('nivel_20');
         break;
       case 25:
-        this.achievementsService.unlockAchievement("nivel_25")
+        this.achievementsService.unlockAchievement('nivel_25');
         break;
       case 30:
-        this.achievementsService.unlockAchievement("nivel_30")
+        this.achievementsService.unlockAchievement('nivel_30');
         break;
       case 50:
-        this.achievementsService.unlockAchievement("nivel_50")
+        this.achievementsService.unlockAchievement('nivel_50');
         break;
       case 60:
-        this.achievementsService.unlockAchievement("nivel_60")
+        this.achievementsService.unlockAchievement('nivel_60');
         break;
       case 80:
-        this.achievementsService.unlockAchievement("nivel_80")
+        this.achievementsService.unlockAchievement('nivel_80');
         break;
       case 100:
-        this.achievementsService.unlockAchievement("nivel_100")
+        this.achievementsService.unlockAchievement('nivel_100');
         break;
       case 1000:
-        this.achievementsService.unlockAchievement("nivel_1000")
+        this.achievementsService.unlockAchievement('nivel_1000');
         break;
       case 10000:
-        this.achievementsService.unlockAchievement("nivel_10000")
+        this.achievementsService.unlockAchievement('nivel_10000');
         break;
     }
   }
@@ -194,7 +194,7 @@ export class PlayerStats {
 
     this.isTimerRunning = true;
     this.intervalId = setInterval(() => {
-      this._timePlaying.update(current => {
+      this._timePlaying.update((current) => {
         const newValue = current + 1;
         // guardar cada 10 segundos
         if (newValue % 10 === 0) {
@@ -214,43 +214,35 @@ export class PlayerStats {
   }
 
   public loadFromStorage() {
-    if (typeof localStorage == "undefined") return;
+    if (typeof localStorage == 'undefined') return;
 
-    console.log('[PlayerStats] Cargando desde localStorage...');
-
-    const epc = this.optionsService.getGameItem("expPerClick");
+    const epc = this.optionsService.getGameItem('expPerClick');
     if (epc) {
-      console.log('[PlayerStats] expPerClick:', epc);
       this._expPerClick.set(Number(epc));
     }
 
-    const etn = this.optionsService.getGameItem("expToNext");
+    const etn = this.optionsService.getGameItem('expToNext');
     if (etn) {
-      console.log('[PlayerStats] expToNext:', etn);
       this._expToNext.set(Number(etn));
     }
 
-    const lvl = this.optionsService.getGameItem("level");
+    const lvl = this.optionsService.getGameItem('level');
     if (lvl) {
-      console.log('[PlayerStats] level:', lvl);
       this._level.next(Number(lvl));
     }
 
-    const tc = this.optionsService.getGameItem("totalClicks");
+    const tc = this.optionsService.getGameItem('totalClicks');
     if (tc) {
-      console.log('[PlayerStats] totalClicks:', tc);
       this._totalClicks.set(Number(tc));
     }
 
-    const ce = this.optionsService.getGameItem("currentExp");
+    const ce = this.optionsService.getGameItem('currentExp');
     if (ce) {
-      console.log('[PlayerStats] currentExp:', ce);
       this._currentExp.set(Number(ce));
     }
 
-    const tp = this.optionsService.getGameItem("timePlaying");
+    const tp = this.optionsService.getGameItem('timePlaying');
     if (tp) {
-      console.log('[PlayerStats] timePlaying:', tp);
       this._timePlaying.set(Number(tp));
     }
 
