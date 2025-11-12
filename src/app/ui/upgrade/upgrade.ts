@@ -1,10 +1,10 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, effect, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { PlayerStats } from '@services/player-stats.service';
-import { Subscription } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
@@ -24,16 +24,18 @@ export class Upgrade {
 
   @Input() config!: UpgradeModel;
 
-  private levelSub?: Subscription;
+  private level = toSignal(this.playerStats.level$, { initialValue: 0 });
+
+  levelEffect = effect(() => {
+    const currentLevel = this.level();
+    this.checkLevel(currentLevel);
+  });
 
   unlocked: boolean = true;
   bought: boolean = false;
 
   ngOnInit() {
     this.loadFromStorage();
-    this.levelSub = this.playerStats.level$.subscribe((level) => {
-      this.checkLevel(level);
-    });
   }
 
   // Comprobar si la mejora está desbloqueada
@@ -89,9 +91,5 @@ export class Upgrade {
     if (typeof localStorage === 'undefined') return;
     // guardar estado de compra
     this.optionsService.setGameItem('upgrade_' + this.config.id + '_bought', String(this.bought));
-  }
-
-  ngOnDestroy() {
-    this.levelSub?.unsubscribe(); // limpiar la suscripción
   }
 }

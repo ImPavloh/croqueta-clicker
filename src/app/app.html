@@ -4,16 +4,16 @@
     <span class="splash" (click)="hideSplash()"></span>
     <span class="croqueta-splash"></span>
     }
-    <app-achievement-popup />
-    <app-level-up-popup />
     <app-modal />
-    <app-golden-croqueta />
-    <app-bonus-countdown-popup />
     @if (isMobile) {
     <app-newsline />
+    <app-achievement-popup />
     <app-floating-buttons />
     }
     <div class="clicker-container">
+      <app-level-up-popup />
+      <app-bonus-countdown-popup />
+      <app-golden-croqueta />
       <app-particles />
       <app-floating />
       <app-clicker />

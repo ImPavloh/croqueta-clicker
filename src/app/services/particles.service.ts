@@ -22,9 +22,20 @@ export class ParticlesService {
   readonly particles = this._particles.asReadonly();
 
   private lastId = 0;
-  private readonly maxParticles = 100;
+  private readonly maxParticles = this.getMaxParticles();
 
   constructor() {}
+
+  private getMaxParticles(): number {
+    if (typeof window === 'undefined') return 50;
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
+
+    if (isMobile) return 30;
+    if (isLowEnd) return 50;
+    return 75;
+  }
 
   // crear partículas desde una posición específica
   spawn(x: number, y: number, count: number = 8) {
@@ -33,10 +44,12 @@ export class ParticlesService {
       return;
     }
 
+    const adjustedCount = this.maxParticles <= 30 ? Math.min(count, 4) : count;
+
     const particles: Particle[] = [];
     const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFFE0', '#FFF8DC'];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < adjustedCount; i++) {
       const uid = ++this.lastId;
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
       const speed = 2 + Math.random() * 3;
@@ -72,9 +85,11 @@ export class ParticlesService {
       return;
     }
 
+    const adjustedCount = this.maxParticles <= 30 ? Math.min(count, 2) : count;
+
     const particles: Particle[] = [];
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < adjustedCount; i++) {
       const uid = ++this.lastId;
       const x = Math.random() * containerWidth;
       const y = -50;

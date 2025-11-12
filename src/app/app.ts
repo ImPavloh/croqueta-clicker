@@ -86,6 +86,7 @@ export class App implements OnInit, OnDestroy {
     this.goldenCroquetaService.startSpawnCheck();
   }
   ngOnDestroy() {
+    this.levelSub?.unsubscribe();
     this.playerStats.stopTimer();
   }
 

@@ -55,17 +55,6 @@
                 {{ item.title }}
               </h3>
             </div>
-
-            <span
-              class="absolute top-0 right-0 inline-flex items-center px-2 py-1 rounded-full text-xs border shadow-lg"
-              [ngClass]="
-                item.unlocked
-                  ? 'bg-amber-200/80 text-amber-800 border-amber-400'
-                  : 'bg-gray-200/80 text-gray-600 border-gray-400'
-              "
-            >
-              {{ item.unlocked ? '✓' : '🔒' }}
-            </span>
           </div>
         </app-corner-card>
       </app-tooltip>

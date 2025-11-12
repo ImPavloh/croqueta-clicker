@@ -6,6 +6,7 @@ import { SkinsService } from '@services/skins.service';
 import { AchievementsService } from '@services/achievements.service';
 import { ParticlesService } from '@services/particles.service';
 import { AudioService } from '@services/audio.service';
+import { Subscription } from 'rxjs';
 import Decimal from 'break_infinity.js';
 import { SKINS } from '@data/skin.data';
 
@@ -36,6 +37,9 @@ export class Clicker implements OnInit, OnDestroy {
   private noClicksTimeout?: any;
   private readonly noClicksDelayMs = 60 * 60 * 1000; // 1 hora
 
+  // suscripcion al cambio de skin
+  private skinSub?: Subscription;
+
   constructor(
     public pointsService: PointsService,
     private skinsService: SkinsService,
@@ -44,7 +48,7 @@ export class Clicker implements OnInit, OnDestroy {
     private particlesService: ParticlesService,
     private audioService: AudioService
   ) {
-    this.skinsService.skinChanged$.subscribe((id) => {
+    this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
       const newSkin = id;
       if (newSkin !== this.currentSkin()) {
         this.previousSkin.set(this.currentSkin());
@@ -223,6 +227,7 @@ export class Clicker implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------------------
 
   ngOnDestroy() {
+    this.skinSub?.unsubscribe();
     clearTimeout(this.afkTimeout);
     clearTimeout(this.noClicksTimeout);
   }

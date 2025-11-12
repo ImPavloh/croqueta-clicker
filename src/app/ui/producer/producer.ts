@@ -3,8 +3,8 @@ import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { CornerCard } from '@ui/corner-card/corner-card';
-import { Subscription } from 'rxjs';
 import { PlayerStats } from '@services/player-stats.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
@@ -27,7 +27,12 @@ export class Producer {
   // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
   inintEfect = effect(() => this.updatePriceAndPoints());
 
-  private levelSub?: Subscription;
+  private level = toSignal(this.playerStats.level$, { initialValue: 0 });
+
+  levelEffect = effect(() => {
+    const currentLevel = this.level();
+    this.checkLevel(currentLevel);
+  });
 
   // ID del productor
   @Input() config!: ProducerModel;
@@ -46,10 +51,6 @@ export class Producer {
     if (this.quantity > 0) {
       const production = this.calculateTotalPoints();
     }
-
-    this.levelSub = this.playerStats.level$.subscribe((level) => {
-      this.checkLevel(level);
-    });
   }
 
   // Actualizar precio y puntos cuando cambia la cantidad de compra
@@ -168,9 +169,5 @@ export class Producer {
       'producer_' + this.config.id + '_quantity',
       String(this.quantity)
     );
-  }
-
-  ngOnDestroy() {
-    this.levelSub?.unsubscribe(); // limpiar la suscripción
   }
 }

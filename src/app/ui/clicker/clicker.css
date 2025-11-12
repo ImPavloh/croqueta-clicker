@@ -87,7 +87,7 @@
 
 .croqueta-bg-light {
   z-index: 1;
-  background: url('/images/lightrays.webp') center/cover no-repeat;
+  background: url('/assets/effects/lightrays.webp') center/cover no-repeat;
   background-size: contain;
 
   transform: translate(-50%, -50%);

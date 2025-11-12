@@ -1,13 +1,14 @@
 import { PlayerStats } from '@services/player-stats.service';
 import {
   Component,
-  input,
   computed,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  effect,
+  inject,
 } from '@angular/core';
 import { NewsService } from '@services/news.service';
-import { Subscription } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-newsline',
@@ -18,21 +19,22 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsLine {
-  constructor(
-    private newsService: NewsService,
-    private playerStats: PlayerStats,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private newsService = inject(NewsService);
+  private playerStats = inject(PlayerStats);
+  private cdr = inject(ChangeDetectorRef);
 
   // Seleccionar nivel de noticias a mostrar
   private level: number = 1;
-  private levelSub?: Subscription;
-  ngOnInit() {
-    this.levelSub = this.playerStats.level$.subscribe((level) => {
+
+  constructor() {
+    const playerLevel = toSignal(this.playerStats.level$, { initialValue: 1 });
+
+    effect(() => {
+      const currentLevel = playerLevel();
       this.level = 1;
-      if (level > 30) {
+      if (currentLevel > 30) {
         this.level = 3;
-      } else if (level > 15) {
+      } else if (currentLevel > 15) {
         this.level = 2;
       }
       this.cdr.markForCheck();

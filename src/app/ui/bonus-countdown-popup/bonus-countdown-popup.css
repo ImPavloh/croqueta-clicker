@@ -1,19 +1,19 @@
 .bonus-countdown-popup {
-  position: fixed;
+  position: absolute;
   top: 20px;
-  left: 20px;
-  margin: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: gold;
+  right: 20px;
+  z-index: 300;
+  background: linear-gradient(135deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
   padding: 15px 25px;
-  border-radius: 10px;
-  border: 2px solid gold;
+  border: 3px solid #f3eac2;
   text-align: center;
-  font-size: 1.2em;
-  font-weight: bold;
-  z-index: 10000;
-  box-shadow: 0 0 20px gold;
+  box-shadow: 0 4px 15px rgba(184, 156, 90, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.2);
   animation: pulse 1.5s infinite alternate;
+  pointer-events: none;
 }
 
 .bonus-message {
@@ -21,15 +21,18 @@
   margin-bottom: 5px;
 }
 
-.multiplier, .time-left {
+.multiplier,
+.time-left {
   margin-top: 5px;
 }
 
 @keyframes pulse {
   from {
-    box-shadow: 0 0 10px gold;
+    box-shadow: 0 4px 15px rgba(184, 156, 90, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3),
+      inset 0 -1px 3px rgba(0, 0, 0, 0.2);
   }
   to {
-    box-shadow: 0 0 30px gold;
+    box-shadow: 0 4px 30px rgba(184, 156, 90, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.3),
+      inset 0 -1px 3px rgba(0, 0, 0, 0.2);
   }
 }

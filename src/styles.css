@@ -8,17 +8,20 @@
 }
 
 body {
-  background: url('/images/bg.webp') no-repeat center/cover;
+  background: url('/assets/backgrounds/bg.webp') no-repeat center/cover;
   backdrop-filter: blur(2px) brightness(0.8);
   overflow: hidden;
   transform: translateZ(0);
   backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+  text-rendering: optimizeSpeed;
 }
 
 img,
 video {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+  loading: lazy;
 }
 
 /* Prevenir FOUC (Flash of Unstyled Content) https://dev.to/lyqht/what-the-fouc-is-happening-flash-of-unstyled-content-413j */
@@ -46,9 +49,22 @@ app-root {
   box-sizing: border-box;
 }
 
-/* Golden Croqueta Bonus Text */
-.golden-bonus-text {
-  color: gold;
-  text-shadow: 0 0 5px gold, 0 0 10px gold;
-  font-size: 1.2em; /* Make it slightly bigger */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    backdrop-filter: none;
+  }
 }

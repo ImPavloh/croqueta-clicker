@@ -1,4 +1,4 @@
-import { Injectable, signal, effect, inject } from '@angular/core';
+import { Injectable, signal, effect, inject, OnDestroy } from '@angular/core';
 import {
   GOLDEN_CROQUETA_BONUS_DURATION_MS,
   GOLDEN_CROQUETA_BONUS_MULTIPLIER,
@@ -18,7 +18,7 @@ export interface GoldenCroquetaState {
 @Injectable({
   providedIn: 'root',
 })
-export class GoldenCroquetaService {
+export class GoldenCroquetaService implements OnDestroy {
   private audioService = inject(AudioService);
 
   // State for the golden croqueta itself

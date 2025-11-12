@@ -3,9 +3,15 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
+import {
+  provideRouter,
+  withPreloading,
+  PreloadAllModules,
+  RouteReuseStrategy,
+} from '@angular/router';
 
 import { routes } from './app.routes';
+import { RouteReuse } from './config/route-reuse';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +21,6 @@ export const appConfig: ApplicationConfig = {
       runCoalescing: true,
     }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    { provide: RouteReuseStrategy, useClass: RouteReuse },
   ],
 };

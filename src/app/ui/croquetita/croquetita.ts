@@ -1,19 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { OptionsService } from '@services/options.service';
 import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
-import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-croquetita',
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Croquetita {
+export class Croquetita implements OnDestroy {
   isOpen = signal(false);
   currentMessage = signal('');
   isAnimating = signal(false);
@@ -21,6 +20,8 @@ export class Croquetita {
   private messages: TutorialMessage[] = TUTORIAL_MESSAGES;
   private shownMessages = new Set<string>();
   private autoCloseTimeout?: number;
+  private initialTimeout?: number;
+  private checkInterval?: number;
   protected optionsService = inject(OptionsService);
 
   constructor(private pointsService: PointsService, private playerStats: PlayerStats) {
@@ -28,14 +29,14 @@ export class Croquetita {
   }
 
   ngOnInit() {
-    setTimeout(() => {
+    this.initialTimeout = window.setTimeout(() => {
       if (!this.shownMessages.has('welcome')) {
         this.showAutoMessage();
       }
     }, 5000);
 
     // Revisar nuevos mensajes cada 30 segundos
-    setInterval(() => {
+    this.checkInterval = window.setInterval(() => {
       this.checkForNewMessages();
     }, 30000);
   }
@@ -191,5 +192,18 @@ export class Croquetita {
     this.shownMessages.clear();
     this.saveShownMessages();
     this.close();
+  }
+
+  ngOnDestroy() {
+    // Limpiar todos los timers al destruir el componente
+    if (this.autoCloseTimeout) {
+      clearTimeout(this.autoCloseTimeout);
+    }
+    if (this.initialTimeout) {
+      clearTimeout(this.initialTimeout);
+    }
+    if (this.checkInterval) {
+      clearInterval(this.checkInterval);
+    }
   }
 }

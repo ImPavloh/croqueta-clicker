@@ -1,8 +1,8 @@
 .level-up-popup {
-  position: fixed;
-  top: 3svh;
-  left: 2rem;
-  z-index: 9998;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 300;
   pointer-events: none;
 }
 
