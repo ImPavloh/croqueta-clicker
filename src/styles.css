@@ -45,3 +45,10 @@ app-root {
 *::after {
   box-sizing: border-box;
 }
+
+/* Golden Croqueta Bonus Text */
+.golden-bonus-text {
+  color: gold;
+  text-shadow: 0 0 5px gold, 0 0 10px gold;
+  font-size: 1.2em; /* Make it slightly bigger */
+}

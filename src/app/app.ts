@@ -18,6 +18,9 @@ import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
 import { AutosaveService } from '@services/autosave.service';
+import { GoldenCroquetaService } from '@services/golden-croqueta.service';
+import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
+import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-popup';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +37,8 @@ import { AutosaveService } from '@services/autosave.service';
     NewsLine,
     Modal,
     FloatingButtons,
+    GoldenCroqueta,
+    BonusCountdownPopup,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -50,7 +55,8 @@ export class App implements OnInit, OnDestroy {
     private playerStats: PlayerStats,
     private audioService: AudioService,
     private autosaveService: AutosaveService,
-    private achievementsService: AchievementsService
+    private achievementsService: AchievementsService,
+    private goldenCroquetaService: GoldenCroquetaService
   ) {}
 
   private level: number = 1;
@@ -77,6 +83,7 @@ export class App implements OnInit, OnDestroy {
 
       this.audioService.playMusic(url, true, 2);
     });
+    this.goldenCroquetaService.startSpawnCheck();
   }
   ngOnDestroy() {
     this.playerStats.stopTimer();

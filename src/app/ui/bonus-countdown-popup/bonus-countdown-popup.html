@@ -1,0 +1,13 @@
+@if (goldenCroquetaService.isBonusActive()) {
+  <div class="bonus-countdown-popup">
+    <div class="bonus-message">
+      ¡BONUS ACTIVO!
+    </div>
+    <div class="multiplier">
+      Multiplicador: x{{ goldenCroquetaService.bonusMultiplier }}
+    </div>
+    <div class="time-left">
+      Tiempo restante: {{ goldenCroquetaService.bonusTimeLeft() }}s
+    </div>
+  </div>
+}

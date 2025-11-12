@@ -1,3 +1,4 @@
+import { GoldenCroquetaService } from './golden-croqueta.service';
 import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
@@ -8,6 +9,7 @@ import { OptionsService } from './options.service';
 })
 export class PointsService {
   private optionsService = inject(OptionsService);
+  private goldenCroquetaService = inject(GoldenCroquetaService);
   // state usando Decimal en lugar de number
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
@@ -40,8 +42,15 @@ export class PointsService {
   // métodos para modificar el estado
   // añadir puntos (por click)
   addPointsPerClick(x?: number, y?: number) {
-    // amount = pointsPerClick * multiply
-    const amount = this.pointsPerClick().times(this.multiply());
+    // Check for golden croqueta bonus
+    const bonusMultiplier = this.goldenCroquetaService.isBonusActive()
+      ? this.goldenCroquetaService.bonusMultiplier
+      : 1;
+
+    // amount = pointsPerClick * multiply * bonusMultiplier
+    const amount = this.pointsPerClick()
+      .times(this.multiply())
+      .times(bonusMultiplier);
     // actualizar puntos: v + amount
     this._points.update((v) => v.plus(amount));
 
@@ -57,7 +66,12 @@ export class PointsService {
 
   // añadir puntos por segundo
   addPointPerSecond() {
-    const amount = this.pointsPerSecond();
+    // Check for golden croqueta bonus
+    const bonusMultiplier = this.goldenCroquetaService.isBonusActive()
+      ? this.goldenCroquetaService.bonusMultiplier
+      : 1;
+
+    const amount = this.pointsPerSecond().times(bonusMultiplier);
     this._points.update((v) => v.plus(amount));
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());

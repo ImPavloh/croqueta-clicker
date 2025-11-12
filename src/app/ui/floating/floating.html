@@ -1,7 +1,7 @@
 @if (optionsService.showFloatingText()) {
 <div class="floating-container">
   @for (m of floating.messages(); track m.uid) {
-    <span class="floating-text" [style.left]="getLeft(m)" [style.top]="getTop(m)">
+    <span class="floating-text" [class.golden-text]="m.isGolden" [style.left]="getLeft(m)" [style.top]="getTop(m)">
       +{{ m.text | short}}
     </span>
   }

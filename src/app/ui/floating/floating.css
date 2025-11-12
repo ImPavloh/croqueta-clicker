@@ -48,3 +48,8 @@
     opacity: 0;
   }
 }
+
+.golden-text {
+  color: gold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}

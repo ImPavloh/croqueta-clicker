@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { GoldenCroquetaService } from './golden-croqueta.service';
 
 export interface FloatingMessage {
   uid: number;
@@ -6,6 +7,7 @@ export interface FloatingMessage {
   rx: number;
   ry: number;
   duration: number;
+  isGolden?: boolean;
   x?: number;
   y?: number;
 }
@@ -16,6 +18,7 @@ export interface FloatingMessage {
 export class FloatingService {
   private _messages = signal<FloatingMessage[]>([]);
   readonly messages = this._messages.asReadonly();
+  private goldenCroquetaService = inject(GoldenCroquetaService);
 
   private lastId = 0;
 
@@ -41,7 +44,9 @@ export class FloatingService {
       ry = Math.round((Math.random() - 0.5) * 40); // -20..20
     }
 
-    const msg: FloatingMessage = { uid, text, rx, ry, duration, x, y };
+    const isGolden = this.goldenCroquetaService.isBonusActive();
+
+    const msg: FloatingMessage = { uid, text, rx, ry, duration, isGolden, x, y };
     this._messages.update((a) => [...a, msg]);
 
     // borrar
