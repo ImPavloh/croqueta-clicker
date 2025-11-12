@@ -59,7 +59,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     minPoints: 15,
     maxPoints: 50,
     message:
-      '¡Ya puedes comprar tu primer productor! Ve al menú de la derecha y compra una "Abuela" que cocinará croquetas automáticamente.',
+      '¡Ya puedes comprar tu primer productor! Ve al menú de la derecha y compra un "Click" que cocinará croquetas automáticamente.',
     priority: 4,
     autoShow: true,
     category: 'tutorial',
@@ -205,7 +205,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     id: 'five_million',
     minPoints: 5000000,
     maxPoints: 10000000,
-    message: '5 millones... Ya perdiste la cuenta de cuántas horas llevas jugando, ¿verdad?',
+    message: '5 millones... ¿Has considerado abrir una franquicia de croquetas?',
     priority: 80,
     category: 'humor',
   },
@@ -381,8 +381,32 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   {
     id: 'octillion_gods',
     minPoints: 1000000000000000000000000000,
+    maxPoints: 1000000000000000000000000000000,
     message: 'Octillón... Los dioses de las croquetas te observan con respeto y un poco de miedo.',
     priority: 180,
+    category: 'humor',
+  },
+  {
+    id: 'nonillion_legend',
+    minPoints: 1000000000000000000000000000000,
+    maxPoints: 1000000000000000000000000000000000,
+    message: 'Un... ¿Nonillón? He tenido que buscar ese número en Google. Sal a la calle un rato.',
+    priority: 185,
+    category: 'humor',
+  },
+  {
+    id: 'decillion_limit',
+    minPoints: 1000000000000000000000000000000000,
+    maxPoints: 1000000000000000000000000000000000000,
+    message: 'Un decillón... Creo que ya es suficiente. Ve a dar un paseo, por favor.',
+    priority: 190,
+    category: 'humor',
+  },
+  {
+    id: 'more_and_beyond',
+    minPoints: 1000000000000000000000000000000000000,
+    message: '¿Más de un decillón? En serio, ve a ver la luz del sol. Las croquetas pueden esperar.',
+    priority: 195,
     category: 'humor',
   },
 
@@ -424,7 +448,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   {
     id: 'clicks_100000',
     minClicks: 100000,
-    message: '100.000 clicks!!! Tu mouse ya nunca será el mismo. F por tu mouse.',
+    message: '¡¡¡100K clicks!!! Tu mouse ya nunca será el mismo. F por tu mouse.',
     priority: 220,
     category: 'achievement',
   },
@@ -560,7 +584,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   // ============================================================
   {
     id: 'help_navigation',
-    message: 'Usa los menús para: Productores | Mejoras | Estadísticas | Skins',
+    message: 'Usa los menús para sacar el máximo provecho de tu experiencia croquetera.',
     priority: 600,
     category: 'tutorial',
   },

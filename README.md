@@ -2,7 +2,7 @@
 
 **Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 20 y TypeScript. 
 
-¡Haz clic en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas!
+¡Haz click en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas!
 
 Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para jugarlo ya :)
 
@@ -11,7 +11,7 @@ Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para
 ## Características principales
 
 ### Sistema de juego completo
-- **Sistema de clicks**: Gana croquetas haciendo clic (con efectos visuales y partículas)
+- **Sistema de clicks**: Gana croquetas haciendo click (con efectos visuales y partículas)
 - **Productores automáticos**: 8 tipos de productores que generan croquetas por segundo
 - **Mejoras (Upgrades)**: 20+ mejoras para aumentar tus clicks y producción
 - **Sistema de niveles**: Gana experiencia y sube de nivel desbloqueando contenido

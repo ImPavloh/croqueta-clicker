@@ -42,7 +42,7 @@ export const NEWS_DATA: NewsItem[] = [
     { level: 2, news: "Croquetas de pollo inician guerra civil contra las de jamón. El mundo observa." },
     { level: 2, news: "Una croqueta gana las elecciones generales con el lema 'menos política, más bechamel'." },
     { level: 2, news: "La Iglesia Croquetaria canoniza a San Rebozado, patrono del crujiente eterno." },
-    { level: 2, news: "Informe filtrado: el clic en masa podría alterar la gravedad local." },
+    { level: 2, news: "Informe filtrado: el click en masa podría alterar la gravedad local." },
     { level: 2, news: "La croqueta cuántica aparece en dos freidoras a la vez." },
     { level: 2, news: "Los gobiernos del mundo firman el Tratado de No Fritura para frenar el calentamiento global." },
     { level: 2, news: "El rebozado de Schrödinger: crujiente y blando a la vez." },

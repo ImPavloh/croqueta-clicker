@@ -7,6 +7,7 @@ import {
   GOLDEN_CROQUETA_SPAWN_CHANCE,
 } from '../config/constants';
 import { AudioService } from './audio.service';
+import { AchievementsService } from './achievements.service';
 
 export interface GoldenCroquetaState {
   visible: boolean;
@@ -20,6 +21,7 @@ export interface GoldenCroquetaState {
 })
 export class GoldenCroquetaService implements OnDestroy {
   private audioService = inject(AudioService);
+  private achievementsService = inject(AchievementsService);
 
   // State for the golden croqueta itself
   private _state = signal<GoldenCroquetaState>({
@@ -86,6 +88,7 @@ export class GoldenCroquetaService implements OnDestroy {
   }
 
   private activateBonus() {
+    this.achievementsService.unlockAchievement('bonus_event');
     this.audioService.playSfx('/assets/sfx/achievement.mp3');
     this._isBonusActive.set(true);
     this._bonusTimeLeft.set(GOLDEN_CROQUETA_BONUS_DURATION_MS / 1000);

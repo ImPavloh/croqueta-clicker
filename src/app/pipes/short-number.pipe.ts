@@ -22,7 +22,17 @@ export class ShortNumberPipe implements PipeTransform {
 
     // Escalas con sufijos
     const units: { value: Decimal; symbol: string }[] = [
-      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
+      { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
+      { value: new Decimal(1e60), symbol: 'Nd' }, // novendecillón
+      { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
+      { value: new Decimal(1e54), symbol: 'Spd' }, // septendecillón
+      { value: new Decimal(1e51), symbol: 'Sx' }, // sexdecillón
+      { value: new Decimal(1e48), symbol: 'Qn' }, // quindecillón
+      { value: new Decimal(1e45), symbol: 'Qd' }, // cuatordecillón
+      { value: new Decimal(1e42), symbol: 'Td' }, // tredecillón
+      { value: new Decimal(1e39), symbol: 'Dd' }, // duodecillón
+      { value: new Decimal(1e36), symbol: 'Ud' }, // undecillón
+      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón - De aqui para arriba es solo por si acaso
       { value: new Decimal(1e30), symbol: 'Nn' }, // nonillón
       { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
       { value: new Decimal(1e24), symbol: 'Sp' }, // septillón

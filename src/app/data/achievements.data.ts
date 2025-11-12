@@ -40,6 +40,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'nivel_10000', title: 'El Croquetero Infinito', description: 'Alcanza el nivel 10000.', icon: '/assets/achievements/level/12.webp' },
 
   // ------------------------------------------------------------
+  // ⭐ EVENTOS (Implementado)
+  // ------------------------------------------------------------
+  { id: 'bonus_event', title: 'La croqueta dorada', description: 'Haz click en la croqueta dorada.', icon: '/assets/achievements/event/golden.webp', secret: true },
+
+  // ------------------------------------------------------------
   // 🏭 PRODUCTORES
   // ------------------------------------------------------------
   /*{ id: 'primer_productor', title: 'Primer productor', description: 'Compra tu primer productor.', icon: '/assets/producers/click.webp' },

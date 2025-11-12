@@ -74,10 +74,10 @@ export class App implements OnInit, OnDestroy {
     }
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       let url = '/assets/ost/bechamel.mp3';
-      if (level > 30) {
+      if (level > 100) {
         url = '/assets/ost/phillipethepope.mp3';
         this.achievementsService.unlockAchievement("achievement_ost")
-      } else if (level > 15) {
+      } else if (level > 5) {
         url = '/assets/ost/croquetauniversity.mp3';
       }
 

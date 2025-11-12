@@ -6,41 +6,49 @@ export const UPGRADES: UpgradeModel[] = [
   // 🥇 EARLY GAME - Primeras mejoras para arrancar el juego
   // ============================================================
   { id: 1, name: 'Dedo rápido', image: '/assets/upgrades/general.webp', price: 20, clicks: 1, level: 0, exp: 5 },
-  { id: 2, name: 'Clic doble', image: '/assets/upgrades/general.webp', price: 50, clicks: 2, level: 3, exp: 10 },
-  { id: 3, name: 'Dedo firme', image: '/assets/upgrades/general.webp', price: 120, clicks: 3, level: 5, exp: 15 },
-  { id: 4, name: 'Dedo extra', image: '/assets/upgrades/general.webp', price: 300, clicks: 5, level: 7, exp: 25 },
-  { id: 5, name: 'Tenedor', image: '/assets/upgrades/general.webp', price: 750, clicks: 10, level: 9, exp: 40 },
-  { id: 6, name: 'Cuchara', image: '/assets/upgrades/general.webp', price: 1800, clicks: 20, level: 11, exp: 80 },
-  { id: 7, name: 'Dedo aceitoso', image: '/assets/upgrades/general.webp', price: 4000, clicks: 40, level: 13, exp: 160 },
-  { id: 8, name: 'Click crujiente', image: '/assets/upgrades/general.webp', price: 9500, clicks: 80, level: 15, exp: 320 },
-  { id: 9, name: 'Más bechamel', image: '/assets/upgrades/general.webp', price: 20000, clicks: 150, level: 17, exp: 600 },
-  { id: 10, name: 'Mano experta', image: '/assets/upgrades/general.webp', price: 45000, clicks: 300, level: 20, exp: 1200 },
+  { id: 2, name: 'Click doble', image: '/assets/upgrades/general.webp', price: 45, clicks: 2, level: 2, exp: 8 },
+  { id: 3, name: 'Dedo firme', image: '/assets/upgrades/general.webp', price: 100, clicks: 3, level: 4, exp: 12 },
+  { id: 4, name: 'Dedo extra', image: '/assets/upgrades/general.webp', price: 250, clicks: 5, level: 6, exp: 25 },
+  { id: 5, name: 'Tenedor', image: '/assets/upgrades/general.webp', price: 600, clicks: 10, level: 8, exp: 45 },
+  { id: 6, name: 'Cuchara', image: '/assets/upgrades/general.webp', price: 1_500, clicks: 20, level: 10, exp: 90 },
+  { id: 7, name: 'Dedo aceitoso', image: '/assets/upgrades/general.webp', price: 3_500, clicks: 40, level: 12, exp: 180 },
+  { id: 8, name: 'Click crujiente', image: '/assets/upgrades/general.webp', price: 8_500, clicks: 80, level: 14, exp: 360 },
+  { id: 9, name: 'Más bechamel', image: '/assets/upgrades/general.webp', price: 18_000, clicks: 150, level: 16, exp: 700 },
+  { id: 10, name: 'Mano experta', image: '/assets/upgrades/general.webp', price: 40_000, clicks: 300, level: 18, exp: 1_400 },
 
   // ============================================================
   // ⚙️ MID GAME - Mejoras intermedias y de eficiencia
   // ============================================================
-  { id: 11, name: 'Toque de Abuela', image: '/assets/upgrades/general.webp', price: 100000, clicks: 600, level: 23, exp: 2400 },
-  { id: 12, name: 'Clic caliente', image: '/assets/upgrades/general.webp', price: 220000, clicks: 1200, level: 26, exp: 4800 },
-  { id: 13, name: 'Dedo empanado', image: '/assets/upgrades/general.webp', price: 500000, clicks: 2500, level: 30, exp: 10000 },
-  { id: 14, name: 'Click de Jamón', image: '/assets/upgrades/general.webp', price: 1100000, clicks: 5000, level: 33, exp: 20000 },
-  { id: 15, name: 'Fritura rápida', image: '/assets/upgrades/general.webp', price: 2500000, clicks: 10000, level: 37, exp: 40000 },
-  { id: 16, name: 'Doble empanado', image: '/assets/upgrades/general.webp', price: 6000000, clicks: 20000, level: 41, exp: 80000 },
-  { id: 17, name: 'Mano Santa', image: '/assets/upgrades/general.webp', price: 14000000, clicks: 40000, level: 44, exp: 160000 },
-  { id: 18, name: 'Dedo de Oro', image: '/assets/upgrades/general.webp', price: 35000000, clicks: 85000, level: 47, exp: 340000 },
-  { id: 19, name: 'Toque maestro', image: '/assets/upgrades/general.webp', price: 80000000, clicks: 160000, level: 50, exp: 640000 },
-  { id: 20, name: 'Fritura perfecta', image: '/assets/upgrades/general.webp', price: 200000000, clicks: 350000, level: 55, exp: 1400000 },
+  { id: 11, name: 'Toque de Abuela', image: '/assets/upgrades/general.webp', price: 90_000, clicks: 600, level: 22, exp: 3_000 },
+  { id: 12, name: 'Click caliente', image: '/assets/upgrades/general.webp', price: 200_000, clicks: 1_200, level: 25, exp: 6_000 },
+  { id: 13, name: 'Dedo empanado', image: '/assets/upgrades/general.webp', price: 450_000, clicks: 2_500, level: 28, exp: 12_000 },
+  { id: 14, name: 'Click de Jamón', image: '/assets/upgrades/general.webp', price: 1_000_000, clicks: 5_000, level: 32, exp: 25_000 },
+  { id: 15, name: 'Fritura rápida', image: '/assets/upgrades/general.webp', price: 2_300_000, clicks: 10_000, level: 36, exp: 50_000 },
+  { id: 16, name: 'Doble empanado', image: '/assets/upgrades/general.webp', price: 5_500_000, clicks: 20_000, level: 40, exp: 100_000 },
+  { id: 17, name: 'Mano Santa', image: '/assets/upgrades/general.webp', price: 13_000_000, clicks: 40_000, level: 44, exp: 200_000 },
+  { id: 18, name: 'Dedo de Oro', image: '/assets/upgrades/general.webp', price: 32_000_000, clicks: 85_000, level: 48, exp: 400_000 },
+  { id: 19, name: 'Toque maestro', image: '/assets/upgrades/general.webp', price: 75_000_000, clicks: 160_000, level: 52, exp: 800_000 },
+  { id: 20, name: 'Fritura perfecta', image: '/assets/upgrades/general.webp', price: 180_000_000, clicks: 350_000, level: 56, exp: 1_700_000 },
 
   // ============================================================
   // 🔥 LATE GAME - Mejoras avanzadas y de gran poder
   // ============================================================
-  { id: 21, name: 'Clic industrial', image: '/assets/upgrades/general.webp', price: 500000000, clicks: 700000, level: 60, exp: 3500000 },
-  { id: 22, name: 'Dedo biónico', image: '/assets/upgrades/general.webp', price: 1200000000, clicks: 1500000, level: 65, exp: 7500000 },
-  { id: 23, name: 'Croqueta platino', image: '/assets/upgrades/general.webp', price: 3000000000, clicks: 3000000, level: 70, exp: 15000000 },
-  { id: 24, name: 'Clic de Chef', image: '/assets/upgrades/general.webp', price: 7500000000, clicks: 6500000, level: 75, exp: 32500000 },
-  { id: 25, name: 'Dedo-Queta', image: '/assets/upgrades/general.webp', price: 20000000000, clicks: 12000000, level: 80, exp: 60000000 },
-  { id: 26, name: 'Croquetificar', image: '/assets/upgrades/general.webp', price: 55000000000, clicks: 25000000, level: 85, exp: 125000000 },
-  { id: 27, name: 'Clic cuántico', image: '/assets/upgrades/general.webp', price: 150000000000, clicks: 50000000, level: 90, exp: 250000000 },
-  { id: 28, name: 'Dedo fractal', image: '/assets/upgrades/general.webp', price: 400000000000, clicks: 100000000, level: 95, exp: 500000000 },
-  { id: 29, name: 'El click', image: '/assets/upgrades/general.webp', price: 1000000000000, clicks: 220000000, level: 100, exp: 1100000000 },
-  { id: 30, name: 'La croqueta', image: '/assets/upgrades/general.webp', price: 1000000000000000, clicks: 500000000, level: 110, exp: 2500000000 },
+  { id: 21, name: 'Click industrial', image: '/assets/upgrades/general.webp', price: 450_000_000, clicks: 700_000, level: 61, exp: 4_000_000 },
+  { id: 22, name: 'Dedo biónico', image: '/assets/upgrades/general.webp', price: 1_100_000_000, clicks: 1_500_000, level: 66, exp: 8_500_000 },
+  { id: 23, name: 'Croqueta platino', image: '/assets/upgrades/general.webp', price: 2_800_000_000, clicks: 3_000_000, level: 71, exp: 17_000_000 },
+  { id: 24, name: 'Click de Chef', image: '/assets/upgrades/general.webp', price: 7_200_000_000, clicks: 6_500_000, level: 76, exp: 35_000_000 },
+  { id: 25, name: 'Dedo-Queta', image: '/assets/upgrades/general.webp', price: 19_000_000_000, clicks: 12_000_000, level: 81, exp: 65_000_000 },
+  { id: 26, name: 'Croquetificar', image: '/assets/upgrades/general.webp', price: 50_000_000_000, clicks: 25_000_000, level: 86, exp: 135_000_000 },
+  { id: 27, name: 'Click cuántico', image: '/assets/upgrades/general.webp', price: 140_000_000_000, clicks: 50_000_000, level: 91, exp: 270_000_000 },
+  { id: 28, name: 'Dedo fractal', image: '/assets/upgrades/general.webp', price: 380_000_000_000, clicks: 100_000_000, level: 96, exp: 540_000_000 },
+  { id: 29, name: 'Click Infinito', image: '/assets/upgrades/general.webp', price: 950_000_000_000, clicks: 220_000_000, level: 101, exp: 1_200_000_000 },
+  { id: 30, name: 'Click de Dios', image: '/assets/upgrades/general.webp', price: 95_000_000_000_000, clicks: 500_000_000, level: 110, exp: 2_700_000_000 },
+
+  // ============================================================
+  // 🌀 ENDGAME - Ultra upgrades para niveles imposibles
+  // ============================================================
+  { id: 31, name: 'El click', image: '/assets/upgrades/general.webp', price: 12_000_000_000_000_000, clicks: 1_000_000_000, level: 150, exp: 10_000_000_000 },
+  { id: 32, name: 'El rebozado', image: '/assets/upgrades/general.webp', price: 250_000_000_000_000_000, clicks: 10_000_000_000, level: 200, exp: 100_000_000_000 },
+  { id: 33, name: 'La croqueta', image: '/assets/upgrades/general.webp', price: 5_000_000_000_000_000_000, clicks: 100_000_000_000, level: 300, exp: 1_000_000_000_000 },
+
 ];
