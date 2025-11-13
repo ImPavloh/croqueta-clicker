@@ -1,9 +1,9 @@
 <nav class="navbar justify-between items-center">
   <div class="flex gap-2">
-    <app-button variant="nav" [routerLink]="'/'" [routerLinkActiveExact]="true" (click)="onClick()">
+    <app-button variant="nav" [routerLink]="'/'" [routerLinkActiveExact]="true">
       Mejoras
     </app-button>
-    <app-button variant="nav" [routerLink]="'/stats'" (click)="onClick()">
+    <app-button variant="nav" [routerLink]="'/stats'">
       Estadísticas
     </app-button>
   </div>
@@ -11,7 +11,7 @@
   <app-newsline />
   }
   <div class="flex gap-2">
-    <app-button variant="nav" [routerLink]="'/skins'" (click)="onClick()"> Skins </app-button>
-    <app-button variant="nav" [routerLink]="'/options'" (click)="onClick()"> Opciones </app-button>
+    <app-button variant="nav" [routerLink]="'/skins'"> Skins </app-button>
+    <app-button variant="nav" [routerLink]="'/options'"> Opciones </app-button>
   </div>
 </nav>

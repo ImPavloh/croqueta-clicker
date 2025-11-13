@@ -118,8 +118,8 @@ export class Producer {
     const buyAmount = this.shopControls.buyAmount();
     const cost = this.calculateBulkPrice(this.quantity, buyAmount);
 
-    // comparar Decimal con Decimal
-    if (this.pointsService.points().gte(cost)) {
+    // comparar Decimal con Decimal y verificar que esté desbloqueado
+    if (this.pointsService.points().gte(cost) && this.unlocked) {
       // restar usando Decimal
       this.pointsService.substractPoints(cost);
 

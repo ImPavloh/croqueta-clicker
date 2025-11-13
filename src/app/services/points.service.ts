@@ -3,6 +3,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,10 @@ export class PointsService {
   private _multiply = signal<Decimal>(new Decimal(1));
   private isInitializing = true;
   private lastSaveTime: number = 0;
+
+  // Subject para emitir eventos de clic manual
+  private clickEvent$ = new Subject<Decimal>();
+  public readonly onManualClick$ = this.clickEvent$.asObservable();
 
   // getter público (read-only signal)
   readonly points = this._points.asReadonly();
@@ -50,6 +55,9 @@ export class PointsService {
     const amount = this.pointsPerClick().times(this.multiply()).times(bonusMultiplier);
     // actualizar puntos: v + amount
     this._points.update((v) => v.plus(amount));
+
+    // Emitir evento de clic manual con la cantidad ganada
+    this.clickEvent$.next(amount);
 
     // mostrar texto flotante junto a la croqueta
     if (typeof window !== 'undefined' && amount.gt(0)) {

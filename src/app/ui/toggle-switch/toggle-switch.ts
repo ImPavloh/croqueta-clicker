@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-toggle-switch',
@@ -9,6 +10,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './toggle-switch.css'
 })
 export class ToggleSwitch {
+  private audioService = inject(AudioService);
+
   @Input() label: string = '';
   @Input() checked: boolean = false;
   @Output() checkedChange = new EventEmitter<boolean>();
@@ -16,5 +19,6 @@ export class ToggleSwitch {
   onCheckedChange(newValue: boolean) {
     this.checked = newValue;
     this.checkedChange.emit(newValue);
+    this.audioService.playSfx('/assets/sfx/switch01.mp3', 1);
   }
 }

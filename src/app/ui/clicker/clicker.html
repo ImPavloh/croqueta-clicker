@@ -1,5 +1,5 @@
 <div class="relative flex justify-center items-center h-full w-full">
-  <span
+  <div
     (click)="onClick($event)"
     (keydown)="preventKey($event)"
     tabindex="-1"
@@ -7,15 +7,17 @@
     [class.afk]="isAfk()"
   >
     @if (showPrevious()) {
-    <span
+    <img
       class="croqueta croqueta-layer croqueta-previous"
-      [style.backgroundImage]="getSkinImage(this.previousSkin())"
-    ></span>
+      [src]="getSkinImage(this.previousSkin())"
+      alt="Previous croqueta skin"
+    />
     }
-    <span
+    <img
       class="croqueta croqueta-layer croqueta-current"
-      [style.backgroundImage]="getSkinImage(currentSkin())"
-    ></span>
-  </span>
+      [src]="getSkinImage(currentSkin())"
+      alt="Croqueta"
+    />
+  </div>
   <span class="croqueta-bg-light"></span>
 </div>

@@ -3,13 +3,12 @@ import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
-import { CornerCard } from '@ui/corner-card/corner-card';
 import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-achievement-list',
   standalone: true,
-  imports: [CommonModule, CornerCard, Tooltip],
+  imports: [CommonModule, Tooltip],
   templateUrl: './achievement-list.html',
   styleUrls: ['./achievement-list.css'],
 })

@@ -446,11 +446,11 @@
 
   .corner-card .corner::after {
     width: 1.5rem;
-    height: calc(0.75rem - 1px);
+    height: calc(0.5rem - 4px);
   }
 
   .corner-card .corner::before {
-    width: calc(0.75rem - 1px);
+    width: calc(0.5rem - 4px);
     height: 1.5rem;
   }
 
@@ -497,7 +497,7 @@
 }
 
 /* tablets */
-@media (min-width: 641px) and (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1344px) {
   .corner-card--lg {
     padding: 1.25rem;
     gap: 1.25rem;

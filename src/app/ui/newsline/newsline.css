@@ -55,7 +55,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1344px) {
   .newsline-container {
     box-shadow: #00000048 0px 2px 4px, #0000001e 0px 5px 10px -3px, #0000001f 0px -3px 0px inset;
     border-radius: 0;

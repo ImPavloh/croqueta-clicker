@@ -2,14 +2,15 @@
   @if (label) {
     <span class="text-xl min-w-20">{{ label }}</span>
   }
-  <input 
-    type="range" 
-    [min]="min" 
+  <input
+    type="range"
+    [min]="min"
     [max]="max"
     [step]="step"
     class="flex-1"
     [ngModel]="value"
     (ngModelChange)="onValueChange($event)"
+    (change)="onSliderRelease()"
   />
   @if (showValue) {
     <span class="min-w-12 text-right text-xl">{{ value }}{{ valueUnit }}</span>

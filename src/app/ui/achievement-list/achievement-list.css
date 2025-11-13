@@ -1,24 +1,3 @@
-.achievement-list-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 1rem;
-  padding: 0.5rem;
-}
-
-.achievement-list-header {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, rgba(255, 248, 220, 0.98) 0%, rgba(254, 243, 199, 0.98) 100%);
-  border: 2px solid #d4a574aa;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  flex-shrink: 0;
-}
-
 .achievement-list-scrollable {
   overflow-y: auto;
   overflow-x: hidden;
@@ -37,48 +16,24 @@
 }
 
 .achievement-list-scrollable::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4a574 0%, #b89c5a 50%, #d4a574 100%);
+  background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
   border-radius: 10px;
   border: 2px solid #f3eac2;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5);
 }
 
 .achievement-list-scrollable::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #e0b684 0%, #c4a86a 50%, #e0b684 100%);
+  background: linear-gradient(180deg, #ccb78b 0%, #b89c5a 50%, #ccb78b 100%);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.6);
 }
 
 .achievement-list-scrollable::-webkit-scrollbar-track {
   background: #f3eac2;
   border-radius: 10px;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
-}
-
-.achievement-list-scrollable .grid {
-  gap: 1rem;
-}
-
-app-corner-card {
-  transition: all 0.3s ease;
-  display: block;
-  cursor: help;
-}
-
-app-corner-card:hover {
-  transform: translateY(-2px);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 app-tooltip {
   display: block;
   height: 100%;
-}
-
-.grayscale {
-  filter: grayscale(100%);
-  transition: filter 0.3s ease;
-}
-
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

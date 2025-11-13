@@ -1,17 +1,17 @@
 <!--upgrades-->
 <div class="h-full flex flex-col">
-  <div class="upgrades flex flex-row p-4">
+  <div class="upgrades flex flex-row p-2 sm:p-4">
     @for (upgrade of upgrades; track upgrade.id) {
     <app-upgrade [config]="upgrade"></app-upgrade>
     }
   </div>
   <!--<hr class="text-amber-800 my-2 w-[75%] m-auto" />-->
   <!--producers-->
-  <div class="p-4">
+  <div class="p-2 sm:p-4">
     <app-shop-controls />
   </div>
   <div class="producers-container">
-    <div class="flex flex-col gap-8 p-4">
+    <div class="flex flex-col gap-3 sm:gap-8 p-2 sm:p-4">
       @for (producer of filteredAndSortedProducers(); track producer.id) {
       <app-producer [config]="producer"></app-producer>
       } @empty {

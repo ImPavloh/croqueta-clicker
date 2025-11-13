@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal, effect } from '@angular/core';
 import { PlayerStats } from '@services/player-stats.service';
 import { StatCardComponent } from '@ui/stat-card/stat-card';
 import { CommonModule } from '@angular/common';
@@ -27,9 +27,18 @@ export class Stats {
 
   // Circular progress bar - radio aumentado a 78
   circumference = 2 * Math.PI * 78; // radio = 78
+  shouldTransition = signal(true);
+
+  private previousProgress = 0;
+
+  private expProgress = computed(() => {
+    const current = this.playerStats.currentExp();
+    const next = this.playerStats.expToNext();
+    return next > 0 ? current / next : 0;
+  });
 
   strokeDashoffset = computed(() => {
-    const progress = this.getValue('expProgress');
+    const progress = this.expProgress();
     return this.circumference - progress * this.circumference;
   });
 
@@ -37,16 +46,30 @@ export class Stats {
   currentExp = computed(() => this.playerStats.currentExp());
   expToNext = computed(() => this.playerStats.expToNext());
 
+  constructor() {
+    effect(() => {
+      const currentProgress = this.expProgress();
+
+      if (currentProgress < this.previousProgress - 0.5) {
+        this.shouldTransition.set(false);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            this.shouldTransition.set(true);
+          });
+        });
+      }
+
+      this.previousProgress = currentProgress;
+    });
+  }
+
   // Computar valores reactivamente
   values = computed(() => {
     return {
       totalClicks: this.playerStats.totalClicks(),
       timePlaying: this.playerStats.timePlaying(),
       level: this.level(),
-      expProgress:
-        this.playerStats.expToNext() > 0
-          ? this.playerStats.currentExp() / this.playerStats.expToNext()
-          : 0,
     };
   });
 

@@ -21,17 +21,14 @@ export class ShopControls {
   constructor(public shopControls: ShopControlsService, private audioService: AudioService) {}
 
   selectAmount(amount: BuyAmount) {
-    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     this.shopControls.setBuyAmount(amount);
   }
 
   selectSort(order: SortOrder) {
-    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     this.shopControls.setSortOrder(order);
   }
 
   selectFilter(filter: FilterType) {
-    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     this.shopControls.setFilter(filter);
   }
 }

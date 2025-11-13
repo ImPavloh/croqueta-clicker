@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { GoldenCroquetaService } from '@services/golden-croqueta.service';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-golden-croqueta',
@@ -9,8 +10,10 @@ import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 })
 export class GoldenCroqueta {
   protected goldenCroquetaService = inject(GoldenCroquetaService);
+  private audioService = inject(AudioService);
 
   onClick() {
     this.goldenCroquetaService.clicked();
+    this.audioService.playSfx('/assets/sfx/click01.mp3', 1);
   }
 }

@@ -22,6 +22,7 @@ import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
 import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-popup';
 import { Splash } from '@ui/splash/splash';
+import { MobileStats } from '@ui/mobile-stats/mobile-stats';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +42,7 @@ import { Splash } from '@ui/splash/splash';
     GoldenCroqueta,
     BonusCountdownPopup,
     Splash,
+    MobileStats,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -61,7 +63,7 @@ export class App implements OnInit, OnDestroy {
   private level: number = 1;
   private levelSub?: Subscription;
 
-  public isMobile: boolean = window.innerWidth <= 1024;
+  public isMobile: boolean = window.innerWidth <= 1344;
 
   ngOnInit(): void {
     this.levelSub = this.playerStats.level$.subscribe((level) => {

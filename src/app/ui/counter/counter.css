@@ -2,3 +2,18 @@
   display: block;
   width: 100%;
 }
+
+@media (max-width: 1344px) {
+  :host {
+    position: relative;
+  }
+}
+
+.counter p {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+.counter p.scale-110 {
+  transform: scale(1.02);
+}

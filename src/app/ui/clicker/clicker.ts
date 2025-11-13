@@ -51,24 +51,17 @@ export class Clicker implements OnInit, OnDestroy {
     this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
       const newSkin = id;
       if (newSkin !== this.currentSkin()) {
-        this.previousSkin.set(this.currentSkin());
-        this.showPrevious.set(true);
         this.currentSkin.set(newSkin);
-
-        setTimeout(() => {
-          this.showPrevious.set(false);
-        }, 600);
       }
     });
   }
-  //Condigue la url de la skin seleccionada
+  //Consigue la url de la skin seleccionada
   getSkinImage(skinId: number): string {
     const skin = this.skins.find((s) => s.id === skinId);
-    return `url('${skin?.image}')`;
+    return skin?.image || '';
   }
 
   onClick(event?: MouseEvent) {
-    // ME CAGO EN LA OST DE CRISTO PORQUE NO SE REPRODUCE JODEEEEEEEEEEEEEEEEEEEEEEEEEEEER
     this.audioService.resumeIfNeeded();
     // obtener las coordenadas relativas al contenedor principal (clicker-container)
     let x: number | undefined;
@@ -107,7 +100,13 @@ export class Clicker implements OnInit, OnDestroy {
     this.particlesService.spawnFallingCroquetas(containerWidth, 3, particleImage);
 
     // SFX
-    this.audioService.playSfx('/assets/sfx/click01.mp3', 1);
+    const crunchSounds = [
+      '/assets/sfx/crunch1.mp3',
+      '/assets/sfx/crunch2.mp3',
+      '/assets/sfx/crunch3.mp3'
+    ];
+    const randomCrunch = crunchSounds[Math.floor(Math.random() * crunchSounds.length)];
+    this.audioService.playSfx(randomCrunch, 1);
   }
 
   // obtener la imagen de partícula según la skin actual (o dejar la skin de la normal por defecto)

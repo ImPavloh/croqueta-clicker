@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ModalService } from '@services/modal.service';
+import { AudioService } from '@services/audio.service';
 import { Upgrades } from '@pages/upgrades/upgrades';
 import { Stats } from '@pages/stats/stats';
 import { Skins } from '@pages/skins/skins';
@@ -14,9 +15,11 @@ import { ButtonComponent } from '@ui/button/button';
 })
 export class Modal {
   protected modalService = inject(ModalService);
+  private audioService = inject(AudioService);
 
   closeModal() {
     this.modalService.closeModal();
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 
   getModalTitle(): string {

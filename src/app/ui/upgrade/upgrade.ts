@@ -55,8 +55,8 @@ export class Upgrade {
 
     const priceDecimal = new Decimal(this.config.price);
 
-    // comprobar si hay suficientes puntos y si no está ya comprada
-    if (this.pointsService.points().gte(priceDecimal) && !this.bought) {
+    // comprobar si hay suficientes puntos, si no está ya comprada y si está desbloqueada
+    if (this.pointsService.points().gte(priceDecimal) && !this.bought && this.unlocked) {
       // restar puntos usando Decimal
       this.pointsService.substractPoints(priceDecimal);
 

@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-button',
@@ -8,8 +9,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './button.html',
   styleUrl: './button.css',
+  host: {
+    '[class]': 'customClass',
+    '(click)': 'onClick()'
+  }
 })
 export class ButtonComponent {
+  private audioService = inject(AudioService);
+
   @Input() variant: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'nav' | 'control' =
     'primary';
   @Input() active: boolean = false;
@@ -18,4 +25,12 @@ export class ButtonComponent {
   @Input() fullWidth: boolean = false;
   @Input() routerLink?: string | any[];
   @Input() routerLinkActiveExact: boolean = false;
+  @Input() customClass: string = '';
+  @Input() noSound: boolean = false;
+
+  onClick() {
+    if (!this.disabled && !this.noSound) {
+      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    }
+  }
 }

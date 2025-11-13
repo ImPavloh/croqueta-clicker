@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject, OnDestroy, HostListener } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { OptionsService } from '@services/options.service';
+import { AudioService } from '@services/audio.service';
 import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
 
 @Component({
@@ -23,6 +24,7 @@ export class Croquetita implements OnDestroy {
   private initialTimeout?: number;
   private checkInterval?: number;
   protected optionsService = inject(OptionsService);
+  private audioService = inject(AudioService);
 
   constructor(private pointsService: PointsService, private playerStats: PlayerStats) {
     this.loadShownMessages();
@@ -41,6 +43,26 @@ export class Croquetita implements OnDestroy {
     }, 30000);
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isOpen()) return;
+
+    const target = event.target as HTMLElement;
+
+    // no cerrar si se hace clic en Croquetita o en el mensaje
+    if (target.closest('.croquetita-character') || target.closest('.croquetita-dialog')) {
+      return;
+    }
+
+    // ni cerrar si se hace clic en el clicker
+    if (target.closest('.croqueta-container')) {
+      return;
+    }
+
+    // cerrar el mensaje si se hace clic en cualquier otro lao
+    this.close();
+  }
+
   toggleHelper() {
     if (this.isOpen()) {
       this.close();
@@ -53,12 +75,18 @@ export class Croquetita implements OnDestroy {
     this.isOpen.set(true);
     this.isAnimating.set(true);
     this.showRelevantMessage();
+    this.audioService.playSfx('/assets/sfx/croquetita.mp3', 1);
 
     // cerrar automáticamente
     this.clearAutoCloseTimeout();
     this.autoCloseTimeout = window.setTimeout(() => {
       this.close();
     }, 8000);
+  }
+
+  closeSound() {
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    this.close();
   }
 
   close() {
@@ -136,7 +164,6 @@ export class Croquetita implements OnDestroy {
     }
   }
 
-  // TODO: MEJORABLEEEEE
   private showAutoMessage() {
     const relevantMessages = this.messages
       .filter(

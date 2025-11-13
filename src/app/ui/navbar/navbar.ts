@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
-import { AudioService } from '@services/audio.service';
 import { NewsLine } from '@ui/newsline/newsline';
 import { ButtonComponent } from '@ui/button/button';
 
@@ -11,10 +10,5 @@ import { ButtonComponent } from '@ui/button/button';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  public isMobile: boolean = window.innerWidth <= 1024;
-  private audioService = inject(AudioService);
-
-  onClick(){
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
-  }
+  public isMobile: boolean = window.innerWidth <= 1344;
 }

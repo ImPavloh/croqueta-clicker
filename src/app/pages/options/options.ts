@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { FormsModule } from '@angular/forms';
 import { OptionsService } from '@services/options.service';
@@ -12,6 +12,7 @@ import { AutosaveService } from '@services/autosave.service';
 import { SkinsService } from '@services/skins.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
+import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-options',
@@ -21,6 +22,7 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
 })
 export class Options {
   private shortNumberPipe = new ShortNumberPipe();
+  private audioService = inject(AudioService);
 
   constructor(
     public optionsService: OptionsService,
@@ -135,6 +137,7 @@ export class Options {
   }
 
   shareGame() {
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     const totalClicks = this.shortNumberPipe.transform(this.playerStats.totalClicks(), 0);
     const timePlaying = this.formatTime(this.playerStats.timePlaying());
     const level = this.playerStats._level.getValue();

@@ -2,9 +2,9 @@
   <div class="main-container">
     <app-splash (splashComplete)="onSplashComplete()" />
     <app-modal />
+    <app-achievement-popup />
     @if (isMobile) {
     <app-newsline />
-    <app-achievement-popup />
     <app-floating-buttons />
     }
     <div class="clicker-container">
@@ -13,8 +13,22 @@
       <app-golden-croqueta />
       <app-particles />
       <app-floating />
-      <app-clicker />
-      <app-counter />
+      @if (isMobile) {
+      <div class="mobile-top">
+        <app-mobile-stats />
+      </div>
+      <div class="clicker-wrapper">
+        <app-clicker />
+      </div>
+      <div class="mobile-bottom">
+        <app-counter />
+      </div>
+      } @else {
+      <div class="desktop-content">
+        <app-clicker />
+        <app-counter />
+      </div>
+      }
       <app-croquetita />
     </div>
     @if (!isMobile) {

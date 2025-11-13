@@ -7,7 +7,7 @@
     [routerLink]="routerLink"
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
-    [class]="'btn btn-' + variant"
+    [class]="'btn btn-' + variant + ' ' + customClass"
     [class.disabled]="disabled"
     [class.full-width]="fullWidth"
   >
@@ -17,7 +17,7 @@
   <button
     [type]="type"
     [disabled]="disabled"
-    [class]="'btn btn-' + variant"
+    [class]="'btn btn-' + variant + ' ' + customClass"
     [class.active]="active"
     [class.full-width]="fullWidth"
   >

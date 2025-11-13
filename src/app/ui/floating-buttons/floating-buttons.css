@@ -41,8 +41,10 @@
 }
 
 .btn-icon {
-  font-size: 32px;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
   transition: transform 0.3s ease;
   z-index: 1;
 }
@@ -109,6 +111,17 @@
   to {
     opacity: 1;
     transform: translateX(0) rotate(0deg);
+  }
+}
+
+@media (max-width: 1344px) {
+  .floating-btn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .btn-icon {
+    font-size: 26px;
   }
 }
 

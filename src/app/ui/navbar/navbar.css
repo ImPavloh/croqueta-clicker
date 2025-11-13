@@ -28,7 +28,7 @@
 }
 
 /* para tablets */
-@media (max-width: 1024px) {
+@media (max-width: 1344px) {
   .navbar {
     border-radius: 15px;
     padding: 8px;

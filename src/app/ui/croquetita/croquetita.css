@@ -1,71 +1,28 @@
-.croquetita-container {
-  position: absolute;
-  bottom: 12px;
-  left: 5px;
-  z-index: 100;
+.croquetita {
+  filter: drop-shadow(-8px 8px 10px rgba(0, 0, 0, 0.6));
 }
 
 .croquetita-character {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
   animation: float 3s ease-in-out infinite;
-  will-change: transform;
-}
-
-.croquetita-character:hover {
-  transform: scale(1.05);
 }
 
 .croquetita-character.talking {
   animation: bounce 0.5s ease;
 }
 
-.croquetita-face {
-  font-size: 40px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
 .croquetita-bubble-indicator {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  font-size: 24px;
   animation: pulse 2s ease-in-out infinite;
 }
 
 .croquetita-dialog {
-  position: absolute;
-  bottom: 100px;
-  left: 20px;
-  width: 320px;
-  max-width: 90vw;
-  background: white;
-  border: 3px solid #f3eac2;
   background: linear-gradient(135deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
-  color: #fff;
   box-shadow: 0 4px 15px rgba(184, 156, 90, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3),
     inset 0 -1px 3px rgba(0, 0, 0, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateY(20px) scale(0.9);
-  transition: all 0.3s ease;
 }
 
-.croquetita-dialog.animate {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-/* triangulo inferior que apunta a croquetita */
 .croquetita-dialog::after {
   content: '';
   position: absolute;
@@ -91,19 +48,9 @@
   z-index: 1;
 }
 
-.croquetita-message {
-  color: #faf6e6;
-  font-size: 20px;
-}
-
-.croquetita-close-btn {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 18px;
-  color: #6b5633;
-  cursor: pointer;
-  font-weight: bold;
+.croquetita-dialog.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 @keyframes float {
@@ -135,32 +82,5 @@
   50% {
     transform: scale(1.1);
     opacity: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .croquetita-character {
-    width: 60px;
-    height: 60px;
-  }
-
-  .croquetita-face {
-    font-size: 30px;
-  }
-
-  .croquetita-bubble-indicator {
-    font-size: 18px;
-    top: -5px;
-    right: -5px;
-  }
-
-  .croquetita-dialog {
-    width: 280px;
-    bottom: 80px;
-    left: 0;
-  }
-
-  .croquetita-message {
-    font-size: 13px;
   }
 }

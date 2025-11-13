@@ -1,7 +1,7 @@
 <div class="stats-page">
-  <div class="stats-header">
+  <div class="stats-header hidden sm:block">
     <app-corner-card [type]="'div'" [showCorners]="true" cornerStyle="simple">
-      <div class="flex flex-row justify-evenly gap-8 items-center w-full">
+      <div class="flex flex-col sm:flex-row justify-evenly gap-4 sm:gap-8 items-center w-full">
         <div class="stat-with-icon">
           <div class="stat-icon-container">
             <img
@@ -13,7 +13,7 @@
           <app-stat-card [config]="timeStat" [value]="getValue('timePlaying')"></app-stat-card>
         </div>
 
-        <div class="separator"></div>
+        <div class="separator hidden sm:block"></div>
 
         <div class="level-container">
           <div class="circular-progress">
@@ -29,6 +29,7 @@
               />
               <circle
                 class="progress-ring-circle"
+                [class.no-transition]="!shouldTransition()"
                 [attr.stroke-dasharray]="circumference + ' ' + circumference"
                 [style.stroke-dashoffset]="strokeDashoffset()"
                 stroke="url(#gradient)"
@@ -60,7 +61,7 @@
           </div>
         </div>
 
-        <div class="separator"></div>
+        <div class="separator hidden sm:block"></div>
 
         <div class="stat-with-icon">
           <div class="stat-icon-container">
