@@ -2,6 +2,7 @@
   z-index: 10;
   position: relative;
 
+  margin-bottom: 40px;
   width: 187px; /* un poco de hardcodeo nunca viene mal */
   height: 350px;
 

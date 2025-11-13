@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .label {
@@ -35,35 +35,51 @@
   opacity: 0.4;
 }
 
-.buttons {
-  display: flex;
-  gap: 6px;
-}
-
-/* Responsive: apilar en móvil */
+/* moviles */
 @media (max-width: 768px) {
-  .shop-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
+  .mhdn {
+    display: none;
   }
 
-  .control-group {
-    flex-direction: column;
-    align-items: stretch;
+  .shop-controls {
+    justify-content: space-between;
     gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
   }
 
   .separator {
-    width: 100%;
-    height: 1px;
+    display: none;
   }
 
   .buttons {
-    justify-content: center;
+    gap: 3px;
   }
 
   .label {
-    text-align: center;
+    font-size: 10px;
+    margin: 0;
+    letter-spacing: 0.3px;
+    display: none;
+  }
+
+  .filter-group .label {
+    display: block;
+    font-size: 9px;
+  }
+}
+
+/* pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .shop-controls {
+    gap: 6px;
+    padding: 4px 4px;
+  }
+  .buttons {
+    gap: 2px;
+  }
+
+  .label {
+    font-size: 8px;
   }
 }

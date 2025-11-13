@@ -9,11 +9,12 @@ import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
+import { Tooltip } from '@ui/tooltip/tooltip';
 import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-producer',
-  imports: [NgClass, ShortNumberPipe, CornerCard],
+  imports: [NgClass, ShortNumberPipe, CornerCard, Tooltip],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })

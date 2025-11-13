@@ -2,7 +2,7 @@
   <!-- cantidad de compra -->
   <div class="control-group">
     <p class="label">Comprar</p>
-    <div class="buttons">
+    <div class="gap-1.5 flex">
       <app-button
         variant="control"
         [active]="shopControls.buyAmount() === 1"
@@ -21,11 +21,11 @@
       </app-button>
       <app-button
         variant="control"
-        [active]="shopControls.buyAmount() === 100"
-        (click)="selectAmount(100)"
-        title="Comprar de 100 en 100"
+        [active]="shopControls.buyAmount() === 25"
+        (click)="selectAmount(25)"
+        title="Comprar de 25 en 25"
       >
-        x100
+        x25
       </app-button>
     </div>
   </div>
@@ -35,7 +35,7 @@
   <!-- ordenación -->
   <div class="control-group">
     <p class="label">Ordenar</p>
-    <div class="buttons">
+    <div class="gap-1.5 flex">
       <app-button
         variant="control"
         [active]="shopControls.sortOrder() === 'default'"
@@ -74,9 +74,9 @@
   <div class="separator"></div>
 
   <!-- filtros -->
-  <div class="control-group">
-    <p class="label">Mostrar solo comprables</p>
-    <div class="buttons">
+  <div class="control-group mhdn">
+    <p class="label">Comprables</p>
+    <div class="gap-1.5 flex">
       <app-toggle-switch
         [checked]="shopControls.filter() === 'affordable'"
         (checkedChange)="selectFilter($event ? 'affordable' : 'all')"

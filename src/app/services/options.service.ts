@@ -50,11 +50,24 @@ export class OptionsService {
 
   // detectar auto dispositivos de bajo rendimiento
   private detectLowPerformanceDevice(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
 
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // solo aplicar detección automática si NO hay valores guardados previamente
+    const hasParticlesSetting = localStorage.getItem(GAME_PREFIX + 'showParticles') !== null;
+    const hasCroquetitaSetting = localStorage.getItem(GAME_PREFIX + 'showCroquetita') !== null;
+
+    // si ya tiene config guardada respetar las preferencias del usuario
+    if (hasParticlesSetting && hasCroquetitaSetting) {
+      return;
+    }
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
     const isLowEndCPU = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 2 : false;
-    const isLowMemory = (navigator as any).deviceMemory ? (navigator as any).deviceMemory <= 4 : false;
+    const isLowMemory = (navigator as any).deviceMemory
+      ? (navigator as any).deviceMemory <= 4
+      : false;
 
     if ((isMobile && isLowEndCPU) || isLowMemory) {
       this._showParticles.set(false);
@@ -143,7 +156,7 @@ export class OptionsService {
         keysToRemove.push(key);
       }
     }
-    keysToRemove.forEach(key => localStorage.removeItem(key));
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
 
     // También resetear achievements explícitamente
     this.achievementsService.resetAll();
@@ -179,7 +192,7 @@ export class OptionsService {
       version: '1.0',
       timestamp: new Date().toISOString(),
       game: 'croqueta-clicker',
-      data: saveData
+      data: saveData,
     };
 
     const dataStr = JSON.stringify(exportData, null, 2);
@@ -230,7 +243,7 @@ export class OptionsService {
               keysToRemove.push(key);
             }
           }
-          keysToRemove.forEach(key => localStorage.removeItem(key));
+          keysToRemove.forEach((key) => localStorage.removeItem(key));
 
           // cargar los datos con el prefijo
           let itemsLoaded = 0;

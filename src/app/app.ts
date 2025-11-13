@@ -21,6 +21,7 @@ import { AutosaveService } from '@services/autosave.service';
 import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
 import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-popup';
+import { Splash } from '@ui/splash/splash';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +40,7 @@ import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-p
     FloatingButtons,
     GoldenCroqueta,
     BonusCountdownPopup,
+    Splash,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -46,9 +48,6 @@ import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-p
 })
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
-
-  // splash control (visible al inicio)
-  protected readonly splashShown = signal(true);
 
   constructor(
     private points: PointsService,
@@ -65,18 +64,11 @@ export class App implements OnInit, OnDestroy {
   public isMobile: boolean = window.innerWidth <= 1024;
 
   ngOnInit(): void {
-    // ocultar splash automáticamente tras 2s
-    if (typeof window !== 'undefined') {
-      setTimeout(() => {
-        this.splashShown.set(false);
-        this.playerStats.startTimer();
-      }, 5000);
-    }
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       let url = '/assets/ost/bechamel.mp3';
       if (level > 100) {
         url = '/assets/ost/phillipethepope.mp3';
-        this.achievementsService.unlockAchievement("achievement_ost")
+        this.achievementsService.unlockAchievement('achievement_ost');
       } else if (level > 5) {
         url = '/assets/ost/croquetauniversity.mp3';
       }
@@ -90,7 +82,7 @@ export class App implements OnInit, OnDestroy {
     this.playerStats.stopTimer();
   }
 
-  protected hideSplash(): void {
-    this.splashShown.set(false);
+  protected onSplashComplete(): void {
+    this.playerStats.startTimer();
   }
 }

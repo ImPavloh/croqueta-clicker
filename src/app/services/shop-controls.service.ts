@@ -1,7 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { OptionsService } from './options.service';
 
-export type BuyAmount = 1 | 10 | 100;
+export type BuyAmount = 1 | 10 | 25;
 export type SortOrder = 'default' | 'price-asc' | 'price-desc' | 'name';
 export type FilterType = 'all' | 'affordable';
 
@@ -44,11 +44,11 @@ export class ShopControlsService {
     this.saveToStorage();
   }
 
-  // ciclar entre las opciones de cantidad (1 -> 10 -> 100 ...)
+  // ciclar entre las opciones de cantidad (1 -> 10 -> 25 ...)
   cycleBuyAmount() {
     const current = this._buyAmount();
     if (current === 1) this.setBuyAmount(10);
-    else if (current === 10) this.setBuyAmount(100);
+    else if (current === 10) this.setBuyAmount(25);
     else this.setBuyAmount(1);
   }
 
@@ -58,7 +58,7 @@ export class ShopControlsService {
 
     // cargar cantidad de compra
     const stored = this.optionsService.getGameItem('buyAmount');
-    if (stored === '10' || stored === '100') {
+    if (stored === '10' || stored === '25') {
       this._buyAmount.set(Number(stored) as BuyAmount);
     }
 

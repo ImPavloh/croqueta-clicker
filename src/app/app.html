@@ -1,9 +1,6 @@
 <main>
   <div class="main-container">
-    @if (splashShown()) {
-    <span class="splash" (click)="hideSplash()"></span>
-    <span class="croqueta-splash"></span>
-    }
+    <app-splash (splashComplete)="onSplashComplete()" />
     <app-modal />
     @if (isMobile) {
     <app-newsline />

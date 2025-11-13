@@ -2,7 +2,7 @@ import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from 
 
 /**
  * Estrategia personalizada para reutilizar componentes de rutas en lugar de destruirlos
- * ()se tratan las rutas como secciones de una SPA)
+ * (se tratan las rutas como secciones de una SPA)
  *
  * Sin esto al cambiar de upgrades a skins angular se carga el componente de upgrades y crea uno nuevo de skins que hace que las imgs se recarguen por ejemplo
  *
