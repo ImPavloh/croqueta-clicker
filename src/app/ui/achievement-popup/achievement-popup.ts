@@ -3,13 +3,12 @@ import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
-import { CornerCard } from '@ui/corner-card/corner-card';
 import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-achievement-popup',
   standalone: true,
-  imports: [CommonModule, CornerCard],
+  imports: [CommonModule],
   templateUrl: './achievement-popup.html',
   styleUrls: ['./achievement-popup.css'],
 })
@@ -29,9 +28,9 @@ export class AchievementPopup implements OnDestroy {
     private cdr: ChangeDetectorRef
   ) {
     this.subs.add(
-      this.svc.queue$.subscribe(queue => {
+      this.svc.queue$.subscribe((queue) => {
         if (queue.length > 0 && !this.isProcessing) {
-          this.processQueue().catch(err => console.error(err));
+          this.processQueue().catch((err) => console.error(err));
         }
       })
     );
@@ -58,12 +57,12 @@ export class AchievementPopup implements OnDestroy {
   }
 
   private showFor(item: Achievement): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.current = item;
       this.visible = true;
       this.cdr.detectChanges();
 
-      this.audioService.playSfx("/assets/sfx/achievement.mp3",1)
+      this.audioService.playSfx('/assets/sfx/achievement.mp3', 1);
 
       if (this.hideTimeout) clearTimeout(this.hideTimeout);
 

@@ -1,13 +1,19 @@
 {
-  "name": "croqueta-clicker",
-  "short_name": "croqueta-clicker",
+  "name": "Croqueta Clicker - Juego incremental",
+  "short_name": "Croqueta Clicker",
+  "description": "Juego incremental de croquetas. Haz clicks en croquetas, desbloquea mejoras y personaliza tu experiencia.",
+  "theme_color": "#e6892d",
+  "background_color": "#e6892d",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/",
+  "start_url": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
-      "src": "assets/favicon.ico",
+      "src": "favicon.ico",
       "sizes": "72x72",
       "type": "image/x-icon",
       "purpose": "maskable any"
