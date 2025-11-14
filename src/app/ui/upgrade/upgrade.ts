@@ -27,8 +27,12 @@ export class Upgrade {
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
   levelEffect = effect(() => {
-    const currentLevel = this.level();
-    this.checkLevel(currentLevel);
+    // El effect se ejecutará inmediatamente, pero la lógica interna
+    // solo procederá si 'config' ya ha sido establecido por el Input.
+    if (this.config) {
+        const currentLevel = this.level();
+        this.checkLevel(currentLevel);
+    }
   });
 
   unlocked: boolean = true;
@@ -40,6 +44,7 @@ export class Upgrade {
 
   // Comprobar si la mejora está desbloqueada
   checkLevel(currentLevel: number) {
+    if (!this.config) return; // Doble seguridad
     this.unlocked = currentLevel >= this.config.level;
   }
 

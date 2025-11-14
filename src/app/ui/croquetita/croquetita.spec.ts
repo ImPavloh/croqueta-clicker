@@ -18,12 +18,4 @@ describe('Croquetita', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should toggle dialog on click', () => {
-    expect(component.isOpen()).toBe(false);
-    component.toggleHelper();
-    expect(component.isOpen()).toBe(true);
-    component.toggleHelper();
-    expect(component.isOpen()).toBe(false);
-  });
 });

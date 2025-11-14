@@ -25,18 +25,24 @@ export class Producer {
   public shopControls = inject(ShopControlsService);
   private optionsService = inject(OptionsService);
 
+  // ID del productor
+  @Input() config!: ProducerModel;
+
   // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
-  inintEfect = effect(() => this.updatePriceAndPoints());
+  inintEfect = effect(() => {
+    if (this.config) {
+        this.updatePriceAndPoints();
+    }
+  });
 
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
   levelEffect = effect(() => {
-    const currentLevel = this.level();
-    this.checkLevel(currentLevel);
+    if(this.config){
+      const currentLevel = this.level();
+      this.checkLevel(currentLevel);
+    }
   });
-
-  // ID del productor
-  @Input() config!: ProducerModel;
 
   // cantidad (entera)
   quantity: number = 0;
@@ -50,9 +56,14 @@ export class Producer {
     this.updatePriceAndPoints();
 
     if (this.quantity > 0) {
-      const production = this.calculateTotalPoints();
+      const addedProduction = this.calculateTotalPoints();
+
+      // 🛠️ Aplicar la producción cargadsa al CPS global
+      const oldCps = this.pointsService.pointsPerSecond();
+      const newCps = oldCps.plus(addedProduction);
+      this.pointsService.upgradePointsPerSecond(newCps);
     }
-  }
+}
 
   // Actualizar precio y puntos cuando cambia la cantidad de compra
   updatePriceAndPoints() {
@@ -63,6 +74,7 @@ export class Producer {
 
   // Comprobar si el productor está desbloqueado
   checkLevel(currentLevel: number) {
+    if (!this.config) return; // Doble seguridad
     this.unlocked = currentLevel >= this.config.level;
   }
 

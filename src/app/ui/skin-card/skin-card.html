@@ -1,12 +1,14 @@
-<app-tooltip [text]="config.description" [position]="'bottom'">
-  <button (click)="onClick()" class="w-full h-full">
-    <app-corner-card type="button" [disabled]="false" [hoverable]="true" [active]="isSelected">
-      <img src="{{ config.image }}" alt="{{ config.name }}" class="w-full h-32 object-contain" />
-      <div class="text-center h-full">
-        <h3 class="text-lg lg:text-2xl text-amber-900 text-shadow-amber-950 text-shadow-2xs">
-          {{ config.name }}
-        </h3>
-      </div>
-    </app-corner-card>
-  </button>
-</app-tooltip>
+@if (config){
+  <app-tooltip [text]="config.description" [position]="'bottom'">
+    <button (click)="onClick()" class="w-full h-full">
+      <app-corner-card type="button" [disabled]="false" [hoverable]="true" [active]="isSelected">
+        <img src="{{ config.image }}" alt="{{ config.name }}" class="w-full h-32 object-contain" />
+        <div class="text-center h-full">
+          <h3 class="text-lg lg:text-2xl text-amber-900 text-shadow-amber-950 text-shadow-2xs">
+            {{ config.name }}
+          </h3>
+        </div>
+      </app-corner-card>
+    </button>
+  </app-tooltip>
+}
