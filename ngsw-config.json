@@ -7,7 +7,13 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
-        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js"
+        ]
       }
     },
     {
@@ -16,9 +22,35 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2|mp3|ogg|wav)"
+          "/assets/**/*.svg",
+          "/assets/**/*.cur",
+          "/assets/**/*.jpg",
+          "/assets/**/*.jpeg",
+          "/assets/**/*.png",
+          "/assets/**/*.apng",
+          "/assets/**/*.webp",
+          "/assets/**/*.avif",
+          "/assets/**/*.gif",
+          "/assets/**/*.otf",
+          "/assets/**/*.ttf",
+          "/assets/**/*.woff",
+          "/assets/**/*.woff2",
+          "/assets/**/*.mp3",
+          "/assets/**/*.ogg",
+          "/assets/**/*.wav"
+        ]
+      }
+    },
+    {
+      "name": "lazy-assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/backgrounds/**"
         ]
       }
     }
-  ]
+  ],
+  "dataGroups": []
 }

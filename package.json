@@ -1,6 +1,6 @@
 {
   "name": "croqueta-clicker",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Proyecto Angular. Juego incremental inspirado en Cookie Clicker, desarrollado por Pavloh y colaboradores.",
   "author": {
     "name": "Pavloh",
@@ -25,7 +25,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:prod": "pnpm build && npx http-server dist/croqueta-clicker/browser -p 8080 -c-1"
   },
   "prettier": {
     "printWidth": 100,

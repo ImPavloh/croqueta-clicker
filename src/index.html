@@ -10,14 +10,23 @@
     />
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="/assets/logo/logo.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/assets/logo/icon_192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/assets/logo/icon_512.png" />
 
     <!-- PWA -->
-    <meta name="theme-color" content="#e6892d" />
+    <meta name="theme-color" content="#f3eac2" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3eac2" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#b89c5a" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Croqueta Clicker" />
+    <meta name="application-name" content="Croqueta Clicker" />
+    <meta name="msapplication-TileColor" content="#e6892d" />
+    <meta name="msapplication-TileImage" content="/assets/logo/logo.png" />
+    <meta name="msapplication-config" content="none" />
+    <link rel="manifest" href="manifest.webmanifest" />
 
     <!-- SEO -->
     <meta
@@ -28,7 +37,7 @@
       name="keywords"
       content="croqueta clicker, cookie clicker, juego incremental, idle game, clicker game, croquetas, juego gratis"
     />
-    <meta name="author" content="Pavloh" />
+    <meta name="author" content="Pavloh, Roberto Cichón, Víctor RG" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://croquetaclicker.pavloh.com/" />
 
@@ -40,8 +49,7 @@
       property="og:description"
       content="Juego incremental de croquetas. ¡Haz clicks y desbloquea mejoras, skins y productores automáticos!"
     />
-    <!--
-    <meta property="og:image" content="https://croquetaclicker.pavloh.com/assets/logo/logo.png" />-->
+    <meta property="og:image" content="https://croquetaclicker.pavloh.com/assets/screenshots/phones.webp" />
     <meta property="og:locale" content="es_ES" />
 
     <!-- Twitter -->
@@ -52,8 +60,7 @@
       name="twitter:description"
       content="Juego incremental de croquetas. ¡Haz clicks y desbloquea mejoras, skins y productores automáticos!"
     />
-    <!--
-    <meta name="twitter:image" content="https://croquetaclicker.pavloh.com/assets/logo/logo.png" />-->
+    <meta name="twitter:image" content="https://croquetaclicker.pavloh.com/assets/screenshots/phones.webp" />
     <style>
       /* loader visible mientras angular carga */
       app-root:empty::before {
@@ -94,10 +101,14 @@
         display: block;
       }
     </style>
-    <link rel="manifest" href="manifest.webmanifest" />
   </head>
   <body>
     <app-root></app-root>
-    <noscript>Activa JavaScript para poder jugar con tu croqueta favorita.</noscript>
+    <noscript>
+      <div style="text-align: center; padding: 40px; font-family: Arial, sans-serif;">
+        <h1>Croqueta Clicker</h1>
+        <p>Activa JavaScript para poder jugar con tu croqueta favorita.</p>
+      </div>
+    </noscript>
   </body>
 </html>
