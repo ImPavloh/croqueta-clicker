@@ -42,14 +42,11 @@ export class Options {
       confirmText: 'Sí, reiniciar',
       cancelText: 'Cancelar',
       onConfirm: () => {
-        // Resetear TODOS los servicios en memoria ANTES de borrar localStorage
         this.pointsService.reset();
         this.playerStats.reset();
         this.skinsService.reset();
         this.shopControlsService.reset();
         this.optionsService.resetOptions();
-
-        // Ahora resetear localStorage y achievements, luego recargar
         this.optionsService.restartGame();
       },
     });

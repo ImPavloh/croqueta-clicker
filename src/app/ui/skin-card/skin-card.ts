@@ -22,7 +22,26 @@ export class SkinCard {
     return this.skinsService.skinId() === this.config.id;
   }
 
+  get isUnlocked(): boolean {
+    return this.skinsService.isSkinUnlocked(this.config);
+  }
+
+  get unlockText(): string {
+    if (this.isUnlocked || !this.config.unlockRequirement) {
+      return this.config.description;
+    }
+    return `${this.config.description}\n\nRequisito: ${this.skinsService.getUnlockRequirementText(
+      this.config.unlockRequirement
+    )}`;
+  }
+
   onClick() {
+    if (!this.isUnlocked) {
+      // SFX de error o bloqueado
+      this.audioService.playSfx('/assets/sfx/click02.mp3', 0.5);
+      return;
+    }
+
     this.skinsService.updateSkin(this.config.id);
     // SFX
     this.audioService.playSfx('/assets/sfx/click02.mp3', 1);

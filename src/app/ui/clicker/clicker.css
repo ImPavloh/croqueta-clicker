@@ -1,21 +1,17 @@
 .croqueta-container {
   z-index: 10;
   position: relative;
-
-  width: 187px; /* un poco de hardcodeo nunca viene mal */
-  height: 350px;
-
+  width: min(187px, 30vw);
+  height: min(350px, 50vh);
+  max-width: 250px;
+  max-height: 450px;
   cursor: pointer;
   user-select: none;
-  -webkit-user-select: none;
   touch-action: manipulation;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   transition: transform 0.2s ease, filter 0.2s ease;
-
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -24,125 +20,169 @@
 .croqueta-container:focus-within {
   outline: none;
 }
+.croqueta-container:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+}
+.croqueta-container:active {
+  transform: scale(0.98);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+.croqueta-container.afk .croqueta-layer {
+  animation: tilt-afk 4s ease-in-out infinite;
+}
 
 .croqueta-layer {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-
   object-fit: contain;
-  object-position: center;
   border-radius: 90% / 30%;
-
   color: rgb(255, 243, 216);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
   font-size: 3rem;
   font-weight: bold;
-  text-align: center;
-  line-height: 1;
-
   pointer-events: none;
-
   transition: transform 0.3s ease-out;
 }
 
 .croqueta-previous {
   z-index: 1;
-  opacity: 1;
 }
-
 .croqueta-current {
   z-index: 2;
-  opacity: 1;
-}
-
-.croqueta-container.afk .croqueta-layer {
-  animation: tilt-afk 4s ease-in-out infinite;
 }
 
 .croqueta-bg-light {
   z-index: 1;
-  background: url('/assets/effects/lightrays.webp') center/cover no-repeat;
-  background-size: contain;
-
-  transform: translate(-50%, -50%);
+  background: url('/assets/effects/lightrays.webp') center/contain no-repeat;
   position: absolute;
   top: 50%;
   left: 50%;
-
-  width: 550px;
-  height: 550px;
-
+  width: min(550px, 80vw);
+  height: min(550px, 80vh);
+  max-width: 700px;
+  max-height: 700px;
   pointer-events: none;
-  user-select: none;
-
   opacity: 0.6;
-
   animation: rotateLight 10s linear infinite;
   will-change: transform;
   transform: translate(-50%, -50%) translateZ(0);
   backface-visibility: hidden;
 }
 
-.croqueta-container:hover {
-  transform: scale(1.02);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
-}
-
-.croqueta-container:active {
-  transform: scale(0.98);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-}
-
 @keyframes tilt-afk {
-  0% {
+  0%,
+  100% {
     transform: rotate(-5deg) scale(1) translateZ(0);
   }
-  25% {
+  25%,
+  75% {
     transform: scale(1.1) translateZ(0);
   }
   50% {
     transform: rotate(5deg) scale(0.9) translateZ(0);
   }
-  75% {
-    transform: scale(1.1) translateZ(0);
-  }
-  100% {
-    transform: rotate(-5deg) scale(1) translateZ(0);
-  }
 }
 
 @keyframes rotateLight {
-  0% {
+  from {
     transform: translate(-50%, -50%) rotate(0deg) translateZ(0);
   }
-  100% {
+  to {
     transform: translate(-50%, -50%) rotate(360deg) translateZ(0);
   }
 }
 
-/* para tablets */
-@media (max-width: 1024px) {
-  .croqueta-layer {
-    font-size: 1.2rem;
+@media (min-width: 1920px) {
+  .croqueta-container {
+    width: min(250px, 30vw);
+    height: min(450px, 50vh);
+  }
+  .croqueta-bg-light {
+    width: min(700px, 80vw);
+    height: min(700px, 80vh);
   }
 }
 
-/* para móviles */
-@media (max-width: 640px) {
+@media (max-width: 1344px) and (min-width: 768px) {
   .croqueta-container {
-    width: 147px;
-    height: 275px;
+    width: min(170px, 35vw);
+    height: min(320px, 45vh);
   }
-
   .croqueta-layer {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
   }
-
   .croqueta-bg-light {
-    width: 300px;
-    height: 300px;
+    width: min(450px, 70vw);
+    height: min(450px, 70vh);
+  }
+}
+
+@media (max-width: 767px) {
+  .croqueta-container {
+    width: min(140px, 35vw);
+    height: min(250px, 32vh);
+  }
+  .croqueta-layer {
+    font-size: 1.2rem;
+  }
+  .croqueta-bg-light {
+    width: min(320px, 60vw);
+    height: min(320px, 55vh);
+  }
+}
+
+@media (max-width: 480px) {
+  .croqueta-container {
+    width: min(130px, 40vw);
+    height: min(230px, 28vh);
+  }
+  .croqueta-layer {
+    font-size: 1rem;
+  }
+  .croqueta-bg-light {
+    width: min(280px, 55vw);
+    height: min(280px, 52vh);
+  }
+}
+
+@media (max-width: 360px) {
+  .croqueta-container {
+    width: min(110px, 45vw);
+    height: min(200px, 25vh);
+  }
+  .croqueta-layer {
+    font-size: 0.95rem;
+  }
+  .croqueta-bg-light {
+    width: min(230px, 50vw);
+    height: min(230px, 48vh);
+  }
+}
+
+@media (max-width: 320px) {
+  .croqueta-container {
+    width: min(100px, 55vw);
+    height: min(180px, 30vh);
+  }
+  .croqueta-layer {
+    font-size: 0.9rem;
+  }
+  .croqueta-bg-light {
+    width: min(200px, 50vw);
+    height: min(200px, 50vh);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .croqueta-container {
+    width: min(140px, 22vw);
+    height: min(240px, 42vh);
+  }
+  .croqueta-bg-light {
+    width: min(320px, 50vw);
+    height: min(320px, 60vh);
   }
 }

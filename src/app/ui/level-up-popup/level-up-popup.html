@@ -1,23 +1,23 @@
 <div class="level-up-popup">
   @if (current) {
-    <div class="level-up-card" [class.show]="visible" role="status" aria-atomic="true">
-      <div class="glow-effect"></div>
-      <div class="content flex items-center">
-        <div class="level-icon flex flex-col items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-yellow-400 drop-shadow-lg">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-          </svg>
-        <span class="relative text-2xl font-extrabold text-amber-900 text-shadow z-10 mt-1">{{ current.level }}</span>
+  <div class="level-up-card" [class.show]="visible" role="status" aria-atomic="true">
+    <div class="glow-effect"></div>
+    <div class="content flex items-center">
+      <div class="level-icon flex flex-col items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+          />
+        </svg>
+        >
+      </div>
+      <div class="flex-1">
+        <div class="text-amber-400 text-sm font-bold uppercase tracking-widest mb-1">
+          ¡Nivel alcanzado!
         </div>
-        <div class="flex-1">
-          <div class="text-amber-950 text-lg font-extrabold uppercase tracking-wide text-shadow mb-1 drop-shadow">
-            ¡NIVEL ALCANZADO!
-          </div>
-          <div class="text-amber-900 text-sm opacity-95 font-medium">
-            Has subido al nivel {{ current.level }}
-          </div>
-        </div>
+        <div class="text-white text-lg font-bold drop-shadow-lg">Nivel {{ current.level }}</div>
       </div>
     </div>
+  </div>
   }
 </div>

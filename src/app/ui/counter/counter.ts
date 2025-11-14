@@ -18,7 +18,6 @@ export class Counter implements OnDestroy {
   displayPoints = signal(new Decimal(0));
   isAnimating = signal(false);
 
-  private animationFrame: number | null = null;
   private clickSubscription: Subscription | null = null;
 
   constructor(public pointsService: PointsService, private skinsService: SkinsService) {
@@ -31,42 +30,6 @@ export class Counter implements OnDestroy {
         this.displayPoints.set(currentPoints);
       }
     });
-
-    this.clickSubscription = this.pointsService.onManualClick$.subscribe(() => {
-      const from = this.displayPoints();
-      const to = this.pointsService.points();
-      this.animateCounter(from, to);
-    });
-  }
-
-  private animateCounter(from: Decimal, to: Decimal): void {
-    if (this.animationFrame !== null) {
-      cancelAnimationFrame(this.animationFrame);
-    }
-
-    this.isAnimating.set(true);
-    const startTime = performance.now();
-    const duration = 200;
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      const eased = 1 - Math.pow(1 - progress, 3);
-
-      const current = from.plus(to.minus(from).times(eased));
-      this.displayPoints.set(current);
-
-      if (progress < 1) {
-        this.animationFrame = requestAnimationFrame(animate);
-      } else {
-        this.isAnimating.set(false);
-        this.animationFrame = null;
-        this.displayPoints.set(to);
-      }
-    };
-
-    this.animationFrame = requestAnimationFrame(animate);
   }
 
   getCounterLabel(): string {
@@ -83,9 +46,6 @@ export class Counter implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.animationFrame !== null) {
-      cancelAnimationFrame(this.animationFrame);
-    }
     if (this.clickSubscription) {
       this.clickSubscription.unsubscribe();
     }

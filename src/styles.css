@@ -59,7 +59,7 @@ app-root {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1344px) {
   * {
     -webkit-tap-highlight-color: transparent;
   }

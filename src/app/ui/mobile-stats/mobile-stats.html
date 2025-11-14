@@ -5,7 +5,9 @@
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold text-white/90 uppercase tracking-widest">Nivel</span>
           <div class="level-divider"></div>
-          <span class="text-3xl font-black text-white leading-none level-number">{{ level() | short }}</span>
+          <span class="text-3xl font-black text-white leading-none level-number">{{
+            level() | short
+          }}</span>
         </div>
       </div>
 
@@ -15,10 +17,16 @@
             <div class="exp-bar-shine"></div>
             <div class="exp-bar-pulse"></div>
           </div>
-          <div class="absolute inset-0 flex items-center justify-center gap-1.5 font-semibold pointer-events-none z-20 text-center px-2">
-            <span class="text-sm text-white drop-shadow-lg font-bold">{{ currentExp() | short }}</span>
+          <div
+            class="absolute inset-0 flex items-center justify-center gap-1.5 font-semibold pointer-events-none z-20 text-center px-2"
+          >
+            <span class="text-sm text-white drop-shadow-lg font-bold">{{
+              currentExp() | short
+            }}</span>
             <span class="text-xs text-white/80 font-medium">/</span>
-            <span class="text-sm text-white drop-shadow-lg font-bold">{{ expToNext() | short }}</span>
+            <span class="text-sm text-white drop-shadow-lg font-bold">{{
+              expToNext() | short
+            }}</span>
             <span class="text-xs text-white/80 uppercase tracking-widest ml-1 font-bold">XP</span>
           </div>
         </div>
@@ -46,5 +54,14 @@
         </div>
       </div>
     </div>
+
+    @if (goldenCroquetaService.isBonusActive()) {
+    <div class="bonus-inline">
+      <div class="bonus-content">
+        <span class="bonus-text">BONUS x{{ goldenCroquetaService.bonusMultiplier }}</span>
+        <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
+      </div>
+    </div>
+    }
   </div>
 </div>

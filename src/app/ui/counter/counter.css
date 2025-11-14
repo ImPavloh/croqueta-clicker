@@ -9,6 +9,10 @@
   }
 }
 
+.counter {
+  background: linear-gradient(to right, transparent, rgba(51, 25, 0, 0.5), transparent);
+}
+
 .counter p {
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   will-change: transform;
@@ -16,4 +20,33 @@
 
 .counter p.scale-110 {
   transform: scale(1.02);
+}
+
+/* ajustes para pantallas muy altas */
+@media (min-height: 1080px) {
+  .counter {
+    padding: 1.5rem !important;
+  }
+}
+
+/* ajustes para pantallas muy cortas */
+@media (max-height: 600px) {
+  .counter {
+    padding: 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+}
+
+@media (max-height: 450px) {
+  .counter {
+    padding: 0.3rem !important;
+    gap: 0.1rem !important;
+  }
+}
+
+/* landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .counter {
+    padding: 0.4rem !important;
+  }
 }

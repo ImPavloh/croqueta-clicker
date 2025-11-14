@@ -11,6 +11,7 @@
   justify-content: center;
   z-index: 999;
   animation: fadeIn 0.3s ease;
+  will-change: opacity;
   padding: 20px;
 }
 
@@ -24,6 +25,7 @@
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6), 0 0 0 3px #b89c5a,
     inset 0 2px 10px rgba(255, 255, 255, 0.3);
   animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
   overflow: hidden;
   border: 2px solid #f3eac2;
 }
@@ -122,6 +124,7 @@
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6), 0 0 0 3px #b89c5a,
     inset 0 2px 10px rgba(255, 255, 255, 0.3);
   animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
   overflow: hidden;
   border: 2px solid #f3eac2;
 }

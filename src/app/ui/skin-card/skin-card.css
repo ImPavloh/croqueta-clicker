@@ -1,0 +1,11 @@
+button:disabled {
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  cursor: pointer;
+}
+
+.grayscale {
+  filter: grayscale(100%);
+}

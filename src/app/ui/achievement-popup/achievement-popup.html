@@ -1,19 +1,19 @@
 <div class="achievement-popup">
   @if (current) {
   <div class="card" [class.show]="visible" role="status" aria-atomic="true">
-    <app-corner-card>
-      <div class="content-wrapper">
-        <div class="icon">
-          <img [src]="current.icon" [alt]="current.title" />
-          <div class="icon-glow"></div>
-        </div>
-        <div class="text-content">
-          <div class="text-amber-800 text-sm font-bold uppercase mb-1">¡LOGRO DESBLOQUEADO!</div>
-          <div class="text-amber-700 achievement-title">{{ current.title }}</div>
-          <div class="text-amber-700 achievement-description">{{ current.description }}</div>
-        </div>
+    <div class="content-wrapper">
+      <div class="icon">
+        <img [src]="current.icon" [alt]="current.title" />
+        <div class="icon-glow"></div>
       </div>
-    </app-corner-card>
+      <div class="text-content">
+        <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
+          ¡Logro desbloqueado!
+        </div>
+        <div class="achievement-title">{{ current.title }}</div>
+        <div class="achievement-description">{{ current.description }}</div>
+      </div>
+    </div>
   </div>
   }
 </div>

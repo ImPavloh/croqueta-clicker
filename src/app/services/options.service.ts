@@ -45,35 +45,6 @@ export class OptionsService {
     }
     */
     this.loadFromStorage();
-    this.detectLowPerformanceDevice();
-  }
-
-  // detectar auto dispositivos de bajo rendimiento
-  private detectLowPerformanceDevice(): void {
-    if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
-
-    // solo aplicar detección automática si NO hay valores guardados previamente
-    const hasParticlesSetting = localStorage.getItem(GAME_PREFIX + 'showParticles') !== null;
-    const hasCroquetitaSetting = localStorage.getItem(GAME_PREFIX + 'showCroquetita') !== null;
-
-    // si ya tiene config guardada respetar las preferencias del usuario
-    if (hasParticlesSetting && hasCroquetitaSetting) {
-      return;
-    }
-
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-    const isLowEndCPU = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 2 : false;
-    const isLowMemory = (navigator as any).deviceMemory
-      ? (navigator as any).deviceMemory <= 4
-      : false;
-
-    if ((isMobile && isLowEndCPU) || isLowMemory) {
-      this._showParticles.set(false);
-      this._showCroquetita.set(false);
-      this.saveToStorage();
-    }
   }
 
   // ----------------- setters públicos (reciben 0..100) -----------------

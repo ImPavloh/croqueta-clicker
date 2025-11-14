@@ -42,23 +42,23 @@
         (click)="selectSort('default')"
         title="Orden por defecto"
       >
-        📋
+        x
       </app-button>
       <app-button
         variant="control"
         [active]="shopControls.sortOrder() === 'price-asc'"
         (click)="selectSort('price-asc')"
-        title="Precio: Menor a Mayor"
+        title="Precio: Menor a mayor"
       >
-        💰↑
+        ¢ ↑
       </app-button>
       <app-button
         variant="control"
         [active]="shopControls.sortOrder() === 'price-desc'"
         (click)="selectSort('price-desc')"
-        title="Precio: Mayor a Menor"
+        title="Precio: Mayor a menor"
       >
-        💰↓
+        ¢ ↓
       </app-button>
       <app-button
         variant="control"

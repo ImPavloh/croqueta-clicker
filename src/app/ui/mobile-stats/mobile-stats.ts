@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PlayerStats } from '@services/player-stats.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 
 @Component({
   selector: 'app-mobile-stats',
@@ -13,6 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class MobileStats {
   playerStats = inject(PlayerStats);
+  goldenCroquetaService = inject(GoldenCroquetaService);
 
   level = toSignal(this.playerStats.level$, { initialValue: 0 });
   currentExp = computed(() => this.playerStats.currentExp());

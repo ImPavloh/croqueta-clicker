@@ -2,12 +2,18 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 import { OptionsService } from './options.service';
+import { PlayerStats } from './player-stats.service';
+import { PointsService } from './points.service';
+import { SkinModel, UnlockRequirement } from '@models/skin.model';
+import Decimal from 'break_infinity.js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SkinsService {
   private optionsService = inject(OptionsService);
+  private playerStats = inject(PlayerStats);
+  private pointsService = inject(PointsService);
   // state
   private _skinId = new BehaviorSubject<number>(1);
   // getter público (read-only signal)
@@ -23,6 +29,63 @@ export class SkinsService {
   skinId() {
     return this._skinId.value;
   }
+
+  // ver si una skin esta desbloqueada
+  isSkinUnlocked(skin: SkinModel): boolean {
+    if (!skin.unlockRequirement || skin.unlockRequirement.type === 'none') {
+      return true;
+    }
+
+    const req = skin.unlockRequirement;
+
+    switch (req.type) {
+      case 'level':
+        return this.playerStats._level.value >= req.value;
+
+      case 'croquetas':
+        const totalCroquetas = this.pointsService.points();
+        return totalCroquetas.gte(req.value);
+
+      case 'exp':
+        return this.playerStats.currentExp() >= req.value;
+
+      case 'achievement':
+        const achievements = this.achievementsService.getAllWithState();
+        const achievement = achievements.find((a) => a.id === req.id);
+        return achievement?.unlocked ?? false;
+
+      default:
+        return false;
+    }
+  }
+
+  // descripción del requisito de desbloqueo
+  getUnlockRequirementText(requirement: UnlockRequirement): string {
+    switch (requirement.type) {
+      case 'none':
+        return 'Desbloqueada';
+      case 'level':
+        return `Nivel ${requirement.value}`;
+      case 'croquetas':
+        return `${this.formatNumber(requirement.value)} croquetas`;
+      case 'exp':
+        return `${this.formatNumber(requirement.value)} EXP`;
+      case 'achievement':
+        return `Logro: ${requirement.id}`;
+      default:
+        return 'Bloqueada';
+    }
+  }
+
+  private formatNumber(num: number): string {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+  }
+
   // métodos para modificar el estado
   // actualizar skin
   updateSkin(id: number) {

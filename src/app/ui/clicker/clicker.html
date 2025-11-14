@@ -1,6 +1,7 @@
 <div class="relative flex justify-center items-center h-full w-full">
   <div
     (click)="onClick($event)"
+    (touchstart)="onTouchStart($event)"
     (keydown)="preventKey($event)"
     tabindex="-1"
     class="croqueta-container"

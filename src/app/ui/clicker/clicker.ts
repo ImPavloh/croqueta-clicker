@@ -49,99 +49,102 @@ export class Clicker implements OnInit, OnDestroy {
     private audioService: AudioService
   ) {
     this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
-      const newSkin = id;
-      if (newSkin !== this.currentSkin()) {
-        this.currentSkin.set(newSkin);
-      }
+      if (id !== this.currentSkin()) this.currentSkin.set(id);
     });
   }
+
   //Consigue la url de la skin seleccionada
-  getSkinImage(skinId: number): string {
-    const skin = this.skins.find((s) => s.id === skinId);
-    return skin?.image || '';
-  }
+  getSkinImage = (skinId: number) => this.skins.find((s) => s.id === skinId)?.image || '';
 
   onClick(event?: MouseEvent) {
     this.audioService.resumeIfNeeded();
     // obtener las coordenadas relativas al contenedor principal (clicker-container)
-    let x: number | undefined;
-    let y: number | undefined;
-    let containerWidth = 500;
-
+    let x: number | undefined,
+      y: number | undefined,
+      containerWidth = 500;
     if (event) {
-      const target = event.currentTarget as HTMLElement;
-      const clickerContainer = target.closest('.clicker-container');
-
-      if (clickerContainer) {
-        const rect = clickerContainer.getBoundingClientRect();
+      const rect = (event.currentTarget as HTMLElement)
+        .closest('.clicker-container')
+        ?.getBoundingClientRect();
+      if (rect) {
         x = event.clientX - rect.left;
         y = event.clientY - rect.top;
         containerWidth = rect.width;
       }
     }
 
+    this.processClick(x, y, containerWidth);
+  }
+
+  // multitouch
+  onTouchStart(event: TouchEvent) {
+    this.audioService.resumeIfNeeded();
+    event.preventDefault(); // prevenir el click emulado
+
+    const rect = (event.currentTarget as HTMLElement)
+      .closest('.clicker-container')
+      ?.getBoundingClientRect();
+
+    if (!rect) return;
+
+    const containerWidth = rect.width;
+
+    // procesar cada toque simultaneo
+    Array.from(event.changedTouches).forEach((touch) => {
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      this.processClick(x, y, containerWidth);
+    });
+  }
+
+  private processClick(x?: number, y?: number, containerWidth = 500) {
     this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
     this.playerStats.checkLevelUp();
-
     this.recordClickTimestampAndCheck(); // cuenta clicks en los últimos 10s y desbloquea si toca
     this.resetNoClicksTimer(); // cada click cancela / reinicia el timer de 1h
-
     this.resetAfkTimer();
     this.checkAchievements(); // tus achievements por puntos siguen ahí
 
     // generar partículas en la posición del click
-    if (x !== undefined && y !== undefined) {
-      this.particlesService.spawn(x, y, 6);
-    }
+    if (x !== undefined && y !== undefined) this.particlesService.spawn(x, y, 6);
 
+    const skin = this.skins.find((s) => s.id === this.skinsService.skinId());
     // generar partículas de croquetas cayendo con personalización según skin
-    const particleImage = this.getParticleImage();
-    this.particlesService.spawnFallingCroquetas(containerWidth, 3, particleImage);
+    this.particlesService.spawnFallingCroquetas(
+      containerWidth,
+      3,
+      skin?.particleImage || '/assets/skins/croqueta-normal.webp'
+    );
 
-    // SFX
-    const crunchSounds = [
-      '/assets/sfx/crunch1.mp3',
-      '/assets/sfx/crunch2.mp3',
-      '/assets/sfx/crunch3.mp3'
-    ];
-    const randomCrunch = crunchSounds[Math.floor(Math.random() * crunchSounds.length)];
-    this.audioService.playSfx(randomCrunch, 1);
+    const crunch = [1, 2, 3].map((n) => `/assets/sfx/crunch${n}.mp3`);
+    this.audioService.playSfx(crunch[Math.floor(Math.random() * 3)], 1);
   }
 
-  // obtener la imagen de partícula según la skin actual (o dejar la skin de la normal por defecto)
-  private getParticleImage(): string {
-    const currentSkinId = this.skinsService.skinId();
-    const skin = this.skins.find((s) => s.id === currentSkinId);
-
-    return skin?.particleImage || '/assets/skins/croqueta-normal.webp';
-  }
-
-  // Logros (thresholds como Decimal)
-  achievements: { id: string; threshold: Decimal }[] = [
-    { id: 'primera_croqueta', threshold: new Decimal('1') },
-    { id: '1k_croquetas', threshold: new Decimal('1e3') },
-    { id: '1m_croquetas', threshold: new Decimal('1e6') },
-    { id: '1b_croquetas', threshold: new Decimal('1e9') },
-    { id: '1t_croquetas', threshold: new Decimal('1e12') },
-    { id: '1qa_croquetas', threshold: new Decimal('1e15') },
-    { id: '1qi_croquetas', threshold: new Decimal('1e18') },
-    { id: '1sx_croquetas', threshold: new Decimal('1e21') },
-    { id: '1sp_croquetas', threshold: new Decimal('1e24') },
-    { id: '1oc_croquetas', threshold: new Decimal('1e27') },
-    { id: '1nn_croquetas', threshold: new Decimal('1e30') },
-    { id: '1dc_croquetas', threshold: new Decimal('1e33') },
+  // Logros
+  private readonly achievements = [
+    ['primera_croqueta', '1'],
+    ['1k_croquetas', '1e3'],
+    ['1m_croquetas', '1e6'],
+    ['1b_croquetas', '1e9'],
+    ['1t_croquetas', '1e12'],
+    ['1qa_croquetas', '1e15'],
+    ['1qi_croquetas', '1e18'],
+    ['1sx_croquetas', '1e21'],
+    ['1sp_croquetas', '1e24'],
+    ['1oc_croquetas', '1e27'],
+    ['1nn_croquetas', '1e30'],
+    ['1dc_croquetas', '1e33'],
   ];
 
   checkAchievements() {
     // pointsService.points() devuelve un Decimal (signal)
     const current = this.pointsService.points();
-    for (const a of this.achievements) {
-      // usar gte() en lugar de operador numérico
-      if (current.gte(a.threshold)) {
-        this.achievementsService.unlockAchievement(a.id);
+    this.achievements.forEach(([id, threshold]) => {
+      if (current.gte(new Decimal(threshold))) {
+        this.achievementsService.unlockAchievement(id);
       }
-    }
+    });
   }
 
   ngOnInit() {
@@ -174,47 +177,29 @@ export class Clicker implements OnInit, OnDestroy {
     const now = Date.now();
     // insertar timestamp y filtrar los antiguos fuera de la ventana
     this.clickTimestamps.push(now);
-    const cutoff = now - this.clickWindowMs;
-    // mantener sólo los timestamps >= cutoff
-    while (this.clickTimestamps.length && this.clickTimestamps[0] < cutoff) {
-      this.clickTimestamps.shift();
-    }
+    this.clickTimestamps = this.clickTimestamps.filter((t) => t >= now - this.clickWindowMs);
 
-    this.checkClickSpeedAchievements();
-  }
-
-  private checkClickSpeedAchievements() {
     const count = this.clickTimestamps.length;
-
     // desbloqueamos en orden descendente, así si llegas a 250 también se intentan desbloquear 120 y 70
     if (count >= 250) {
-      this.achievementsService.unlockAchievement('autoclicker');
-      // también desbloqueos menores (por si no se habían desbloqueado)
-      this.achievementsService.unlockAchievement('speedrun');
+      ['autoclicker', 'speedrun', 'click_rapido'].forEach((id) =>
+        this.achievementsService.unlockAchievement(id)
+      );
+    } else if (count >= 100) {
+      ['speedrun', 'click_rapido'].forEach((id) => this.achievementsService.unlockAchievement(id));
+    } else if (count >= 70) {
       this.achievementsService.unlockAchievement('click_rapido');
-      return;
     }
-    if (count >= 100) {
-      this.achievementsService.unlockAchievement('speedrun');
-      this.achievementsService.unlockAchievement('click_rapido');
-      return;
-    }
-    if (count >= 70) {
-      this.achievementsService.unlockAchievement('click_rapido');
-      return;
-    }
-    // si no cumple ninguno, no hacemos nada
   }
 
   private startNoClicksTimer() {
     // limpia cualquier timer existente
     clearTimeout(this.noClicksTimeout);
     // arrancar timer: si pasa 1 hora sin clicks, se desbloquea
-    this.noClicksTimeout = setTimeout(() => {
-      this.achievementsService.unlockAchievement('no_clicks_1h');
-      // una vez desbloqueado, no reiniciamos automáticamente; si quieres permitir desbloquear de nuevo
-      // (no tiene sentido para la mayoría de juegos), podrías reiniciar el timer aquí.
-    }, this.noClicksDelayMs);
+    this.noClicksTimeout = setTimeout(
+      () => this.achievementsService.unlockAchievement('no_clicks_1h'),
+      this.noClicksDelayMs
+    );
   }
 
   private resetNoClicksTimer() {
@@ -222,8 +207,6 @@ export class Clicker implements OnInit, OnDestroy {
     clearTimeout(this.noClicksTimeout);
     this.startNoClicksTimer();
   }
-
-  // ---------------------------------------------------------------------------------------
 
   ngOnDestroy() {
     this.skinSub?.unsubscribe();
