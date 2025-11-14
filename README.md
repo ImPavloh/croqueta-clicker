@@ -1,6 +1,6 @@
 # Croqueta Clicker
 
-**Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 20 y TypeScript. 
+**Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 20 y TypeScript.
 
 ¡Haz click en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas!
 
@@ -11,16 +11,19 @@ Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para
 ## Características principales
 
 ### Sistema de juego completo
+
 - **Sistema de clicks**: Gana croquetas haciendo click (con efectos visuales y partículas)
 - **Productores automáticos**: 8 tipos de productores que generan croquetas por segundo
 - **Mejoras (Upgrades)**: 20+ mejoras para aumentar tus clicks y producción
 - **Sistema de niveles**: Gana experiencia y sube de nivel desbloqueando contenido
 - **Logros (Achievements)**: 30+ logros por desbloquear con diferentes categorías
-- **Croqueta dorada**: Evento especial aleatorio con bonificaciones temporales
+- **Croqueta dorada**: Evento especial aleatorio con bonificación x2
 - **Skins personalizables**: 10+ skins desbloqueables para personalizar tu croqueta
 
 ### Características técnicas
+
 - **Guardado automático**: Progreso guardado en localStorage
+- **PWA**: Instalación como aplicación web progresiva
 - **Arquitectura modular**: componentes UI reutilizables + páginas
 - **Optimización de rutas**: RouteReuseStrategy personalizado
 - **Gestión de números grandes**: Integración con break_infinity.js para números enormes
@@ -33,6 +36,7 @@ Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para
 ## Arquitectura del proyecto
 
 ### Patrón de diseño
+
 El proyecto sigue una **arquitectura modular basada en componentes standalone** de Angular 20.3:
 
 ```
@@ -57,6 +61,7 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 ```
 
 ### Flujo de datos
+
 1. **Servicios singleton** gestionan el estado global
 2. **Signals y Effects** para reactividad (Angular 20.3)
 3. **RxJS Observables** para eventos asíncronos
@@ -77,28 +82,33 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 ## Instalación y ejecución
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone https://github.com/impavloh/croqueta-clicker.git
 cd croqueta-clicker
 ```
 
 ### 2. Instalar Node.js (con NVM y si no lo tienes)
+
 ```bash
 nvm install 20.19.0
 nvm use 20.19.0
 ```
 
 ### 3. Instalar PNPM globalmente (si no lo tienes)
+
 ```bash
 npm install -g pnpm
 ```
 
 ### 4. Instalar dependencias del proyecto
+
 ```bash
 pnpm install
 ```
 
 ### 5. Iniciar servidor de desarrollo
+
 ```bash
 ng serve
 ```
@@ -111,13 +121,13 @@ El servidor recargará automáticamente al detectar cambios en los archivos.
 
 ## Scripts disponibles
 
-| Comando | Descripción |
-|---------|-------------|
-| `ng serve` | Inicia servidor de desarrollo en http://localhost:4200 |
-| `ng build` | Compila el proyecto para producción en `/dist` |
-| `ng build --configuration development` | Compila en modo desarrollo (con source maps) |
-| `ng test` | Ejecuta tests unitarios con Karma + Jasmine |
-| `ng serve --open` | Inicia servidor y abre navegador automáticamente |
+| Comando                                | Descripción                                            |
+| -------------------------------------- | ------------------------------------------------------ |
+| `ng serve`                             | Inicia servidor de desarrollo en http://localhost:4200 |
+| `ng build`                             | Compila el proyecto para producción en `/dist`         |
+| `ng build --configuration development` | Compila en modo desarrollo (con source maps)           |
+| `ng test`                              | Ejecuta tests unitarios con Karma + Jasmine            |
+| `ng serve --open`                      | Inicia servidor y abre navegador automáticamente       |
 
 ---
 

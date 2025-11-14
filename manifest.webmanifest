@@ -1,0 +1,17 @@
+{
+  "name": "Croqueta Clicker",
+  "short_name": "CroquetaClicker",
+  "theme_color": "#e6892d",
+  "background_color": "#e6892d",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "assets/favicon.ico",
+      "sizes": "72x72",
+      "type": "image/x-icon"
+    }
+  ]
+}

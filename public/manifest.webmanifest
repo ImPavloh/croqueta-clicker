@@ -1,0 +1,16 @@
+{
+  "name": "croqueta-clicker",
+  "short_name": "croqueta-clicker",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/favicon.ico",
+      "sizes": "72x72",
+      "type": "image/x-icon",
+      "purpose": "maskable any"
+    }
+  ]
+}
