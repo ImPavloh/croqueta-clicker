@@ -10,10 +10,10 @@ export const PRODUCERS: ProducerModel[] = [
     image: '/assets/producers/click.webp',
     priceBase: 25, // sigue siendo asequible para empezar
     priceMult: 1.12, // coste sube suavemente
-    pointsBase: 1, // croquetas/segundo por unidad en compra 1
-    pointsSum: 1, // incremento por nivel/upgrade interno
+    pointsBase: 0.1, // croquetas/segundo por unidad en compra 1
+    pointsSum: 0.1, // incremento por nivel/upgrade interno
     description: 'Hace clicks automáticos por ti.',
-    level: 0,
+    level: 1,
     exp: 1,
   },
   {
@@ -22,10 +22,10 @@ export const PRODUCERS: ProducerModel[] = [
     image: '/assets/producers/cocinero.webp',
     priceBase: 150,
     priceMult: 1.15,
-    pointsBase: 6,
-    pointsSum: 4,
+    pointsBase: 0.3,
+    pointsSum: 0.3,
     description: 'Un cocinero profesional que hace croquetas por ti.',
-    level: 5,
+    level: 7,
     exp: 12,
   },
   {
@@ -35,9 +35,9 @@ export const PRODUCERS: ProducerModel[] = [
     priceBase: 1_000,
     priceMult: 1.18,
     pointsBase: 40,
-    pointsSum: 10,
+    pointsSum: 20,
     description: 'Una freidora industrial que produce croquetas a gran escala.',
-    level: 10,
+    level: 15,
     exp: 65,
   },
   {
@@ -49,7 +49,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 220,
     pointsSum: 30,
     description: 'Una fábrica automatizada de croquetas. Aprobada por Chicote.',
-    level: 15,
+    level: 20,
     exp: 300,
   },
 
@@ -65,7 +65,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1_200,
     pointsSum: 120,
     description: 'Investigación y desarrollo de croquetas.',
-    level: 20,
+    level: 30,
     exp: 1_500,
   },
   {
@@ -77,7 +77,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 7_500,
     pointsSum: 500,
     description: 'Robot avanzado que produce croquetas a gran ritmo.',
-    level: 25,
+    level: 50,
     exp: 9_000,
   },
   {
@@ -89,7 +89,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 45_000,
     pointsSum: 3_000,
     description: 'Importa croquetas de todo el mundo para su distribución masiva.',
-    level: 30,
+    level: 65,
     exp: 55_000,
   },
 
@@ -105,7 +105,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 200_000,
     pointsSum: 20_000,
     description: 'Veneración y promoción de la croqueta.',
-    level: 35,
+    level: 80,
     exp: 130_000,
   },
   {
@@ -117,7 +117,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1_500_000,
     pointsSum: 120_000,
     description: 'Un portal interdimensional que trae croquetas de otros universos.',
-    level: 45,
+    level: 100,
     exp: 400_000,
   },
   {
@@ -129,7 +129,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 18_000_000,
     pointsSum: 1_500_000,
     description: 'IA que domina el universo y produce croquetas a gran escala.',
-    level: 55,
+    level: 120,
     exp: 3_500_000,
   },
 
@@ -146,7 +146,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsSum: 25_000_000,
     description:
       'Corporación que explota recursos de diferentes lineas temporales para fabricar croquetas.',
-    level: 70,
+    level: 150,
     exp: 30_000_000,
   },
   {
@@ -158,7 +158,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 4_000_000_000,
     pointsSum: 400_000_000,
     description: 'Un motor cuántico que sintetiza croquetas instantáneamente.',
-    level: 85,
+    level: 180,
     exp: 300_000_000,
   },
   {
@@ -170,7 +170,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1_000_000_000_000,
     pointsSum: 120_000_000_000,
     description: 'Una croqueta de tamaño estelar con sabor infinito.',
-    level: 100,
+    level: 210,
     exp: 2_500_000_000,
   },
   {
@@ -183,7 +183,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsSum: 100_000_000_000_000,
     description:
       'Un programa autoconsciente que modifica el código del juego para crear más croquetas.',
-    level: 200,
+    level: 240,
     exp: 1_000_000_000_000,
   },
   {

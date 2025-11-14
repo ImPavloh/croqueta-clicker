@@ -5,16 +5,16 @@ export const UPGRADES: UpgradeModel[] = [
   // ============================================================
   // 🥇 EARLY GAME - Primeras mejoras para arrancar el juego
   // ============================================================
-  { id: 1, name: 'Dedo rápido', image: '/assets/upgrades/general.webp', price: 20, clicks: 1, level: 0, exp: 5 },
-  { id: 2, name: 'Click doble', image: '/assets/upgrades/general.webp', price: 45, clicks: 2, level: 2, exp: 8 },
-  { id: 3, name: 'Dedo firme', image: '/assets/upgrades/general.webp', price: 100, clicks: 3, level: 4, exp: 12 },
-  { id: 4, name: 'Dedo extra', image: '/assets/upgrades/general.webp', price: 250, clicks: 5, level: 6, exp: 25 },
-  { id: 5, name: 'Tenedor', image: '/assets/upgrades/general.webp', price: 600, clicks: 10, level: 8, exp: 45 },
-  { id: 6, name: 'Cuchara', image: '/assets/upgrades/general.webp', price: 1_500, clicks: 20, level: 10, exp: 90 },
-  { id: 7, name: 'Dedo aceitoso', image: '/assets/upgrades/general.webp', price: 3_500, clicks: 40, level: 12, exp: 180 },
-  { id: 8, name: 'Click crujiente', image: '/assets/upgrades/general.webp', price: 8_500, clicks: 80, level: 14, exp: 360 },
-  { id: 9, name: 'Más bechamel', image: '/assets/upgrades/general.webp', price: 18_000, clicks: 150, level: 16, exp: 700 },
-  { id: 10, name: 'Mano experta', image: '/assets/upgrades/general.webp', price: 40_000, clicks: 300, level: 18, exp: 1_400 },
+  { id: 1, name: 'Dedo rápido', image: '/assets/upgrades/general.webp', price: 20, clicks: 1, level: 2, exp: 5 },
+  { id: 2, name: 'Click doble', image: '/assets/upgrades/general.webp', price: 45, clicks: 2, level: 4, exp: 8 },
+  { id: 3, name: 'Dedo firme', image: '/assets/upgrades/general.webp', price: 100, clicks: 3, level: 7, exp: 12 },
+  { id: 4, name: 'Dedo extra', image: '/assets/upgrades/general.webp', price: 250, clicks: 5, level: 10, exp: 25 },
+  { id: 5, name: 'Tenedor', image: '/assets/upgrades/general.webp', price: 600, clicks: 10, level: 13, exp: 45 },
+  { id: 6, name: 'Cuchara', image: '/assets/upgrades/general.webp', price: 1_500, clicks: 20, level: 17, exp: 90 },
+  { id: 7, name: 'Dedo aceitoso', image: '/assets/upgrades/general.webp', price: 3_500, clicks: 40, level: 21, exp: 180 },
+  { id: 8, name: 'Click crujiente', image: '/assets/upgrades/general.webp', price: 8_500, clicks: 80, level: 25, exp: 360 },
+  { id: 9, name: 'Más bechamel', image: '/assets/upgrades/general.webp', price: 18_000, clicks: 150, level: 30, exp: 700 },
+  { id: 10, name: 'Mano experta', image: '/assets/upgrades/general.webp', price: 40_000, clicks: 300, level: 35, exp: 1_400 },
 
   // ============================================================
   // ⚙️ MID GAME - Mejoras intermedias y de eficiencia
