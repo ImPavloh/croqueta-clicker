@@ -4,7 +4,7 @@
   "description": "Juego incremental de croquetas. Haz clicks en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas. ¡Juega ya!",
   "theme_color": "#f3eac2",
   "background_color": "#f8f2dc",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "any",
   "scope": "/",
   "start_url": "/",
@@ -45,7 +45,7 @@
       "name": "Jugar",
       "short_name": "Jugar",
       "description": "Ir al juego",
-      "url": "/?source=shortcut",
+      "url": "/",
       "icons": [
         {
           "src": "/assets/logo/icon_192.png",

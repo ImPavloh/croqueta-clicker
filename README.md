@@ -41,14 +41,14 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 
 ```
 ┌───────────────────────────────────────────┐
-│                         App (Root)        │
+│            App (Root)                     │
 │  - Control de splash screen               │
 │  - Inicialización de servicios globales   │
 │  - Gestión de audio por nivel             │
 └────────────────┬──────────────────────────┘
                  │
-    ┌────────────┴────────────┐
-    │                         │
+    ┌────────────┴───────────┐
+    │                        │
 ┌───▼────────┐    ┌──────────▼────────┐
 │  Clicker   │    │   Router Outlet   │
 │ Container  │    │   (Menu Pages)    │
@@ -63,53 +63,54 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 ### Flujo de datos
 
 1. **Servicios singleton** gestionan el estado global
-2. **Signals y Effects** para reactividad (Angular 20.3)
+2. **Signals y Effects** para reactividad
 3. **RxJS Observables** para eventos asíncronos
 4. **LocalStorage** para persistencia de datos
 
 ---
 
+
+### ¿Qué puedes hacer clonando este repositorio?
+
+1. **Puedes ver la PWA en navegador**: `pnpm install` + `ng serve` - http://localhost:4200
+2. **Genera APK debug con Gradle**: `gradlew.bat assembleDebug` - `app/build/outputs/apk/debug/app-debug.apk`
+3. **Prueba la app en móvil**: instala el APK debug generado
+
+---
+
 ## Requisitos previos
 
+- [Git](https://git-scm.com/) (opcional, para clonar el repositorio)
+
+- [NVM](https://github.com/nvm-sh/nvm) (opcional, para gestionar versiones de Node.js)
 - [Node.js](https://nodejs.org/) v20.19.0 o superior
 - [PNPM](https://pnpm.io/) v10.20.0 (gestor de paquetes)
 - [Angular CLI](https://github.com/angular/angular-cli) v20.3.9
 
-> **Nota**: Se recomienda usar [NVM](https://github.com/nvm-sh/nvm) para gestionar versiones de Node.js
+- [Java JDK](https://adoptium.net/) v11 o superior (opcional, para generar APK)
+- [Android SDK](https://developer.android.com/studio) (opcional, Gradle lo descarga si falta)
 
 ---
 
 ## Instalación y ejecución
 
-### 1. Clonar el repositorio
+### Para ejecutar la PWA (desarrollo web)
 
 ```bash
 git clone https://github.com/impavloh/croqueta-clicker.git
 cd croqueta-clicker
-```
 
-### 2. Instalar Node.js (con NVM y si no lo tienes)
-
-```bash
+# Instalar Node.js 20.x (si no lo tienes)
 nvm install 20.19.0
 nvm use 20.19.0
-```
 
-### 3. Instalar PNPM globalmente (si no lo tienes)
-
-```bash
+# Instalar PNPM globalmente  (si no lo tienes)
 npm install -g pnpm
-```
 
-### 4. Instalar dependencias del proyecto
-
-```bash
+# Instalar dependencias
 pnpm install
-```
 
-### 5. Iniciar servidor de desarrollo
-
-```bash
+# Iniciar servidor de desarrollo
 ng serve
 ```
 
@@ -117,9 +118,35 @@ La aplicación estará disponible en **[http://localhost:4200/](http://localhost
 
 El servidor recargará automáticamente al detectar cambios en los archivos.
 
+### Para generar APK Android (Gradle directo)
+
+> Este repositorio incluye también el proyecto Android ya generado con **Bubblewrap**.  
+Bubblewrap solo lo utilizamos los desarrolladores para generar la APK firmada y publicarla en Google Play.
+**No necesitas Bubblewrap** para compilar un APK *debug*.
+
+Si tienes **Java + Android SDK** instalados, puedes generar un APK de depuración con:
+
+```bash
+# Windows
+gradlew.bat assembleDebug
+
+# Linux / macOS
+./gradlew assembleDebug
+```
+
+> **Nota**: El APK generado es de depuración y no está firmado para producción.
+
+El APK quedará en: `app/build/outputs/apk/debug/app-debug.apk`
+
+### APK para pruebas
+
+Si quieres probar el juego descargado sin compilarlo, descarga el APK debug desde: **[apk/CroquetaClicker-debug.apk](apk/CroquetaClicker-debug.apk)**
+
+> **Nota**: Para instalarlo necesitas habilitar "Instalar apps de fuentes desconocidas" en Android. Este APK no está firmado.
+
 ---
 
-## Scripts disponibles
+## Scripts disponibles (Angular CLI)
 
 | Comando                                | Descripción                                            |
 | -------------------------------------- | ------------------------------------------------------ |
@@ -128,6 +155,11 @@ El servidor recargará automáticamente al detectar cambios en los archivos.
 | `ng build --configuration development` | Compila en modo desarrollo (con source maps)           |
 | `ng test`                              | Ejecuta tests unitarios con Karma + Jasmine            |
 | `ng serve --open`                      | Inicia servidor y abre navegador automáticamente       |
+---
+
+## Publicación en Google Play (Trusted Web Activity)
+
+Este proyecto se publicará en Google Play como una **TWA (Trusted Web Activity)**: un contenedor Android mínimo que abre la PWA a pantalla completa dentro de Chrome. El wrapper **no se incluye completamente** en este repositorio para mantenerlo limpio y proteger las claves de firma.
 
 ---
 

@@ -1,0 +1,49 @@
+{
+  "packageId": "com.pavloh.croquetaclicker",
+  "host": "croquetaclicker.pavloh.com",
+  "name": "Croqueta Clicker",
+  "launcherName": "Croqueta Clicker",
+  "display": "fullscreen",
+  "themeColor": "#F3EAC2",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#F8F2DC",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://croquetaclicker.pavloh.com/assets/logo/icon_512.png",
+  "splashScreenFadeOutDuration": 300,
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "Jugar",
+      "shortName": "Jugar",
+      "url": "https://croquetaclicker.pavloh.com/",
+      "chosenIconUrl": "https://croquetaclicker.pavloh.com/assets/logo/icon_192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://croquetaclicker.pavloh.com/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://croquetaclicker.pavloh.com/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "1"
+}
