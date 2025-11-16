@@ -1,12 +1,11 @@
 import { Component, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatModel } from 'app/models/stat.model';
-import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   standalone: true,
   selector: 'app-stat-card',
-  imports: [CommonModule, Tooltip],
+  imports: [CommonModule],
   templateUrl: './stat-card.html',
   styleUrl: './stat-card.css',
 })

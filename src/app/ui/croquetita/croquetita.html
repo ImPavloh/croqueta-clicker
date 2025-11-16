@@ -8,10 +8,10 @@
     [class.talking]="isOpen()"
     title="Haz click en Croquetita para recibir ayuda"
   >
-    <img src="assets/croquetita/croquetita.webp" class="croquetita" />
+    <img src="assets/croquetita/croquetita.webp" class="croquetita" alt="Croquetita" width="80" height="100" />
     @if (!isOpen()) {
     <span class="w-8 h-8 absolute -top-[15px] -right-[15px] croquetita-bubble-indicator">
-      <img src="assets/icons/message.webp" class="w-full h-full object-contain" alt="Mensaje" />
+      <img src="assets/icons/message.webp" class="w-full h-full object-contain" alt="Mensaje" width="32" height="32" />
     </span>
     }
   </button>

@@ -24,6 +24,10 @@ export class SkinsService {
   // getter público (read-only signal)
   skinChanged$ = this._skinId.asObservable();
 
+  // observable para el fondo activo
+  private _currentBackground = new BehaviorSubject<string>('/assets/backgrounds/bg.webp');
+  currentBackground$ = this._currentBackground.asObservable();
+
   // skins probadas
   skinsUsed = new Set<number>();
 
@@ -123,8 +127,19 @@ export class SkinsService {
   updateSkin(id: number) {
     this._skinId.next(id);
     this.skinsUsed.add(id);
+    this.updateBackground(id);
     this.checkAchievements();
     this.saveToStorage();
+  }
+
+  // actualizar fondo segun skin
+  private updateBackground(skinId: number) {
+    const skin = SKINS.find(s => s.id === skinId);
+    if (skin?.background) {
+      this._currentBackground.next(skin.background);
+    } else {
+      this._currentBackground.next('/assets/backgrounds/bg.webp');
+    }
   }
 
   private checkAchievements() {
@@ -143,7 +158,11 @@ export class SkinsService {
 
     // cargar skin actual
     const skin = this.optionsService.getGameItem('skin');
-    if (skin) this._skinId.next(Number(skin) || 0);
+    if (skin) {
+      const skinId = Number(skin) || 1;
+      this._skinId.next(skinId);
+      this.updateBackground(skinId);
+    }
 
     // cargar skins usadas
     const skinsUsedStr = this.optionsService.getGameItem('skinsUsed');
@@ -170,6 +189,7 @@ export class SkinsService {
   // Reset a estado inicial
   public reset() {
     this._skinId.next(1);
+    this._currentBackground.next('/assets/backgrounds/bg.webp');
     this.skinsUsed.clear();
     this.unlockedSkins.clear();
     this.unlockedSkins.add(1); // la skin 1 siempre esta desbloqueada

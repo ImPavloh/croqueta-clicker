@@ -15,4 +15,5 @@ export interface SkinModel {
   particleImage?: string;
   counterLabel?: string;
   unlockRequirement?: UnlockRequirement;
+  background?: string;
 }

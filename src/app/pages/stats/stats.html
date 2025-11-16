@@ -2,7 +2,8 @@
   <div class="stats-header hidden sm:block">
     <app-corner-card [type]="'div'" [showCorners]="true" cornerStyle="simple">
       <div class="flex flex-col sm:flex-row justify-evenly gap-4 sm:gap-8 items-center w-full">
-        <div class="stat-with-icon">
+        <app-tooltip text="Tiempo total jugado" position="bottom">
+          <div class="stat-with-icon">
           <div class="stat-icon-container">
             <img
               src="assets/stats/clock.webp"
@@ -10,65 +11,70 @@
               class="stat-icon"
             />
           </div>
-          <app-stat-card [config]="timeStat" [value]="getValue('timePlaying')"></app-stat-card>
-        </div>
+            <app-stat-card [config]="timeStat" [value]="getValue('timePlaying')"></app-stat-card>
+          </div>
+        </app-tooltip>
 
         <div class="separator hidden sm:block"></div>
 
-        <div class="level-container">
-          <div class="circular-progress">
-            <svg class="progress-ring" width="180" height="180">
-              <circle
-                class="progress-ring-circle-bg"
-                stroke="#d1d5db"
-                stroke-width="12"
-                fill="#f9fafb"
-                r="78"
-                cx="90"
-                cy="90"
-              />
-              <circle
-                class="progress-ring-circle"
-                [class.no-transition]="!shouldTransition()"
-                [attr.stroke-dasharray]="circumference + ' ' + circumference"
-                [style.stroke-dashoffset]="strokeDashoffset()"
-                stroke="url(#gradient)"
-                stroke-width="12"
-                fill="transparent"
-                stroke-linecap="round"
-                r="78"
-                cx="90"
-                cy="90"
-              />
-              <defs>
-                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color: #f59e0b; stop-opacity: 1" />
-                  <stop offset="100%" style="stop-color: #f97316; stop-opacity: 1" />
-                </linearGradient>
-              </defs>
-            </svg>
+        <app-tooltip text="Progreso de experiencia: XP actual y necesario para el siguiente nivel." position="bottom">
+          <div class="level-container">
+            <div class="circular-progress">
+              <svg class="progress-ring" width="180" height="180">
+                <circle
+                  class="progress-ring-circle-bg"
+                  stroke="#d1d5db"
+                  stroke-width="12"
+                  fill="#f9fafb"
+                  r="78"
+                  cx="90"
+                  cy="90"
+                />
+                <circle
+                  class="progress-ring-circle"
+                  [class.no-transition]="!shouldTransition()"
+                  [attr.stroke-dasharray]="circumference + ' ' + circumference"
+                  [style.stroke-dashoffset]="strokeDashoffset()"
+                  stroke="url(#gradient)"
+                  stroke-width="12"
+                  fill="transparent"
+                  stroke-linecap="round"
+                  r="78"
+                  cx="90"
+                  cy="90"
+                />
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color: #f59e0b; stop-opacity: 1" />
+                    <stop offset="100%" style="stop-color: #f97316; stop-opacity: 1" />
+                  </linearGradient>
+                </defs>
+              </svg>
 
-            <div class="level-text">
-              <div class="level-number">{{ getValue('level') | short }}</div>
-              <div class="level-label">Nivel</div>
-              <div class="exp-numbers">
-                <span
-                  >{{ currentExp() | short }} /
-                  {{ expToNext() | short }} XP</span
-                >
+              <div class="level-text">
+                <div class="level-number">{{ getValue('level') | short }}</div>
+                <div class="level-label">Nivel</div>
+                <div class="exp-numbers">
+                  <span
+                    >{{ currentExp() | short }} /
+                    {{ expToNext() | short }} XP</span
+                  >
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </app-tooltip>
 
         <div class="separator hidden sm:block"></div>
 
-        <div class="stat-with-icon">
+        <app-tooltip text="Clicks totales realizados" position="bottom">
+          <div class="stat-with-icon">
           <div class="stat-icon-container">
             <img src="assets/stats/mouse.webp" alt="Clicks" class="stat-icon" />
           </div>
-          <app-stat-card [config]="clicksStat" [value]="getValue('totalClicks')"></app-stat-card>
-        </div>
+            <app-stat-card [config]="clicksStat" [value]="getValue('totalClicks')"></app-stat-card>
+          </div>
+        </app-tooltip>
       </div>
     </app-corner-card>
   </div>

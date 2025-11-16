@@ -4,21 +4,29 @@
     <div class="flex flex-col gap-6 w-full h-full">
       <p class="text-2xl text-center text-amber-900">Volumen</p>
       <div class="max-w-md w-full mx-auto flex flex-col gap-4">
-        <app-range-slider
-          label="General:"
-          [value]="optionsService.generalVolume()"
-          (valueChange)="optionsService.setGeneralVolume($event)"
-        />
-        <app-range-slider
-          label="Música:"
-          [value]="optionsService.musicVolume()"
-          (valueChange)="optionsService.setMusicVolume($event)"
-        />
-        <app-range-slider
-          label="SFX:"
-          [value]="optionsService.sfxVolume()"
-          (valueChange)="optionsService.setSfxVolume($event)"
-        />
+        <app-tooltip text="Controla el volumen general del juego.">
+          <app-range-slider
+            label="General:"
+            [value]="optionsService.generalVolume()"
+            (valueChange)="optionsService.setGeneralVolume($event)"
+          ></app-range-slider>
+        </app-tooltip>
+
+        <app-tooltip text="Controla el volumen de la música de fondo.">
+          <app-range-slider
+            label="Música:"
+            [value]="optionsService.musicVolume()"
+            (valueChange)="optionsService.setMusicVolume($event)"
+          ></app-range-slider>
+        </app-tooltip>
+
+        <app-tooltip text="Controla el volumen de los efectos de sonido (SFX).">
+          <app-range-slider
+            label="SFX:"
+            [value]="optionsService.sfxVolume()"
+            (valueChange)="optionsService.setSfxVolume($event)"
+          ></app-range-slider>
+        </app-tooltip>
       </div>
     </div>
   </app-corner-card>
@@ -28,21 +36,29 @@
     <div class="flex flex-col gap-6 w-full h-full">
       <p class="text-2xl text-center text-amber-900">Interfaz</p>
       <div class="max-w-2xs w-full mx-auto flex flex-col gap-4">
-        <app-toggle-switch
-          label="Mostrar mascota:"
-          [checked]="optionsService.showCroquetita()"
-          (checkedChange)="optionsService.setShowCroquetita($event)"
-        />
-        <app-toggle-switch
-          label="Reproducir partículas:"
-          [checked]="optionsService.showParticles()"
-          (checkedChange)="optionsService.setShowParticles($event)"
-        />
-        <app-toggle-switch
-          label="Ver puntos flotantes:"
-          [checked]="optionsService.showFloatingText()"
-          (checkedChange)="optionsService.setShowFloatingText($event)"
-        />
+        <app-tooltip text="Muestra u oculta la mascota en pantalla.">
+          <app-toggle-switch
+            label="Mostrar mascota:"
+            [checked]="optionsService.showCroquetita()"
+            (checkedChange)="optionsService.setShowCroquetita($event)"
+          ></app-toggle-switch>
+        </app-tooltip>
+
+        <app-tooltip text="Activa o desactiva las partículas visuales.">
+          <app-toggle-switch
+            label="Reproducir partículas:"
+            [checked]="optionsService.showParticles()"
+            (checkedChange)="optionsService.setShowParticles($event)"
+          ></app-toggle-switch>
+        </app-tooltip>
+
+        <app-tooltip text="Muestra los puntos flotantes al hacer click.">
+          <app-toggle-switch
+            label="Ver puntos flotantes:"
+            [checked]="optionsService.showFloatingText()"
+            (checkedChange)="optionsService.setShowFloatingText($event)"
+          ></app-toggle-switch>
+        </app-tooltip>
       </div>
     </div>
   </app-corner-card>
@@ -51,14 +67,27 @@
   <app-corner-card>
     <p class="text-2xl text-center text-amber-900">Partida</p>
     <div class="flex flex-col items-center justify-center gap-4">
+        <div class="flex flex-col items-center justify-center md:flex-row gap-4">
+          <app-tooltip text="Guarda manualmente tu partida en el navegador.">
+            <app-button customClass="w-34 lg:w-38" variant="success" (click)="saveProgress()"> Guardar ahora </app-button>
+          </app-tooltip>
+
+          <app-tooltip text="Descarga un archivo .json con tu progreso.">
+            <app-button customClass="w-34 lg:w-38" variant="primary" (click)="exportProgress()"> Descargar partida </app-button>
+          </app-tooltip>
+
+          <app-tooltip text="Carga una partida desde un archivo .json.">
+            <app-button customClass="w-34 lg:w-38" variant="warning" (click)="importProgress()"> Cargar partida </app-button>
+          </app-tooltip>
+        </div>
       <div class="flex flex-col items-center justify-center md:flex-row gap-4">
-        <app-button customClass="w-34 lg:w-38" variant="success" (click)="saveProgress()"> Guardar ahora </app-button>
-        <app-button customClass="w-34 lg:w-38" variant="primary" (click)="exportProgress()"> Descargar partida </app-button>
-        <app-button customClass="w-34 lg:w-38" variant="warning" (click)="importProgress()"> Cargar partida </app-button>
-      </div>
-      <div class="flex flex-col items-center justify-center md:flex-row gap-4">
-        <app-button customClass="w-34 lg:w-44" variant="secondary" [noSound]="true" (click)="shareGame()"> Compartir progreso </app-button>
-        <app-button customClass="w-34 lg:w-44" variant="danger" (click)="restartGame()"> Reiniciar partida </app-button>
+        <app-tooltip text="Comparte tus estadísticas o cópialas al portapapeles.">
+          <app-button customClass="w-34 lg:w-44" variant="secondary" [noSound]="true" (click)="shareGame()"> Compartir progreso </app-button>
+        </app-tooltip>
+
+        <app-tooltip text="Reinicia tu progreso. Esta acción no se puede deshacer.">
+          <app-button customClass="w-34 lg:w-44" variant="danger" (click)="restartGame()"> Reiniciar partida </app-button>
+        </app-tooltip>
       </div>
     </div>
   </app-corner-card>

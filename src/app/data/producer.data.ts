@@ -8,17 +8,10 @@ export const PRODUCERS: ProducerModel[] = [
     id: 1,
     name: 'Click',
     image: '/assets/producers/click.webp',
-<<<<<<< HEAD
     priceBase: 50, // sigue siendo asequible para empezar
     priceMult: 1.12, // coste sube suavemente
     pointsBase: 0.1, // croquetas/segundo por unidad en compra 1
     pointsSum: 0.5, // incremento por nivel/upgrade interno
-=======
-    priceBase: 25,
-    priceMult: 1.12,
-    pointsBase: 0.1,
-    pointsSum: 0.1,
->>>>>>> 88af5b29ad8e7d645463439cc5c16d9369d4e660
     description: 'Hace clicks automáticos por ti.',
     level: 0,
     exp: 1,

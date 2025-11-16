@@ -10,8 +10,12 @@
       <div class="relative w-full h-32">
         <img
           src="{{ config.image }}"
-          alt="{{ config.name }}"
-          class="w-full h-full object-contain transition-all"
+          alt="Imagen de {{ config.name }}"
+          class="h-full w-auto object-contain transition-all mx-auto"
+          width="109"
+          height="128"
+          loading="lazy"
+          decoding="async"
           [class.opacity-30]="!isUnlocked"
           [class.grayscale]="!isUnlocked"
         />

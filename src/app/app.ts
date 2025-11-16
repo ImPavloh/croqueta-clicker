@@ -1,5 +1,5 @@
 import { AchievementsService } from '@services/achievements.service';
-import { Component, signal, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, ChangeDetectionStrategy, Renderer2, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Navbar } from '@ui/navbar/navbar';
@@ -24,6 +24,7 @@ import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-p
 import { Splash } from '@ui/splash/splash';
 import { MobileStats } from '@ui/mobile-stats/mobile-stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
+import { SkinsService } from '@services/skins.service';
 
 @Component({
   selector: 'app-root',
@@ -52,6 +53,7 @@ import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
 })
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
+  private renderer = inject(Renderer2);
 
   constructor(
     private points: PointsService,
@@ -59,11 +61,13 @@ export class App implements OnInit, OnDestroy {
     private audioService: AudioService,
     private autosaveService: AutosaveService,
     private achievementsService: AchievementsService,
-    private goldenCroquetaService: GoldenCroquetaService
+    private goldenCroquetaService: GoldenCroquetaService,
+    private skinsService: SkinsService
   ) {}
 
   private level: number = 1;
   private levelSub?: Subscription;
+  private backgroundSub?: Subscription;
 
   public isMobile: boolean = window.innerWidth <= 1344;
 
@@ -80,9 +84,17 @@ export class App implements OnInit, OnDestroy {
       this.audioService.playMusic(url, true, 2);
     });
     this.goldenCroquetaService.startSpawnCheck();
+
+    // suscripcion al fondo activo y aplicarlo
+    this.backgroundSub = this.skinsService.currentBackground$.subscribe((bgUrl) => {
+      if (typeof document !== 'undefined') {
+        this.renderer.setStyle(document.body, 'background', `url('${bgUrl}') no-repeat center/cover`);
+      }
+    });
   }
   ngOnDestroy() {
     this.levelSub?.unsubscribe();
+    this.backgroundSub?.unsubscribe();
     this.playerStats.stopTimer();
   }
 

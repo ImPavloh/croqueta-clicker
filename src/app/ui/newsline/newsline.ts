@@ -41,22 +41,16 @@ export class NewsLine {
     });
   }
 
-  // Creamos un signal 'computed' para la cadena de texto
-  // Se recalculará automáticamente SOLO si el signal 'level' cambia.
-  private newsString = computed(() => {
-    // Obtenemos las noticias aleatorias del servicio
+  // Obtenemos las noticias como array
+  protected displayItems = computed(() => {
     const shuffledNews = this.newsService.getNewsByLevel(this.level);
 
     if (shuffledNews.length === 0) {
-      return 'No hay noticias disponibles para este nivel. ';
+      return ['No hay noticias disponibles para este nivel.'];
     }
 
-    // Unimos todas las noticias en un solo string
-    const separator = '  •  ';
-    return shuffledNews.map((item) => item.news).join(separator) + separator;
+    const newsArray = shuffledNews.map((item) => item.news);
+    // Duplicamos el array para el loop infinito
+    return [...newsArray, ...newsArray];
   });
-
-  // Creamos un array con dos copias del string para el @for
-  // Esto es necesario para la animación de bucle infinito.
-  protected displayItems = computed(() => [this.newsString(), this.newsString()]);
 }

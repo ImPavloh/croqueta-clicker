@@ -1,5 +1,7 @@
 import { SkinModel } from 'app/models/skin.model';
 
+// fondos implementados pero no usados (no hay imagenes de fondo de momento/no me convence ~ Pavloh)
+
 export const SKINS: SkinModel[] = [
   // ============================================================
   // 🟤 COMUNES
@@ -149,12 +151,20 @@ export const SKINS: SkinModel[] = [
     counterLabel: '¿plátanos?',
     unlockRequirement: { type: 'exp', value: 100000 },
   },
-
+  {
+    id: 16,
+    name: 'Bocadillo...',
+    description: 'Un bocadillo relleno de croquetas, para los más valientes.',
+    image: '/assets/skins/croqueta-bocadillo.webp',
+    rarity: 'Legendaria',
+    counterLabel: '¿bocadillos?',
+    unlockRequirement: { type: 'level', value: 75 },
+  },
   // ============================================================
   // 🔴 MÍTICA
   // ============================================================
   {
-    id: 16,
+    id: 17,
     name: 'Real',
     description: 'La croqueta definitiva.',
     image: '/assets/skins/croqueta-real.webp',

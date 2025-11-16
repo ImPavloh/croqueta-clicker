@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CornerCard } from '@ui/corner-card/corner-card';
 import { FormsModule } from '@angular/forms';
+import { Tooltip } from '@ui/tooltip/tooltip';
 import { OptionsService } from '@services/options.service';
 import { ModalService } from '@services/modal.service';
 import { PlayerStats } from '@services/player-stats.service';
@@ -16,7 +17,7 @@ import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-options',
-  imports: [CornerCard, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch],
+  imports: [CornerCard, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch, Tooltip],
   templateUrl: './options.html',
   styleUrl: './options.css',
 })
