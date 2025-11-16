@@ -23,6 +23,7 @@ import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
 import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-popup';
 import { Splash } from '@ui/splash/splash';
 import { MobileStats } from '@ui/mobile-stats/mobile-stats';
+import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,7 @@ import { MobileStats } from '@ui/mobile-stats/mobile-stats';
     BonusCountdownPopup,
     Splash,
     MobileStats,
+    SkinUnlockPopup,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',

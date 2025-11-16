@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { Achievement } from '@data/achievements.data';
@@ -25,7 +25,8 @@ export class AchievementPopup implements OnDestroy {
   constructor(
     private svc: AchievementsService,
     private audioService: AudioService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {
     this.subs.add(
       this.svc.queue$.subscribe((queue) => {
@@ -67,13 +68,20 @@ export class AchievementPopup implements OnDestroy {
       if (this.hideTimeout) clearTimeout(this.hideTimeout);
 
       this.hideTimeout = setTimeout(() => {
-        this.visible = false;
-        this.cdr.detectChanges();
-        setTimeout(() => {
-          this.current = null;
+        this.zone.run(() => {
+          this.visible = false;
           this.cdr.detectChanges();
-          resolve();
-        }, this.FADE_MS);
+
+          if (this.hideTimeout) clearTimeout(this.hideTimeout);
+
+          this.hideTimeout = setTimeout(() => {
+            this.zone.run(() => {
+              this.current = null;
+              this.cdr.detectChanges();
+              resolve();
+            });
+          }, this.FADE_MS);
+        });
       }, this.DISPLAY_MS);
     });
   }

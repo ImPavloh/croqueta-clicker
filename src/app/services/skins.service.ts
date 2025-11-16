@@ -1,11 +1,16 @@
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, inject, effect } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 import { OptionsService } from './options.service';
 import { PlayerStats } from './player-stats.service';
 import { PointsService } from './points.service';
 import { SkinModel, UnlockRequirement } from '@models/skin.model';
-import Decimal from 'break_infinity.js';
+import { SKINS } from '@data/skin.data';
+
+export interface SkinUnlockNotification {
+  skin: SkinModel;
+  timestamp: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +27,35 @@ export class SkinsService {
   // skins probadas
   skinsUsed = new Set<number>();
 
+  // skins desbloqueadas (tracking para notis)
+  private unlockedSkins = new Set<number>();
+
+  private queueSubject = new BehaviorSubject<SkinUnlockNotification[]>([]);
+  readonly queue$: Observable<SkinUnlockNotification[]> = this.queueSubject.asObservable();
+
   constructor(private achievementsService: AchievementsService) {
     this.loadFromStorage();
+
+    // tracking de skins desbloqueadas
+    SKINS.forEach((skin) => {
+      if (this.isSkinUnlocked(skin)) {
+        this.unlockedSkins.add(skin.id);
+      }
+    });
+
+    this.playerStats.level$.subscribe(() => {
+      this.checkUnlockedSkins();
+    });
+
+    effect(() => {
+      this.pointsService.points();
+      this.playerStats.currentExp();
+      this.checkUnlockedSkins();
+    });
+
+    this.achievementsService.unlockedMap$.subscribe(() => {
+      this.checkUnlockedSkins();
+    });
   }
 
   skinId() {
@@ -139,5 +171,40 @@ export class SkinsService {
   public reset() {
     this._skinId.next(1);
     this.skinsUsed.clear();
+    this.unlockedSkins.clear();
+    this.unlockedSkins.add(1); // la skin 1 siempre esta desbloqueada
+  }
+
+  public checkUnlockedSkins(): void {
+    SKINS.forEach((skin) => {
+      if (!this.unlockedSkins.has(skin.id) && this.isSkinUnlocked(skin)) {
+        this.unlockedSkins.add(skin.id);
+        this.notifySkinUnlock(skin);
+      }
+    });
+  }
+
+  notifySkinUnlock(skin: SkinModel): void {
+    const notification: SkinUnlockNotification = {
+      skin,
+      timestamp: Date.now(),
+    };
+
+    const queue = this.queueSubject.getValue();
+    const exists = queue.some(
+      (n) => n.skin.id === skin.id && Date.now() - n.timestamp < 5000
+    );
+    if (!exists) {
+      this.queueSubject.next([...queue, notification]);
+    }
+  }
+
+  consumeNext(): SkinUnlockNotification | null {
+    const queue = this.queueSubject.getValue();
+    if (queue.length === 0) return null;
+
+    const [first, ...rest] = queue;
+    this.queueSubject.next(rest);
+    return first;
   }
 }

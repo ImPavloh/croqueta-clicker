@@ -10,7 +10,7 @@ export interface SkinModel {
   name: string;
   description: string;
   image: string;
-  rarity?: 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
+  rarity?: 'Común' | 'Rara' | 'Épica' | 'Legendaria' | 'Mítica';
   unlocked?: boolean;
   particleImage?: string;
   counterLabel?: string;
