@@ -8,12 +8,12 @@ export const PRODUCERS: ProducerModel[] = [
     id: 1,
     name: 'Click',
     image: '/assets/producers/click.webp',
-    priceBase: 25, // sigue siendo asequible para empezar
-    priceMult: 1.12, // coste sube suavemente
-    pointsBase: 0.1, // croquetas/segundo por unidad en compra 1
-    pointsSum: 0.1, // incremento por nivel/upgrade interno
+    priceBase: 25,
+    priceMult: 1.12,
+    pointsBase: 0.1,
+    pointsSum: 0.1,
     description: 'Hace clicks automáticos por ti.',
-    level: 1,
+    level: 0,
     exp: 1,
   },
   {
@@ -25,7 +25,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 0.3,
     pointsSum: 0.3,
     description: 'Un cocinero profesional que hace croquetas por ti.',
-    level: 7,
+    level: 5,
     exp: 12,
   },
   {
@@ -37,7 +37,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 40,
     pointsSum: 20,
     description: 'Una freidora industrial que produce croquetas a gran escala.',
-    level: 15,
+    level: 10,
     exp: 65,
   },
   {

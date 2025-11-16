@@ -67,6 +67,9 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 3. **RxJS Observables** para eventos asíncronos
 4. **LocalStorage** para persistencia de datos
 
+### Más información
+Puedes consultar una documentación mas detallada del proyecto [aqui.](DOCS.md)
+
 ---
 
 
