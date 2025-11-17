@@ -1,5 +1,5 @@
 @if (config){
-  <app-tooltip [text]="unlocked ? config.description : '???'" [position]="'bottom'">
+  <app-tooltip [text]="unlocked ? config.description : config.level.toString()" [position]="'bottom'">
     <app-corner-card
       type="button"
       [disabled]="pointsService.points().lt(price) || !unlocked"
@@ -55,7 +55,7 @@
       </div>
       } @else {
       <div class="flex w-full h-16 justify-center items-center italic opacity-70 text-amber-800">
-        <p>???</p>
+        <p>Nivel {{config.level}}</p>
       </div>
       }
     </app-corner-card>
