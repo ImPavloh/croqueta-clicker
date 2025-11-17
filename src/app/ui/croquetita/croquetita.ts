@@ -4,7 +4,8 @@ import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { OptionsService } from '@services/options.service';
 import { AudioService } from '@services/audio.service';
-import { TUTORIAL_MESSAGES, TutorialMessage } from '@data/tutorial.data';
+import { TUTORIAL_MESSAGES } from '@data/tutorial.data';
+import { TutorialMessage } from '@models/tutorial.model';
 
 @Component({
   selector: 'app-croquetita',
