@@ -14,21 +14,21 @@ export class FloatingButtons {
 
   openUpgrades() {
     this.modalService.openModal('upgrades');
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 
-  openStats() {
-    this.modalService.openModal('stats');
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
+  openAchievements() {
+    this.modalService.openModal('achievements');
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 
   openSkins() {
     this.modalService.openModal('skins');
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 
   openOptions() {
     this.modalService.openModal('options');
-    this.audioService.playSfx("/assets/sfx/click02.mp3",1)
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
 }

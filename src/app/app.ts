@@ -1,5 +1,13 @@
 import { AchievementsService } from '@services/achievements.service';
-import { Component, signal, OnInit, OnDestroy, ChangeDetectionStrategy, Renderer2, inject } from '@angular/core';
+import {
+  Component,
+  signal,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  Renderer2,
+  inject,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { Navbar } from '@ui/navbar/navbar';
@@ -20,9 +28,8 @@ import { AudioService } from '@services/audio.service';
 import { AutosaveService } from '@services/autosave.service';
 import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
-import { BonusCountdownPopup } from '@ui/bonus-countdown-popup/bonus-countdown-popup';
 import { Splash } from '@ui/splash/splash';
-import { MobileStats } from '@ui/mobile-stats/mobile-stats';
+import { StatsComponent } from '@ui/stats/stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
 import { SkinsService } from '@services/skins.service';
 
@@ -42,9 +49,9 @@ import { SkinsService } from '@services/skins.service';
     Modal,
     FloatingButtons,
     GoldenCroqueta,
-    BonusCountdownPopup,
+
     Splash,
-    MobileStats,
+    StatsComponent,
     SkinUnlockPopup,
   ],
   templateUrl: './app.html',
@@ -88,7 +95,11 @@ export class App implements OnInit, OnDestroy {
     // suscripcion al fondo activo y aplicarlo
     this.backgroundSub = this.skinsService.currentBackground$.subscribe((bgUrl) => {
       if (typeof document !== 'undefined') {
-        this.renderer.setStyle(document.body, 'background', `url('${bgUrl}') no-repeat center/cover`);
+        this.renderer.setStyle(
+          document.body,
+          'background',
+          `url('${bgUrl}') no-repeat center/cover`
+        );
       }
     });
   }

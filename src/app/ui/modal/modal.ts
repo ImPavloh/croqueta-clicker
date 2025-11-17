@@ -2,14 +2,14 @@ import { Component, inject } from '@angular/core';
 import { ModalService } from '@services/modal.service';
 import { AudioService } from '@services/audio.service';
 import { Upgrades } from '@pages/upgrades/upgrades';
-import { Stats } from '@pages/stats/stats';
+import { Achievements } from '@pages/achievements/achievements';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
 import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-modal',
-  imports: [Upgrades, Stats, Skins, Options, ButtonComponent],
+  imports: [Upgrades, Achievements, Skins, Options, ButtonComponent],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
@@ -27,8 +27,8 @@ export class Modal {
     switch (modal) {
       case 'upgrades':
         return 'Mejoras';
-      case 'stats':
-        return 'Estadísticas';
+      case 'achievements':
+        return 'Logros';
       case 'skins':
         return 'Skins';
       case 'options':

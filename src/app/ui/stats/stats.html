@@ -1,0 +1,144 @@
+@if (mode() === 'mobile') {
+<div class="w-full max-w-[500px] mx-auto p-2 relative z-155">
+  <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-3">
+      <div class="level-badge flex items-center justify-center gap-3 px-5 py-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-white/90 uppercase tracking-widest">Nivel</span>
+          <div class="level-divider"></div>
+          <span class="text-3xl font-black text-white leading-none level-number">{{
+            level() | short
+          }}</span>
+        </div>
+      </div>
+
+      <div class="relative w-full exp-container">
+        <div class="exp-bar-bg">
+          <div class="exp-bar-fill" [style.width.%]="expProgress()">
+            <div class="exp-bar-shine"></div>
+            <div class="exp-bar-pulse"></div>
+          </div>
+          <div
+            class="absolute inset-0 flex items-center justify-center gap-1.5 font-semibold pointer-events-none z-20 text-center px-2"
+          >
+            <span class="text-sm text-white drop-shadow-lg font-bold">{{
+              currentExp() | short
+            }}</span>
+            <span class="text-xs text-white/80 font-medium">/</span>
+            <span class="text-sm text-white drop-shadow-lg font-bold">{{
+              expToNext() | short
+            }}</span>
+            <span class="text-xs text-white/80 uppercase tracking-widest ml-1 font-bold">XP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <div class="stat-card group">
+        <div class="stat-icon-wrapper">
+          <img src="assets/stats/clock.webp" alt="Tiempo" class="stat-icon" />
+        </div>
+        <div class="flex flex-col gap-1 flex-1 min-w-0">
+          <span class="stat-label">Tiempo</span>
+          <span class="stat-value">{{ formatTime(timePlaying()) }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card group">
+        <div class="stat-icon-wrapper">
+          <img src="assets/stats/mouse.webp" alt="Clicks" class="stat-icon" />
+        </div>
+        <div class="flex flex-col gap-1 flex-1 min-w-0">
+          <span class="stat-label">Clicks</span>
+          <span class="stat-value">{{ totalClicks() | short }}</span>
+        </div>
+      </div>
+    </div>
+
+    @if (goldenCroquetaService.isBonusActive()) {
+    <div class="bonus-inline">
+      <div class="bonus-content">
+        <span class="bonus-text">BONUS x{{ goldenCroquetaService.bonusMultiplier }}</span>
+        <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+} @else {
+<div class="ds-overlay">
+  <div class="ds-card ds-left">
+    <div class="ds-circle">
+      <svg class="ds-ring" width="150" height="150">
+        <circle
+          class="ds-ring-bg"
+          stroke="#e5e7eb50"
+          stroke-width="10"
+          fill="#0F101550"
+          [attr.r]="radius"
+          [attr.cx]="75"
+          [attr.cy]="75"
+        />
+        <circle
+          class="ds-ring-fg"
+          [attr.stroke-dasharray]="circumference + ' ' + circumference"
+          [style.stroke-dashoffset]="strokeDashoffset()"
+          stroke="url(#dsGradient)"
+          stroke-width="10"
+          fill="transparent"
+          stroke-linecap="round"
+          [attr.r]="radius"
+          [attr.cx]="75"
+          [attr.cy]="75"
+        />
+        <defs>
+          <linearGradient id="dsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color: #f59e0b; stop-opacity: 1" />
+            <stop offset="100%" style="stop-color: #f97316; stop-opacity: 1" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="ds-level">
+        <div class="ds-level-number">{{ level() | short }}</div>
+        <div class="ds-level-label">Nivel</div>
+        <div class="ds-exp">{{ currentExp() | short }} / {{ expToNext() | short }} XP</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ds-card ds-right">
+    <div class="ds-right-inner">
+      <div class="ds-stat">
+        <div class="ds-icon">
+          <img src="assets/stats/clock.webp" alt="Tiempo" />
+        </div>
+        <div class="ds-text">
+          <div class="ds-label">Tiempo</div>
+          <div class="ds-value">{{ formatTime(timePlaying()) }}</div>
+        </div>
+      </div>
+
+      <div class="ds-sep"></div>
+
+      <div class="ds-stat">
+        <div class="ds-icon">
+          <img src="assets/stats/mouse.webp" alt="Clicks" />
+        </div>
+        <div class="ds-text">
+          <div class="ds-label">Clicks</div>
+          <div class="ds-value">{{ totalClicks() | short }}</div>
+        </div>
+      </div>
+    </div>
+    @if (goldenCroquetaService.isBonusActive()) {
+    <div class="bonus-inline ds-bonus">
+      <div class="bonus-content">
+        <span class="bonus-text">BONUS x{{ goldenCroquetaService.bonusMultiplier }}</span>
+        <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+}

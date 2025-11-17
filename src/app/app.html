@@ -10,13 +10,15 @@
     }
     <div class="clicker-container">
       <app-level-up-popup />
-      <app-bonus-countdown-popup />
+
       <app-golden-croqueta />
       <app-particles />
       <app-floating />
-      @if (isMobile) {
+      @if (!isMobile) {
+      <app-stats variant="desktop" />
+      } @if (isMobile) {
       <div class="mobile-top">
-        <app-mobile-stats />
+        <app-stats variant="mobile" />
       </div>
       <div class="clicker-wrapper">
         <app-clicker />

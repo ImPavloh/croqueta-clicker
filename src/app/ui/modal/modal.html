@@ -8,8 +8,8 @@
     <div class="modal-body">
       @switch (modalService.currentModal()) { @case ('upgrades') {
       <app-upgrades />
-      } @case ('stats') {
-      <app-stats />
+      } @case ('achievements') {
+      <app-achievements />
       } @case ('skins') {
       <app-skins />
       } @case ('options') {
@@ -32,9 +32,9 @@
     </div>
     <div class="confirm-actions" [class.single-button]="!modalService.confirmDialog()!.cancelText">
       @if (modalService.confirmDialog()!.cancelText) {
-        <app-button variant="primary" (click)="cancelAction()">
-          {{ modalService.confirmDialog()!.cancelText }}
-        </app-button>
+      <app-button variant="primary" (click)="cancelAction()">
+        {{ modalService.confirmDialog()!.cancelText }}
+      </app-button>
       }
       <app-button variant="primary" (click)="confirmAction()">
         {{ modalService.confirmDialog()!.confirmText }}

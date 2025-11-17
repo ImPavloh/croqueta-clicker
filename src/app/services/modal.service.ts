@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-export type ModalType = 'upgrades' | 'stats' | 'skins' | 'options' | null;
+export type ModalType = 'upgrades' | 'achievements' | 'skins' | 'options' | null;
 
 export interface ConfirmDialogData {
   title: string;

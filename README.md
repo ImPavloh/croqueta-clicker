@@ -52,11 +52,11 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 ┌───▼────────┐    ┌──────────▼────────┐
 │  Clicker   │    │   Router Outlet   │
 │ Container  │    │   (Menu Pages)    │
-│            │    │                   │
-│ - Clicker  │    │    - Upgrades     │
-│ - Counter  │    │    - Stats        │
-│ - Particles│    │    - Options      │
-│ - Floating │    │    - Skins        │
+│ - Stats    │    │                   │
+│ - Clicker  │    │   - Upgrades      │
+│ - Counter  │    │   - Achievements  │
+│ - Particles│    │   - Options       │
+│ - Floating │    │   - Skins         │
 └────────────┘    └───────────────────┘
 ```
 
@@ -68,10 +68,10 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 4. **LocalStorage** para persistencia de datos
 
 ### Más información
-Puedes consultar una documentación mas detallada del proyecto [aqui.](DOCS.md)
+
+Puedes consultar una documentación más detallada del proyecto [aquí](DOCS.md).
 
 ---
-
 
 ### ¿Qué puedes hacer clonando este repositorio?
 
@@ -124,8 +124,8 @@ El servidor recargará automáticamente al detectar cambios en los archivos.
 ### Para generar APK Android (Gradle directo)
 
 > Este repositorio incluye también el proyecto Android ya generado con **Bubblewrap**.  
-Bubblewrap solo lo utilizamos los desarrolladores para generar la APK firmada y publicarla en Google Play.
-**No necesitas Bubblewrap** para compilar un APK *debug*.
+> Bubblewrap solo lo utilizamos los desarrolladores para generar la APK firmada y publicarla en Google Play.
+> **No necesitas Bubblewrap** para compilar un APK _debug_.
 
 Si tienes **Java + Android SDK** instalados, puedes generar un APK de depuración con:
 
@@ -158,6 +158,7 @@ Si quieres probar el juego descargado sin compilarlo, descarga el APK debug desd
 | `ng build --configuration development` | Compila en modo desarrollo (con source maps)           |
 | `ng test`                              | Ejecuta tests unitarios con Karma + Jasmine            |
 | `ng serve --open`                      | Inicia servidor y abre navegador automáticamente       |
+
 ---
 
 ## Publicación en Google Play (Trusted Web Activity)

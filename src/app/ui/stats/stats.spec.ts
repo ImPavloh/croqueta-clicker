@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MobileStats } from './mobile-stats';
+import { StatsComponent } from './stats';
 
-describe('MobileStats', () => {
-  let component: MobileStats;
-  let fixture: ComponentFixture<MobileStats>;
+describe('StatsComponent', () => {
+  let component: StatsComponent;
+  let fixture: ComponentFixture<StatsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MobileStats]
-    })
-    .compileComponents();
+      imports: [StatsComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(MobileStats);
+    fixture = TestBed.createComponent(StatsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

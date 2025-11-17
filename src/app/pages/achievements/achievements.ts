@@ -1,21 +1,17 @@
 import { Component, computed, inject, signal, effect } from '@angular/core';
 import { PlayerStats } from '@services/player-stats.service';
-import { StatCardComponent } from '@ui/stat-card/stat-card';
-import { Tooltip } from '@ui/tooltip/tooltip';
 import { CommonModule } from '@angular/common';
 import { AchievementList } from '@ui/achievement-list/achievement-list';
 import { STATS } from '@data/stats.data';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { CornerCard } from '@ui/corner-card/corner-card';
-import { ShortNumberPipe } from '@pipes/short-number.pipe';
 
 @Component({
-  selector: 'app-stats',
-  imports: [StatCardComponent, CommonModule, AchievementList, CornerCard, ShortNumberPipe, Tooltip],
-  templateUrl: './stats.html',
-  styleUrl: './stats.css',
+  selector: 'app-achievements',
+  imports: [CommonModule, AchievementList],
+  templateUrl: './achievements.html',
+  styleUrl: './achievements.css',
 })
-export class Stats {
+export class Achievements {
   private playerStats = inject(PlayerStats);
 
   level = toSignal(this.playerStats._level, { initialValue: 0 });
