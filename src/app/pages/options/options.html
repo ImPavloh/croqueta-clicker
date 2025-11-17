@@ -67,26 +67,41 @@
   <app-corner-card>
     <p class="text-2xl text-center text-amber-900">Partida</p>
     <div class="flex flex-col items-center justify-center gap-4">
-        <div class="flex flex-col items-center justify-center md:flex-row gap-4">
-          <app-tooltip text="Guarda manualmente tu partida en el navegador.">
-            <app-button customClass="w-34 lg:w-38" variant="success" (click)="saveProgress()"> Guardar ahora </app-button>
-          </app-tooltip>
+      <div class="flex flex-col items-center justify-center md:flex-row gap-4">
+        <app-tooltip text="Guarda manualmente tu partida en el navegador.">
+          <app-button customClass="w-34 lg:w-38" variant="success" (click)="saveProgress()">
+            Guardar ahora
+          </app-button>
+        </app-tooltip>
 
-          <app-tooltip text="Descarga un archivo .json con tu progreso.">
-            <app-button customClass="w-34 lg:w-38" variant="primary" (click)="exportProgress()"> Descargar partida </app-button>
-          </app-tooltip>
+        <app-tooltip text="Descarga un archivo .json con tu progreso.">
+          <app-button customClass="w-34 lg:w-38" variant="primary" (click)="exportProgress()">
+            Descargar partida
+          </app-button>
+        </app-tooltip>
 
-          <app-tooltip text="Carga una partida desde un archivo .json.">
-            <app-button customClass="w-34 lg:w-38" variant="warning" (click)="importProgress()"> Cargar partida </app-button>
-          </app-tooltip>
-        </div>
+        <app-tooltip text="Carga una partida desde un archivo .json.">
+          <app-button customClass="w-34 lg:w-38" variant="warning" (click)="importProgress()">
+            Cargar partida
+          </app-button>
+        </app-tooltip>
+      </div>
       <div class="flex flex-col items-center justify-center md:flex-row gap-4">
         <app-tooltip text="Comparte tus estadísticas o cópialas al portapapeles.">
-          <app-button customClass="w-34 lg:w-44" variant="secondary" [noSound]="true" (click)="shareGame()"> Compartir progreso </app-button>
+          <app-button
+            customClass="w-34 lg:w-44"
+            variant="secondary"
+            [noSound]="true"
+            (click)="shareGame()"
+          >
+            Compartir progreso
+          </app-button>
         </app-tooltip>
 
         <app-tooltip text="Reinicia tu progreso. Esta acción no se puede deshacer.">
-          <app-button customClass="w-34 lg:w-44" variant="danger" (click)="restartGame()"> Reiniciar partida </app-button>
+          <app-button customClass="w-34 lg:w-44" variant="danger" (click)="restartGame()">
+            Reiniciar partida
+          </app-button>
         </app-tooltip>
       </div>
     </div>
@@ -183,8 +198,17 @@
         target="_blank"
         rel="noopener noreferrer"
         class="opacity-50 transition-all hover:opacity-100 hover:scale-105 text-sm text-amber-800"
-        >Whiteroot Studios © 2025</a
+        >WhiteRoot Studios © 2025</a
       >
+      <div class="mt-3 text-sm">
+        <a
+          href="/privacidad/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-amber-800 hover:underline"
+          >Política de privacidad</a
+        >
+      </div>
     </div>
   </app-corner-card>
 </div>
