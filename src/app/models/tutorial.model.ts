@@ -8,7 +8,7 @@ export interface TutorialMessage {
   maxLevel?: number;
   message: string;
   priority: number;
-  autoShow?: boolean; // Si debe mostrarse automáticamente (importante para mensajes de bienvenida, para el tutorial en sí)
+  autoShow?: boolean;
   category:
     | 'welcome'
     | 'tutorial'

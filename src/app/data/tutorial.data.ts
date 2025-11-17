@@ -1,5 +1,6 @@
-import { TutorialMessage } from "@models/tutorial.model";
+import { TutorialMessage } from '@models/tutorial.model';
 
+// Croquetita = tutorial / mensajes de ayuda y consejos durante el juego
 export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   // ============================================================
   // BIENVENIDA Y PRIMEROS PASOS (0-100 croquetas)
@@ -30,14 +31,14 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     maxPoints: 15,
     message:
       '¡Vas muy bien! Cada click cuenta. Cuando tengas suficientes croquetas, podrás comprar productores automáticos.',
-    priority: 3,
-    autoShow: true,
+    priority: 15,
+    autoShow: false,
     category: 'tutorial',
   },
   {
     id: 'first_producer',
-    minPoints: 100,
-    maxPoints: 150,
+    minPoints: 50,
+    maxPoints: 75,
     message:
       '¡Ya puedes comprar tu primer productor! Ve al menú de la derecha y compra un "Click" que cocinará croquetas automáticamente.',
     priority: 4,
@@ -46,10 +47,10 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   },
   {
     id: 'first_upgrade',
-    minPoints: 50,
-    maxPoints: 100,
+    minPoints: 100,
+    maxPoints: 125,
     message:
-      'Consejo: Las mejoras aumentan la cantidad de croquetas por click. ¡Invierte en ellas sabiamente!',
+      'Las mejoras aumentan la cantidad de croquetas por click. ¡Invierte en ellas sabiamente!',
     priority: 5,
     category: 'tips',
   },
@@ -57,14 +58,6 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   // ============================================================
   // EARLY GAME - Primeros productores (100-10k)
   // ============================================================
-  {
-    id: 'hundred_milestone',
-    minPoints: 100,
-    maxPoints: 200,
-    message: '¡100 croquetas! Ya eres todo un cocinero. Las cosas se van a poner interesantes...',
-    priority: 10,
-    category: 'milestone',
-  },
   {
     id: 'producers_tip',
     minPoints: 200,
@@ -79,6 +72,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     maxPoints: 1000,
     message: 'Estás progresando genial. No olvides comprar mejoras para aumentar tu click power.',
     priority: 20,
+    autoShow: true,
     category: 'encouragement',
   },
   {
@@ -93,8 +87,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     id: 'balance_tip',
     minPoints: 2000,
     maxPoints: 5000,
-    message:
-      'Consejo de experto: Balancea tu inversión entre productores y mejoras para máxima eficiencia.',
+    message: 'Balancea tu inversión entre productores y mejoras para máxima eficiencia.',
     priority: 30,
     category: 'tips',
   },
@@ -102,7 +95,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     id: 'five_thousand',
     minPoints: 5000,
     maxPoints: 10000,
-    message: '¡5.000 croquetas! Tu cocina está en llamas (en el buen sentido).',
+    message: '¡5.000 croquetas! Estás en el camino correcto. ¡Sigue así!',
     priority: 35,
     category: 'encouragement',
   },
@@ -124,7 +117,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     minPoints: 25000,
     maxPoints: 50000,
     message:
-      'Visita la sección de Skins para personalizar tu croqueta. ¡Hay muchos diseños geniales!',
+      'Visita la sección de Skins para personalizar tu croqueta. ¡Hay muchos diseños diferentes!',
     priority: 45,
     category: 'tutorial',
   },
@@ -134,6 +127,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     maxPoints: 100000,
     message: '50K... Esto se está poniendo serio. Pronto alcanzarás números que ni imaginabas.',
     priority: 50,
+    autoShow: true,
     category: 'encouragement',
   },
   {
@@ -170,6 +164,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     maxPoints: 2500000,
     message: '¡¡¡UN MILLÓN DE CROQUETAS!!! ¡Eres oficialmente un croqueta-millonario!',
     priority: 70,
+    autoShow: true,
     category: 'milestone',
   },
   {
@@ -195,6 +190,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     maxPoints: 25000000,
     message: '¡10M! A este ritmo, pronto estarás nadando en croquetas (no literalmente... o sí?).',
     priority: 85,
+    autoShow: true,
     category: 'encouragement',
   },
   {
@@ -237,7 +233,8 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
     id: 'half_billion',
     minPoints: 500000000,
     maxPoints: 1000000000,
-    message: '500M. Tip: Las mejoras de nivel alto multiplican tu producción exponencialmente.',
+    message:
+      '500M. Un consejo, las mejoras de nivel alto multiplican tu producción exponencialmente.',
     priority: 110,
     category: 'tips',
   },
@@ -385,7 +382,8 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   {
     id: 'more_and_beyond',
     minPoints: 1000000000000000000000000000000000000,
-    message: '¿Más de un decillón? En serio, ve a ver la luz del sol. Las croquetas pueden esperar.',
+    message:
+      '¿Más de un decillón? En serio, ve a ver la luz del sol. Las croquetas pueden esperar.',
     priority: 195,
     category: 'humor',
   },
@@ -393,22 +391,6 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   // ============================================================
   // CONSEJOS BASADOS EN CLICKS
   // ============================================================
-  {
-    id: 'clicks_10',
-    minClicks: 10,
-    maxClicks: 50,
-    message: '¡10 clicks! Cada uno cuenta. Sigue así y pronto serás un maestro del mouse.',
-    priority: 200,
-    category: 'encouragement',
-  },
-  {
-    id: 'clicks_100',
-    minClicks: 100,
-    maxClicks: 500,
-    message: '100 clicks! Tus dedos están empezando a tomar forma.',
-    priority: 205,
-    category: 'encouragement',
-  },
   {
     id: 'clicks_1000',
     minClicks: 1000,
@@ -471,8 +453,29 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   {
     id: 'level_50',
     minLevel: 50,
-    message: '¡¡NIVEL 50!! Eres leyenda. Solo los más dedicados llegan aquí.',
+    message: '¡¡NIVEL 50!! Eres una leyenda. Solo los más dedicados llegan aquí.',
     priority: 320,
+    category: 'achievement',
+  },
+  {
+    id: 'level_75',
+    minLevel: 75,
+    message: 'Nivel 75 alcanzado. ¿Sigues ahí? ¡Increíble dedicación!',
+    priority: 325,
+    category: 'achievement',
+  },
+  {
+    id: 'level_100',
+    minLevel: 100,
+    message: '¡NIVEL 100! Has dominado el arte de las croquetas. Eres una inspiración para todos.',
+    priority: 330,
+    category: 'achievement',
+  },
+  {
+    id: 'level_200',
+    minLevel: 200,
+    message: '¡¡NIVEL 200!! Eres una leyenda viviente en el mundo de las croquetas.',
+    priority: 335,
     category: 'achievement',
   },
 
@@ -482,7 +485,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   {
     id: 'tip_efficiency',
     message:
-      'Tip: Calcula el coste por croqueta/segundo de cada productor para optimizar tu estrategia.',
+      'Calcula el coste por croqueta/segundo de cada productor para optimizar tu estrategia.',
     priority: 400,
     category: 'tips',
   },
@@ -507,8 +510,7 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   },
   {
     id: 'tip_active_vs_idle',
-    message:
-      '¿Sabías? Puedes jugar activamente (clickeando) o pasivamente (con productores). ¡Encuentra tu estilo!',
+    message: '¿Sabías? Puedes jugar activamente o pasivamente. ¡Encuentra tu estilo!',
     priority: 404,
     category: 'tips',
   },
@@ -518,13 +520,13 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   // ============================================================
   {
     id: 'humor_addiction',
-    message: 'Recuerda: Las croquetas no son reales, pero tu adicción sí lo es.',
+    message: 'Recuerda que las croquetas no son reales pero tu adicción sí lo es.',
     priority: 500,
     category: 'humor',
   },
   {
     id: 'humor_grass',
-    message: 'Por favor, sal a tocar hierba de vez en cuando.',
+    message: 'Por favor, sal a tocar césped de vez en cuando.',
     priority: 501,
     category: 'humor',
   },
@@ -536,8 +538,33 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   },
   {
     id: 'humor_family',
-    message: 'Tu familia te extraña. Pero entendemos que las croquetas son prioridad.',
+    message: 'Tu familia te extraña. Pero entiendo que las croquetas son tu prioridad.',
     priority: 503,
+    category: 'humor',
+  },
+  {
+    id: 'humor_finger',
+    message:
+      'Recuerda estirar tus dedos. No queremos que termines con el síndrome del túnel carpiano.',
+    priority: 504,
+    category: 'humor',
+  },
+  {
+    id: 'humor_croqueta_addict',
+    message: 'Si las croquetas fueran una droga, ya estarías en rehabilitación. ¡Sigue así!',
+    priority: 505,
+    category: 'humor',
+  },
+  {
+    id: 'humor_infinite_clicks',
+    message: '¿Crees que puedes hacer clicks infinitos? ¡Sigue intentándolo!',
+    priority: 506,
+    category: 'humor',
+  },
+  {
+    id: 'humor_croqueta_universe',
+    message: 'En algún universo paralelo, ya eres el emperador de las croquetas.',
+    priority: 507,
     category: 'humor',
   },
   {
@@ -570,13 +597,14 @@ export const TUTORIAL_MESSAGES: TutorialMessage[] = [
   },
   {
     id: 'help_stats',
-    message: '¿Sabías que puedes ver todas tus estadísticas detalladas en el menú de Stats?',
+    message: '¿Sabías que puedes ver todas tus estadísticas detalladas?',
     priority: 601,
     category: 'tutorial',
   },
   {
     id: 'help_skins',
-    message: 'Las skins no dan bonificaciones, pero hacen que tu croqueta se vea genial.',
+    message:
+      'Las skins no dan bonificaciones, pero hacen que tu croqueta se vea genial o al menos diferente...',
     priority: 602,
     category: 'tutorial',
   },
