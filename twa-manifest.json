@@ -17,14 +17,7 @@
   "splashScreenFadeOutDuration": 300,
   "appVersionName": "1",
   "appVersionCode": 1,
-  "shortcuts": [
-    {
-      "name": "Jugar",
-      "shortName": "Jugar",
-      "url": "https://croquetaclicker.pavloh.com/",
-      "chosenIconUrl": "https://croquetaclicker.pavloh.com/icon_192.png"
-    }
-  ],
+  "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://croquetaclicker.pavloh.com/manifest.webmanifest",
   "fallbackType": "customtabs",
