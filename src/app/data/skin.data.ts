@@ -76,6 +76,7 @@ export const SKINS: SkinModel[] = [
     rarity: 'Rara',
     particleImage: '/assets/skins/croqueta-quemada.webp',
     unlockRequirement: { type: 'croquetas', value: 10000 },
+    background: '/assets/backgrounds/bg-quemado.webp',
   },
 
   // ============================================================
@@ -89,6 +90,7 @@ export const SKINS: SkinModel[] = [
     rarity: 'Épica',
     particleImage: '/assets/skins/croqueta-cosmica.webp',
     unlockRequirement: { type: 'level', value: 20 },
+    background: '/assets/backgrounds/bg-galaxy.webp',
   },
   {
     id: 10,
@@ -120,6 +122,7 @@ export const SKINS: SkinModel[] = [
     rarity: 'Legendaria',
     particleImage: '/assets/skins/croqueta-dios.webp',
     unlockRequirement: { type: 'level', value: 50 },
+    background: '/assets/backgrounds/bg-heaven.webp',
   },
   {
     id: 13,
@@ -130,6 +133,7 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-phillipe.webp',
     counterLabel: '¿croquetas?',
     unlockRequirement: { type: 'achievement', id: 'six_seven' },
+    background: '/assets/backgrounds/bg-phillipe.webp',
   },
   {
     id: 14,

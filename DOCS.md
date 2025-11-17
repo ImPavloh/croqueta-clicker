@@ -1,4 +1,4 @@
-# Documentación del Proyecto: Croqueta Clicker
+# Documentación del proyecto: Croqueta Clicker
 
 ## 1. Introducción
 
