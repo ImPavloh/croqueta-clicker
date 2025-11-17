@@ -76,11 +76,13 @@ export class PlayerStats {
 
   /**
    * Actualiza la experiencia por click
-   * @param newExp Nueva exp por click
+   * Fórmula BALANCEADA para progresión lenta y satisfactoria
    */
   upgradeExpPerClick(pointsPerClick: Decimal): void {
-    // curva suavizada: XP ≈ (puntosPorClick ^ 0.8) + (puntosPorClick / 3)
-    let newExpDecimal = pointsPerClick.pow(0.8).plus(pointsPerClick.dividedBy(3)).floor();
+    // XP = (puntosPorClick ^ 0.5) + log10(puntosPorClick + 1) * 2
+    const powerPart = pointsPerClick.pow(0.5);
+    const logPart = new Decimal(pointsPerClick.plus(1).log10()).times(2);
+    let newExpDecimal = powerPart.plus(logPart).floor();
 
     // convertir a number de forma segura
     let newExp: number;
@@ -97,15 +99,40 @@ export class PlayerStats {
   }
 
   /**
-   * Calcula la experiencia necesaria por nivel a través de una fórmula cuadrática
+   * Calcula la experiencia necesaria por nivel
+   * Curva AGRESIVA para progresión lenta (PERO satisfactoria)
    */
   private calculateExpToNext(): void {
     const n = this._level.value;
-    const baseExp = 100; // XP base del nivel 1
-    const growth = 1.2; // crecimiento por nivel (ajustable)
-    const expNeeded = Math.floor(baseExp * Math.pow(growth, n));
+    if (n === 0) {
+      this._expToNext.set(100);
+      return;
+    }
 
-    this._expToNext.set(expNeeded);
+    // Fórmula EXPONENCIAL AGRESIVA para niveles lentos:
+    // Early game (0-20): crece rápido para enganchar
+    // Mid game (20-100): crecimiento exponencial fuerte
+    // Late game (100+): exponencial MUY fuerte
+
+    let expNeeded: number;
+
+    if (n <= 20) {
+      // Early: 100 * 1.25^n (crece rápido pero razonable)
+      expNeeded = Math.floor(100 * Math.pow(1.25, n));
+    } else if (n <= 100) {
+      // Mid: base más alta + exponencial más fuerte
+      const earlyGameExp = Math.floor(100 * Math.pow(1.25, 20));
+      const midGameLevels = n - 20;
+      expNeeded = Math.floor(earlyGameExp * Math.pow(1.18, midGameLevels));
+    } else {
+      // Late: exponencial MUY fuerte
+      const earlyGameExp = Math.floor(100 * Math.pow(1.25, 20));
+      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.18, 80));
+      const lateGameLevels = n - 100;
+      expNeeded = Math.floor(midGameExp * Math.pow(1.15, lateGameLevels));
+    }
+
+    this._expToNext.set(Math.max(100, expNeeded));
   }
 
   /**

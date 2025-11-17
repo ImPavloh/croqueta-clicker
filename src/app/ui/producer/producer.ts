@@ -31,14 +31,14 @@ export class Producer {
   // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
   inintEfect = effect(() => {
     if (this.config) {
-        this.updatePriceAndPoints();
+      this.updatePriceAndPoints();
     }
   });
 
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
   levelEffect = effect(() => {
-    if(this.config){
+    if (this.config) {
       const currentLevel = this.level();
       this.checkLevel(currentLevel);
     }
@@ -54,16 +54,7 @@ export class Producer {
   ngOnInit() {
     this.loadFromStorage();
     this.updatePriceAndPoints();
-
-    if (this.quantity > 0) {
-      const addedProduction = this.calculateTotalPoints();
-
-      // 🛠️ Aplicar la producción cargadsa al CPS global
-      const oldCps = this.pointsService.pointsPerSecond();
-      const newCps = oldCps.plus(addedProduction);
-      this.pointsService.upgradePointsPerSecond(newCps);
-    }
-}
+  }
 
   // Actualizar precio y puntos cuando cambia la cantidad de compra
   updatePriceAndPoints() {
@@ -91,7 +82,6 @@ export class Producer {
     }
 
     // suma geométrica: base * mult^currentQuantity * (mult^amount - 1) / (mult - 1)
-    // TODO: revisar esto, victor todo tuyo
     const multPowCurrent = mult.pow(currentQuantity);
     const multPowAmount = mult.pow(amount);
     const numerator = multPowAmount.minus(1);
@@ -111,18 +101,25 @@ export class Producer {
     return value.floor();
   }
 
-  // Método para calcular los puntos generados por el productor (devuelve Decimal)
+  // Método para calcular los puntos por segundo que genera cada unidad individual
   calculatePoints(quantity: number): Decimal {
-    // points = pointsBase + pointsSum * quantity
+    if (quantity === 0) return new Decimal(0);
+    // CPS por unidad = pointsBase + (pointsSum * (quantity - 1))
+    // Cada unidad genera pointsBase, más un bonus por cada unidad YA comprada anteriormente
     const base = new Decimal(this.config.pointsBase);
-    const sum = new Decimal(this.config.pointsSum).times(quantity);
-    return base.plus(sum);
+    const bonus = new Decimal(this.config.pointsSum).times(Math.max(0, quantity - 1));
+    return base.plus(bonus);
   }
 
-  // Método para calcular el total de puntos generados por todos los productores
+  // Método para calcular el total de puntos generados por TODAS las unidades
   calculateTotalPoints(): Decimal {
-    // total = points * quantity
-    return this.points.times(this.quantity);
+    if (this.quantity === 0) return new Decimal(0);
+    // Total = (pointsBase * quantity) + (pointsSum * quantity * (quantity - 1) / 2)
+    // Esto es la suma: pointsBase*q + pointsSum*(0+1+2+...+(q-1))
+    const base = new Decimal(this.config.pointsBase).times(this.quantity);
+    const sumSequence = (this.quantity * (this.quantity - 1)) / 2;
+    const bonus = new Decimal(this.config.pointsSum).times(sumSequence);
+    return base.plus(bonus);
   }
 
   // Método para comprar el productor

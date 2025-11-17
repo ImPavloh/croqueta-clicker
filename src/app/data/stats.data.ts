@@ -1,15 +1,13 @@
-import { StatModel } from "app/models/stat.model";
-
+import { StatModel } from 'app/models/stat.model';
 
 export const STATS: StatModel[] = [
-
   // ============================================================
   // 🖱️ INTERACCIÓN - Estadísticas relacionadas con los clics
   // ============================================================
   {
     id: 'total_clicks',
     title: 'Clicks totales',
-    key: 'totalClicks', // nombre usado en PlayerStats
+    key: 'totalClicks',
     icon: 'mouse',
     format: 'number',
     description: 'Cantidad total de clics realizados por el jugador.',
@@ -41,7 +39,7 @@ export const STATS: StatModel[] = [
   {
     id: 'exp_progress',
     title: 'Progreso al siguiente nivel',
-    key: 'expProgress', // se calculará: currentExp / expToNext
+    key: 'expProgress',
     icon: 'progress',
     format: 'percentage',
     description: 'Porcentaje de progreso hacia el próximo nivel.',
