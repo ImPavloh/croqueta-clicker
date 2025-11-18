@@ -1,0 +1,12 @@
+<div
+  [ngClass]="{
+    card: true,
+    'card--sm': size() === 'sm',
+    'card--md': size() === 'md',
+    'card--lg': size() === 'lg',
+    'card--primary': variant() === 'primary',
+    'card--secondary': variant() === 'secondary'
+  }"
+>
+  <ng-content></ng-content>
+</div>

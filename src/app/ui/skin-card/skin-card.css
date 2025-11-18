@@ -6,6 +6,13 @@ button:not(:disabled):hover {
   cursor: pointer;
 }
 
-.grayscale {
-  filter: grayscale(100%);
+.skin-card-action {
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .skin-card-action app-button {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
 }

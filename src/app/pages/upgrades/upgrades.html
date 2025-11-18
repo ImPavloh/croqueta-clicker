@@ -1,6 +1,6 @@
 <!--upgrades-->
 <div class="h-full flex flex-col">
-  <div class="upgrades flex flex-row p-2 sm:p-4">
+  <div class="upgrades flex flex-row">
     @for (upgrade of upgrades; track upgrade.id) {
     <app-upgrade [config]="upgrade"></app-upgrade>
     }
@@ -10,13 +10,16 @@
   <div class="p-2 sm:p-4">
     <app-shop-controls />
   </div>
-  <div class="producers-container">
-    <div class="flex flex-col gap-3 sm:gap-8 p-2 sm:p-4">
+  <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
+    <div class="producers-list flex flex-col gap-4 p-2 sm:p-4">
       @for (producer of filteredAndSortedProducers(); track producer.id) {
-      <app-producer [config]="producer"></app-producer>
+      <app-producer
+        [config]="producer"
+        [class.producer-compact]="shopControls.gridView()"
+      ></app-producer>
       } @empty {
       <div class="flex justify-center items-center p-8 text-amber-800 italic opacity-70">
-        <p>No hay productores que coincidan con los filtros seleccionados</p>
+        <p>No hay productores comprables</p>
       </div>
       }
     </div>

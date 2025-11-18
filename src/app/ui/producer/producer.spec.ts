@@ -10,7 +10,11 @@ import { OptionsService } from '@services/options.service';
 
 // --- SIMULACIÓN DE SERVICIOS (MOCKS) ---
 // Define mocks para cada servicio inyectado en Producer.ts
-const mockPlayerStats = jasmine.createSpyObj('PlayerStats', ['level$', 'addExp', 'upgradeExpPerClick']);
+const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
+  'level$',
+  'addExp',
+  'upgradeExpPerClick',
+]);
 mockPlayerStats.level$ = of(0); // Simula el Observable para toSignal
 
 const mockPointsService = jasmine.createSpyObj('PointsService', [
@@ -18,14 +22,18 @@ const mockPointsService = jasmine.createSpyObj('PointsService', [
   'substractPoints',
   'pointsPerSecond',
   'upgradePointsPerSecond',
-  'pointsPerClick'
+  'pointsPerClick',
 ]);
 // Simula los métodos que devuelven Signals/Decimal. Usaremos un objeto Decimal simulado.
 mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
 
 const mockAudioService = jasmine.createSpyObj('AudioService', ['playSfx']);
-const mockShopControlsService = jasmine.createSpyObj('ShopControlsService', ['buyAmount']);
+const mockShopControlsService = jasmine.createSpyObj('ShopControlsService', [
+  'buyAmount',
+  'gridView',
+]);
 mockShopControlsService.buyAmount.and.returnValue(1); // Simula el signal de compra
+mockShopControlsService.gridView.and.returnValue(false); // Por defecto, vista lista
 
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
 
@@ -38,9 +46,9 @@ const mockConfig: ProducerModel = {
   pointsBase: 0,
   pointsSum: 1,
   exp: 1,
-  name: "Test",
-  image: "",
-  description: ""
+  name: 'Test',
+  image: '',
+  description: '',
 };
 
 // ----------------------------------------

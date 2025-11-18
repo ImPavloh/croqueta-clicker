@@ -22,6 +22,10 @@ export class ShopControlsService {
   private _filter = signal<FilterType>('all');
   readonly filter = this._filter.asReadonly();
 
+  // vista de la tienda: lista-grid
+  private _gridView = signal<boolean>(false);
+  readonly gridView = this._gridView.asReadonly();
+
   constructor() {
     this.loadFromStorage();
   }
@@ -41,6 +45,12 @@ export class ShopControlsService {
   // cambiar el filtro
   setFilter(filter: FilterType) {
     this._filter.set(filter);
+    this.saveToStorage();
+  }
+
+  // cambiar layout de vista a grid o lista
+  setGridView(value: boolean) {
+    this._gridView.set(value);
     this.saveToStorage();
   }
 
@@ -73,6 +83,12 @@ export class ShopControlsService {
     if (storedFilter && ['all', 'affordable'].includes(storedFilter)) {
       this._filter.set(storedFilter);
     }
+
+    // cargar vista grid
+    const storedGrid = this.optionsService.getGameItem('shopGridView');
+    if (storedGrid === 'true' || storedGrid === 'false') {
+      this._gridView.set(storedGrid === 'true');
+    }
   }
 
   private saveToStorage() {
@@ -80,11 +96,13 @@ export class ShopControlsService {
     this.optionsService.setGameItem('buyAmount', String(this._buyAmount()));
     this.optionsService.setGameItem('shopSortOrder', this._sortOrder());
     this.optionsService.setGameItem('shopFilter', this._filter());
+    this.optionsService.setGameItem('shopGridView', String(this._gridView()));
   }
 
   public reset() {
     this._buyAmount.set(1);
     this._sortOrder.set('default');
     this._filter.set('all');
+    this._gridView.set(false);
   }
 }

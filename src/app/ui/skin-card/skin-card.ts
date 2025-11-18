@@ -1,14 +1,14 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkinsService } from '@services/skins.service';
-import { CornerCard } from '@ui/corner-card/corner-card';
+import { ButtonComponent } from '@ui/button/button';
 import { AudioService } from '@services/audio.service';
 import { SkinModel } from 'app/models/skin.model';
 import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-skin-card',
-  imports: [CornerCard, CommonModule, Tooltip],
+  imports: [ButtonComponent, CommonModule, Tooltip],
   templateUrl: './skin-card.html',
   styleUrl: './skin-card.css',
 })

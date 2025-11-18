@@ -32,41 +32,25 @@
 
   <div class="separator"></div>
 
-  <!-- ordenación -->
+  <!-- vista: grid o lista -->
   <div class="control-group">
-    <p class="label">Ordenar</p>
+    <p class="label">Vista</p>
     <div class="gap-1.5 flex">
       <app-button
         variant="control"
-        [active]="shopControls.sortOrder() === 'default'"
-        (click)="selectSort('default')"
-        title="Orden por defecto"
+        [active]="!shopControls.gridView()"
+        (click)="shopControls.setGridView(false)"
+        title="Vista lista"
       >
-        x
+        ☰
       </app-button>
       <app-button
         variant="control"
-        [active]="shopControls.sortOrder() === 'price-asc'"
-        (click)="selectSort('price-asc')"
-        title="Precio: Menor a mayor"
+        [active]="shopControls.gridView()"
+        (click)="shopControls.setGridView(true)"
+        title="Vista cuadrícula"
       >
-        ¢ ↑
-      </app-button>
-      <app-button
-        variant="control"
-        [active]="shopControls.sortOrder() === 'price-desc'"
-        (click)="selectSort('price-desc')"
-        title="Precio: Mayor a menor"
-      >
-        ¢ ↓
-      </app-button>
-      <app-button
-        variant="control"
-        [active]="shopControls.sortOrder() === 'name'"
-        (click)="selectSort('name')"
-        title="Orden alfabético"
-      >
-        A-Z
+        ▦
       </app-button>
     </div>
   </div>

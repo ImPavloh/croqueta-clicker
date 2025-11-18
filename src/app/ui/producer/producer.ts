@@ -2,19 +2,18 @@ import { Component, effect, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
-import { CornerCard } from '@ui/corner-card/corner-card';
+import { ButtonComponent } from '@ui/button/button';
 import { PlayerStats } from '@services/player-stats.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
-import { Tooltip } from '@ui/tooltip/tooltip';
 import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-producer',
-  imports: [NgClass, ShortNumberPipe, CornerCard, Tooltip],
+  imports: [NgClass, ShortNumberPipe, ButtonComponent],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })

@@ -28,12 +28,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-direction: column; /* stack bonus under stats */
+  flex-direction: column;
 }
 
 .ds-right-inner {
+  min-width: 20vw;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 12px;
 }
 
@@ -99,6 +101,7 @@
 .ds-stat {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 10px;
 }
 

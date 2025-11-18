@@ -1,17 +1,19 @@
 @if (config){
 <app-tooltip [text]="unlockText" [position]="'bottom'">
-  <button (click)="onClick()" class="w-full h-full" [disabled]="!isUnlocked">
-    <app-corner-card
-      type="button"
-      [disabled]="!isUnlocked"
-      [hoverable]="isUnlocked"
-      [active]="isSelected"
-    >
-      <div class="relative w-full h-32">
+  <app-button
+    type="button"
+    [disabled]="!isUnlocked"
+    [hoverable]="isUnlocked"
+    [active]="isSelected"
+    (click)="onClick()"
+    customClass="w-full flex flex-col items-center justify-start gap-2 p-2"
+  >
+    <div class="relative w-full h-28 sm:h-32 md:h-36 lg:h-40 flex items-center justify-center">
+      <div class="relative w-full">
         <img
           src="{{ config.image }}"
           alt="Imagen de {{ config.name }}"
-          class="h-full w-auto object-contain transition-all mx-auto"
+          class="object-contain transition-all mx-auto max-w-[110px] max-h-[110px] w-auto h-auto"
           width="109"
           height="128"
           loading="lazy"
@@ -19,27 +21,28 @@
           [class.opacity-30]="!isUnlocked"
           [class.grayscale]="!isUnlocked"
         />
-        @if (!isUnlocked) {
-        <div class="absolute inset-0 flex items-center justify-center">
-          <svg class="w-12 h-12 text-amber-900 opacity-80" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        }
       </div>
-      <div class="text-center h-full">
-        <h3
-          class="text-lg lg:text-2xl text-amber-900 text-shadow-amber-950 text-shadow-2xs"
-          [class.opacity-50]="!isUnlocked"
-        >
-          {{ config.name }}
-        </h3>
+      @if (!isUnlocked) {
+      <div class="absolute inset-0 flex items-center justify-center">
+        <svg class="w-12 h-12 text-amber-900 opacity-80" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
       </div>
-    </app-corner-card>
-  </button>
+      }
+    </div>
+
+    <div class="text-center h-full mt-1">
+      <h3
+        class="text-lg lg:text-xl text-amber-900 text-shadow-amber-950 text-shadow-2xs truncate"
+        [class.opacity-50]="!isUnlocked"
+      >
+        {{ config.name }}
+      </h3>
+    </div>
+  </app-button>
 </app-tooltip>
 }

@@ -14,7 +14,7 @@ import { OptionsService } from '@services/options.service';
 const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
   'level$',
   'addExp',
-  'upgradeExpPerClick'
+  'upgradeExpPerClick',
 ]);
 mockPlayerStats.level$ = of(0); // Simula el Observable para toSignal
 
@@ -22,7 +22,7 @@ const mockPointsService = jasmine.createSpyObj('PointsService', [
   'points',
   'substractPoints',
   'pointsPerClick',
-  'upgradePointPerClick'
+  'upgradePointPerClick',
 ]);
 // Simula que 'points()' devuelve un objeto que responde a gte() y lt()
 // gte() -> greater than or equal (suficientes puntos para comprar)
@@ -30,7 +30,6 @@ const mockPointsService = jasmine.createSpyObj('PointsService', [
 mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
 // Simula pointsPerClick()
 mockPointsService.pointsPerClick.and.returnValue({ plus: () => ({}) } as any);
-
 
 const mockAudioService = jasmine.createSpyObj('AudioService', ['playSfx']);
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
@@ -44,8 +43,8 @@ const mockConfig: UpgradeModel = {
   price: 100, // Debe ser un número, ya que el componente lo convierte a Decimal
   clicks: 1,
   exp: 10,
-  name: "Mock Upgrade",
-  image: "mock.png",
+  name: 'Mock Upgrade',
+  image: 'mock.png',
 };
 
 // ----------------------------------------

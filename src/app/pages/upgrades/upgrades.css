@@ -33,6 +33,19 @@
   border-radius: 8px;
 }
 
+.producers-container.producers-grid .producers-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.producers-container.producers-grid .producers-list app-producer {
+  display: block;
+  height: 100%;
+  min-height: 160px;
+}
+
 /* para móviles */
 @media (max-width: 640px) {
   .upgrades {

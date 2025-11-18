@@ -8,11 +8,11 @@ import { AudioService } from '@services/audio.service';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './button.html',
-  styleUrl: './button.css',
+  styleUrls: ['./button.css'],
   host: {
     '[class]': 'customClass',
-    '(click)': 'onClick()'
-  }
+    '(click)': 'onClick()',
+  },
 })
 export class ButtonComponent {
   private audioService = inject(AudioService);
@@ -20,9 +20,10 @@ export class ButtonComponent {
   @Input() variant: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'nav' | 'control' =
     'primary';
   @Input() active: boolean = false;
+  @Input() hoverable: boolean = true;
+  @Input() clickable: boolean = false;
   @Input() disabled: boolean = false;
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
-  @Input() fullWidth: boolean = false;
   @Input() routerLink?: string | any[];
   @Input() routerLinkActiveExact: boolean = false;
   @Input() customClass: string = '';

@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Producer } from '@ui/producer/producer';
 import { Upgrade } from '@ui/upgrade/upgrade';
 import { ShopControls } from '@ui/shop-controls/shop-controls';
@@ -9,10 +10,11 @@ import { ShopControlsService } from '@services/shop-controls.service';
 import { PointsService } from '@services/points.service';
 import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-upgrades',
-  imports: [Producer, Upgrade, ShopControls],
+  imports: [CommonModule, Producer, Upgrade, ShopControls, Tooltip],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',
 })
@@ -22,7 +24,7 @@ export class Upgrades {
 
   private optionsService = inject(OptionsService);
 
-  constructor(private shopControls: ShopControlsService, private pointsService: PointsService) {}
+  constructor(public shopControls: ShopControlsService, private pointsService: PointsService) {}
 
   filteredAndSortedProducers = computed(() => {
     let filtered = [...this.producers];
@@ -38,29 +40,6 @@ export class Upgrades {
         const price = this.calculateBulkPrice(p, this.getProducerQuantity(p.id), buyAmount);
         return currentPoints.gte(price);
       });
-    }
-
-    if (sort === 'price-asc') {
-      // Precio ascendente
-      filtered.sort((a, b) => {
-        const qtyA = this.getProducerQuantity(a.id);
-        const qtyB = this.getProducerQuantity(b.id);
-        const priceA = this.calculateBulkPrice(a, qtyA, buyAmount);
-        const priceB = this.calculateBulkPrice(b, qtyB, buyAmount);
-        return priceA.cmp(priceB);
-      });
-    } else if (sort === 'price-desc') {
-      // Precio descendente
-      filtered.sort((a, b) => {
-        const qtyA = this.getProducerQuantity(a.id);
-        const qtyB = this.getProducerQuantity(b.id);
-        const priceA = this.calculateBulkPrice(a, qtyA, buyAmount);
-        const priceB = this.calculateBulkPrice(b, qtyB, buyAmount);
-        return priceB.cmp(priceA);
-      });
-    } else if (sort === 'name') {
-      // Orden alfabético
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return filtered;

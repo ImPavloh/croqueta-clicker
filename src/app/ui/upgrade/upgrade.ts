@@ -2,7 +2,7 @@ import { Component, effect, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
-import { CornerCard } from '@ui/corner-card/corner-card';
+import { ButtonComponent } from '@ui/button/button';
 import { PlayerStats } from '@services/player-stats.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
@@ -12,7 +12,7 @@ import { UpgradeModel } from '@models/upgrade.model';
 
 @Component({
   selector: 'app-upgrade',
-  imports: [NgClass, ShortNumberPipe, CornerCard],
+  imports: [NgClass, ShortNumberPipe, ButtonComponent],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })
@@ -30,8 +30,8 @@ export class Upgrade {
     // El effect se ejecutará inmediatamente, pero la lógica interna
     // solo procederá si 'config' ya ha sido establecido por el Input.
     if (this.config) {
-        const currentLevel = this.level();
-        this.checkLevel(currentLevel);
+      const currentLevel = this.level();
+      this.checkLevel(currentLevel);
     }
   });
 
