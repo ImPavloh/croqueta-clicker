@@ -23,6 +23,10 @@ export class OptionsService {
   readonly showParticles = this._showParticles.asReadonly();
   readonly showFloatingText = this._showFloatingText.asReadonly();
 
+  // -- versión para cambiar cuándo hay cambios en items guardados
+  private _gameItemsVersion = signal<number>(0);
+  readonly gameItemsVersion = this._gameItemsVersion.asReadonly();
+
   // --- Observables normalizados 0..1 (para AudioService) ---
   private _generalVolume$ = new BehaviorSubject<number>(1); // 0..1
   private _musicVolume$ = new BehaviorSubject<number>(1);
@@ -290,10 +294,13 @@ export class OptionsService {
   setGameItem(key: string, value: string): void {
     if (typeof localStorage === 'undefined') return;
     localStorage.setItem(GAME_PREFIX + key, value);
+    // notificar que un item de progreso se ha modificado
+    this._gameItemsVersion.update((v) => v + 1);
   }
 
   removeGameItem(key: string): void {
     if (typeof localStorage === 'undefined') return;
     localStorage.removeItem(GAME_PREFIX + key);
+    this._gameItemsVersion.update((v) => v + 1);
   }
 }

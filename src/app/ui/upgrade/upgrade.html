@@ -1,48 +1,60 @@
 @if (!bought && config){
 <app-button
   type="button"
+  variant="terciary"
   (click)="buyUpgrade()"
   [disabled]="pointsService.points().lt(config.price) || !unlocked"
   [hoverable]="pointsService.points().gte(config.price) && unlocked"
   [active]="false"
-  [clickable]="true"
+  [clickable]="!(pointsService.points().lt(config.price) || !unlocked)"
   [class.full-height]="true"
   [class.full-width]="true"
-  [ngClass]="
-    pointsService.points().lt(config.price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
-  "
+  class="pr-4 h-full max-w-3xs w-full min-w-36 sm:pr-8 sm:min-w-48"
 >
   <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
   @if (unlocked) {
-  <div class="flex flex-col items-center gap-1 sm:gap-2">
-    <img
-      class="size-12 sm:size-16 shrink-0"
-      src="{{ config.image }}"
-      alt="Imagen de {{ config.name }}"
-    />
-    <div class="flex flex-col items-center">
-      <p class="text-amber-800 text-sm sm:text-base leading-tight">{{ config.name }}</p>
-      <p class="text-base sm:text-lg text-green-700">
-        +{{ config.clicks | short }} ¢
+  <div class="upgrade-card-inner">
+    <img class="upgrade-image" src="{{ config.image }}" alt="Imagen de {{ config.name }}" />
+    <div class="flex flex-col items-center justify-center">
+      <p class="text-amber-800 text-sm sm:text-base leading-tight upgrade-name">
+        {{ config.name || 'Nivel ' + config.level }}
+      </p>
+      <p class="text-base sm:text-lg text-green-700 md:block hidden">
+        +{{
+          config.clicks !== undefined && config.clicks !== null
+            ? (config.clicks | short)
+            : 'Nivel ' + config.level
+        }}
+        ¢
         <span class="text-black text-[10px] sm:text-xs opacity-60">por clic</span>
       </p>
     </div>
 
-    <div class="w-12 h-px bg-amber-800 opacity-20 my-0.5 sm:my-1"></div>
+    <div class="w-12 h-px bg-amber-800 opacity-20 my-0.5 mx-auto sm:my-1"></div>
 
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center upgrade-price">
       <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">Precio</p>
       <p
         class="text-sm sm:text-base"
-        [ngClass]="pointsService.points().gte(config.price) ? 'text-green-700' : 'text-red-600'"
+        [ngClass]="
+          config.price !== undefined &&
+          config.price !== null &&
+          pointsService.points().gte(config.price)
+            ? 'text-green-700'
+            : 'text-red-600'
+        "
       >
-        {{ config.price | short }} ¢
+        {{
+          config.price !== undefined && config.price !== null
+            ? (config.price | short) + ' ¢'
+            : 'Nivel ' + config.level
+        }}
       </p>
     </div>
   </div>
   } @else {
-  <div class="flex h-28 justify-center items-center italic opacity-70 text-amber-800">
-    <p>Nivel {{ config.level }}</p>
+  <div class="upgrade-card-inner upgrade-placeholder">
+    <p class="text-amber-800">Nivel {{ config.level }}</p>
   </div>
   }
 </app-button>

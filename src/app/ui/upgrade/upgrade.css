@@ -1,0 +1,80 @@
+:host {
+  display: block;
+}
+
+:host(.upgrade) {
+  min-width: 150px;
+  min-height: 221px;
+  box-sizing: border-box;
+  display: block;
+}
+
+.upgrade-badge {
+  position: absolute;
+  z-index: 10;
+  transform: translateZ(0);
+}
+
+:host {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.btn > .upgrade-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 8px;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.btn > .upgrade-card-inner .upgrade-image {
+  display: block;
+  max-width: 72px;
+  max-height: 64px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.btn > .upgrade-card-inner .upgrade-name {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.btn > .upgrade-card-inner .upgrade-price {
+  text-align: center;
+}
+
+.btn > .upgrade-card-inner .upgrade-placeholder {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 4px;
+}
+
+@media (min-width: 640px) {
+  .btn > .upgrade-card-inner .upgrade-image {
+    max-width: 96px;
+    max-height: 84px;
+  }
+}
+
+@media (max-width: 640px) {
+  :host(.upgrade) {
+    min-width: 104px;
+    max-width: 120px;
+    min-height: 128px;
+    height: 128px;
+    max-height: 128px;
+  }
+}

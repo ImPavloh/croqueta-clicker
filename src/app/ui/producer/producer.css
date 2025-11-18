@@ -48,7 +48,7 @@
 }
 
 .producer-grid-price {
-  font-size: 0.875rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
 }
@@ -82,14 +82,6 @@
 
   .producer-grid-name {
     font-size: 0.813rem;
-  }
-
-  .producer-grid-price {
-    font-size: 0.813rem;
-  }
-
-  .producer-grid-quantity {
-    font-size: 1.25rem;
   }
 
   .producer-grid-production {

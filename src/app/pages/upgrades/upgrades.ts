@@ -10,11 +10,10 @@ import { ShopControlsService } from '@services/shop-controls.service';
 import { PointsService } from '@services/points.service';
 import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
-import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-upgrades',
-  imports: [CommonModule, Producer, Upgrade, ShopControls, Tooltip],
+  imports: [CommonModule, Producer, Upgrade, ShopControls],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',
 })
@@ -26,23 +25,14 @@ export class Upgrades {
 
   constructor(public shopControls: ShopControlsService, private pointsService: PointsService) {}
 
-  filteredAndSortedProducers = computed(() => {
-    let filtered = [...this.producers];
-
-    const buyAmount = this.shopControls.buyAmount();
-    const filter = this.shopControls.filter();
-    const sort = this.shopControls.sortOrder();
-    const currentPoints = this.pointsService.points();
-
-    if (filter === 'affordable') {
-      // Solo los que puedes comprar
-      filtered = filtered.filter((p) => {
-        const price = this.calculateBulkPrice(p, this.getProducerQuantity(p.id), buyAmount);
-        return currentPoints.gte(price);
-      });
-    }
-
-    return filtered;
+  // filtrar upgrades que ya han sido compradas para que no aparezcan
+  visibleUpgrades = computed(() => {
+    this.optionsService.gameItemsVersion();
+    const u = [...this.upgrades];
+    return u.filter((upgrade) => {
+      const stored = this.optionsService.getGameItem('upgrade_' + upgrade.id + '_bought');
+      return stored !== 'true';
+    });
   });
 
   // Obtener cantidad de un productor desde localStorage

@@ -12,6 +12,9 @@ import { UpgradeModel } from '@models/upgrade.model';
 
 @Component({
   selector: 'app-upgrade',
+  host: {
+    class: 'upgrade',
+  },
   imports: [NgClass, ShortNumberPipe, ButtonComponent],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
@@ -23,12 +26,11 @@ export class Upgrade {
   private optionsService = inject(OptionsService);
 
   @Input() config!: UpgradeModel;
+  @Input() cardIndex: number = 0;
 
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
   levelEffect = effect(() => {
-    // El effect se ejecutará inmediatamente, pero la lógica interna
-    // solo procederá si 'config' ya ha sido establecido por el Input.
     if (this.config) {
       const currentLevel = this.level();
       this.checkLevel(currentLevel);
@@ -42,9 +44,9 @@ export class Upgrade {
     this.loadFromStorage();
   }
 
-  // Comprobar si la mejora está desbloqueada
+  // comprobar si la mejora está desbloqueada
   checkLevel(currentLevel: number) {
-    if (!this.config) return; // Doble seguridad
+    if (!this.config) return;
     this.unlocked = currentLevel >= this.config.level;
   }
 

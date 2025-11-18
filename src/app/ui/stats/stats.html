@@ -6,9 +6,10 @@
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold text-white/90 uppercase tracking-widest">Nivel</span>
           <div class="level-divider"></div>
-          <span class="text-3xl font-black text-white leading-none level-number">{{
-            level() | short
-          }}</span>
+          <span
+            class="text-3xl font-black text-white leading-none level-number font-mono tabular-nums min-w-[4ch] text-center"
+            >{{ level() | short }}</span
+          >
         </div>
       </div>
 
@@ -21,13 +22,15 @@
           <div
             class="absolute inset-0 flex items-center justify-center gap-1.5 font-semibold pointer-events-none z-20 text-center px-2"
           >
-            <span class="text-sm text-white drop-shadow-lg font-bold">{{
-              currentExp() | short
-            }}</span>
+            <span
+              class="text-sm text-white drop-shadow-lg font-bold font-mono tabular-nums inline-block min-w-[6ch] text-center"
+              >{{ currentExp() | short }}</span
+            >
             <span class="text-xs text-white/80 font-medium">/</span>
-            <span class="text-sm text-white drop-shadow-lg font-bold">{{
-              expToNext() | short
-            }}</span>
+            <span
+              class="text-sm text-white drop-shadow-lg font-bold font-mono tabular-nums inline-block min-w-[6ch] text-center"
+              >{{ expToNext() | short }}</span
+            >
             <span class="text-xs text-white/80 uppercase tracking-widest ml-1 font-bold">XP</span>
           </div>
         </div>
@@ -41,7 +44,9 @@
         </div>
         <div class="flex flex-col gap-1 flex-1 min-w-0">
           <span class="stat-label">Tiempo</span>
-          <span class="stat-value">{{ formatTime(timePlaying()) }}</span>
+          <span class="stat-value font-mono tabular-nums inline-block min-w-[10ch]">{{
+            formatTime(timePlaying())
+          }}</span>
         </div>
       </div>
 
@@ -51,7 +56,9 @@
         </div>
         <div class="flex flex-col gap-1 flex-1 min-w-0">
           <span class="stat-label">Clicks</span>
-          <span class="stat-value">{{ totalClicks() | short }}</span>
+          <span class="stat-value font-mono tabular-nums inline-block min-w-[8ch]">{{
+            totalClicks() | short
+          }}</span>
         </div>
       </div>
     </div>
@@ -100,9 +107,13 @@
         </defs>
       </svg>
       <div class="ds-level">
-        <div class="ds-level-number">{{ level() | short }}</div>
+        <div class="ds-level-number font-mono tabular-nums inline-block min-w-[4ch] text-center">
+          {{ level() | short }}
+        </div>
         <div class="ds-level-label">Nivel</div>
-        <div class="ds-exp">{{ currentExp() | short }} / {{ expToNext() | short }} XP</div>
+        <div class="ds-exp font-mono tabular-nums">
+          {{ currentExp() | short }} / {{ expToNext() | short }} XP
+        </div>
       </div>
     </div>
   </div>
@@ -115,7 +126,9 @@
         </div>
         <div class="ds-text">
           <div class="ds-label">Tiempo</div>
-          <div class="ds-value">{{ formatTime(timePlaying()) }}</div>
+          <div class="ds-value font-mono tabular-nums inline-block min-w-[10ch]">
+            {{ formatTime(timePlaying()) }}
+          </div>
         </div>
       </div>
 
@@ -125,7 +138,9 @@
         </div>
         <div class="ds-text">
           <div class="ds-label">Clicks</div>
-          <div class="ds-value">{{ totalClicks() | short }}</div>
+          <div class="ds-value font-mono tabular-nums inline-block min-w-[8ch]">
+            {{ totalClicks() | short }}
+          </div>
         </div>
       </div>
     </div>

@@ -14,14 +14,6 @@ export class ShopControlsService {
   private _buyAmount = signal<BuyAmount>(1);
   readonly buyAmount = this._buyAmount.asReadonly();
 
-  // orden de clasificación
-  private _sortOrder = signal<SortOrder>('default');
-  readonly sortOrder = this._sortOrder.asReadonly();
-
-  // filtro activo
-  private _filter = signal<FilterType>('all');
-  readonly filter = this._filter.asReadonly();
-
   // vista de la tienda: lista-grid
   private _gridView = signal<boolean>(false);
   readonly gridView = this._gridView.asReadonly();
@@ -33,18 +25,6 @@ export class ShopControlsService {
   // cambiar la cantidad de compra
   setBuyAmount(amount: BuyAmount) {
     this._buyAmount.set(amount);
-    this.saveToStorage();
-  }
-
-  // cambiar el orden
-  setSortOrder(order: SortOrder) {
-    this._sortOrder.set(order);
-    this.saveToStorage();
-  }
-
-  // cambiar el filtro
-  setFilter(filter: FilterType) {
-    this._filter.set(filter);
     this.saveToStorage();
   }
 
@@ -72,18 +52,6 @@ export class ShopControlsService {
       this._buyAmount.set(Number(stored) as BuyAmount);
     }
 
-    // cargar orden
-    const storedSort = this.optionsService.getGameItem('shopSortOrder') as SortOrder;
-    if (storedSort && ['default', 'price-asc', 'price-desc', 'name'].includes(storedSort)) {
-      this._sortOrder.set(storedSort);
-    }
-
-    // cargar filtro
-    const storedFilter = this.optionsService.getGameItem('shopFilter') as FilterType;
-    if (storedFilter && ['all', 'affordable'].includes(storedFilter)) {
-      this._filter.set(storedFilter);
-    }
-
     // cargar vista grid
     const storedGrid = this.optionsService.getGameItem('shopGridView');
     if (storedGrid === 'true' || storedGrid === 'false') {
@@ -94,15 +62,11 @@ export class ShopControlsService {
   private saveToStorage() {
     if (typeof localStorage === 'undefined') return;
     this.optionsService.setGameItem('buyAmount', String(this._buyAmount()));
-    this.optionsService.setGameItem('shopSortOrder', this._sortOrder());
-    this.optionsService.setGameItem('shopFilter', this._filter());
     this.optionsService.setGameItem('shopGridView', String(this._gridView()));
   }
 
   public reset() {
     this._buyAmount.set(1);
-    this._sortOrder.set('default');
-    this._filter.set('all');
     this._gridView.set(false);
   }
 }

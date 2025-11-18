@@ -7,15 +7,72 @@
 .upgrades {
   mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem;
+  align-items: stretch;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.upgrades::-webkit-scrollbar {
+  display: none;
+}
+
+.controls-grid .search-input {
+  border: 1px solid rgba(139, 69, 19, 0.08);
+  padding: 8px 10px;
+  outline: none;
+  color: #b87333;
+}
+
+.controls-grid .search-input:focus {
+  box-shadow: 0 0 0 3px rgba(184, 156, 90, 0.12);
+  border-color: #b89c5a;
+}
+
+.upgrades-section {
+  padding-bottom: 0.75rem;
+  flex: 0 0 auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.5rem;
+}
+
+.section-title {
+  font-weight: 800;
+  color: #6b5633;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: #6b5633;
+}
+
+.upgrades {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0));
+  border-radius: 8px;
+  padding: 0.25rem 0.25rem;
 }
 
 .producers-container {
+  mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
   overflow-y: auto;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: #b89c5a #f3eac2;
-  mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .producers-container::-webkit-scrollbar {
@@ -46,16 +103,26 @@
   min-height: 160px;
 }
 
+.producers-container.producers-grid .producers-list .no-producers-placeholder {
+  grid-column: 1 / -1;
+  width: 100%;
+  justify-content: center;
+}
+
+.producers-container .producers-list .no-producers-placeholder {
+  width: 100%;
+}
+
 /* para móviles */
 @media (max-width: 640px) {
   .upgrades {
-    mask-image: linear-gradient(to right, transparent, black 5%, black 55%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 55%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 0, black 55%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 0, black 55%, transparent);
   }
 
   .producers-container {
-    height: auto;
-    max-height: 60svh;
     padding: 0.25rem;
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 }

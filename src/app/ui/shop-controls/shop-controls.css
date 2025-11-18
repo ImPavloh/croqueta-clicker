@@ -1,85 +1,23 @@
-.shop-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 20px;
-  padding: 12px 20px;
-  background: rgba(255, 248, 220, 0.95);
-  border: 2px solid #d4a574;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+:host {
+  display: block;
 }
 
-.control-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+/* Ensure the root row can adapt on small screens */
+:host > div {
+  width: 100%;
 }
 
-.label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #8b4513;
-  margin: 0 0 0 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-
-.separator {
-  width: 1px;
-  height: 40px;
-  background: #d4a574;
-  opacity: 0.4;
-}
-
-/* moviles */
-@media (max-width: 768px) {
-  .mhdn {
-    display: none;
+@media (max-width: 640px) {
+  :host > div {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .shop-controls {
-    justify-content: space-between;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 8px;
-  }
-
-  .separator {
-    display: none;
-  }
-
-  .buttons {
-    gap: 3px;
-  }
-
-  .label {
-    font-size: 10px;
-    margin: 0;
-    letter-spacing: 0.3px;
-    display: none;
-  }
-
-  .filter-group .label {
-    display: block;
-    font-size: 9px;
-  }
-}
-
-/* pantallas muy pequeñas */
-@media (max-width: 480px) {
-  .shop-controls {
-    gap: 6px;
-    padding: 4px 4px;
-  }
-  .buttons {
-    gap: 2px;
-  }
-
-  .label {
-    font-size: 8px;
+  /* Let button groups wrap nicely */
+  :host > div > div {
+    flex: 0 1 auto;
   }
 }

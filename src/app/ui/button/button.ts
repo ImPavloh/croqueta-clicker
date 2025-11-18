@@ -11,14 +11,22 @@ import { AudioService } from '@services/audio.service';
   styleUrls: ['./button.css'],
   host: {
     '[class]': 'customClass',
-    '(click)': 'onClick()',
+    '(click)': 'onClick($event)',
   },
 })
 export class ButtonComponent {
   private audioService = inject(AudioService);
 
-  @Input() variant: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'nav' | 'control' =
-    'primary';
+  @Input() variant:
+    | 'primary'
+    | 'secondary'
+    | 'terciary'
+    | 'quaternary'
+    | 'danger'
+    | 'success'
+    | 'warning'
+    | 'nav'
+    | 'control' = 'primary';
   @Input() active: boolean = false;
   @Input() hoverable: boolean = true;
   @Input() clickable: boolean = false;
@@ -29,8 +37,16 @@ export class ButtonComponent {
   @Input() customClass: string = '';
   @Input() noSound: boolean = false;
 
-  onClick() {
-    if (!this.disabled && !this.noSound) {
+  onClick(event?: Event) {
+    if (this.disabled) {
+      if (event?.preventDefault) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+      return;
+    }
+
+    if (!this.noSound) {
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     }
   }

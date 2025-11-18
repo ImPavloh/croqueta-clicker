@@ -8,6 +8,7 @@
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
     [class]="'btn btn-' + variant + ' ' + customClass"
+    [class.clickable]="clickable"
     [class.disabled]="disabled"
     [attr.aria-disabled]="disabled ? true : null"
     [attr.tabindex]="disabled ? -1 : null"

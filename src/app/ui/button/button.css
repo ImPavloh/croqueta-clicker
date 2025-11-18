@@ -21,7 +21,6 @@
 .btn.disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 /* Efecto de brillo */
@@ -70,6 +69,30 @@
 .btn-secondary:hover {
   background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 50%, #60a5fa 100%);
   border-color: #2563eb;
+}
+
+/* Variante Terciary */
+.btn-terciary {
+  color: #6b5633;
+  background: linear-gradient(135deg, #e8cfa1 0%, #f3e2c2 50%, #e8cfa1 100%);
+  border-color: #d4a574;
+}
+
+.btn-terciary:hover {
+  background: linear-gradient(135deg, #f3e2c2 0%, #e8cfa1 50%, #f3e2c2 100%);
+  border-color: #c9a05f;
+}
+
+/* Variante Quaternary */
+.btn-quaternary {
+  color: #6b5633;
+  background: linear-gradient(135deg, #f3e2c2 0%, #e8cfa1 50%, #f3e2c2 100%);
+  border-color: #d4a574;
+}
+
+.btn-quaternary:hover {
+  background: linear-gradient(135deg, #e8cfa1 0%, #f3e2c2 50%, #e8cfa1 100%);
+  border-color: #c9a05f;
 }
 
 /* Variante Danger */
@@ -143,24 +166,20 @@
 .btn-control {
   padding: 6px 12px;
   font-size: 14px;
-  font-weight: 700;
   color: #8b4513;
   background: linear-gradient(to bottom, #fff5e1, #f5deb3);
   border-color: #d4a574;
   border-radius: 8px;
-  min-width: 45px;
   transform: translateZ(0);
 }
 
 .btn-control:hover {
   background: linear-gradient(to bottom, #ffe4b5, #f5deb3);
   border-color: #c9a05f;
-  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-control:active {
-  transform: translateY(0) translateZ(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -187,13 +206,6 @@
     transform: translateY(-1px);
   }
 
-  .btn-control {
-    padding: 4px 8px;
-    font-size: 12px;
-    min-width: 40px;
-    border-radius: 6px;
-  }
-
   .btn-nav {
     padding: 8px 16px;
     font-size: 13px;
@@ -201,13 +213,6 @@
 }
 
 @media (max-width: 480px) {
-  .btn-control {
-    padding: 2px 6px;
-    font-size: 11px;
-    min-width: 35px;
-    border-radius: 5px;
-  }
-
   .btn-nav {
     padding: 6px 12px;
     font-size: 12px;
@@ -215,12 +220,6 @@
 }
 
 @media (max-width: 360px) {
-  .btn-control {
-    padding: 2px 3px;
-    font-size: 10px;
-    min-width: 30px;
-  }
-
   .btn-nav {
     padding: 5px 10px;
     font-size: 11px;

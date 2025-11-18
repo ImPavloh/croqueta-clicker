@@ -1,19 +1,32 @@
 @if (config){
 <app-button
   type="button"
+  variant="quaternary"
   [disabled]="pointsService.points().lt(price) || !unlocked"
   [hoverable]="pointsService.points().gte(price) && unlocked"
   [active]="false"
-  [clickable]="true"
+  [clickable]="!(pointsService.points().lt(price) || !unlocked)"
   (click)="buyProducer()"
-  [ngClass]="
-    pointsService.points().lt(price) || !unlocked ? 'cursor-not-allowed' : 'cursor-pointer'
-  "
 >
   @if (unlocked) { @if (shopControls.gridView()) {
   <div class="producer-grid-content">
-    <img class="producer-grid-image" src="{{ config.image }}" alt="Imagen de {{ config.name }}" />
-    <p class="producer-grid-name">{{ config.name }}</p>
+    <div class="flex flex-row gap-2 w-full items-center">
+      <div>
+        <img
+          class="producer-grid-image"
+          src="{{ config.image }}"
+          alt="Imagen de {{ config.name }}"
+        />
+        <p class="producer-grid-name">{{ config.name }}</p>
+      </div>
+      <div class="flex flex-col justify-evenly ml-auto text-right">
+        @if (quantity > 0) {
+        <p class="producer-grid-quantity">x{{ quantity }}</p>
+        <p class="producer-grid-production">{{ calculateTotalPoints() | short }} ¢/s</p>
+        }
+      </div>
+    </div>
+
     <div class="producer-grid-stats">
       <p
         class="producer-grid-price"
@@ -21,10 +34,6 @@
       >
         {{ price | short }} ¢
       </p>
-      @if (quantity > 0) {
-      <p class="producer-grid-quantity">x{{ quantity }}</p>
-      <p class="producer-grid-production">{{ calculateTotalPoints() | short }} ¢/s</p>
-      }
     </div>
   </div>
   } @else {
