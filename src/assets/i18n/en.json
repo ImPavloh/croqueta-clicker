@@ -318,11 +318,13 @@
     },
     "unlock": {
       "unlocked": "Unlocked",
-      "level": "Level {value}",
-      "croquettes": "{value} croquettes",
-      "exp": "{value} EXP",
-      "achievement": "Achievement: {id}",
-      "locked": "Locked"
+      "level": "Level {{value}}",
+      "croquettes": "{{value}} croquettes",
+      "exp": "{{value}} EXP",
+      "achievement": "Achievement: {{id}}",
+      "achievement_short": "Unlockable with an achievement",
+      "locked": "Locked",
+      "requirement": "Requirement: {{value}}"
     },
     "unlock_message": "¡You have unlocked the skin \"{{skinName}}\"!",
     "skin": {
@@ -335,19 +337,44 @@
       "7": { "name": "Coquette", "description": "A divine and stylish croquette" },
       "8": { "name": "Golden", "description": "A luxury croquette, probably toxic." },
       "9": { "name": "Burnt", "description": "Too much time in the fryer... crunchy to a crisp." },
-      "10": { "name": "Cosmic", "description": "Shines with the power of the universe. Not suitable for humans." },
-      "11": { "name": "King", "description": "His majesty the croquette, sovereign of all fried foods." },
-      "12": { "name": "Pope", "description": "The chosen croquette: wise, firm and a little too salty." },
+      "10": {
+        "name": "Cosmic",
+        "description": "Shines with the power of the universe. Not suitable for humans."
+      },
+      "11": {
+        "name": "King",
+        "description": "His majesty the croquette, sovereign of all fried foods."
+      },
+      "12": {
+        "name": "Pope",
+        "description": "The chosen croquette: wise, firm and a little too salty."
+      },
       "13": { "name": "Businesswoman", "description": "A croquette ready for business." },
       "14": { "name": "DJ", "description": "The croquette that plays the music at the party." },
       "15": { "name": "Super", "description": "A heroic croquette that saves the day." },
       "16": { "name": "God", "description": "Beyond bechamel and breadcrumbs..." },
       "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "croquettes?" },
-      "18": { "name": "Cookie", "description": "A croquette in an identity crisis.", "counterLabel": "cookies?" },
-      "19": { "name": "Banana?", "description": "A tropical croquette that leaves you with existential doubts.", "counterLabel": "bananas?" },
-      "20": { "name": "Sandwich...", "description": "A sandwich filled with croquettes, for the bravest.", "counterLabel": "sandwiches?" },
+      "18": {
+        "name": "Cookie",
+        "description": "A croquette in an identity crisis.",
+        "counterLabel": "cookies?"
+      },
+      "19": {
+        "name": "Banana?",
+        "description": "A tropical croquette that leaves you with existential doubts.",
+        "counterLabel": "bananas?"
+      },
+      "20": {
+        "name": "Sandwich...",
+        "description": "A sandwich filled with croquettes, for the bravest.",
+        "counterLabel": "sandwiches?"
+      },
       "21": { "name": "Real", "description": "The ultimate croquette." },
-      "22": { "name": "3D", "description": "A low-poly croquette, but just as tasty.", "counterLabel": "polygons?"}
+      "22": {
+        "name": "3D",
+        "description": "A low-poly croquette, but just as tasty.",
+        "counterLabel": "polygons?"
+      }
     }
   },
   "clicker": {

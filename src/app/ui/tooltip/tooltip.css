@@ -8,7 +8,7 @@
   border-radius: 8px;
   font-size: 13px;
   font-weight: normal;
-  white-space: normal;
+  white-space: pre-line;
   display: inline-block;
   max-width: 400px;
   line-height: 1.4;

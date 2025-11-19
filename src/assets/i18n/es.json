@@ -318,11 +318,13 @@
     },
     "unlock": {
       "unlocked": "Desbloqueada",
-      "level": "Nivel {value}",
-      "croquettes": "{value} croquetas",
-      "exp": "{value} EXP",
-      "achievement": "Logro: {id}",
-      "locked": "Bloqueada"
+      "level": "Nivel {{value}}",
+      "croquettes": "{{value}} croquetas",
+      "exp": "{{value}} EXP",
+      "achievement": "Logro: {{id}}",
+      "achievement_short": "Desbloqueable con un logro",
+      "locked": "Bloqueada",
+      "requirement": "Requisito: {{value}}"
     },
     "unlock_message": "¡Has desbloqueado la skin \"{{skinName}}\"!",
     "skin": {
@@ -334,20 +336,48 @@
       "6": { "name": "Setas", "description": "Una croqueta de setas exquisita y aromática" },
       "7": { "name": "Coqueta", "description": "Una croqueta divina y con estilo" },
       "8": { "name": "Dorada", "description": "Una croqueta de lujo, probablemente tóxica." },
-      "9": { "name": "Quemada", "description": "Demasiado tiempo en la freidora... crujiente nivel carbón." },
-      "10": { "name": "Cósmica", "description": "Brilla con el poder del universo. No apta para humanos." },
-      "11": { "name": "Rey", "description": "Su majestad la croqueta, soberana de todas las frituras." },
-      "12": { "name": "Papa", "description": "La croqueta elegida: sabia, firme y un poco pasada de sal." },
+      "9": {
+        "name": "Quemada",
+        "description": "Demasiado tiempo en la freidora... crujiente nivel carbón."
+      },
+      "10": {
+        "name": "Cósmica",
+        "description": "Brilla con el poder del universo. No apta para humanos."
+      },
+      "11": {
+        "name": "Rey",
+        "description": "Su majestad la croqueta, soberana de todas las frituras."
+      },
+      "12": {
+        "name": "Papa",
+        "description": "La croqueta elegida: sabia, firme y un poco pasada de sal."
+      },
       "13": { "name": "Empresaria", "description": "Una croqueta lista para los negocios." },
       "14": { "name": "DJ", "description": "La croqueta que pone la música en la fiesta." },
       "15": { "name": "Super", "description": "Una croqueta heroica que salva el día." },
       "16": { "name": "Dios", "description": "Más allá de la bechamel y el pan rallado..." },
       "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "¿croquetas?" },
-      "18": { "name": "Cookie", "description": "Una croqueta en crisis de identidad.", "counterLabel": "¿galletas?" },
-      "19": { "name": "¿Plátano?", "description": "Una croqueta tropical que te deja con dudas existenciales.", "counterLabel": "¿plátanos?" },
-      "20": { "name": "Bocadillo...", "description": "Un bocadillo relleno de croquetas, para los más valientes.", "counterLabel": "¿bocadillos?" },
+      "18": {
+        "name": "Cookie",
+        "description": "Una croqueta en crisis de identidad.",
+        "counterLabel": "¿galletas?"
+      },
+      "19": {
+        "name": "¿Plátano?",
+        "description": "Una croqueta tropical que te deja con dudas existenciales.",
+        "counterLabel": "¿plátanos?"
+      },
+      "20": {
+        "name": "Bocadillo...",
+        "description": "Un bocadillo relleno de croquetas, para los más valientes.",
+        "counterLabel": "¿bocadillos?"
+      },
       "21": { "name": "Real", "description": "La croqueta definitiva." },
-      "22": { "name": "3D", "description": "Una croqueta low-poly, pero igual de sabrosa.", "counterLabel": "¿polígonos?"}
+      "22": {
+        "name": "3D",
+        "description": "Una croqueta low-poly, pero igual de sabrosa.",
+        "counterLabel": "¿polígonos?"
+      }
     }
   },
   "clicker": {

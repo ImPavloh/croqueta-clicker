@@ -33,9 +33,14 @@ export class SkinCard {
     if (this.isUnlocked || !this.config.unlockRequirement) {
       return this.translocoService.translate(this.config.description);
     }
-    return `${this.translocoService.translate(this.config.description)}\n\nRequisito: ${this.skinsService.getUnlockRequirementText(
+    const requirementText = this.skinsService.getUnlockRequirementText(
       this.config.unlockRequirement
-    )}`;
+    );
+    const labeled = this.translocoService.translate('skins.unlock.requirement', {
+      value: requirementText,
+    });
+
+    return `${this.translocoService.translate(this.config.description)}\n\n${labeled}`;
   }
 
   onClick() {

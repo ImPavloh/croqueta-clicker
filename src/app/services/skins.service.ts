@@ -105,11 +105,21 @@ export class SkinsService {
       case 'level':
         return this.translocoService.translate('skins.unlock.level', { value: requirement.value });
       case 'croquetas':
-        return this.translocoService.translate('skins.unlock.croquettes', { value: this.formatNumber(requirement.value) });
+        return this.translocoService.translate('skins.unlock.croquettes', {
+          value: this.formatNumber(requirement.value),
+        });
       case 'exp':
-        return this.translocoService.translate('skins.unlock.exp', { value: this.formatNumber(requirement.value) });
+        return this.translocoService.translate('skins.unlock.exp', {
+          value: this.formatNumber(requirement.value),
+        });
       case 'achievement':
-        return this.translocoService.translate('skins.unlock.achievement', { id: requirement.id });
+        const ach = this.achievementsService.getAchievementById(requirement.id);
+        if (ach) {
+          const achName = this.translocoService.translate(ach.title);
+          return this.translocoService.translate('skins.unlock.achievement', { id: achName });
+        }
+
+        return this.translocoService.translate('skins.unlock.achievement_short');
       default:
         return this.translocoService.translate('skins.unlock.locked');
     }
@@ -136,12 +146,12 @@ export class SkinsService {
 
   removeSkinFromQueue(skinId: number) {
     const currentQueue = this.queueSubject.value; // O como llames a tu BehaviorSubject
-    const updatedQueue = currentQueue.filter(item => item.skin.id !== skinId);
+    const updatedQueue = currentQueue.filter((item) => item.skin.id !== skinId);
     this.queueSubject.next(updatedQueue); // Al hacer .next(), Angular avisa al componente de nuevo
   }
   // actualizar fondo segun skin
   private updateBackground(skinId: number) {
-    const skin = SKINS.find(s => s.id === skinId);
+    const skin = SKINS.find((s) => s.id === skinId);
     if (skin?.background) {
       this._currentBackground.next(skin.background);
     } else {
@@ -153,8 +163,7 @@ export class SkinsService {
     if (this.skinsUsed.size >= 1) {
       this.achievementsService.unlockAchievement('primer_skin');
     }
-    // VALOR HARDCODEADO, CUIDAO
-    if (this.skinsUsed.size >= 16) {
+    if (this.skinsUsed.size >= SKINS.length) {
       this.achievementsService.unlockAchievement('todas_skins');
     }
   }
@@ -218,9 +227,7 @@ export class SkinsService {
     };
 
     const queue = this.queueSubject.getValue();
-    const exists = queue.some(
-      (n) => n.skin.id === skin.id && Date.now() - n.timestamp < 5000
-    );
+    const exists = queue.some((n) => n.skin.id === skin.id && Date.now() - n.timestamp < 5000);
     if (!exists) {
       this.queueSubject.next([...queue, notification]);
     }

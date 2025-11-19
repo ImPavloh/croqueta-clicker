@@ -7,10 +7,11 @@ export type UnlockRequirement =
 
 export interface SkinModel {
   id: number;
+  rarity?: string;
+  order?: number;
   name: string;
   description: string;
   image: string;
-  rarity?: string;
   unlocked?: boolean;
   particleImage?: string;
   counterLabel?: string;
