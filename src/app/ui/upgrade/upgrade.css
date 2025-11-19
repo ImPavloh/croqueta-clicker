@@ -5,6 +5,8 @@
 :host(.upgrade) {
   min-width: 150px;
   min-height: 221px;
+  max-width: 150px;
+  max-height: 221px;
   box-sizing: border-box;
   display: block;
 }

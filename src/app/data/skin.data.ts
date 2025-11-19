@@ -21,7 +21,7 @@ export const SKINS: SkinModel[] = [
     description: 'Una croqueta deliciosa de jamón ibérico',
     image: '/assets/skins/croqueta-jamon.webp',
     rarity: 'Común',
-    unlockRequirement: { type: 'croquetas', value: 100 },
+    unlockRequirement: { type: 'croquetas', value: 500 },
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ export const SKINS: SkinModel[] = [
     description: 'Una croqueta de queso cremosa y deliciosa',
     image: '/assets/skins/croqueta-queso.webp',
     rarity: 'Común',
-    unlockRequirement: { type: 'croquetas', value: 500 },
+    unlockRequirement: { type: 'croquetas', value: 2000 },
   },
   {
     id: 5,
@@ -61,6 +61,15 @@ export const SKINS: SkinModel[] = [
   // ============================================================
   {
     id: 7,
+    name: 'Coqueta',
+    description: 'Una croqueta divina y con estilo',
+    image: '/assets/skins/croqueta-coqueta.webp',
+    rarity: 'Rara',
+    particleImage: '/assets/skins/croqueta-coqueta.webp',
+    unlockRequirement: { type: 'level', value: 13 },
+  },
+  {
+    id: 8,
     name: 'Dorada',
     description: 'Una croqueta de lujo, probablemente tóxica.',
     image: '/assets/skins/croqueta-dorada.webp',
@@ -69,7 +78,7 @@ export const SKINS: SkinModel[] = [
     unlockRequirement: { type: 'level', value: 15 },
   },
   {
-    id: 8,
+    id: 9,
     name: 'Quemada',
     description: 'Demasiado tiempo en la freidora... crujiente nivel carbón.',
     image: '/assets/skins/croqueta-quemada.webp',
@@ -83,26 +92,26 @@ export const SKINS: SkinModel[] = [
   // 🔵 ÉPICAS
   // ============================================================
   {
-    id: 9,
+    id: 10,
     name: 'Cósmica',
     description: 'Brilla con el poder del universo. No apta para humanos.',
     image: '/assets/skins/croqueta-cosmica.webp',
     rarity: 'Épica',
     particleImage: '/assets/skins/croqueta-cosmica.webp',
-    unlockRequirement: { type: 'level', value: 20 },
+    unlockRequirement: { type: 'croquetas', value: 150000 },
     background: '/assets/backgrounds/bg-galaxy.webp',
   },
   {
-    id: 10,
+    id: 11,
     name: 'Rey',
     description: 'Su majestad la croqueta, soberana de todas las frituras.',
     image: '/assets/skins/croqueta-rey.webp',
     rarity: 'Épica',
     particleImage: '/assets/skins/croqueta-rey.webp',
-    unlockRequirement: { type: 'croquetas', value: 50000 },
+    unlockRequirement: { type: 'level', value: 20 },
   },
   {
-    id: 11,
+    id: 12,
     name: 'Papa',
     description: 'La croqueta elegida: sabia, firme y un poco pasada de sal.',
     image: '/assets/skins/croqueta-papa.webp',
@@ -110,12 +119,39 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-papa.webp',
     unlockRequirement: { type: 'level', value: 30 },
   },
+  {
+    id: 13,
+    name: 'Empresaria',
+    description: 'Una croqueta lista para los negocios.',
+    image: '/assets/skins/croqueta-empresaria.webp',
+    rarity: 'Épica',
+    particleImage: '/assets/skins/croqueta-empresaria.webp',
+    unlockRequirement: { type: 'croquetas', value: 750000 },
+  },
+  {
+    id: 14,
+    name: 'DJ',
+    description: 'La croqueta que pone la música en la fiesta.',
+    image: '/assets/skins/croqueta-dj.webp',
+    rarity: 'Épica',
+    particleImage: '/assets/skins/croqueta-dj.webp',
+    unlockRequirement: { type: 'level', value: 80 },
+  },
 
   // ============================================================
   // 🟣 LEGENDARIAS
   // ============================================================
   {
-    id: 12,
+    id: 15,
+    name: 'Super',
+    description: 'Una croqueta heroica que salva el día.',
+    image: '/assets/skins/croqueta-super.webp',
+    rarity: 'Legendaria',
+    particleImage: '/assets/skins/croqueta-super.webp',
+    unlockRequirement: { type: 'croquetas', value: 2_500_000 },
+  },
+  {
+    id: 16,
     name: 'Dios',
     description: 'Más allá de la bechamel y el pan rallado...',
     image: '/assets/skins/croqueta-dios.webp',
@@ -125,7 +161,7 @@ export const SKINS: SkinModel[] = [
     background: '/assets/backgrounds/bg-heaven.webp',
   },
   {
-    id: 13,
+    id: 17,
     name: 'Phillipe',
     description: 'phillipe.',
     image: '/assets/skins/croqueta-phillipe.webp',
@@ -136,7 +172,7 @@ export const SKINS: SkinModel[] = [
     background: '/assets/backgrounds/bg-phillipe.webp',
   },
   {
-    id: 14,
+    id: 18,
     name: 'Cookie',
     description: 'Una croqueta en crisis de identidad.',
     image: '/assets/skins/croqueta-cookie.webp',
@@ -146,7 +182,7 @@ export const SKINS: SkinModel[] = [
     unlockRequirement: { type: 'level', value: 60 },
   },
   {
-    id: 15,
+    id: 19,
     name: '¿Plátano?',
     description: 'Una croqueta tropical que te deja con dudas existenciales.',
     image: '/assets/skins/croqueta-platano.webp',
@@ -156,7 +192,7 @@ export const SKINS: SkinModel[] = [
     unlockRequirement: { type: 'exp', value: 100000 },
   },
   {
-    id: 16,
+    id: 20,
     name: 'Bocadillo...',
     description: 'Un bocadillo relleno de croquetas, para los más valientes.',
     image: '/assets/skins/croqueta-bocadillo.webp',
@@ -168,39 +204,12 @@ export const SKINS: SkinModel[] = [
   // 🔴 MÍTICA
   // ============================================================
   {
-    id: 17,
+    id: 21,
     name: 'Real',
     description: 'La croqueta definitiva.',
     image: '/assets/skins/croqueta-real.webp',
     rarity: 'Mítica',
     particleImage: '/assets/skins/croqueta-real.webp',
     unlockRequirement: { type: 'level', value: 100 },
-  },
-  {
-    id: 18,
-    name: 'Empresaria',
-    description: 'Una croqueta lista para los negocios.',
-    image: '/assets/skins/croqueta-empresaria.webp',
-    rarity: 'Legendaria',
-    particleImage: '/assets/skins/croqueta-empresaria.webp',
-    unlockRequirement: { type: 'croquetas', value: 75000 },
-  },
-  {
-    id: 19,
-    name: 'DJ',
-    description: 'La croqueta que pone la música en la fiesta.',
-    image: '/assets/skins/croqueta-dj.webp',
-    rarity: 'Legendaria',
-    particleImage: '/assets/skins/croqueta-dj.webp',
-    unlockRequirement: { type: 'level', value: 80 },
-  },
-  {
-    id: 20,
-    name: 'Super',
-    description: 'Una croqueta heroica que salva el día.',
-    image: '/assets/skins/croqueta-super.webp',
-    rarity: 'Legendaria',
-    particleImage: '/assets/skins/croqueta-super.webp',
-    unlockRequirement: { type: 'achievement', id: 'heroic_deed' },
   },
 ];
