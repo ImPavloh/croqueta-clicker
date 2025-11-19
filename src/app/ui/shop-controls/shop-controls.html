@@ -5,7 +5,7 @@
       variant="control"
       [active]="shopControls.buyAmount() === 1"
       (click)="selectAmount(1)"
-      title="Comprar de 1 en 1"
+      [title]="'producers.buyAmount_1' | transloco"
     >
       x1
     </app-button>
@@ -13,7 +13,7 @@
       variant="control"
       [active]="shopControls.buyAmount() === 10"
       (click)="selectAmount(10)"
-      title="Comprar de 10 en 10"
+      [title]="'producers.buyAmount_10' | transloco"
     >
       x10
     </app-button>
@@ -21,16 +21,16 @@
       variant="control"
       [active]="shopControls.buyAmount() === 25"
       (click)="selectAmount(25)"
-      title="Comprar de 25 en 25"
+      [title]="'producers.buyAmount_25' | transloco"
     >
       x25
     </app-button>
   </div>
 
   <div class="hidden md:flex flex-col flex-1 text-center">
-    <h2 class="text-amber-800 font-semibold text-xl uppercase tracking-widest">Productores</h2>
+    <h2 class="text-amber-800 font-semibold text-xl uppercase tracking-widest">{{ 'producers.title' | transloco }}</h2>
     <p class="text-amber-800 opacity-70 text-balance text-sm">
-      Descubre y compra productores que generarán ingresos automáticamente
+      {{ 'producers.description' | transloco }}
     </p>
   </div>
   <!-- vista: grid o lista -->
@@ -39,7 +39,7 @@
       variant="control"
       [active]="!shopControls.gridView()"
       (click)="shopControls.setGridView(false)"
-      title="Vista lista"
+      [title]="'producers.listView' | transloco"
     >
       ☰
     </app-button>
@@ -47,7 +47,7 @@
       variant="control"
       [active]="shopControls.gridView()"
       (click)="shopControls.setGridView(true)"
-      title="Vista cuadrícula"
+      [title]="'producers.gridView' | transloco"
     >
       ▦
     </app-button>

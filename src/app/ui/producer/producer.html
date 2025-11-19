@@ -15,14 +15,14 @@
         <img
           class="producer-grid-image"
           src="{{ config.image }}"
-          alt="Imagen de {{ config.name }}"
+          alt="{{ config.name | transloco }}"
         />
-        <p class="producer-grid-name">{{ config.name }}</p>
+        <p class="producer-grid-name">{{ config.name | transloco }}</p>
       </div>
       <div class="flex flex-col justify-evenly ml-auto text-right">
         @if (quantity > 0) {
         <p class="producer-grid-quantity">x{{ quantity }}</p>
-        <p class="producer-grid-production">{{ calculateTotalPoints() | short }} ¢/s</p>
+        <p class="producer-grid-production">{{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}</p>
         }
       </div>
     </div>
@@ -42,10 +42,10 @@
       <img
         class="size-14 sm:size-20 shrink-0"
         src="{{ config.image }}"
-        alt="Imagen de {{ config.name }}"
+        alt="{{ config.name | transloco }}"
       />
       <div class="flex flex-col justify-center gap-0.5 sm:gap-1">
-        <p class="text-lg sm:text-2xl leading-tight">{{ config.name }}</p>
+        <p class="text-lg sm:text-2xl leading-tight">{{ config.name | transloco }}</p>
         <div class="flex items-baseline gap-1 sm:gap-2">
           <p
             class="text-sm sm:text-base"
@@ -62,7 +62,7 @@
 
     <div class="flex items-center gap-3 sm:gap-6 shrink-0 w-auto justify-between sm:justify-end">
       <div class="flex flex-col items-center">
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">Tienes</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.owned' | transloco }}</p>
         <p class="text-2xl sm:text-3xl font-bold text-amber-700">{{ quantity }}</p>
       </div>
 
@@ -70,21 +70,21 @@
 
       <div class="producer-stats flex flex-col items-end">
         @if (quantity > 0) {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">Producción</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.production' | transloco }}</p>
         <p class="text-lg sm:text-2xl font-bold text-green-700">
-          {{ calculateTotalPoints() | short }} ¢/s
+          {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
         </p>
         } @else {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">Producirá</p>
-        <p class="text-base sm:text-xl font-semibold text-gray-600">{{ points | short }} ¢/s</p>
-        <p class="text-[10px] sm:text-xs opacity-50">por unidad</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.willProduce' | transloco }}</p>
+        <p class="text-base sm:text-xl font-semibold text-gray-600">{{ points | short }} {{ 'producers.cps' | transloco }}</p>
+        <p class="text-[10px] sm:text-xs opacity-50">{{ 'producers.perUnit' | transloco }}</p>
         }
       </div>
     </div>
   </div>
   } } @else {
   <div class="flex w-full h-16 justify-center items-center italic opacity-70 text-amber-800">
-    <p>Nivel {{ config.level }}</p>
+    <p>{{ 'upgrades.level' | transloco }} {{ config.level }}</p>
   </div>
   }
 </app-button>

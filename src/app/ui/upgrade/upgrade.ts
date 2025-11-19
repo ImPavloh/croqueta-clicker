@@ -10,13 +10,15 @@ import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-upgrade',
   standalone: true,
   host: {
     class: 'upgrade',
   },
-  imports: [NgClass, ShortNumberPipe, ButtonComponent],
+  imports: [NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })

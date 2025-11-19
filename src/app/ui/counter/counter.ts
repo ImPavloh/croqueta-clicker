@@ -7,10 +7,12 @@ import { SKINS } from '@data/skin.data';
 import Decimal from 'break_infinity.js';
 import { Subscription } from 'rxjs';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-counter',
   standalone: true,
-  imports: [CommonModule, ShortNumberPipe],
+  imports: [CommonModule, ShortNumberPipe, TranslocoModule],
   templateUrl: './counter.html',
   styleUrl: './counter.css',
 })
@@ -36,7 +38,7 @@ export class Counter implements OnDestroy {
   getCounterLabel(): string {
     const currentSkinId = this.skinsService.skinId();
     const skin = this.skins.find((s) => s.id === currentSkinId);
-    const baseLabel = skin?.counterLabel || 'croquetas';
+    const baseLabel = skin?.counterLabel || 'clicker.croquetas';
     const points = this.displayPoints();
 
     if (points.eq(1)) {

@@ -15,6 +15,7 @@ import { ShopControlsService } from '@services/shop-controls.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { AudioService } from '@services/audio.service';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { AchievementsService } from '@services/achievements.service';
 
 @Component({
   selector: 'app-options',
@@ -35,11 +36,12 @@ export class Options {
     private autosaveService: AutosaveService,
     private skinsService: SkinsService,
     private shopControlsService: ShopControlsService,
-    private translocoService: TranslocoService
+    private translocoService: TranslocoService,
+    private achievementsService: AchievementsService
   ) {}
 
-  setLang(lang: string) {
-    this.translocoService.setActiveLang(lang);
+  ngOnInit() {
+    this.setSavedLang();
   }
 
   restartGame() {
@@ -170,6 +172,35 @@ export class Options {
         });
     } else {
       this.copyToClipboard(shareText);
+    }
+  }
+
+  studioClicked = 0;
+  clickOnStudio() {
+    this.studioClicked++;
+    if (this.studioClicked >= 10) {
+      this.achievementsService.unlockAchievement('fanboy');
+    }
+    if (this.studioClicked >= 1000) {
+      this.achievementsService.unlockAchievement('certified_obsession');
+    }
+  }
+
+  changeLanguage(lang: string) {
+    this.translocoService.setActiveLang(lang);
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // guardar lang como string
+    this.optionsService.setGameItem('lang', lang);
+  }
+
+  setSavedLang() {
+    // si no hay localStorage, no hacer nada
+    if (typeof localStorage === 'undefined') return;
+    // cargar lang
+    const savedLang = this.optionsService.getGameItem('lang');
+    if (savedLang) {
+      this.translocoService.setActiveLang(savedLang);
     }
   }
 

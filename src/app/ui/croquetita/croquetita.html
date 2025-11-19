@@ -6,12 +6,12 @@
     [class.croquetita-character]="true"
     (click)="toggleHelper()"
     [class.talking]="isOpen()"
-    title="Haz click en Croquetita para recibir ayuda"
+    [title]="'clicker.croquetitaHelp' | transloco"
   >
-    <img src="assets/croquetita/croquetita.webp" class="croquetita" alt="Croquetita" width="80" height="100" />
+    <img src="assets/croquetita/croquetita.webp" class="croquetita" [alt]="'clicker.croquetitaAlt' | transloco" width="80" height="100" />
     @if (!isOpen()) {
     <span class="w-8 h-8 absolute -top-[15px] -right-[15px] croquetita-bubble-indicator">
-      <img src="assets/icons/message.webp" class="w-full h-full object-contain" alt="Mensaje" width="32" height="32" />
+      <img src="assets/icons/message.webp" class="w-full h-full object-contain" [alt]="'clicker.messageAlt' | transloco" width="32" height="32" />
     </span>
     }
   </button>
@@ -28,7 +28,7 @@
       >X</span
     >
     <div class="text-[#faf6e6] text-xl text-balance md:text-xl sm:text-[13px]">
-      {{ currentMessage() }}
+      {{ currentMessage() | transloco }}
     </div>
   </div>
   }

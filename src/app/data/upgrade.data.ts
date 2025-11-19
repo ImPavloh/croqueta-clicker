@@ -6,7 +6,7 @@ export const UPGRADES: UpgradeModel[] = [
   // ============================================================
   {
     id: 1,
-    name: 'Dedo rápido',
+    name: 'upgrades.upgrade_1',
     image: '/assets/upgrades/general.webp',
     price: 100,
     clicks: 2,
@@ -15,7 +15,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 2,
-    name: 'Click doble',
+    name: 'upgrades.upgrade_2',
     image: '/assets/upgrades/general.webp',
     price: 300,
     clicks: 4,
@@ -24,7 +24,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 3,
-    name: 'Dedo firme',
+    name: 'upgrades.upgrade_3',
     image: '/assets/upgrades/general.webp',
     price: 2000,
     clicks: 6,
@@ -33,7 +33,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 4,
-    name: 'Dedo extra',
+    name: 'upgrades.upgrade_4',
     image: '/assets/upgrades/general.webp',
     price: 5000,
     clicks: 10,
@@ -42,7 +42,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 5,
-    name: 'Tenedor',
+    name: 'upgrades.upgrade_5',
     image: '/assets/upgrades/general.webp',
     price: 14_000,
     clicks: 20,
@@ -51,7 +51,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 6,
-    name: 'Cuchara',
+    name: 'upgrades.upgrade_6',
     image: '/assets/upgrades/general.webp',
     price: 100_000,
     clicks: 40,
@@ -60,7 +60,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 7,
-    name: 'Dedo aceitoso',
+    name: 'upgrades.upgrade_7',
     image: '/assets/upgrades/general.webp',
     price: 500_000,
     clicks: 80,
@@ -69,7 +69,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 8,
-    name: 'Click crujiente',
+    name: 'upgrades.upgrade_8',
     image: '/assets/upgrades/general.webp',
     price: 1_000_000,
     clicks: 160,
@@ -78,7 +78,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 9,
-    name: 'Más bechamel',
+    name: 'upgrades.upgrade_9',
     image: '/assets/upgrades/general.webp',
     price: 3_000_000,
     clicks: 300,
@@ -87,7 +87,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 10,
-    name: 'Mano experta',
+    name: 'upgrades.upgrade_10',
     image: '/assets/upgrades/general.webp',
     price: 7_500_000,
     clicks: 600,
@@ -100,7 +100,7 @@ export const UPGRADES: UpgradeModel[] = [
   // ============================================================
   {
     id: 11,
-    name: 'Toque de Abuela',
+    name: 'upgrades.upgrade_11',
     image: '/assets/upgrades/general.webp',
     price: 90_000,
     clicks: 1_200,
@@ -109,7 +109,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 12,
-    name: 'Click caliente',
+    name: 'upgrades.upgrade_12',
     image: '/assets/upgrades/general.webp',
     price: 200_000,
     clicks: 2_500,
@@ -118,7 +118,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 13,
-    name: 'Dedo empanado',
+    name: 'upgrades.upgrade_13',
     image: '/assets/upgrades/general.webp',
     price: 450_000,
     clicks: 5_000,
@@ -127,7 +127,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 14,
-    name: 'Click de Jamón',
+    name: 'upgrades.upgrade_14',
     image: '/assets/upgrades/general.webp',
     price: 1_000_000,
     clicks: 10_000,
@@ -136,7 +136,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 15,
-    name: 'Fritura rápida',
+    name: 'upgrades.upgrade_15',
     image: '/assets/upgrades/general.webp',
     price: 2_300_000,
     clicks: 20_000,
@@ -145,7 +145,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 16,
-    name: 'Doble empanado',
+    name: 'upgrades.upgrade_16',
     image: '/assets/upgrades/general.webp',
     price: 5_500_000,
     clicks: 40_000,
@@ -154,7 +154,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 17,
-    name: 'Mano Santa',
+    name: 'upgrades.upgrade_17',
     image: '/assets/upgrades/general.webp',
     price: 13_000_000,
     clicks: 80_000,
@@ -163,7 +163,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 18,
-    name: 'Dedo de Oro',
+    name: 'upgrades.upgrade_18',
     image: '/assets/upgrades/general.webp',
     price: 32_000_000,
     clicks: 170_000,
@@ -172,7 +172,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 19,
-    name: 'Toque maestro',
+    name: 'upgrades.upgrade_19',
     image: '/assets/upgrades/general.webp',
     price: 75_000_000,
     clicks: 350_000,
@@ -181,7 +181,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 20,
-    name: 'Fritura perfecta',
+    name: 'upgrades.upgrade_20',
     image: '/assets/upgrades/general.webp',
     price: 180_000_000,
     clicks: 700_000,
@@ -194,7 +194,7 @@ export const UPGRADES: UpgradeModel[] = [
   // ============================================================
   {
     id: 21,
-    name: 'Click industrial',
+    name: 'upgrades.upgrade_21',
     image: '/assets/upgrades/general.webp',
     price: 450_000_000,
     clicks: 700_000,
@@ -203,7 +203,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 22,
-    name: 'Dedo biónico',
+    name: 'upgrades.upgrade_22',
     image: '/assets/upgrades/general.webp',
     price: 1_100_000_000,
     clicks: 1_500_000,
@@ -212,7 +212,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 23,
-    name: 'Croqueta platino',
+    name: 'upgrades.upgrade_23',
     image: '/assets/upgrades/general.webp',
     price: 2_800_000_000,
     clicks: 3_000_000,
@@ -221,7 +221,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 24,
-    name: 'Click de Chef',
+    name: 'upgrades.upgrade_24',
     image: '/assets/upgrades/general.webp',
     price: 7_200_000_000,
     clicks: 6_500_000,
@@ -230,7 +230,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 25,
-    name: 'Dedo-Queta',
+    name: 'upgrades.upgrade_25',
     image: '/assets/upgrades/general.webp',
     price: 19_000_000_000,
     clicks: 12_000_000,
@@ -239,7 +239,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 26,
-    name: 'Croquetificar',
+    name: 'upgrades.upgrade_26',
     image: '/assets/upgrades/general.webp',
     price: 50_000_000_000,
     clicks: 25_000_000,
@@ -248,7 +248,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 27,
-    name: 'Click cuántico',
+    name: 'upgrades.upgrade_27',
     image: '/assets/upgrades/general.webp',
     price: 140_000_000_000,
     clicks: 50_000_000,
@@ -257,7 +257,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 28,
-    name: 'Dedo fractal',
+    name: 'upgrades.upgrade_28',
     image: '/assets/upgrades/general.webp',
     price: 380_000_000_000,
     clicks: 100_000_000,
@@ -266,7 +266,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 29,
-    name: 'Click Infinito',
+    name: 'upgrades.upgrade_29',
     image: '/assets/upgrades/general.webp',
     price: 950_000_000_000,
     clicks: 220_000_000,
@@ -275,7 +275,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 30,
-    name: 'Click de Dios',
+    name: 'upgrades.upgrade_30',
     image: '/assets/upgrades/general.webp',
     price: 95_000_000_000_000,
     clicks: 500_000_000,
@@ -288,7 +288,7 @@ export const UPGRADES: UpgradeModel[] = [
   // ============================================================
   {
     id: 31,
-    name: 'El click',
+    name: 'upgrades.upgrade_31',
     image: '/assets/upgrades/general.webp',
     price: 12_000_000_000_000_000,
     clicks: 1_000_000_000,
@@ -297,7 +297,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 32,
-    name: 'El rebozado',
+    name: 'upgrades.upgrade_32',
     image: '/assets/upgrades/general.webp',
     price: 250_000_000_000_000_000,
     clicks: 10_000_000_000,
@@ -306,7 +306,7 @@ export const UPGRADES: UpgradeModel[] = [
   },
   {
     id: 33,
-    name: 'La croqueta',
+    name: 'upgrades.upgrade_33',
     image: '/assets/upgrades/general.webp',
     price: 5_000_000_000_000_000_000,
     clicks: 100_000_000_000,

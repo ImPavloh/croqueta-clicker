@@ -7,10 +7,12 @@ import { AudioService } from '@services/audio.service';
 import { TUTORIAL_MESSAGES } from '@data/tutorial.data';
 import { TutorialMessage } from '@models/tutorial.model';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-croquetita',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

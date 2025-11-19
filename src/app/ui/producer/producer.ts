@@ -11,10 +11,12 @@ import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-producer',
   standalone: true,
-  imports: [NgClass, ShortNumberPipe, ButtonComponent],
+  imports: [NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })

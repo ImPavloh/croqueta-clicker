@@ -7,10 +7,12 @@ import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 
 type StatsVariant = 'mobile' | 'desktop' | 'auto';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [CommonModule, ShortNumberPipe],
+  imports: [CommonModule, ShortNumberPipe, TranslocoModule],
   templateUrl: './stats.html',
   styleUrl: './stats.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

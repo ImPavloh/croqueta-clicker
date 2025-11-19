@@ -11,10 +11,12 @@ import { PointsService } from '@services/points.service';
 import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 
+import { TranslocoModule } from '@ngneat/transloco';
+
 @Component({
   selector: 'app-upgrades',
   standalone: true,
-  imports: [CommonModule, Producer, Upgrade, ShopControls],
+  imports: [CommonModule, Producer, Upgrade, ShopControls, TranslocoModule],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',
 })

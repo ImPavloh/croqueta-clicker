@@ -119,4 +119,6 @@ export const ACHIEVEMENTS: Achievement[] = [
   // 🤪 LOGROS DE BROMA (Implementado)
   // ------------------------------------------------------------
   { id: 'six_seven', title: 'achievements.six_seven.title', description: 'achievements.six_seven.description', icon: '/assets/achievements/xd/sixseven.webp', secret: true },
+  { id: 'fanboy', title: 'achievements.fanboy.title', description: 'achievements.fanboy.description', icon: '/assets/achievements/xd/fanboy.webp', secret: true },
+  { id: 'certified_obsession', title: 'achievements.certified_obsession.title', description: 'achievements.certified_obsession.description', icon: '/assets/achievements/xd/certified_obsession.webp', secret: true },
 ];

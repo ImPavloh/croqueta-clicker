@@ -69,6 +69,15 @@ export const SKINS: SkinModel[] = [
     unlockRequirement: { type: 'level', value: 13 },
   },
   {
+    id: 22, // esto es una mierda
+    name: 'skins.skin.22.name',
+    description: 'skins.skin.22.description',
+    image: '/assets/skins/croqueta-3d.webp',
+    rarity: 'skins.rarity.rare',
+    particleImage: '/assets/skins/croqueta-3d.webp',
+    unlockRequirement: { type: 'level', value: 14 },
+  },
+  {
     id: 8,
     name: 'skins.skin.8.name',
     description: 'skins.skin.8.description',
