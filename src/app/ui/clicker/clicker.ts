@@ -12,6 +12,7 @@ import { SKINS } from '@data/skin.data';
 
 @Component({
   selector: 'app-clicker',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',

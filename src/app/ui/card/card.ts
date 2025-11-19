@@ -3,6 +3,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-card',
+  standalone: true,
   imports: [NgClass],
   templateUrl: './card.html',
   styleUrl: './card.css',

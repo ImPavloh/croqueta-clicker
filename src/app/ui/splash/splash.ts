@@ -1,7 +1,10 @@
 import { Component, signal, OnInit, ChangeDetectionStrategy, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-splash',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './splash.html',
   styleUrl: './splash.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

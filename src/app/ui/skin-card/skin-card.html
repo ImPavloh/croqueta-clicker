@@ -13,7 +13,7 @@
       <div class="relative w-full">
         <img
           src="{{ config.image }}"
-          alt="Imagen de {{ config.name }}"
+          [alt]="config.name | transloco"
           class="object-contain transition-all mx-auto max-w-[110px] max-h-[110px] w-auto h-auto"
           width="109"
           height="128"
@@ -41,8 +41,11 @@
         class="text-lg lg:text-xl text-amber-900 text-shadow-amber-950 text-shadow-2xs truncate"
         [class.opacity-50]="!isUnlocked"
       >
-        {{ config.name }}
+        {{ config.name | transloco }}
       </h3>
+      <p class="text-sm text-amber-700" [class.opacity-50]="!isUnlocked">
+        {{ config.rarity | transloco }}
+      </p>
     </div>
   </app-button>
 </app-tooltip>

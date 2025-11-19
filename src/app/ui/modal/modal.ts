@@ -6,16 +6,19 @@ import { Achievements } from '@pages/achievements/achievements';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
 import { ButtonComponent } from '@ui/button/button';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-modal',
-  imports: [Upgrades, Achievements, Skins, Options, ButtonComponent],
+  standalone: true,
+  imports: [Upgrades, Achievements, Skins, Options, ButtonComponent, TranslocoModule],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
 export class Modal {
   protected modalService = inject(ModalService);
   private audioService = inject(AudioService);
+  private translocoService = inject(TranslocoService);
 
   closeModal() {
     this.modalService.closeModal();
@@ -26,13 +29,13 @@ export class Modal {
     const modal = this.modalService.currentModal();
     switch (modal) {
       case 'upgrades':
-        return 'Mejoras';
+        return this.translocoService.translate('upgrades.title');
       case 'achievements':
-        return 'Logros';
+        return this.translocoService.translate('achievements.title');
       case 'skins':
-        return 'Skins';
+        return this.translocoService.translate('skins.title');
       case 'options':
-        return 'Opciones';
+        return this.translocoService.translate('options.title');
       default:
         return '';
     }

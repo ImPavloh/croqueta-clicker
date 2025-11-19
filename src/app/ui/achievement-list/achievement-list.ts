@@ -4,11 +4,12 @@ import { AchievementsService } from '@services/achievements.service';
 import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { Tooltip } from '@ui/tooltip/tooltip';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-achievement-list',
   standalone: true,
-  imports: [CommonModule, Tooltip],
+  imports: [CommonModule, Tooltip, TranslocoModule],
   templateUrl: './achievement-list.html',
   styleUrls: ['./achievement-list.css'],
 })
@@ -16,7 +17,10 @@ export class AchievementList implements OnDestroy {
   achievementsWithState: Array<Achievement & { unlocked: boolean }> = [];
   private subs = new Subscription();
 
-  constructor(private svc: AchievementsService) {
+  constructor(
+    private svc: AchievementsService,
+    private transloco: TranslocoService
+  ) {
     // inicializar con el estado actual (método público)
     this.achievementsWithState = this.svc.getAllWithState();
 
@@ -42,8 +46,11 @@ export class AchievementList implements OnDestroy {
 
   getTooltipText(item: Achievement & { unlocked: boolean }): string {
     if (!item.unlocked && item.secret) {
-      return '??? Logro secreto ???';
+      return this.transloco.translate('achievements.secretAchievement');
     }
-    return item.description || 'Sin descripción';
+    if (item.description) {
+      return this.transloco.translate(item.description);
+    }
+    return this.transloco.translate('achievements.noDescription');
   }
 }

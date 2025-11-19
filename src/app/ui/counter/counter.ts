@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-counter',
+  standalone: true,
   imports: [CommonModule, ShortNumberPipe],
   templateUrl: './counter.html',
   styleUrl: './counter.css',

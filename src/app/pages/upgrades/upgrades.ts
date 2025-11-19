@@ -13,6 +13,7 @@ import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-upgrades',
+  standalone: true,
   imports: [CommonModule, Producer, Upgrade, ShopControls],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',

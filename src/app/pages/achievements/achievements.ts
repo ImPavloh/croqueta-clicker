@@ -4,10 +4,12 @@ import { CommonModule } from '@angular/common';
 import { AchievementList } from '@ui/achievement-list/achievement-list';
 import { STATS } from '@data/stats.data';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-achievements',
-  imports: [CommonModule, AchievementList],
+  standalone: true,
+  imports: [CommonModule, AchievementList, TranslocoModule],
   templateUrl: './achievements.html',
   styleUrl: './achievements.css',
 })

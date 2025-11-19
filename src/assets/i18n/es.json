@@ -1,0 +1,262 @@
+{
+  "achievements": {
+    "title": "Logros",
+    "secretAchievement": "??? Logro secreto ???",
+    "noDescription": "Sin descripción",
+    "primera_croqueta": {
+      "title": "Primera croqueta",
+      "description": "Cocina tu primera croqueta."
+    },
+    "1k_croquetas": {
+      "title": "Mil croquetas",
+      "description": "Cocina 1k de croquetas."
+    },
+    "1m_croquetas": {
+      "title": "Un millón",
+      "description": "Cocina 1M croquetas."
+    },
+    "1b_croquetas": {
+      "title": "Un billón",
+      "description": "Cocina 1B de croquetas..."
+    },
+    "1t_croquetas": {
+      "title": "Un trillón",
+      "description": "¿Un 1T de croquetas...?"
+    },
+    "1qa_croquetas": {
+      "title": "Un quadrillón",
+      "description": "¿Y si sales a la calle un rato?"
+    },
+    "1qi_croquetas": {
+      "title": "Un quatrillón",
+      "description": "Creo que ya es suficiente..."
+    },
+    "1sx_croquetas": {
+      "title": "Un sextillón",
+      "description": "Me estoy empezando a preocupar."
+    },
+    "1sp_croquetas": {
+      "title": "Un septillón",
+      "description": "¿Has pensado en buscar trabajo?"
+    },
+    "1oc_croquetas": {
+      "title": "Un octillón",
+      "description": "Nuevo objetivo: Tocar hierba."
+    },
+    "1nn_croquetas": {
+      "title": "Un nonillón",
+      "description": "No sabia que existia ese numero."
+    },
+    "1dc_croquetas": {
+      "title": "Un decillón",
+      "description": "Para, porfavor."
+    },
+    "nivel_5": {
+      "title": "Aprendiz croquetero",
+      "description": "Alcanza el nivel 5."
+    },
+    "nivel_10": {
+      "title": "Cocinero novato",
+      "description": "Alcanza el nivel 10."
+    },
+    "nivel_15": {
+      "title": "Chef croquetero",
+      "description": "Alcanza el nivel 15."
+    },
+    "nivel_20": {
+      "title": "Maestro fritador",
+      "description": "Alcanza el nivel 20."
+    },
+    "nivel_25": {
+      "title": "Experto en empanado",
+      "description": "Alcanza el nivel 25."
+    },
+    "nivel_30": {
+      "title": "Leyenda croquetera",
+      "description": "Alcanza el nivel 30."
+    },
+    "nivel_50": {
+      "title": "Gran Maestro",
+      "description": "Alcanza el nivel 50."
+    },
+    "nivel_60": {
+      "title": "Croqueta Suprema",
+      "description": "Alcanza el nivel 60."
+    },
+    "nivel_80": {
+      "title": "Emperador Croquetero",
+      "description": "Alcanza el nivel 80."
+    },
+    "nivel_100": {
+      "title": "Dios de la Fritura",
+      "description": "Alcanza el nivel 100."
+    },
+    "nivel_1000": {
+      "title": "Croquetero Cosmico",
+      "description": "Alcanza el nivel 1000."
+    },
+    "nivel_10000": {
+      "title": "El Croquetero Infinito",
+      "description": "Alcanza el nivel 10000."
+    },
+    "bonus_event": {
+      "title": "La croqueta dorada",
+      "description": "Haz click en la croqueta dorada."
+    },
+    "primer_skin": {
+      "title": "Cambio de look",
+      "description": "Cambia de skin por primera vez."
+    },
+    "todas_skins": {
+      "title": "Fashionista",
+      "description": "Prueba todas las skins."
+    },
+    "click_rapido": {
+      "title": "Dedos veloces",
+      "description": "Haz 70 clicks en 10 segundos."
+    },
+    "speedrun": {
+      "title": "Speedrun",
+      "description": "Haz 100 clicks en 10 segundos."
+    },
+    "autoclicker": {
+      "title": "Autoclicker",
+      "description": "¿250 clicks en 10 segundos? Lo dudo..."
+    },
+    "no_clicks_1h": {
+      "title": "Zen",
+      "description": "No hagas clicks durante 1 hora."
+    },
+    "primer_achievement": {
+      "title": "Logro desbloqueado",
+      "description": "Desbloquea tu primer logro."
+    },
+    "todos_achievements": {
+      "title": "Maestro de logros",
+      "description": "Desbloquea todos los logros."
+    },
+    "achievement_ost": {
+      "title": "Melómano",
+      "description": "Escucha toda la OST."
+    },
+    "six_seven": {
+      "title": "Six Seven",
+      "description": "jeje sixseven"
+    }
+  },
+  "options": {
+    "title": "Opciones",
+    "volumeTitle": "Volumen",
+    "generalVolumeTooltip": "Controla el volumen general del juego.",
+    "generalVolumeLabel": "General:",
+    "musicVolumeTooltip": "Controla el volumen de la música de fondo.",
+    "musicVolumeLabel": "Música:",
+    "sfxVolumeTooltip": "Controla el volumen de los efectos de sonido (SFX).",
+    "sfxVolumeLabel": "SFX:",
+    "interfaceTitle": "Interfaz",
+    "showMascotTooltip": "Muestra u oculta la mascota en pantalla.",
+    "showMascotLabel": "Mostrar mascota:",
+    "showParticlesTooltip": "Activa o desactiva las partículas visuales.",
+    "showParticlesLabel": "Reproducir partículas:",
+    "showFloatingPointsTooltip": "Muestra los puntos flotantes al hacer click.",
+    "showFloatingPointsLabel": "Ver puntos flotantes:",
+    "gameTitle": "Partida",
+    "saveGameTooltip": "Guarda manually tu partida en el navegador.",
+    "saveGameButton": "Guardar ahora",
+    "exportGameTooltip": "Descarga un archivo .json con tu progreso.",
+    "exportGameButton": "Descargar partida",
+    "importGameTooltip": "Carga una partida desde un archivo .json.",
+    "importGameButton": "Cargar partida",
+    "shareProgressTooltip": "Comparte tus estadísticas o cópialas al portapapeles.",
+    "shareProgressButton": "Compartir progreso",
+    "resetGameTooltip": "Reinicia tu progreso. Esta acción no se puede deshacer.",
+    "resetGameButton": "Reiniciar partida",
+    "creditsTitle": "Créditos",
+    "createdByLabel": "Creado por:",
+    "inspiredByLabel": "Inspirado en",
+    "cookieClickerBy": "de Orteil",
+    "sourceCodeLabel": "Código fuente",
+    "reportBugLabel": "Reportar bug",
+    "privacyPolicyLabel": "Política de privacidad",
+    "languageTitle": "Idioma",
+    "languageTooltip": "Cambia el idioma del juego.",
+    "resetGameModal": {
+      "title": "Reiniciar partida",
+      "message": "¿Estás seguro de que quieres reiniciar tu progreso? Esta acción no se puede deshacer y perderás todas tus croquetas, mejoras y estadísticas.",
+      "confirmText": "Sí, reiniciar",
+      "cancelText": "Cancelar"
+    },
+    "saveGameModal": {
+      "successTitle": "Partida guardada",
+      "errorTitle": "Error al guardar",
+      "successMessage": "¡Tu progreso se ha guardado correctamente en el navegador!",
+      "errorMessage": "Hubo un error al guardar. Por favor, intenta de nuevo.",
+      "confirmText": "Aceptar"
+    },
+    "exportGameModal": {
+      "successTitle": "Partida descargada",
+      "successMessage": "La partida se ha descargado correctamente.",
+      "errorTitle": "Error",
+      "errorMessage": "Error al descargar la partida: ",
+      "confirmText": "Aceptar"
+    },
+    "importGameModal": {
+      "title": "Importar partida",
+      "message": "¿Quieres cargar esta partida? Tu progreso actual será reemplazado completamente.",
+      "confirmText": "Cargar",
+      "cancelText": "Cancelar",
+      "errorTitle": "Error",
+      "errorMessage": "Error al cargar la partida: ",
+      "confirmTextError": "Aceptar"
+    },
+    "shareGameModal": {
+      "title": "Mi progreso en Croqueta Clicker",
+      "text": "¡Mira mi progreso en Croqueta Clicker!\n\n🖱️ Clicks totales: {totalClicks}\n⏱️ Tiempo jugado: {timePlaying}\n⭐ Nivel: {level}\n🥐 Croquetas: {croquetas}\n⚡ Croquetas/seg: {croquetasPerSecond}",
+      "clipboardMessage": "¡Estadísticas copiadas al portapapeles!"
+    }
+  },
+  "upgrades": {
+    "title": "Mejoras"
+  },
+  "skins": {
+    "title": "Skins",
+    "rarity": {
+      "common": "Común",
+      "rare": "Rara",
+      "epic": "Épica",
+      "legendary": "Legendaria",
+      "mythic": "Mítica"
+    },
+    "unlock": {
+      "unlocked": "Desbloqueada",
+      "level": "Nivel {value}",
+      "croquettes": "{value} croquetas",
+      "exp": "{value} EXP",
+      "achievement": "Logro: {id}",
+      "locked": "Bloqueada"
+    },
+    "skin": {
+      "1": { "name": "Normal", "description": "Una croqueta pocha del Wercadona" },
+      "2": { "name": "Jamón", "description": "Una croqueta deliciosa de jamón ibérico" },
+      "3": { "name": "Pollo", "description": "Una croqueta de pollo jugosa y sabrosa" },
+      "4": { "name": "Queso", "description": "Una croqueta de queso cremosa y deliciosa" },
+      "5": { "name": "Bacalao", "description": "Una croqueta de bacalao tradicional y sabrosa" },
+      "6": { "name": "Setas", "description": "Una croqueta de setas exquisita y aromática" },
+      "7": { "name": "Coqueta", "description": "Una croqueta divina y con estilo" },
+      "8": { "name": "Dorada", "description": "Una croqueta de lujo, probablemente tóxica." },
+      "9": { "name": "Quemada", "description": "Demasiado tiempo en la freidora... crujiente nivel carbón." },
+      "10": { "name": "Cósmica", "description": "Brilla con el poder del universo. No apta para humanos." },
+      "11": { "name": "Rey", "description": "Su majestad la croqueta, soberana de todas las frituras." },
+      "12": { "name": "Papa", "description": "La croqueta elegida: sabia, firme y un poco pasada de sal." },
+      "13": { "name": "Empresaria", "description": "Una croqueta lista para los negocios." },
+      "14": { "name": "DJ", "description": "La croqueta que pone la música en la fiesta." },
+      "15": { "name": "Super", "description": "Una croqueta heroica que salva el día." },
+      "16": { "name": "Dios", "description": "Más allá de la bechamel y el pan rallado..." },
+      "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "¿croquetas?" },
+      "18": { "name": "Cookie", "description": "Una croqueta en crisis de identidad.", "counterLabel": "¿galletas?" },
+      "19": { "name": "¿Plátano?", "description": "Una croqueta tropical que te deja con dudas existenciales.", "counterLabel": "¿plátanos?" },
+      "20": { "name": "Bocadillo...", "description": "Un bocadillo relleno de croquetas, para los más valientes.", "counterLabel": "¿bocadillos?" },
+      "21": { "name": "Real", "description": "La croqueta definitiva." }
+    }
+  }
+}

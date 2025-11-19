@@ -12,6 +12,7 @@ import { UpgradeModel } from '@models/upgrade.model';
 
 @Component({
   selector: 'app-upgrade',
+  standalone: true,
   host: {
     class: 'upgrade',
   },

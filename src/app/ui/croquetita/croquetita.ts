@@ -9,6 +9,7 @@ import { TutorialMessage } from '@models/tutorial.model';
 
 @Component({
   selector: 'app-croquetita',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',

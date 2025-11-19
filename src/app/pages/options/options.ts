@@ -14,10 +14,12 @@ import { SkinsService } from '@services/skins.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { AudioService } from '@services/audio.service';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-options',
-  imports: [Card, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch, Tooltip],
+  standalone: true,
+  imports: [Card, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch, Tooltip, TranslocoModule],
   templateUrl: './options.html',
   styleUrl: './options.css',
 })
@@ -32,16 +34,20 @@ export class Options {
     private pointsService: PointsService,
     private autosaveService: AutosaveService,
     private skinsService: SkinsService,
-    private shopControlsService: ShopControlsService
+    private shopControlsService: ShopControlsService,
+    private translocoService: TranslocoService
   ) {}
+
+  setLang(lang: string) {
+    this.translocoService.setActiveLang(lang);
+  }
 
   restartGame() {
     this.modalService.showConfirm({
-      title: 'Reiniciar partida',
-      message:
-        '¿Estás seguro de que quieres reiniciar tu progreso? Esta acción no se puede deshacer y perderás todas tus croquetas, mejoras y estadísticas.',
-      confirmText: 'Sí, reiniciar',
-      cancelText: 'Cancelar',
+      title: this.translocoService.translate('options.resetGameModal.title'),
+      message: this.translocoService.translate('options.resetGameModal.message'),
+      confirmText: this.translocoService.translate('options.resetGameModal.confirmText'),
+      cancelText: this.translocoService.translate('options.resetGameModal.cancelText'),
       onConfirm: () => {
         this.pointsService.reset();
         this.playerStats.reset();
@@ -58,11 +64,11 @@ export class Options {
     const success = this.autosaveService.saveManually();
 
     this.modalService.showConfirm({
-      title: success ? 'Partida guardada' : 'Error al guardar',
+      title: success ? this.translocoService.translate('options.saveGameModal.successTitle') : this.translocoService.translate('options.saveGameModal.errorTitle'),
       message: success
-        ? '¡Tu progreso se ha guardado correctamente en el navegador!'
-        : 'Hubo un error al guardar. Por favor, intenta de nuevo.',
-      confirmText: 'Aceptar',
+        ? this.translocoService.translate('options.saveGameModal.successMessage')
+        : this.translocoService.translate('options.saveGameModal.errorMessage'),
+      confirmText: this.translocoService.translate('options.saveGameModal.confirmText'),
       cancelText: '',
       onConfirm: () => {},
     });
@@ -77,17 +83,17 @@ export class Options {
       this.optionsService.exportProgress();
       // Mostrar un modal en lugar de alert
       this.modalService.showConfirm({
-        title: 'Partida descargada',
-        message: 'La partida se ha descargado correctamente.',
-        confirmText: 'Aceptar',
+        title: this.translocoService.translate('options.exportGameModal.successTitle'),
+        message: this.translocoService.translate('options.exportGameModal.successMessage'),
+        confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
         onConfirm: () => {},
       });
     } catch (error) {
       this.modalService.showConfirm({
-        title: 'Error',
-        message: 'Error al descargar la partida: ' + error,
-        confirmText: 'Aceptar',
+        title: this.translocoService.translate('options.exportGameModal.errorTitle'),
+        message: this.translocoService.translate('options.exportGameModal.errorMessage') + error,
+        confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
         onConfirm: () => {},
       });
@@ -103,10 +109,10 @@ export class Options {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         this.modalService.showConfirm({
-          title: 'Importar partida',
-          message: `¿Quieres cargar esta partida? Tu progreso actual será reemplazado completamente.`,
-          confirmText: 'Cargar',
-          cancelText: 'Cancelar',
+          title: this.translocoService.translate('options.importGameModal.title'),
+          message: this.translocoService.translate('options.importGameModal.message'),
+          confirmText: this.translocoService.translate('options.importGameModal.confirmText'),
+          cancelText: this.translocoService.translate('options.importGameModal.cancelText'),
           onConfirm: () => {
             this.autosaveService.setImporting(true);
 
@@ -120,9 +126,9 @@ export class Options {
               .catch((error) => {
                 this.autosaveService.setImporting(false);
                 this.modalService.showConfirm({
-                  title: 'Error',
-                  message: 'Error al cargar la partida: ' + error,
-                  confirmText: 'Aceptar',
+                  title: this.translocoService.translate('options.importGameModal.errorTitle'),
+                  message: this.translocoService.translate('options.importGameModal.errorMessage') + error,
+                  confirmText: this.translocoService.translate('options.importGameModal.confirmTextError'),
                   onConfirm: () => {},
                 });
               });
@@ -145,18 +151,18 @@ export class Options {
       1
     );
 
-    const shareText =
-      `¡Mira mi progreso en Croqueta Clicker!\n\n` +
-      `🖱️ Clicks totales: ${totalClicks}\n` +
-      `⏱️ Tiempo jugado: ${timePlaying}\n` +
-      `⭐ Nivel: ${level}\n` +
-      `🥐 Croquetas: ${croquetas}\n` +
-      `⚡ Croquetas/seg: ${croquetasPerSecond}`;
+    const shareText = this.translocoService.translate('options.shareGameModal.text', {
+      totalClicks,
+      timePlaying,
+      level,
+      croquetas,
+      croquetasPerSecond,
+    });
 
     if (navigator.share) {
       navigator
         .share({
-          title: 'Mi progreso en Croqueta Clicker',
+          title: this.translocoService.translate('options.shareGameModal.title'),
           text: shareText,
         })
         .catch(() => {
@@ -169,7 +175,7 @@ export class Options {
 
   private copyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(() => {
-      alert('¡Estadísticas copiadas al portapapeles!');
+      alert(this.translocoService.translate('options.shareGameModal.clipboardMessage'));
     });
   }
 

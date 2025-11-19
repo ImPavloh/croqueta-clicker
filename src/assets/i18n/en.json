@@ -1,0 +1,262 @@
+{
+  "achievements": {
+    "title": "Achievements",
+    "secretAchievement": "??? Secret Achievement ???",
+    "noDescription": "No description",
+    "primera_croqueta": {
+      "title": "First croquette",
+      "description": "Cook your first croquette."
+    },
+    "1k_croquetas": {
+      "title": "A thousand croquettes",
+      "description": "Cook 1k croquettes."
+    },
+    "1m_croquetas": {
+      "title": "One million",
+      "description": "Cook 1M croquettes."
+    },
+    "1b_croquetas": {
+      "title": "One billion",
+      "description": "Cook 1B croquettes..."
+    },
+    "1t_croquetas": {
+      "title": "One trillion",
+      "description": "A 1T of croquettes...?"
+    },
+    "1qa_croquetas": {
+      "title": "One quadrillion",
+      "description": "How about you go outside for a while?"
+    },
+    "1qi_croquetas": {
+      "title": "One quatrillion",
+      "description": "I think that's enough..."
+    },
+    "1sx_croquetas": {
+      "title": "One sextillion",
+      "description": "I'm starting to get worried."
+    },
+    "1sp_croquetas": {
+      "title": "One septillion",
+      "description": "Have you thought about looking for a job?"
+    },
+    "1oc_croquetas": {
+      "title": "One octillion",
+      "description": "New goal: Touch grass."
+    },
+    "1nn_croquetas": {
+      "title": "One nonillion",
+      "description": "I didn't know that number existed."
+    },
+    "1dc_croquetas": {
+      "title": "One decillion",
+      "description": "Please, stop."
+    },
+    "nivel_5": {
+      "title": "Croquette apprentice",
+      "description": "Reach level 5."
+    },
+    "nivel_10": {
+      "title": "Rookie cook",
+      "description": "Reach level 10."
+    },
+    "nivel_15": {
+      "title": "Croquette chef",
+      "description": "Reach level 15."
+    },
+    "nivel_20": {
+      "title": "Master fryer",
+      "description": "Reach level 20."
+    },
+    "nivel_25": {
+      "title": "Breading expert",
+      "description": "Reach level 25."
+    },
+    "nivel_30": {
+      "title": "Croquette legend",
+      "description": "Reach level 30."
+    },
+    "nivel_50": {
+      "title": "Grand Master",
+      "description": "Reach level 50."
+    },
+    "nivel_60": {
+      "title": "Supreme Croquette",
+      "description": "Reach level 60."
+    },
+    "nivel_80": {
+      "title": "Croquette Emperor",
+      "description": "Reach level 80."
+    },
+    "nivel_100": {
+      "title": "God of Frying",
+      "description": "Reach level 100."
+    },
+    "nivel_1000": {
+      "title": "Cosmic Croquetteer",
+      "description": "Reach level 1000."
+    },
+    "nivel_10000": {
+      "title": "The Infinite Croquetteer",
+      "description": "Reach level 10000."
+    },
+    "bonus_event": {
+      "title": "The golden croquette",
+      "description": "Click on the golden croquette."
+    },
+    "primer_skin": {
+      "title": "New look",
+      "description": "Change your skin for the first time."
+    },
+    "todas_skins": {
+      "title": "Fashionista",
+      "description": "Try all the skins."
+    },
+    "click_rapido": {
+      "title": "Fast fingers",
+      "description": "Do 70 clicks in 10 seconds."
+    },
+    "speedrun": {
+      "title": "Speedrun",
+      "description": "Do 100 clicks in 10 seconds."
+    },
+    "autoclicker": {
+      "title": "Autoclicker",
+      "description": "250 clicks in 10 seconds? I doubt it..."
+    },
+    "no_clicks_1h": {
+      "title": "Zen",
+      "description": "Don't click for 1 hour."
+    },
+    "primer_achievement": {
+      "title": "Achievement unlocked",
+      "description": "Unlock your first achievement."
+    },
+    "todos_achievements": {
+      "title": "Achievement master",
+      "description": "Unlock all achievements."
+    },
+    "achievement_ost": {
+      "title": "Music lover",
+      "description": "Listen to the entire OST."
+    },
+    "six_seven": {
+      "title": "Six Seven",
+      "description": "hehe sixseven"
+    }
+  },
+  "options": {
+    "title": "Options",
+    "volumeTitle": "Volume",
+    "generalVolumeTooltip": "Controls the overall volume of the game.",
+    "generalVolumeLabel": "General:",
+    "musicVolumeTooltip": "Controls the volume of the background music.",
+    "musicVolumeLabel": "Music:",
+    "sfxVolumeTooltip": "Controls the volume of the sound effects (SFX).",
+    "sfxVolumeLabel": "SFX:",
+    "interfaceTitle": "Interface",
+    "showMascotTooltip": "Shows or hides the mascot on the screen.",
+    "showMascotLabel": "Show mascot:",
+    "showParticlesTooltip": "Enables or disables visual particles.",
+    "showParticlesLabel": "Play particles:",
+    "showFloatingPointsTooltip": "Shows floating points when clicking.",
+    "showFloatingPointsLabel": "View floating points:",
+    "gameTitle": "Game",
+    "saveGameTooltip": "Manually save your game in the browser.",
+    "saveGameButton": "Save now",
+    "exportGameTooltip": "Download a .json file with your progress.",
+    "exportGameButton": "Download game",
+    "importGameTooltip": "Load a game from a .json file.",
+    "importGameButton": "Load game",
+    "shareProgressTooltip": "Share your stats or copy them to the clipboard.",
+    "shareProgressButton": "Share progress",
+    "resetGameTooltip": "Reset your progress. This action cannot be undone.",
+    "resetGameButton": "Reset game",
+    "creditsTitle": "Credits",
+    "createdByLabel": "Created by:",
+    "inspiredByLabel": "Inspired by",
+    "cookieClickerBy": "by Orteil",
+    "sourceCodeLabel": "Source code",
+    "reportBugLabel": "Report bug",
+    "privacyPolicyLabel": "Privacy policy",
+    "languageTitle": "Language",
+    "languageTooltip": "Change the game language.",
+    "resetGameModal": {
+      "title": "Reset game",
+      "message": "Are you sure you want to reset your progress? This action cannot be undone and you will lose all your croquettes, upgrades and stats.",
+      "confirmText": "Yes, reset",
+      "cancelText": "Cancel"
+    },
+    "saveGameModal": {
+      "successTitle": "Game saved",
+      "errorTitle": "Error saving",
+      "successMessage": "Your progress has been saved correctly in the browser!",
+      "errorMessage": "There was an error saving. Please try again.",
+      "confirmText": "Accept"
+    },
+    "exportGameModal": {
+      "successTitle": "Game downloaded",
+      "successMessage": "The game has been downloaded correctly.",
+      "errorTitle": "Error",
+      "errorMessage": "Error downloading the game: ",
+      "confirmText": "Accept"
+    },
+    "importGameModal": {
+      "title": "Import game",
+      "message": "Do you want to load this game? Your current progress will be completely replaced.",
+      "confirmText": "Load",
+      "cancelText": "Cancel",
+      "errorTitle": "Error",
+      "errorMessage": "Error loading the game: ",
+      "confirmTextError": "Accept"
+    },
+    "shareGameModal": {
+      "title": "My progress in Croqueta Clicker",
+      "text": "Look at my progress in Croqueta Clicker!\n\n🖱️ Total clicks: {totalClicks}\n⏱️ Time played: {timePlaying}\n⭐ Level: {level}\n🥐 Croquettes: {croquetas}\n⚡ Croquettes/sec: {croquetasPerSecond}",
+      "clipboardMessage": "Statistics copied to clipboard!"
+    }
+  },
+  "upgrades": {
+    "title": "Upgrades"
+  },
+  "skins": {
+    "title": "Skins",
+    "rarity": {
+      "common": "Common",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary",
+      "mythic": "Mythic"
+    },
+    "unlock": {
+      "unlocked": "Unlocked",
+      "level": "Level {value}",
+      "croquettes": "{value} croquettes",
+      "exp": "{value} EXP",
+      "achievement": "Achievement: {id}",
+      "locked": "Locked"
+    },
+    "skin": {
+      "1": { "name": "Normal", "description": "A humble croquette from the supermarket" },
+      "2": { "name": "Ham", "description": "A delicious Iberian ham croquette" },
+      "3": { "name": "Chicken", "description": "A juicy and tasty chicken croquette" },
+      "4": { "name": "Cheese", "description": "A creamy and delicious cheese croquette" },
+      "5": { "name": "Cod", "description": "A traditional and tasty cod croquette" },
+      "6": { "name": "Mushroom", "description": "An exquisite and aromatic mushroom croquette" },
+      "7": { "name": "Coquette", "description": "A divine and stylish croquette" },
+      "8": { "name": "Golden", "description": "A luxury croquette, probably toxic." },
+      "9": { "name": "Burnt", "description": "Too much time in the fryer... crunchy to a crisp." },
+      "10": { "name": "Cosmic", "description": "Shines with the power of the universe. Not suitable for humans." },
+      "11": { "name": "King", "description": "His majesty the croquette, sovereign of all fried foods." },
+      "12": { "name": "Pope", "description": "The chosen croquette: wise, firm and a little too salty." },
+      "13": { "name": "Businesswoman", "description": "A croquette ready for business." },
+      "14": { "name": "DJ", "description": "The croquette that plays the music at the party." },
+      "15": { "name": "Super", "description": "A heroic croquette that saves the day." },
+      "16": { "name": "God", "description": "Beyond bechamel and breadcrumbs..." },
+      "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "croquettes?" },
+      "18": { "name": "Cookie", "description": "A croquette in an identity crisis.", "counterLabel": "cookies?" },
+      "19": { "name": "Banana?", "description": "A tropical croquette that leaves you with existential doubts.", "counterLabel": "bananas?" },
+      "20": { "name": "Sandwich...", "description": "A sandwich filled with croquettes, for the bravest.", "counterLabel": "sandwiches?" },
+      "21": { "name": "Real", "description": "The ultimate croquette." }
+    }
+  }
+}

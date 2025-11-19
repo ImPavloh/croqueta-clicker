@@ -5,6 +5,7 @@ import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [RouterModule, RouterLink, NewsLine, ButtonComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',

@@ -6,6 +6,7 @@ import { PlayerStats } from './player-stats.service';
 import { PointsService } from './points.service';
 import { SkinModel, UnlockRequirement } from '@models/skin.model';
 import { SKINS } from '@data/skin.data';
+import { TranslocoService } from '@ngneat/transloco';
 
 export interface SkinUnlockNotification {
   skin: SkinModel;
@@ -19,6 +20,7 @@ export class SkinsService {
   private optionsService = inject(OptionsService);
   private playerStats = inject(PlayerStats);
   private pointsService = inject(PointsService);
+  private translocoService = inject(TranslocoService);
   // state
   private _skinId = new BehaviorSubject<number>(1);
   // getter público (read-only signal)
@@ -99,17 +101,17 @@ export class SkinsService {
   getUnlockRequirementText(requirement: UnlockRequirement): string {
     switch (requirement.type) {
       case 'none':
-        return 'Desbloqueada';
+        return this.translocoService.translate('skins.unlock.unlocked');
       case 'level':
-        return `Nivel ${requirement.value}`;
+        return this.translocoService.translate('skins.unlock.level', { value: requirement.value });
       case 'croquetas':
-        return `${this.formatNumber(requirement.value)} croquetas`;
+        return this.translocoService.translate('skins.unlock.croquettes', { value: this.formatNumber(requirement.value) });
       case 'exp':
-        return `${this.formatNumber(requirement.value)} EXP`;
+        return this.translocoService.translate('skins.unlock.exp', { value: this.formatNumber(requirement.value) });
       case 'achievement':
-        return `Logro: ${requirement.id}`;
+        return this.translocoService.translate('skins.unlock.achievement', { id: requirement.id });
       default:
-        return 'Bloqueada';
+        return this.translocoService.translate('skins.unlock.locked');
     }
   }
 

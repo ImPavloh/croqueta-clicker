@@ -35,6 +35,7 @@ import { SkinsService } from '@services/skins.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     Navbar,

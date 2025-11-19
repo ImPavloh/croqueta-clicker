@@ -4,6 +4,7 @@ import { ModalService } from '@services/modal.service';
 
 @Component({
   selector: 'app-floating-buttons',
+  standalone: true,
   imports: [],
   templateUrl: './floating-buttons.html',
   styleUrl: './floating-buttons.css',

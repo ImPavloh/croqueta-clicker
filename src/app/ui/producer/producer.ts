@@ -13,6 +13,7 @@ import Decimal from 'break_infinity.js';
 
 @Component({
   selector: 'app-producer',
+  standalone: true,
   imports: [NgClass, ShortNumberPipe, ButtonComponent],
   templateUrl: './producer.html',
   styleUrl: './producer.css',

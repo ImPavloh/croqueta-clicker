@@ -5,16 +5,19 @@ import { ButtonComponent } from '@ui/button/button';
 import { AudioService } from '@services/audio.service';
 import { SkinModel } from 'app/models/skin.model';
 import { Tooltip } from '@ui/tooltip/tooltip';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-skin-card',
-  imports: [ButtonComponent, CommonModule, Tooltip],
+  standalone: true,
+  imports: [ButtonComponent, CommonModule, Tooltip, TranslocoModule],
   templateUrl: './skin-card.html',
   styleUrl: './skin-card.css',
 })
 export class SkinCard {
   private skinsService = inject(SkinsService);
   private audioService = inject(AudioService);
+  private translocoService = inject(TranslocoService);
 
   @Input() config!: SkinModel;
 
@@ -28,9 +31,9 @@ export class SkinCard {
 
   get unlockText(): string {
     if (this.isUnlocked || !this.config.unlockRequirement) {
-      return this.config.description;
+      return this.translocoService.translate(this.config.description);
     }
-    return `${this.config.description}\n\nRequisito: ${this.skinsService.getUnlockRequirementText(
+    return `${this.translocoService.translate(this.config.description)}\n\nRequisito: ${this.skinsService.getUnlockRequirementText(
       this.config.unlockRequirement
     )}`;
   }
