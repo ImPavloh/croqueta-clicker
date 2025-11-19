@@ -324,6 +324,7 @@
       "achievement": "Achievement: {id}",
       "locked": "Locked"
     },
+    "unlock_message": "¡You have unlocked the skin \"{{skinName}}\"!",
     "skin": {
       "1": { "name": "Normal", "description": "A humble croquette from the supermarket" },
       "2": { "name": "Ham", "description": "A delicious Iberian ham croquette" },

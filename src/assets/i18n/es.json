@@ -324,6 +324,7 @@
       "achievement": "Logro: {id}",
       "locked": "Bloqueada"
     },
+    "unlock_message": "¡Has desbloqueado la skin \"{{skinName}}\"!",
     "skin": {
       "1": { "name": "Normal", "description": "Una croqueta pocha del Wercadona" },
       "2": { "name": "Jamón", "description": "Una croqueta deliciosa de jamón ibérico" },

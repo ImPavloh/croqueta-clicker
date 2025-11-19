@@ -7,7 +7,9 @@ import { AudioService } from '@services/audio.service';
 import { TUTORIAL_MESSAGES } from '@data/tutorial.data';
 import { TutorialMessage } from '@models/tutorial.model';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { SkinsService } from '@services/skins.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-croquetita',
@@ -29,10 +31,49 @@ export class Croquetita implements OnDestroy {
   private checkInterval?: number;
   protected optionsService = inject(OptionsService);
   private audioService = inject(AudioService);
+  private pointsService = inject(PointsService);
+  private playerStats = inject(PlayerStats);
+  private skinsService = inject(SkinsService);
+  private translocoService = inject(TranslocoService);
 
-  constructor(private pointsService: PointsService, private playerStats: PlayerStats) {
-    this.loadShownMessages();
-  }
+  private subs = new Subscription()
+  private currentSkinIdInDisplay: number | null = null;
+  private canClickToClose = false;
+
+  constructor() {
+  this.loadShownMessages();
+
+  this.subs.add(
+    this.skinsService.queue$.subscribe((queue) => {
+      // Solo actuamos si hay cola Y si Croquetita NO está ya hablando
+      if (queue.length > 0 && !this.isOpen()) {
+
+        // FIFO: Cogemos la PRIMERA skin que entró (índice 0), no la última
+        const notification = queue[0];
+        const skinId = notification.skin.id;
+        this.currentSkinIdInDisplay = skinId; // Guardamos ID para borrarlo al cerrar
+
+        const messageId = `skin_unlocked_${skinId}`;
+
+        const name = this.translocoService.translate(`skins.skin.${skinId}.name`);
+        const fullMessage = this.translocoService.translate('skins.unlock_message', { skinName: name });
+
+        // Verificamos si ya se mostró históricamente (localStorage)
+        if (!this.shownMessages.has(messageId)) {
+          this.currentMessage.set(fullMessage);
+          this.markMessageAsShown(messageId);
+
+          // Abrimos el mensaje (false para no sobrescribir)
+          this.open(false);
+        } else {
+          // IMPORTANTE: Si por alguna razón ya estaba vista pero sigue en la cola,
+          // la borramos silenciosamente para que pase a la siguiente.
+          this.removeCurrentSkinFromQueue();
+        }
+      }
+    })
+  );
+}
 
   ngOnInit() {
     this.initialTimeout = window.setTimeout(() => {
@@ -49,7 +90,7 @@ export class Croquetita implements OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    if (!this.isOpen()) return;
+    if (!this.isOpen() || !this.canClickToClose) return;
 
     const target = event.target as HTMLElement;
 
@@ -75,10 +116,21 @@ export class Croquetita implements OnDestroy {
     }
   }
 
-  open() {
+  open(autoUpdateMessage: boolean = true) {
     this.isOpen.set(true);
     this.isAnimating.set(true);
-    this.showRelevantMessage();
+
+    this.canClickToClose = false;
+
+    setTimeout(() => {
+      this.canClickToClose = true;
+    }, 2000);
+    // Solo buscamos un mensaje nuevo (tutorial/tips) si autoUpdateMessage es true.
+    // Si es false, respetamos el mensaje que ya esté puesto (el de la skin).
+    if (autoUpdateMessage) {
+      this.showRelevantMessage();
+    }
+
     this.audioService.playSfx('/assets/sfx/croquetita.mp3', 1);
 
     // cerrar automáticamente
@@ -96,9 +148,24 @@ export class Croquetita implements OnDestroy {
   close() {
     this.clearAutoCloseTimeout();
     this.isAnimating.set(false);
+
     setTimeout(() => {
       this.isOpen.set(false);
-    }, 200);
+
+      // CUANDO TERMINA LA ANIMACIÓN DE CIERRE:
+      // Borramos la skin de la cola. Esto disparará el .subscribe del constructor
+      // de nuevo automáticamente si quedan más skins.
+      this.removeCurrentSkinFromQueue();
+
+    }, 1000);
+  }
+
+  private removeCurrentSkinFromQueue() {
+    if (this.currentSkinIdInDisplay) {
+      // Asumo que tienes un método así en tu servicio
+      this.skinsService.removeSkinFromQueue(this.currentSkinIdInDisplay);
+      this.currentSkinIdInDisplay = null;
+    }
   }
 
   private clearAutoCloseTimeout() {

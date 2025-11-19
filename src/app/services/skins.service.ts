@@ -134,6 +134,11 @@ export class SkinsService {
     this.saveToStorage();
   }
 
+  removeSkinFromQueue(skinId: number) {
+    const currentQueue = this.queueSubject.value; // O como llames a tu BehaviorSubject
+    const updatedQueue = currentQueue.filter(item => item.skin.id !== skinId);
+    this.queueSubject.next(updatedQueue); // Al hacer .next(), Angular avisa al componente de nuevo
+  }
   // actualizar fondo segun skin
   private updateBackground(skinId: number) {
     const skin = SKINS.find(s => s.id === skinId);
