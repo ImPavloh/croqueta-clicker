@@ -7,7 +7,6 @@ import { GAME_PREFIX } from '@app/config/constants';
   providedIn: 'root',
 })
 export class OptionsService {
-  // --- signals (mantengo tu API actual en 0..100 para bindear en la UI) ---
   private _generalVolume = signal<number>(100);
   private _musicVolume = signal<number>(100);
   private _sfxVolume = signal<number>(100);
@@ -15,7 +14,7 @@ export class OptionsService {
   private _showParticles = signal<boolean>(true);
   private _showFloatingText = signal<boolean>(true);
 
-  // read-only signals públicos (para usar en templates si quieres)
+  // read-only signals públicos (para usar en templates)
   readonly generalVolume = this._generalVolume.asReadonly();
   readonly musicVolume = this._musicVolume.asReadonly();
   readonly sfxVolume = this._sfxVolume.asReadonly();
@@ -23,32 +22,47 @@ export class OptionsService {
   readonly showParticles = this._showParticles.asReadonly();
   readonly showFloatingText = this._showFloatingText.asReadonly();
 
-  // -- versión para cambiar cuándo hay cambios en items guardados
+  // versión para cambiar cuándo hay cambios en items guardados
   private _gameItemsVersion = signal<number>(0);
   readonly gameItemsVersion = this._gameItemsVersion.asReadonly();
 
-  // --- Observables normalizados 0..1 (para AudioService) ---
+  // observables normalizados 0..1 para AudioService
   private _generalVolume$ = new BehaviorSubject<number>(1); // 0..1
   private _musicVolume$ = new BehaviorSubject<number>(1);
   private _sfxVolume$ = new BehaviorSubject<number>(1);
 
-  // exposiciones públicas (nombres con $ para compatibilidad con la solución 2B)
+  // exposiciones públicas
   readonly generalVolume$: Observable<number> = this._generalVolume$.asObservable();
   readonly musicVolume$: Observable<number> = this._musicVolume$.asObservable();
   readonly sfxVolume$: Observable<number> = this._sfxVolume$.asObservable();
 
   constructor(public achievementsService: AchievementsService) {
-    /* debug
-    if (typeof localStorage !== 'undefined') {
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(GAME_PREFIX)) {
-          console.log(`  ${key} = ${localStorage.getItem(key)?.substring(0, 50)}`);
-        }
-      }
+    // comprueba si localStorage funciona
+    this._localStorageAvailable = this.checkLocalStorageAvailability();
+    if (!this._localStorageAvailable) {
+      console.warn(
+        'localStorage no disponible o no persistente: los progresos no se guardarán en esta sesión'
+      );
     }
-    */
+
     this.loadFromStorage();
+    // Intentar solicitar persistencia
+    this.requestPersistentStorage();
+  }
+
+  // flag interno para comprobar si localStorage es usable (no privado o bloqueado)
+  private _localStorageAvailable = true;
+
+  private checkLocalStorageAvailability(): boolean {
+    if (typeof localStorage === 'undefined') return false;
+    try {
+      const testKey = '__cc_test__';
+      localStorage.setItem(testKey, '1');
+      localStorage.removeItem(testKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // ----------------- setters públicos (reciben 0..100) -----------------
@@ -77,7 +91,7 @@ export class OptionsService {
     this.checkAchievements();
   }
 
-  // ----------------- getters sincrónicos (devuelven 0..1) -----------------
+  // getters sincrónicos (devuelven 0..1)
   // AudioService y otros esperan valores 0..1, por eso estos getters devuelven 0..1
   getGeneral(): number {
     return this.toUnit(this._generalVolume());
@@ -94,7 +108,7 @@ export class OptionsService {
     return Math.max(0, Math.min(100, Math.round(v)));
   }
   private toUnit(v100: number) {
-    // convert 0..100 -> 0..1 (float)
+    // 0..100 -> 0..1 (float)
     return Math.max(0, Math.min(1, v100 / 100));
   }
 
@@ -114,7 +128,7 @@ export class OptionsService {
   }
 
   checkAchievements() {
-    // ejemplo: desbloquear un logro si el volumen es exactamente 67
+    // desbloqueo del logro si el volumen es exactamente 67
     if (this._generalVolume() === 67 && this._musicVolume() === 67 && this._sfxVolume() === 67) {
       this.achievementsService.unlockAchievement('six_seven');
     }
@@ -287,20 +301,53 @@ export class OptionsService {
 
   // helpers para que otros servicios usen el prefijo
   getGameItem(key: string): string | null {
-    if (typeof localStorage === 'undefined') return null;
-    return localStorage.getItem(GAME_PREFIX + key);
+    if (!this._localStorageAvailable) return null;
+    try {
+      return localStorage.getItem(GAME_PREFIX + key);
+    } catch (error) {
+      return null;
+    }
   }
 
   setGameItem(key: string, value: string): void {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.setItem(GAME_PREFIX + key, value);
-    // notificar que un item de progreso se ha modificado
-    this._gameItemsVersion.update((v) => v + 1);
+    if (!this._localStorageAvailable) return;
+    try {
+      localStorage.setItem(GAME_PREFIX + key, value);
+      // notificar que un item de progreso se ha modificado
+      this._gameItemsVersion.update((v) => v + 1);
+    } catch (error) {
+      console.warn('Error guardando en localStorage:', error);
+    }
   }
 
   removeGameItem(key: string): void {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.removeItem(GAME_PREFIX + key);
-    this._gameItemsVersion.update((v) => v + 1);
+    if (!this._localStorageAvailable) return;
+    try {
+      localStorage.removeItem(GAME_PREFIX + key);
+      this._gameItemsVersion.update((v) => v + 1);
+    } catch (error) {
+      console.warn('Error eliminando item en localStorage:', error);
+    }
+  }
+
+  public isLocalStorageAvailable(): boolean {
+    return this._localStorageAvailable;
+  }
+
+  public async requestPersistentStorage(): Promise<boolean> {
+    if (
+      typeof navigator === 'undefined' ||
+      !('storage' in navigator) ||
+      !(navigator as any).storage.persist
+    ) {
+      return false;
+    }
+    try {
+      const persisted = await (navigator as any).storage.persist();
+      if (!persisted) console.info('No se concedió persistencia');
+      return persisted;
+    } catch (e) {
+      return false;
+    }
   }
 }

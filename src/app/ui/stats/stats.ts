@@ -53,9 +53,16 @@ export class StatsComponent {
   }
 
   formatTime(seconds: number): string {
+    const years = Math.floor(seconds / 31536000);
+    const weeks = Math.floor(seconds / 604800);
+    const days = Math.floor(seconds / 86400);
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
+
+    if (years > 0) return `${years}y ${weeks % 52}w`;
+    if (weeks > 0) return `${weeks}w ${days % 7}d`;
+    if (days > 0) return `${days}d ${hours}h`;
     if (hours > 0) return `${hours}h ${minutes}m`;
     if (minutes > 0) return `${minutes}m ${secs}s`;
     return `${secs}s`;
