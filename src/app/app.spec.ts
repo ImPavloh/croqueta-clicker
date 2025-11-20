@@ -1,5 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { configureTransloco } from 'testing/test-helpers';
+
+
+beforeEach(async () => {
+  configureTransloco([App]);
+  await TestBed.compileComponents();
+});
+
 
 describe('App', () => {
   beforeEach(async () => {

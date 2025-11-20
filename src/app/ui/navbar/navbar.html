@@ -1,15 +1,15 @@
 <nav class="navbar justify-between items-center">
   <div class="flex gap-2">
     <app-button variant="nav" [routerLink]="'/'" [routerLinkActiveExact]="true">
-      Mejoras
+      {{ 'navbar.upgrades' | transloco }}
     </app-button>
-    <app-button variant="nav" [routerLink]="'/achievements'"> Logros </app-button>
+    <app-button variant="nav" [routerLink]="'/achievements'"> {{ 'navbar.achievements' | transloco }} </app-button>
   </div>
   @if (!isMobile) {
   <app-newsline />
   }
   <div class="flex gap-2">
-    <app-button variant="nav" [routerLink]="'/skins'"> Skins </app-button>
-    <app-button variant="nav" [routerLink]="'/options'"> Opciones </app-button>
+    <app-button variant="nav" [routerLink]="'/skins'"> {{ 'navbar.skins' | transloco }} </app-button>
+    <app-button variant="nav" [routerLink]="'/options'"> {{ 'navbar.options' | transloco }} </app-button>
   </div>
 </nav>

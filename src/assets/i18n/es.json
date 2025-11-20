@@ -3,6 +3,7 @@
     "title": "Logros",
     "secretAchievement": "??? Logro secreto ???",
     "noDescription": "Sin descripción",
+    "achievement_unlocked": "¡Logro desbloqueado!",
     "primera_croqueta": {
       "title": "Primera croqueta",
       "description": "Cocina tu primera croqueta."
@@ -386,6 +387,7 @@
     "buyProducer": "¡Compra un productor para empezar a ganar croquetas automáticamente!",
     "cps": "¢ / seg",
     "croquetas": "croquetas",
+    "croqueta": "croqueta",
     "level": "Nivel",
     "time": "Tiempo",
     "clicks": "Clicks",
@@ -465,5 +467,11 @@
     "help_achievements": "¿Sabías que puedes ver todos tus logros detallados?",
     "help_skins": "Las skins no dan bonificaciones, pero hacen que tu croqueta se vea genial o al menos diferente...",
     "general_help": "¿Necesitas ayuda? Explora los diferentes menús o simplemente sigue clickeando. ¡Tú decides!"
+  },
+  "navbar": {
+    "upgrades": "Mejoras",
+    "achievements": "Logros",
+    "skins": "Skins",
+    "options": "Opciones"
   }
 }

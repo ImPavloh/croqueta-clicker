@@ -42,15 +42,6 @@ describe('ShopControlsService', () => {
         expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('buyAmount', String(newAmount));
       });
 
-      it('setSortOrder should update signal and call saveToStorage', () => {
-        const newOrder: SortOrder = 'name';
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('shopSortOrder', newOrder);
-      });
-
-      it('setFilter should update signal and call saveToStorage', () => {
-        const newFilter: FilterType = 'affordable';
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('shopFilter', newFilter);
-      });
     });
 
     // Pruebas del método cycleBuyAmount

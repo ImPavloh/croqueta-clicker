@@ -74,6 +74,7 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-coqueta.webp',
     particleImage: '/assets/skins/croqueta-coqueta.webp',
     unlockRequirement: { type: 'level', value: 13 },
+    background: '/assets/backgrounds/bg-coqueta.webp',
   },
   {
     id: 22,

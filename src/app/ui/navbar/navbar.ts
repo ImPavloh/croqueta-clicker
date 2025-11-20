@@ -2,11 +2,12 @@ import { Component, HostListener } from '@angular/core';
 import { RouterLink, RouterModule } from '@angular/router';
 import { NewsLine } from '@ui/newsline/newsline';
 import { ButtonComponent } from '@ui/button/button';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, RouterLink, NewsLine, ButtonComponent],
+  imports: [RouterModule, RouterLink, NewsLine, ButtonComponent, TranslocoModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })

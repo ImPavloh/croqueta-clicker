@@ -4,11 +4,12 @@ import { AchievementsService } from '@services/achievements.service';
 import { Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-achievement-popup',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule],
   templateUrl: './achievement-popup.html',
   styleUrls: ['./achievement-popup.css'],
 })

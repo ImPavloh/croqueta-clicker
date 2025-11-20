@@ -3,6 +3,7 @@
     "title": "Achievements",
     "secretAchievement": "??? Secret Achievement ???",
     "noDescription": "No description",
+    "achievement_unlocked": "Achievement unlocked!",
     "primera_croqueta": {
       "title": "First croquette",
       "description": "Cook your first croquette."
@@ -383,6 +384,7 @@
     "buyProducer": "Buy a producer to start earning croquettes automatically!",
     "cps": "¢ / sec",
     "croquetas": "croquettes",
+    "croqueta": "croquette",
     "level": "Level",
     "time": "Time",
     "clicks": "Clicks",
@@ -462,5 +464,11 @@
     "help_achievements": "Did you know you can see all your detailed achievements?",
     "help_skins": "Skins don't give bonuses, but they make your croquette look great or at least different...",
     "general_help": "Need help? Explore the different menus or just keep clicking. You decide!"
+  },
+  "navbar": {
+    "upgrades": "Upgrades",
+    "achievements": "Achievements",
+    "skins": "Skins",
+    "options": "Options"
   }
 }
