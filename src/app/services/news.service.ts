@@ -1,21 +1,31 @@
-import { Injectable } from '@angular/core';
-import { NEWS_DATA, NewsItem } from '@data/news.data';
+import { Injectable, inject } from '@angular/core';
+import { NEWS_DATA } from '@data/news.data';
+import { TranslocoService } from '@jsverse/transloco';
+import { Observable, map, startWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NewsService {
-  constructor() {}
+  private transloco = inject(TranslocoService);
 
   /**
-   * Obtiene las noticias para un nivel específico, ordenadas aleatoriamente.
-   * @param level El nivel de noticias a filtrar.
-   * @returns Un array de NewsItem ordenado aleatoriamente.
+   * Obtiene las noticias para un nivel específico, traducidas y ordenadas aleatoriamente.
+   * @param level El nivel de noticias a obtener.
+   * @returns Un observable que emite un array de strings con las noticias.
    */
-  getNewsByLevel(level: number): NewsItem[] {
-    const filtered = NEWS_DATA.filter((item) => item.level === level);
-    // Devolvemos una copia barajada para no mutar el array original
-    return this.shuffleArray([...filtered]);
+  getNewsByLevel(level: number): Observable<string[]> {
+    return this.transloco.langChanges$.pipe(
+      startWith(this.transloco.getActiveLang()),
+      map((lang) => {
+        const newsForLevel = NEWS_DATA[level];
+        if (!newsForLevel) {
+          return ['No hay noticias para este nivel.'];
+        }
+        const translatedNews = newsForLevel[lang] || newsForLevel['es']; // Fallback a 'es'
+        return this.shuffleArray([...translatedNews]);
+      })
+    );
   }
 
   /**
@@ -23,7 +33,7 @@ export class NewsService {
    * @param array El array a ordenar.
    * @returns El array ordenado aleatoriamente.
    */
-  private shuffleArray(array: NewsItem[]): NewsItem[] {
+  private shuffleArray(array: string[]): string[] {
     let currentIndex = array.length;
     let randomIndex;
 

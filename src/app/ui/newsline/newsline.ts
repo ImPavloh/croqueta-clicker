@@ -1,56 +1,47 @@
 import { PlayerStats } from '@services/player-stats.service';
 import {
   Component,
-  computed,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  effect,
   inject,
+  computed,
 } from '@angular/core';
 import { NewsService } from '@services/news.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { distinctUntilChanged, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-newsline',
-  standalone: true, // Componente independiente
-  imports: [], // No se necesita CommonModule para @for
-  templateUrl: './newsline.html', // Enlazamos un HTML externo
-  styleUrl: './newsline.css', // Enlazamos un CSS externo
+  standalone: true,
+  imports: [],
+  templateUrl: './newsline.html',
+  styleUrl: './newsline.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsLine {
   private newsService = inject(NewsService);
   private playerStats = inject(PlayerStats);
-  private cdr = inject(ChangeDetectorRef);
 
-  // Seleccionar nivel de noticias a mostrar
-  private level: number = 1;
+  // 1. Creamos un observable que emite el nivel de noticias (1, 2, o 3)
+  private newsLevel$ = this.playerStats.level$.pipe(
+    map((playerLevel) => {
+      if (playerLevel > 30) return 3;
+      if (playerLevel > 15) return 2;
+      return 1;
+    }),
+    distinctUntilChanged() // Solo emitimos si el nivel de noticias cambia
+  );
 
-  constructor() {
-    const playerLevel = toSignal(this.playerStats.level$, { initialValue: 1 });
+  // 2. Usamos switchMap para cambiar al nuevo observable de noticias cuando el nivel cambia
+  private news$ = this.newsLevel$.pipe(
+    switchMap((level) => this.newsService.getNewsByLevel(level))
+  );
 
-    effect(() => {
-      const currentLevel = playerLevel();
-      this.level = 1;
-      if (currentLevel > 30) {
-        this.level = 3;
-      } else if (currentLevel > 15) {
-        this.level = 2;
-      }
-      this.cdr.markForCheck();
-    });
-  }
+  // 3. Convertimos el resultado en una señal para el template
+  private newsSignal = toSignal(this.news$, { initialValue: [] });
 
-  // Obtenemos las noticias como array
+  // 4. Creamos una señal computada final que duplica el array para el efecto de bucle infinito
   protected displayItems = computed(() => {
-    const shuffledNews = this.newsService.getNewsByLevel(this.level);
-
-    if (shuffledNews.length === 0) {
-      return ['No hay noticias disponibles para este nivel.'];
-    }
-
-    const newsArray = shuffledNews.map((item) => item.news);
-    // Duplicamos el array para el loop infinito
-    return [...newsArray, ...newsArray];
+    const items = this.newsSignal();
+    return [...items, ...items];
   });
 }
