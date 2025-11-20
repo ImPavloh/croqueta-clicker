@@ -10,6 +10,7 @@
   [class.full-height]="true"
   [class.full-width]="true"
   class="pr-4 h-full max-w-3xs w-full min-w-36 sm:pr-8 sm:min-w-48"
+  [noSound]="true"
 >
   <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
   @if (unlocked) {
@@ -26,14 +27,18 @@
             : ('upgrades.level' | transloco) + ' ' + config.level
         }}
         ¢
-        <span class="text-black text-[10px] sm:text-xs opacity-60">{{ 'upgrades.perClick' | transloco }}</span>
+        <span class="text-black text-[10px] sm:text-xs opacity-60">{{
+          'upgrades.perClick' | transloco
+        }}</span>
       </p>
     </div>
 
     <div class="w-12 h-px bg-amber-800 opacity-20 my-0.5 mx-auto sm:my-1"></div>
 
     <div class="flex flex-col items-center upgrade-price">
-      <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'upgrades.price' | transloco }}</p>
+      <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
+        {{ 'upgrades.price' | transloco }}
+      </p>
       <p
         class="text-sm sm:text-base"
         [ngClass]="

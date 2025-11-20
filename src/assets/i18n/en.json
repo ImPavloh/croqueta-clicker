@@ -264,7 +264,6 @@
   },
   "producers": {
     "title": "Producers",
-    "description": "Discover and buy producers that will generate income automatically",
     "producer_1_name": "Click",
     "producer_1_description": "Makes automatic clicks for you.",
     "producer_2_name": "Cook",

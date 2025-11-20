@@ -7,6 +7,7 @@
   [active]="false"
   [clickable]="!(pointsService.points().lt(price) || !unlocked)"
   (click)="buyProducer()"
+  [noSound]="true"
 >
   @if (unlocked) { @if (shopControls.gridView()) {
   <div class="producer-grid-content">
@@ -22,7 +23,9 @@
       <div class="flex flex-col justify-evenly ml-auto text-right">
         @if (quantity > 0) {
         <p class="producer-grid-quantity">x{{ quantity }}</p>
-        <p class="producer-grid-production">{{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}</p>
+        <p class="producer-grid-production">
+          {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
+        </p>
         }
       </div>
     </div>
@@ -62,7 +65,9 @@
 
     <div class="flex items-center gap-3 sm:gap-6 shrink-0 w-auto justify-between sm:justify-end">
       <div class="flex flex-col items-center">
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.owned' | transloco }}</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
+          {{ 'producers.owned' | transloco }}
+        </p>
         <p class="text-2xl sm:text-3xl font-bold text-amber-700">{{ quantity }}</p>
       </div>
 
@@ -70,13 +75,19 @@
 
       <div class="producer-stats flex flex-col items-end">
         @if (quantity > 0) {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.production' | transloco }}</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
+          {{ 'producers.production' | transloco }}
+        </p>
         <p class="text-lg sm:text-2xl font-bold text-green-700">
           {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
         </p>
         } @else {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">{{ 'producers.willProduce' | transloco }}</p>
-        <p class="text-base sm:text-xl font-semibold text-gray-600">{{ points | short }} {{ 'producers.cps' | transloco }}</p>
+        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
+          {{ 'producers.willProduce' | transloco }}
+        </p>
+        <p class="text-base sm:text-xl font-semibold text-gray-600">
+          {{ points | short }} {{ 'producers.cps' | transloco }}
+        </p>
         <p class="text-[10px] sm:text-xs opacity-50">{{ 'producers.perUnit' | transloco }}</p>
         }
       </div>

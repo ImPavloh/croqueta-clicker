@@ -5,19 +5,30 @@
 }
 
 .upgrades {
-  mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 0%, black 70%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 2%, black 98%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 98%, transparent);
   display: flex;
   gap: 0.75rem;
   padding: 0.5rem 0.25rem;
   align-items: stretch;
   overflow-x: auto;
+
+  /* ahora mismo el usuario no sabe que puede hacer scroll (se lo ocultamos),
+  enseñaserlo visualmente con una flecha o algo similar */
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
 .upgrades::-webkit-scrollbar {
   display: none;
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 100%;
+  border: 1px solid rgba(139, 69, 19, 0.08);
+  background-color: rgba(139, 69, 19, 0.12);
+  margin: 0 0 0 0.5rem;
 }
 
 .controls-grid .search-input {
@@ -68,11 +79,13 @@
   mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
   overflow-y: auto;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: #b89c5a #f3eac2;
   flex: 1 1 auto;
   min-height: 0;
+
+  /* ahora mismo el usuario no sabe que puede hacer scroll (se lo ocultamos),
+  enseñaserlo visualmente con una flecha o algo similar */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .producers-container::-webkit-scrollbar {

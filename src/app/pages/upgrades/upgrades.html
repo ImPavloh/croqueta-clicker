@@ -1,31 +1,34 @@
-<!--upgrades-->
-<div class="h-full flex flex-col">
-  <div class="upgrades-section pr-4">
-    <div class="upgrades flex flex-row">
-      @for (upgrade of visibleUpgrades(); track upgrade.id) {
-      <app-upgrade [config]="upgrade" class="upgrade"></app-upgrade>
-      }
-    </div>
-
-    <hr class="text-amber-800/20 my-4 md:my-8 w-[80%] m-auto" />
-
-    <!--producers-->
-    <app-shop-controls />
+<div class="h-full w-full flex flex-row">
+  <!--upgrades-->
+  <div class="upgrades flex flex-col">
+    <h2 class="text-amber-800 font-semibold text-xl text-center uppercase tracking-widest">
+      {{ 'upgrades.title' | transloco }}
+    </h2>
+    @for (upgrade of visibleUpgrades(); track upgrade.id) {
+    <app-upgrade [config]="upgrade" class="upgrade"></app-upgrade>
+    }
   </div>
-  <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
-    <div class="producers-list flex flex-col gap-4 md:p-4">
-      @for (producer of producers; track producer.id) {
-      <app-producer
-        [config]="producer"
-        [class.producer-compact]="shopControls.gridView()"
-      ></app-producer>
-      } @empty {
-      <div
-        class="no-producers-placeholder flex justify-center items-center p-8 text-amber-800 italic opacity-70"
-      >
-        <p>{{ 'producers.noProducers' | transloco }}</p>
+
+  <hr class="divider-vertical" />
+
+  <!--producers-->
+  <div class="flex flex-col w-full flex-1">
+    <app-shop-controls />
+    <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
+      <div class="producers-list flex flex-col gap-4 md:p-4">
+        @for (producer of producers; track producer.id) {
+        <app-producer
+          [config]="producer"
+          [class.producer-compact]="shopControls.gridView()"
+        ></app-producer>
+        } @empty {
+        <div
+          class="no-producers-placeholder flex justify-center items-center p-8 text-amber-800 italic opacity-70"
+        >
+          <p>{{ 'producers.noProducers' | transloco }}</p>
+        </div>
+        }
       </div>
-      }
     </div>
   </div>
 </div>
