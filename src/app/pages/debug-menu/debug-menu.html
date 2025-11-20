@@ -1,0 +1,32 @@
+<div class="p-4 gap-8 flex flex-col">
+  <app-card>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="flex flex-col">
+        <label for="croquetas">{{ 'debug.croquetas' | transloco }}</label>
+        <input type="number" [(ngModel)]="croquetas" class="text-black" />
+        <app-button (click)="setCroquetas()">{{ 'debug.set' | transloco }}</app-button>
+      </div>
+      <div class="flex flex-col">
+        <label for="exp">{{ 'debug.exp' | transloco }}</label>
+        <input type="number" [(ngModel)]="exp" class="text-black" />
+        <app-button (click)="setExp()">{{ 'debug.set' | transloco }}</app-button>
+      </div>
+      <div class="flex flex-col">
+        <label for="cps">{{ 'debug.cps' | transloco }}</label>
+        <input type="number" [(ngModel)]="cps" class="text-black" />
+        <app-button (click)="setCps()">{{ 'debug.set' | transloco }}</app-button>
+      </div>
+      <div class="flex flex-col">
+        <label for="cpc">{{ 'debug.cpc' | transloco }}</label>
+        <input type="number" [(ngModel)]="cpc" class="text-black" />
+        <app-button (click)="setCpc()">{{ 'debug.set' | transloco }}</app-button>
+      </div>
+    </div>
+  </app-card>
+  <app-card>
+    <div class="grid grid-cols-1 gap-4">
+      <app-button (click)="unlockAllSkins()">{{ 'debug.unlockAllSkins' | transloco }}</app-button>
+      <app-button (click)="unlockAllAchievements()">{{ 'debug.unlockAllAchievements' | transloco }}</app-button>
+    </div>
+  </app-card>
+</div>

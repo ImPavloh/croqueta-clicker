@@ -473,5 +473,23 @@
     "achievements": "Logros",
     "skins": "Skins",
     "options": "Opciones"
+  },
+  "debug": {
+    "title": "Menú Debug",
+    "croquetas": "Croquetas",
+    "exp": "Experiencia",
+    "cps": "Croquetas por segundo",
+    "cpc": "Croquetas por click",
+    "set": "Establecer",
+    "unlockAllSkins": "Desbloquear todas las skins",
+    "unlockAllAchievements": "Desbloquear todos los logros",
+    "resetGame": "Reiniciar partida",
+    "confirm": {
+      "title": "Activar modo debug",
+      "message": "¿Estás seguro de que quieres activar el modo debug? Esto marcará permanentemente tu partida como \"debug\" hasta que la reinicies.",
+      "confirm": "Activar",
+      "cancel": "Cancelar"
+    },
+    "alert": "Modo Debug"
   }
 }

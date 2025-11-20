@@ -70,6 +70,10 @@ export class SkinsService {
 
   // ver si una skin esta desbloqueada
   isSkinUnlocked(skin: SkinModel): boolean {
+    if (this.unlockedSkins.has(skin.id)) {
+      return true;
+    }
+
     if (!skin.unlockRequirement || skin.unlockRequirement.type === 'none') {
       return true;
     }
@@ -240,5 +244,14 @@ export class SkinsService {
     const [first, ...rest] = queue;
     this.queueSubject.next(rest);
     return first;
+  }
+
+  public unlockAllSkins(): void {
+    SKINS.forEach((skin) => {
+      if (!this.unlockedSkins.has(skin.id)) {
+        this.unlockedSkins.add(skin.id);
+        this.notifySkinUnlock(skin);
+      }
+    });
   }
 }

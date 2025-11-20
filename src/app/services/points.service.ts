@@ -157,4 +157,29 @@ export class PointsService {
     this._pointsPerClick.set(new Decimal(1));
     this._multiply.set(new Decimal(1));
   }
+
+  public addPoints(amount: number) {
+    this._points.update((v) => v.plus(new Decimal(amount)));
+    this.saveToStorage();
+  }
+
+  public setPoints(amount: number) {
+    this._points.set(new Decimal(amount));
+    this.saveToStorage();
+  }
+
+  public addCps(amount: number) {
+    this._pointsPerSecond.update((v) => v.plus(new Decimal(amount)));
+    this.saveToStorage();
+  }
+
+  public setCps(amount: number) {
+    this._pointsPerSecond.set(new Decimal(amount));
+    this.saveToStorage();
+  }
+
+  public setPointsPerClick(amount: number) {
+    this._pointsPerClick.set(new Decimal(amount));
+    this.saveToStorage();
+  }
 }

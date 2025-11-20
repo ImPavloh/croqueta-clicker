@@ -7,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   Renderer2,
   inject,
+  HostListener,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -32,6 +33,9 @@ import { Splash } from '@ui/splash/splash';
 import { StatsComponent } from '@ui/stats/stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
 import { SkinsService } from '@services/skins.service';
+import { ModalService } from '@services/modal.service';
+import { DebugService } from '@services/debug.service';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +54,7 @@ import { SkinsService } from '@services/skins.service';
     Modal,
     FloatingButtons,
     GoldenCroqueta,
+    TranslocoModule,
 
     Splash,
     StatsComponent,
@@ -62,6 +67,7 @@ import { SkinsService } from '@services/skins.service';
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
   private renderer = inject(Renderer2);
+  isDebugMode = false;
 
   constructor(
     private points: PointsService,
@@ -70,14 +76,43 @@ export class App implements OnInit, OnDestroy {
     private autosaveService: AutosaveService,
     private achievementsService: AchievementsService,
     private goldenCroquetaService: GoldenCroquetaService,
-    private skinsService: SkinsService
-  ) {}
+    private skinsService: SkinsService,
+    private modalService: ModalService,
+    private debugService: DebugService,
+    private translocoService: TranslocoService
+  ) {
+    this.debugService.isDebugMode$.subscribe(is => this.isDebugMode = is);
+  }
 
   private level: number = 1;
   private levelSub?: Subscription;
   private backgroundSub?: Subscription;
 
   public isMobile: boolean = window.innerWidth <= 1344;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.altKey && event.key === 'F12') {
+      this.openDebugMenu();
+    }
+  }
+
+  openDebugMenu() {
+    if (!this.debugService.isDebugMode) {
+      this.modalService.showConfirm({
+        title: this.translocoService.translate('debug.confirm.title'),
+        message: this.translocoService.translate('debug.confirm.message'),
+        confirmText: this.translocoService.translate('debug.confirm.confirm'),
+        cancelText: this.translocoService.translate('debug.confirm.cancel'),
+        onConfirm: () => {
+          this.debugService.enableDebugMode();
+          this.modalService.openModal('debug');
+        }
+      });
+    } else {
+      this.modalService.openModal('debug');
+    }
+  }
 
   ngOnInit(): void {
     this.levelSub = this.playerStats.level$.subscribe((level) => {

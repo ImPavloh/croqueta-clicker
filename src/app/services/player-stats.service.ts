@@ -70,7 +70,12 @@ export class PlayerStats {
   addExp(exp: number): void {
     this._currentExp.update((total) => total + exp);
     this.checkLevelUp();
-    // guardar cuando se añade experiencia de forma externa (compra de productores/upgrades)
+    this.saveToStorage();
+  }
+
+  setExp(exp: number): void {
+    this._currentExp.set(exp);
+    this.checkLevelUp();
     this.saveToStorage();
   }
 

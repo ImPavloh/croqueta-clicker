@@ -43,4 +43,9 @@
     </div>
     }
   </div>
+  @if (isDebugMode) {
+  <div class="debug-mode-text">
+    {{ 'debug.alert' | transloco }}
+  </div>
+  }
 </main>

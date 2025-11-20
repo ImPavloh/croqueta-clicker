@@ -125,5 +125,9 @@ export class AchievementsService {
     return ACHIEVEMENTS.length;
   }
 
-
+  public unlockAllAchievements(): void {
+    ACHIEVEMENTS.forEach((ach) => {
+      this.unlockAchievement(ach.id);
+    });
+  }
 }

@@ -7,11 +7,12 @@ import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
 import { ButtonComponent } from '@ui/button/button';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { DebugMenuComponent } from '../../pages/debug-menu/debug-menu';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [Upgrades, Achievements, Skins, Options, ButtonComponent, TranslocoModule],
+  imports: [Upgrades, Achievements, Skins, Options, ButtonComponent, TranslocoModule, DebugMenuComponent],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
@@ -36,6 +37,8 @@ export class Modal {
         return this.translocoService.translate('skins.title');
       case 'options':
         return this.translocoService.translate('options.title');
+      case 'debug':
+        return this.translocoService.translate('debug.title');
       default:
         return '';
     }
