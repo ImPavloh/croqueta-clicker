@@ -6,7 +6,7 @@ import { PlayerStats } from './player-stats.service';
 import { PointsService } from './points.service';
 import { SkinModel, UnlockRequirement } from '@models/skin.model';
 import { SKINS } from '@data/skin.data';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
 export interface SkinUnlockNotification {
   skin: SkinModel;

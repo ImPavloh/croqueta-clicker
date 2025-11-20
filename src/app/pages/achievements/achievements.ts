@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AchievementList } from '@ui/achievement-list/achievement-list';
 import { STATS } from '@data/stats.data';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-achievements',

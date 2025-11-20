@@ -10,7 +10,7 @@ import { OptionsService } from '@services/options.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-upgrade',

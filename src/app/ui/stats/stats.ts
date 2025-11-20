@@ -7,7 +7,7 @@ import { GoldenCroquetaService } from '@services/golden-croqueta.service';
 
 type StatsVariant = 'mobile' | 'desktop' | 'auto';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-stats',

@@ -3,7 +3,7 @@ import { ShopControlsService, BuyAmount } from '@services/shop-controls.service'
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@ui/button/button';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-shop-controls',

@@ -4,7 +4,7 @@ import { AchievementsService } from '@services/achievements.service';
 import { ACHIEVEMENTS, Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { Tooltip } from '@ui/tooltip/tooltip';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-achievement-list',

@@ -7,7 +7,7 @@ import { AudioService } from '@services/audio.service';
 import { TUTORIAL_MESSAGES } from '@data/tutorial.data';
 import { TutorialMessage } from '@models/tutorial.model';
 
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { SkinsService } from '@services/skins.service';
 import { Subscription } from 'rxjs';
 

@@ -6,7 +6,7 @@ import { Achievements } from '@pages/achievements/achievements';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
 import { ButtonComponent } from '@ui/button/button';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-modal',

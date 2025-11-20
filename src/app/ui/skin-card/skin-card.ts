@@ -5,7 +5,7 @@ import { ButtonComponent } from '@ui/button/button';
 import { AudioService } from '@services/audio.service';
 import { SkinModel } from 'app/models/skin.model';
 import { Tooltip } from '@ui/tooltip/tooltip';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-skin-card',

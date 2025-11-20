@@ -11,7 +11,7 @@ import { OptionsService } from '@services/options.service';
 import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-producer',

@@ -14,7 +14,7 @@ import { SkinsService } from '@services/skins.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { AudioService } from '@services/audio.service';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
 
 @Component({

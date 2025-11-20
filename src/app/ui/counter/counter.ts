@@ -7,7 +7,7 @@ import { SKINS } from '@data/skin.data';
 import Decimal from 'break_infinity.js';
 import { Subscription } from 'rxjs';
 
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-counter',

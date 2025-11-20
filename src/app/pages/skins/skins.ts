@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { SKINS } from '@data/skin.data';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule } from '@jsverse/transloco';
 import { SkinCard } from '@ui/skin-card/skin-card';
 import { SkinsService } from '@services/skins.service';
 
