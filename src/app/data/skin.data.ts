@@ -107,6 +107,97 @@ export const SKINS: SkinModel[] = [
     unlockRequirement: { type: 'croquetas', value: 10000 },
     background: '/assets/backgrounds/bg-quemado.webp',
   },
+  {
+    id: 23,
+    rarity: 'skins.rarity.rare',
+    order: 5,
+    name: 'skins.skin.23.name',
+    description: 'skins.skin.23.description',
+    image: '/assets/skins/croqueta-congelada.webp',
+    unlockRequirement: { type: 'croquetas', value: 25000 },
+    background: '/assets/backgrounds/bg-congelado.webp',
+  },
+  {
+    id: 25,
+    rarity: 'skins.rarity.rare',
+    order: 6,
+    name: 'skins.skin.25.name',
+    description: 'skins.skin.25.description',
+    image: '/assets/skins/croqueta-japonesa.webp',
+    unlockRequirement: { type: 'croquetas', value: 40000 },
+  },
+  /*
+  {
+    id: 26,
+    rarity: 'skins.rarity.rare',
+    order: 7,
+    name: 'skins.skin.26.name',
+    description: 'skins.skin.26.description',
+    image: '/assets/skins/croqueta-love.webp',
+    unlockRequirement: { type: 'level', value: 12 },
+  },
+  */
+  {
+    id: 27,
+    rarity: 'skins.rarity.rare',
+    order: 8,
+    name: 'skins.skin.27.name',
+    description: 'skins.skin.27.description',
+    image: '/assets/skins/croqueta-meme.webp',
+    unlockRequirement: { type: 'achievement', id: 'fanboy' },
+  },
+  {
+    id: 30,
+    rarity: 'skins.rarity.rare',
+    order: 9,
+    name: 'skins.skin.30.name',
+    description: 'skins.skin.30.description',
+    image: '/assets/skins/croqueta-ninja.webp',
+    unlockRequirement: { type: 'level', value: 18 },
+    background: '/assets/backgrounds/bg-ninja.webp',
+  },
+  {
+    id: 32,
+    rarity: 'skins.rarity.rare',
+    order: 10,
+    name: 'skins.skin.32.name',
+    description: 'skins.skin.32.description',
+    image: '/assets/skins/croqueta-rugby.webp',
+    unlockRequirement: { type: 'croquetas', value: 60000 },
+  },
+  /*
+  {
+    id: 24,
+    rarity: 'skins.rarity.epic',
+    order: 6,
+    name: 'skins.skin.24.name',
+    description: 'skins.skin.24.description',
+    image: '/assets/skins/croqueta-halloween.webp',
+    particleImage: '/assets/skins/croqueta-halloween.webp',
+    unlockRequirement: { type: 'level', value: 35 },
+  },
+  */
+  {
+    id: 28,
+    rarity: 'skins.rarity.epic',
+    order: 7,
+    name: 'skins.skin.28.name',
+    description: 'skins.skin.28.description',
+    image: '/assets/skins/croqueta-monster.webp',
+    particleImage: '/assets/skins/croqueta-monster.webp',
+    unlockRequirement: { type: 'croquetas', value: 350000 },
+  },
+  /*
+  {
+    id: 29,
+    rarity: 'skins.rarity.epic',
+    order: 8,
+    name: 'skins.skin.29.name',
+    description: 'skins.skin.29.description',
+    image: '/assets/skins/croqueta-navidad.webp',
+    unlockRequirement: { type: 'exp', value: 5000 },
+  },
+  */
 
   // ============================================================
   // 🔵 ÉPICAS
@@ -230,6 +321,16 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-bocadillo.webp',
     counterLabel: 'skins.skin.20.counterLabel',
     unlockRequirement: { type: 'level', value: 75 },
+  },
+  {
+    id: 31,
+    rarity: 'skins.rarity.legendary',
+    order: 7,
+    name: 'skins.skin.31.name',
+    description: 'skins.skin.31.description',
+    image: '/assets/skins/croqueta-pirata.webp',
+    unlockRequirement: { type: 'croquetas', value: 1_200_000 },
+    background: '/assets/backgrounds/bg-pirata.webp',
   },
   // ============================================================
   // 🔴 MÍTICA

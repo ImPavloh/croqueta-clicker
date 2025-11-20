@@ -1,0 +1,37 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+}
+
+.backgrounds {
+  background: black;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+  will-change: opacity, background-image;
+}
+
+.bg-layer.visible {
+  opacity: 1;
+}
+
+.bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+  pointer-events: none;
+  backdrop-filter: blur(2px) brightness(0.6);
+}

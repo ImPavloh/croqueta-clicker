@@ -374,7 +374,41 @@
         "name": "3D",
         "description": "A low-poly croquette, but just as tasty.",
         "counterLabel": "polygons?"
-      }
+      },
+      "23": {
+        "name": "Frozen",
+        "description": "Icy on the inside and outside. Microwave at your own risk."
+      },
+      "24": { "name": "Halloween", "description": "A spooky croquette full of pumpkin mischief." },
+      "25": {
+        "name": "Japanese",
+        "description": "Breaded with honor: soy, a hint of wasabi and a mystery roll."
+      },
+      "26": {
+        "name": "Love",
+        "description": "Breaded with hearts. Perfect to gift to your other half-croquette."
+      },
+      "27": {
+        "name": "Meme",
+        "description": "Went viral online. Now taking selfies next to the fryer."
+      },
+      "28": {
+        "name": "Monster",
+        "description": "A croquette with a curious monster shape. What could it be?"
+      },
+      "29": {
+        "name": "Christmas",
+        "description": "Festive and glittery; apparently it tastes like turrón."
+      },
+      "30": {
+        "name": "Ninja",
+        "description": "Silent and deadly in the art of snacking. Blink and it's gone."
+      },
+      "31": {
+        "name": "Pirate",
+        "description": "Arr! Steals croquettes and sings sea shanties while frying."
+      },
+      "32": { "name": "Rugby", "description": "Tough, compact and perfect for post-match energy." }
     }
   },
   "clicker": {

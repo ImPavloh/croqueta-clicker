@@ -32,6 +32,7 @@ import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
 import { Splash } from '@ui/splash/splash';
 import { StatsComponent } from '@ui/stats/stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
+import { Backgrounds } from '@ui/backgrounds/backgrounds';
 import { SkinsService } from '@services/skins.service';
 import { ModalService } from '@services/modal.service';
 import { DebugService } from '@services/debug.service';
@@ -55,10 +56,10 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
     FloatingButtons,
     GoldenCroqueta,
     TranslocoModule,
-
     Splash,
     StatsComponent,
     SkinUnlockPopup,
+    Backgrounds,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -81,12 +82,11 @@ export class App implements OnInit, OnDestroy {
     private debugService: DebugService,
     private translocoService: TranslocoService
   ) {
-    this.debugService.isDebugMode$.subscribe(is => this.isDebugMode = is);
+    this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
   }
 
   private level: number = 1;
   private levelSub?: Subscription;
-  private backgroundSub?: Subscription;
 
   public isMobile: boolean = window.innerWidth <= 1344;
 
@@ -107,7 +107,7 @@ export class App implements OnInit, OnDestroy {
         onConfirm: () => {
           this.debugService.enableDebugMode();
           this.modalService.openModal('debug');
-        }
+        },
       });
     } else {
       this.modalService.openModal('debug');
@@ -127,21 +127,9 @@ export class App implements OnInit, OnDestroy {
       this.audioService.playMusic(url, true, 2);
     });
     this.goldenCroquetaService.startSpawnCheck();
-
-    // suscripcion al fondo activo y aplicarlo
-    this.backgroundSub = this.skinsService.currentBackground$.subscribe((bgUrl) => {
-      if (typeof document !== 'undefined') {
-        this.renderer.setStyle(
-          document.body,
-          'background',
-          `url('${bgUrl}') no-repeat center/cover`
-        );
-      }
-    });
   }
   ngOnDestroy() {
     this.levelSub?.unsubscribe();
-    this.backgroundSub?.unsubscribe();
     this.playerStats.stopTimer();
   }
 

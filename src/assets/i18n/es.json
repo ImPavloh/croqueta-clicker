@@ -377,6 +377,46 @@
         "name": "3D",
         "description": "Una croqueta low-poly, pero igual de sabrosa.",
         "counterLabel": "¿polígonos?"
+      },
+      "23": {
+        "name": "Congelada",
+        "description": "Helada por fuera y por dentro. No apta para microondas."
+      },
+      "24": {
+        "name": "Halloween",
+        "description": "La croqueta que late con espíritu de calabaza y travesura."
+      },
+      "25": {
+        "name": "Japonesa",
+        "description": "Empanada con honor: salsa de soja, wasabi y un rollo de misterio."
+      },
+      "26": {
+        "name": "Amor",
+        "description": "Rebozada con corazones. Ideal para regalar a tu media croqueta."
+      },
+      "27": {
+        "name": "Meme",
+        "description": "Se viralizó en internet. Ahora pide autógrafos en la freidora."
+      },
+      "28": {
+        "name": "Monstruo",
+        "description": "Una croqueta con una curiosa forma de monstruo. ¿Qué será?"
+      },
+      "29": {
+        "name": "Navidad",
+        "description": "Decorada con brillo festivo; sabe a turrón (o eso dicen)."
+      },
+      "30": {
+        "name": "Ninja",
+        "description": "Sigilosa y letal en el reparto de croquetas. Sólo la verás si parpadeas."
+      },
+      "31": {
+        "name": "Pirata",
+        "description": "Arghh! Roba croquetas y canta mientras las fríe en alta mar."
+      },
+      "32": {
+        "name": "Rugby",
+        "description": "Firme y resistente; ideal para tackles y aperitivos post-partido."
       }
     }
   },

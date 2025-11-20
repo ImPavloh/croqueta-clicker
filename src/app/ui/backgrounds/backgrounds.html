@@ -1,0 +1,12 @@
+<div class="backgrounds" aria-hidden="true">
+  <div
+    class="bg-layer"
+    [class.visible]="visibleLayer === 1"
+    [ngStyle]="{ 'background-image': bg1 ? 'url(' + bg1 + ')' : 'none' }"
+  ></div>
+  <div
+    class="bg-layer"
+    [class.visible]="visibleLayer === 2"
+    [ngStyle]="{ 'background-image': bg2 ? 'url(' + bg2 + ')' : 'none' }"
+  ></div>
+</div>
