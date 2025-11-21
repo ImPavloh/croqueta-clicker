@@ -321,6 +321,7 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-platano.webp',
     counterLabel: 'skins.skin.19.counterLabel',
     unlockRequirement: { type: 'exp', value: 100000 },
+    background: '/assets/backgrounds/bg-jungle.webp',
   },
   {
     id: 20,
