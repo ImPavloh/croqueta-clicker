@@ -7,7 +7,8 @@ function calculatePrice(baseLevel: Decimal, basePrice: Decimal, targetLevel: num
   const levelDiff = newTargetLevel.minus(baseLevel);
 
   // Base multiplicadora que escala con el nivel
-  const baseMultiplier = new Decimal(1.8).plus(newTargetLevel.times(0.08));
+  // AJUSTE: Se reduce la base del multiplicador y se elimina el escalado por nivel.
+  const baseMultiplier = new Decimal(1.65);
 
   // Calculamos el precio
   const price = basePrice.times(baseMultiplier.pow(levelDiff));
@@ -18,16 +19,14 @@ function calculatePrice(baseLevel: Decimal, basePrice: Decimal, targetLevel: num
 
 function roundToNiceNumber(num: Decimal): Decimal {
   if (num.lessThanOrEqualTo(0)) return num;
-
-  let deca = new Decimal(1);
-
+  let denario = new Decimal(1);
   // Encontrar la potencia de 10 apropiada
-  while (num.dividedBy(deca).greaterThanOrEqualTo(10)) {
-      deca = deca.times(10);
+  while (num.dividedBy(denario).greaterThanOrEqualTo(10)) {
+      //Multiplica por 10
+      denario = denario.times(10);
   }
-
-  // Redondear al múltiplo más cercano de deca
-  return num.dividedBy(deca).round().times(deca);
+  // Redondear al múltiplo más cercano de denario
+  return num.dividedBy(denario).round().times(denario);
 }
 
 const precioBase = new Decimal(100);
@@ -41,7 +40,7 @@ export const UPGRADES: UpgradeModel[] = [
     id: 1,
     name: 'upgrades.upgrade_1',
     image: '/assets/upgrades/general.webp',
-    price: precioBase, // Convertir a número para el modelo
+    price: precioBase,
     clicks: 2,
     level: 2,
     exp: 5,

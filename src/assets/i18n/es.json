@@ -417,6 +417,10 @@
       "32": {
         "name": "Rugby",
         "description": "Firme y resistente; ideal para tackles y aperitivos post-partido."
+      },
+      "33": {
+        "name": "Alien",
+        "description": "Visitante extranjero, con personalidad infantil y conflictivo"
       }
     }
   },
