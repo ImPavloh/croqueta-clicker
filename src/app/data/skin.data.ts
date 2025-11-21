@@ -95,6 +95,7 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-dorada.webp',
     particleImage: '/assets/skins/croqueta-dorada.webp',
     unlockRequirement: { type: 'level', value: 15 },
+    background: '/assets/backgrounds/bg-gold.webp',
   },
   {
     id: 9,
@@ -344,5 +345,6 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-real.webp',
     particleImage: '/assets/skins/croqueta-real.webp',
     unlockRequirement: { type: 'level', value: 100 },
+    background: '/assets/backgrounds/bg-bar.webp',
   },
 ];
