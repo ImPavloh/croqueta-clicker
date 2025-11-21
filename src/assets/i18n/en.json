@@ -408,7 +408,12 @@
         "name": "Pirate",
         "description": "Arr! Steals croquettes and sings sea shanties while frying."
       },
-      "32": { "name": "Rugby", "description": "Tough, compact and perfect for post-match energy." }
+      "32": { "name": "Rugby", "description": "Tough, compact and perfect for post-match energy." },
+      "33": {
+        "name": "Alien",
+        "description": "Foreign visitor, with a childish and conflictive personality"
+      }
+
     }
   },
   "clicker": {

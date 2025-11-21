@@ -165,6 +165,15 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-rugby.webp',
     unlockRequirement: { type: 'croquetas', value: 60000 },
   },
+  {
+    id: 33,
+    rarity: 'skins.rarity.rare',
+    order: 11,
+    name: 'skins.skin.33.name',
+    description: 'skins.skin.33.description',
+    image: '/assets/skins/croqueta-alien.webp',
+    unlockRequirement: { type: 'level', value: 25 },
+  },
   /*
   {
     id: 24,
