@@ -92,7 +92,7 @@ export class App implements OnInit, OnDestroy {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    if (event.ctrlKey && event.altKey && event.key === 'F12') {
+    if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
       this.openDebugMenu();
     }
   }

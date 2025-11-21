@@ -11,7 +11,7 @@ export const PRODUCERS: ProducerModel[] = [
     priceBase: 50,
     priceMult: 1.12,
     pointsBase: 0.2,
-    pointsSum: 0.2,
+    pointsSum: 0.3, // Aumentado para que el primer productor sea un poco más satisfactorio
     description: 'producers.producer_1_description',
     level: 0,
     exp: 1,
@@ -22,8 +22,8 @@ export const PRODUCERS: ProducerModel[] = [
     image: '/assets/producers/cocinero.webp',
     priceBase: 500,
     priceMult: 1.15,
-    pointsBase: 1,
-    pointsSum: 0.5,
+    pointsBase: 1.5, // Aumentado para un mejor arranque
+    pointsSum: 0.8,
     description: 'producers.producer_2_description',
     level: 5,
     exp: 12,
@@ -33,9 +33,9 @@ export const PRODUCERS: ProducerModel[] = [
     name: 'producers.producer_3_name',
     image: '/assets/producers/freidora.webp',
     priceBase: 10_000,
-    priceMult: 1.18,
-    pointsBase: 2.5,
-    pointsSum: 0.5,
+    priceMult: 1.17, // Ligeramente reducido
+    pointsBase: 8,   // Aumentado significativamente para que sea más impactante
+    pointsSum: 2,
     description: 'producers.producer_3_description',
     level: 10,
     exp: 65,
@@ -45,12 +45,12 @@ export const PRODUCERS: ProducerModel[] = [
     name: 'producers.producer_4_name',
     image: '/assets/producers/fabrica.webp',
     priceBase: 150_000,
-    priceMult: 1.2,
-    pointsBase: 12,
-    pointsSum: 2,
+    priceMult: 1.18, // Reducido para suavizar el "muro"
+    pointsBase: 45,  // Aumentado para que el salto de precio se sienta justificado
+    pointsSum: 10,
     description: 'producers.producer_4_description',
     level: 20,
-    exp: 300,
+    exp: 350,
   },
 
   // ============================================================
@@ -61,12 +61,12 @@ export const PRODUCERS: ProducerModel[] = [
     name: 'producers.producer_5_name',
     image: '/assets/producers/universidad.webp',
     priceBase: 750_000,
-    priceMult: 1.22,
-    pointsBase: 50,
-    pointsSum: 30,
+    priceMult: 1.20, // Reducido
+    pointsBase: 250, // Aumentado
+    pointsSum: 50,
     description: 'producers.producer_5_description',
     level: 30,
-    exp: 1_500,
+    exp: 1_800,
   },
   {
     id: 6,
@@ -74,8 +74,8 @@ export const PRODUCERS: ProducerModel[] = [
     image: '/assets/producers/croquetabot.webp',
     priceBase: 250_000,
     priceMult: 1.24,
-    pointsBase: 7_500,
-    pointsSum: 500,
+    pointsBase: 1_600, // Reducido para encajar mejor en la nueva curva
+    pointsSum: 300,
     description: 'producers.producer_6_description',
     level: 50,
     exp: 9_000,
