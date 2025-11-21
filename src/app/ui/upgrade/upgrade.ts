@@ -1,6 +1,5 @@
 import { Component, effect, inject, Input } from '@angular/core';
 import { PointsService } from '@services/points.service';
-import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
 import { PlayerStats } from '@services/player-stats.service';
@@ -18,7 +17,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   host: {
     class: 'upgrade',
   },
-  imports: [NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
+  imports: [ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
 })
@@ -42,9 +41,14 @@ export class Upgrade {
 
   unlocked: boolean = true;
   bought: boolean = false;
+  expanded: boolean = false;
 
   ngOnInit() {
     this.loadFromStorage();
+  }
+
+  toggleExpand() {
+    this.expanded = !this.expanded;
   }
 
   // comprobar si la mejora está desbloqueada

@@ -1,66 +1,96 @@
-@if (!bought && config){
-<app-button
-  type="button"
-  variant="terciary"
-  (click)="buyUpgrade()"
-  [disabled]="pointsService.points().lt(config.price) || !unlocked"
-  [hoverable]="pointsService.points().gte(config.price) && unlocked"
-  [active]="false"
-  [clickable]="!(pointsService.points().lt(config.price) || !unlocked)"
-  [class.full-height]="true"
-  [class.full-width]="true"
-  class="pr-4 h-full max-w-3xs w-full min-w-36 sm:pr-8 sm:min-w-48"
-  [noSound]="true"
+<div
+  class="upgrade-wrapper"
+  [class.expanded]="expanded"
+  [class.locked]="!unlocked"
+  [class.bought]="bought"
 >
-  <!--Comprobar si esta desbloqueado, de momento siempre lo está-->
-  @if (unlocked) {
-  <div class="upgrade-card-inner">
-    <img class="upgrade-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
-    <div class="flex flex-col items-center justify-center">
-      <p class="text-amber-800 text-sm sm:text-base leading-tight upgrade-name">
-        {{ config.name | transloco }}
-      </p>
-      <p class="text-base sm:text-lg text-green-700 md:block hidden">
-        +{{
-          config.clicks !== undefined && config.clicks !== null
-            ? (config.clicks | short)
-            : ('upgrades.level' | transloco) + ' ' + config.level
-        }}
-        ¢
-        <span class="text-black text-[10px] sm:text-xs opacity-60">{{
-          'upgrades.perClick' | transloco
-        }}</span>
-      </p>
-    </div>
+  <!-- Preview colapsado (siempre visible) -->
+  <div class="upgrade-preview" (click)="toggleExpand()">
+    <div class="preview-content">
+      <!-- Imagen pequeña -->
+      <img class="preview-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
 
-    <div class="w-12 h-px bg-amber-800 opacity-20 my-0.5 mx-auto sm:my-1"></div>
+      <!-- Info mínima -->
+      <div class="preview-info">
+        <p class="preview-name" [class.text-gray-500]="!unlocked">
+          @if (!unlocked) {
+          <span>{{ 'upgrades.level' | transloco }} {{ config.level }}</span>
+          } @else {
+          {{ config.name | transloco }}
+          }
+        </p>
+        @if (unlocked && !bought) {
+        <p
+          class="preview-price"
+          [class.can-afford]="pointsService.points().gte(config.price)"
+          [class.cannot-afford]="pointsService.points().lt(config.price)"
+        >
+          {{ config.price | short }} ¢
+        </p>
+        } @else if (bought) {
+        <p class="preview-owned">{{ 'upgrades.bought' | transloco }}</p>
+        }
+      </div>
 
-    <div class="flex flex-col items-center upgrade-price">
-      <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
-        {{ 'upgrades.price' | transloco }}
-      </p>
-      <p
-        class="text-sm sm:text-base"
-        [ngClass]="
-          config.price !== undefined &&
-          config.price !== null &&
-          pointsService.points().gte(config.price)
-            ? 'text-green-700'
-            : 'text-red-600'
-        "
-      >
-        {{
-          config.price !== undefined && config.price !== null
-            ? (config.price | short) + ' ¢'
-            : ('upgrades.level' | transloco) + ' ' + config.level
-        }}
-      </p>
+      <!-- Indicador de expansión -->
+      <div class="expand-icon" [class.rotated]="expanded">
+        <span>▼</span>
+      </div>
     </div>
   </div>
-  } @else {
-  <div class="upgrade-card-inner upgrade-placeholder">
-    <p class="text-amber-800">{{ 'upgrades.level' | transloco }} {{ config.level }}</p>
+
+  <!-- Contenido expandido -->
+  @if (expanded) {
+  <div class="upgrade-expanded">
+    <div class="expanded-content">
+      <!-- Estadísticas -->
+      <div class="expanded-stats">
+        <div class="stat-item">
+          <span class="stat-label">{{ 'upgrades.bonus' | transloco }}:</span>
+          <span class="stat-value text-green-700">+{{ config.clicks | short }} ¢/click</span>
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-label">{{ 'upgrades.exp' | transloco }}:</span>
+          <span class="stat-value">+{{ config.exp | short }} XP</span>
+        </div>
+
+        <div class="stat-item">
+          <span class="stat-label">{{ 'upgrades.requiredLevel' | transloco }}:</span>
+          <span class="stat-value">{{ config.level }}</span>
+        </div>
+
+        @if (!bought) {
+        <div class="stat-item">
+          <span class="stat-label">{{ 'upgrades.price' | transloco }}:</span>
+          <span
+            class="stat-value"
+            [class.text-green-700]="pointsService.points().gte(config.price)"
+            [class.text-red-600]="pointsService.points().lt(config.price)"
+          >
+            {{ config.price | short }} ¢
+          </span>
+        </div>
+        }
+      </div>
+
+      <!-- Botón de compra -->
+      @if (!bought && unlocked) {
+      <app-button
+        type="button"
+        variant="terciary"
+        (click)="buyUpgrade(); $event.stopPropagation()"
+        [disabled]="pointsService.points().lt(config.price)"
+        [hoverable]="pointsService.points().gte(config.price)"
+        [clickable]="pointsService.points().gte(config.price)"
+        [class.full-width]="true"
+        class="buy-button"
+        [noSound]="true"
+      >
+        {{ 'upgrades.buy' | transloco }}
+      </app-button>
+      }
+    </div>
   </div>
   }
-</app-button>
-}
+</div>

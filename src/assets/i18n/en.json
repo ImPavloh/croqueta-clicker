@@ -296,7 +296,6 @@
     "producer_15_name": "You",
     "producer_15_description": "The ultimate expression of the croquette producer: Yourself, obsessed beyond madness.",
     "cps": "¢/s",
-    "owned": "Owned",
     "production": "Production",
     "willProduce": "Will produce",
     "perUnit": "per unit",
@@ -305,7 +304,14 @@
     "buyAmount_25": "Buy 25 at a time",
     "listView": "List view",
     "gridView": "Grid view",
-    "noProducers": "No purchasable producers"
+    "noProducers": "No purchasable producers",
+    "level": "Level",
+    "bought": "Already bought",
+    "bonus": "Bonus",
+    "exp": "Experience",
+    "requiredLevel": "Required level",
+    "buy": "Buy",
+    "owned": "Already bought"
   },
   "skins": {
     "title": "Skins",
@@ -413,7 +419,6 @@
         "name": "Alien",
         "description": "Foreign visitor, with a childish and conflictive personality"
       }
-
     }
   },
   "clicker": {

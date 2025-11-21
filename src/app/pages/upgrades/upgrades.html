@@ -1,16 +1,4 @@
 <div class="h-full w-full flex flex-row">
-  <!--upgrades-->
-  <div class="upgrades flex flex-col">
-    <h2 class="text-amber-800 font-semibold text-xl text-center uppercase tracking-widest">
-      {{ 'upgrades.title' | transloco }}
-    </h2>
-    @for (upgrade of visibleUpgrades(); track upgrade.id) {
-    <app-upgrade [config]="upgrade" class="upgrade"></app-upgrade>
-    }
-  </div>
-
-  <hr class="divider-vertical" />
-
   <!--producers-->
   <div class="flex flex-col w-full flex-1">
     <app-shop-controls />
@@ -29,6 +17,20 @@
         </div>
         }
       </div>
+    </div>
+  </div>
+
+  <hr class="divider-vertical" />
+
+  <!--upgrades-->
+  <div class="flex flex-col upgrades-section">
+    <h3 class="text-amber-800 font-semibold text-lg text-center uppercase">
+      {{ 'upgrades.title' | transloco }}
+    </h3>
+    <div class="upgrades flex flex-col">
+      @for (upgrade of allUpgrades(); track upgrade.id) {
+      <app-upgrade [config]="upgrade"></app-upgrade>
+      }
     </div>
   </div>
 </div>

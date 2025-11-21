@@ -33,10 +33,24 @@ body {
 }
 
 img,
-video {
+svg,
+video,
+div,
+button,
+a,
+span,
+p,
+h3,
+h2,
+h1 {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  loading: lazy;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 /* Prevenir FOUC (Flash of Unstyled Content) https://dev.to/lyqht/what-the-fouc-is-happening-flash-of-unstyled-content-413j */

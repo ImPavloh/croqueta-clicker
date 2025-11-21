@@ -28,14 +28,10 @@ export class Upgrades {
 
   constructor(public shopControls: ShopControlsService, private pointsService: PointsService) {}
 
-  // filtrar upgrades que ya han sido compradas para que no aparezcan
-  visibleUpgrades = computed(() => {
+  // Mostrar todos los upgrades organizados por estado
+  allUpgrades = computed(() => {
     this.optionsService.gameItemsVersion();
-    const u = [...this.upgrades];
-    return u.filter((upgrade) => {
-      const stored = this.optionsService.getGameItem('upgrade_' + upgrade.id + '_bought');
-      return stored !== 'true';
-    });
+    return [...this.upgrades];
   });
 
   // Obtener cantidad de un productor desde localStorage

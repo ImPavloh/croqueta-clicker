@@ -296,7 +296,6 @@
     "producer_15_name": "Tú",
     "producer_15_description": "La máxima expresión del productor de croquetas: Tú mismo, obesesionado más alla de la locura.",
     "cps": "¢/s",
-    "owned": "Tienes",
     "production": "Producción",
     "willProduce": "Producirá",
     "perUnit": "por unidad",
@@ -305,7 +304,14 @@
     "buyAmount_25": "Comprar de 25 en 25",
     "listView": "Vista lista",
     "gridView": "Vista cuadrícula",
-    "noProducers": "No hay productores comprables"
+    "noProducers": "No hay productores comprables",
+    "level": "Nivel",
+    "bought": "Ya comprado",
+    "bonus": "Bono",
+    "exp": "Experiencia",
+    "requiredLevel": "Nivel requerido",
+    "buy": "Comprar",
+    "owned": "Ya comprado"
   },
   "skins": {
     "title": "Skins",
