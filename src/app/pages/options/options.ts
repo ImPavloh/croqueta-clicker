@@ -16,11 +16,21 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { AudioService } from '@services/audio.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
+import { SupabaseService } from '@services/supabase.service';
+import { DebugService } from '@services/debug.service';
 
 @Component({
   selector: 'app-options',
   standalone: true,
-  imports: [Card, FormsModule, ButtonComponent, RangeSlider, ToggleSwitch, Tooltip, TranslocoModule],
+  imports: [
+    Card,
+    FormsModule,
+    ButtonComponent,
+    RangeSlider,
+    ToggleSwitch,
+    Tooltip,
+    TranslocoModule,
+  ],
   templateUrl: './options.html',
   styleUrl: './options.css',
 })
@@ -37,7 +47,9 @@ export class Options {
     private skinsService: SkinsService,
     private shopControlsService: ShopControlsService,
     private translocoService: TranslocoService,
-    private achievementsService: AchievementsService
+    private achievementsService: AchievementsService,
+    private supabase: SupabaseService,
+    private debugService: DebugService
   ) {}
 
   ngOnInit() {
@@ -50,13 +62,31 @@ export class Options {
       message: this.translocoService.translate('options.resetGameModal.message'),
       confirmText: this.translocoService.translate('options.resetGameModal.confirmText'),
       cancelText: this.translocoService.translate('options.resetGameModal.cancelText'),
-      onConfirm: () => {
+      onConfirm: async () => {
+        // intentar limpiar la entrada del leaderboard remoto y cerrar sesión
+        try {
+          if (!this.debugService?.isDebugMode) {
+            const del = await this.supabase.deleteOwnLeaderboardEntry();
+            // cerrar la sesión actual (se creara una nueva sesion después del reinicio)
+            await this.supabase.signOut();
+          }
+        } catch (e) {
+          console.warn('Error:', e);
+        }
+
         this.pointsService.reset();
         this.playerStats.reset();
         this.skinsService.reset();
         this.shopControlsService.reset();
         this.optionsService.resetOptions();
         this.optionsService.restartGame();
+
+        // asegurar que se cree una nueva sesión anónima para que la aplicación pueda continuar usando los flujos del leaderboard
+        try {
+          await this.supabase.signInAnonymously();
+        } catch {
+          // ignorar y rezar para que funcione
+        }
       },
     });
   }
@@ -66,7 +96,9 @@ export class Options {
     const success = this.autosaveService.saveManually();
 
     this.modalService.showConfirm({
-      title: success ? this.translocoService.translate('options.saveGameModal.successTitle') : this.translocoService.translate('options.saveGameModal.errorTitle'),
+      title: success
+        ? this.translocoService.translate('options.saveGameModal.successTitle')
+        : this.translocoService.translate('options.saveGameModal.errorTitle'),
       message: success
         ? this.translocoService.translate('options.saveGameModal.successMessage')
         : this.translocoService.translate('options.saveGameModal.errorMessage'),
@@ -129,8 +161,11 @@ export class Options {
                 this.autosaveService.setImporting(false);
                 this.modalService.showConfirm({
                   title: this.translocoService.translate('options.importGameModal.errorTitle'),
-                  message: this.translocoService.translate('options.importGameModal.errorMessage') + error,
-                  confirmText: this.translocoService.translate('options.importGameModal.confirmTextError'),
+                  message:
+                    this.translocoService.translate('options.importGameModal.errorMessage') + error,
+                  confirmText: this.translocoService.translate(
+                    'options.importGameModal.confirmTextError'
+                  ),
                   onConfirm: () => {},
                 });
               });

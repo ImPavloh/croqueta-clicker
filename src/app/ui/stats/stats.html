@@ -4,7 +4,9 @@
     <div class="flex flex-col gap-3">
       <div class="level-badge flex items-center justify-center gap-3 px-5 py-3">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-white/90 uppercase tracking-widest">{{ 'clicker.level' | transloco }}</span>
+          <span class="text-xs font-bold text-white/90 uppercase tracking-widest">{{
+            'clicker.level' | transloco
+          }}</span>
           <div class="level-divider"></div>
           <span
             class="text-3xl font-black text-white leading-none level-number font-mono tabular-nums min-w-[4ch] text-center"
@@ -52,7 +54,11 @@
 
       <div class="stat-card group">
         <div class="stat-icon-wrapper">
-          <img src="assets/stats/mouse.webp" [alt]="'clicker.clicks' | transloco" class="stat-icon" />
+          <img
+            src="assets/stats/mouse.webp"
+            [alt]="'clicker.clicks' | transloco"
+            class="stat-icon"
+          />
         </div>
         <div class="flex flex-col gap-1 flex-1 min-w-0">
           <span class="stat-label">{{ 'clicker.clicks' | transloco }}</span>
@@ -66,7 +72,9 @@
     @if (goldenCroquetaService.isBonusActive()) {
     <div class="bonus-inline">
       <div class="bonus-content">
-        <span class="bonus-text">{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span>
+        <span class="bonus-text"
+          >{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span
+        >
         <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
       </div>
     </div>
@@ -118,7 +126,7 @@
     </div>
   </div>
 
-  <div class="ds-card ds-right">
+  <div class="ds-card ds-left-bottom">
     <div class="ds-right-inner">
       <div class="ds-stat">
         <div class="ds-icon">
@@ -147,7 +155,9 @@
     @if (goldenCroquetaService.isBonusActive()) {
     <div class="bonus-inline ds-bonus">
       <div class="bonus-content">
-        <span class="bonus-text">{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span>
+        <span class="bonus-text"
+          >{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span
+        >
         <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
       </div>
     </div>

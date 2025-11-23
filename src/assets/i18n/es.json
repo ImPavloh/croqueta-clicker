@@ -191,7 +191,7 @@
     "languageTooltip": "Cambia el idioma del juego.",
     "resetGameModal": {
       "title": "Reiniciar partida",
-      "message": "¿Estás seguro de que quieres reiniciar tu progreso? Esta acción no se puede deshacer y perderás todas tus croquetas, mejoras y estadísticas.",
+      "message": "¿Estás seguro de que quieres reiniciar tu progreso? Esta acción no se puede deshacer: borrará el progreso local y online en el leaderboard y la sesión.",
       "confirmText": "Sí, reiniciar",
       "cancelText": "Cancelar"
     },
@@ -223,6 +223,33 @@
       "text": "¡Mira mi progreso en Croqueta Clicker!\n\n🖱️ Clicks totales: {totalClicks}\n⏱️ Tiempo jugado: {timePlaying}\n⭐ Nivel: {level}\n🥐 Croquetas: {croquetas}\n⚡ Croquetas/seg: {croquetasPerSecond}",
       "clipboardMessage": "¡Estadísticas copiadas al portapapeles!"
     }
+  },
+  "leaderboard": {
+    "title": "Clasificación",
+    "viewAll": "Ver tabla completa",
+    "nextSync": "Siguiente sincronización",
+    "searchPlaceholder": "Buscar usuario...",
+    "search": "Buscar",
+    "name": "Nombre",
+    "level": "Nivel",
+    "when": "Cuándo",
+    "page": "Página",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "loading": "Cargando…",
+    "noScores": "No hay puntuaciones aún"
+  },
+  "user": {
+    "setUsername": "Establecer usuario",
+    "chooseUsername": "Elige tu nombre de usuario",
+    "usernamePrompt": "Escribe un nombre de usuario único",
+    "usernamePlaceholder": "Introduce el nombre de usuario deseado",
+    "usernameTaken": "Este nombre de usuario ya está en uso. Por favor, elige otro.",
+    "invalidUsername": "Nombre de usuario inválido. Usa solo letras, números y guiones bajos (3-15 caracteres).",
+    "setUsernameSuccess": "¡Nombre de usuario establecido con éxito!",
+    "setUsernameError": "Error al establecer el nombre de usuario. Por favor, inténtalo de nuevo.",
+    "checking": "Comprobando...",
+    "confirm": "Confirmar"
   },
   "upgrades": {
     "title": "Mejoras",
@@ -531,8 +558,8 @@
     "cps": "Croquetas por segundo",
     "cpc": "Croquetas por click",
     "set": "Establecer",
-    "unlockAllSkins": "Desbloquear todas las skins",
-    "unlockAllAchievements": "Desbloquear todos los logros",
+    "unlockAllSkins": "Desbloquear skins",
+    "unlockAllAchievements": "Desbloquear logros",
     "resetGame": "Reiniciar partida",
     "confirm": {
       "title": "Activar modo debug",
@@ -540,6 +567,6 @@
       "confirm": "Activar",
       "cancel": "Cancelar"
     },
-    "alert": "Modo Debug"
+    "alert": "MODO DEBUG"
   }
 }

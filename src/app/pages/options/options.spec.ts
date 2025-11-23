@@ -8,9 +8,14 @@ describe('Options', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Options]
-    })
-    .compileComponents();
+      imports: [Options],
+      providers: [
+        {
+          provide: (await import('@services/debug.service')).DebugService,
+          useValue: { isDebugMode: false, isDebugMode$: null, enableDebugMode: () => {} },
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Options);
     component = fixture.componentInstance;

@@ -5,7 +5,6 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
-  Renderer2,
   inject,
   HostListener,
 } from '@angular/core';
@@ -37,6 +36,8 @@ import { SkinsService } from '@services/skins.service';
 import { ModalService } from '@services/modal.service';
 import { DebugService } from '@services/debug.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { SupabaseService } from '@services/supabase.service';
+import { Leaderboard } from '@ui/leaderboard/leaderboard';
 
 @Component({
   selector: 'app-root',
@@ -60,6 +61,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
     StatsComponent,
     SkinUnlockPopup,
     Backgrounds,
+    Leaderboard,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -67,7 +69,6 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 })
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
-  private renderer = inject(Renderer2);
   isDebugMode = false;
 
   constructor(
@@ -80,7 +81,8 @@ export class App implements OnInit, OnDestroy {
     private skinsService: SkinsService,
     private modalService: ModalService,
     private debugService: DebugService,
-    private translocoService: TranslocoService
+    private translocoService: TranslocoService,
+    private supabase: SupabaseService
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
   }
@@ -114,7 +116,43 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnDestroy() {
+    this.levelSub?.unsubscribe();
+    this.playerStats.stopTimer();
+  }
+
+  protected onSplashComplete(): void {
+    this.playerStats.startTimer();
+
+    // Asegurar que exista una sesion anónima de supabase para interacciones con la leadboard
+    // Intencionalmente mantenemos el juego local
+    // la autenticación solo se usa para las entradas de la leadboard
+    this.supabase.getUser().then((r) => {
+      if (!r?.data?.user) {
+        this.supabase.signInAnonymously().catch(() => {
+          // ignorar errores (el leaderboard lo maneja, o deberia)
+        });
+      }
+    });
+
+    // procesar pendientes cuando vuelva a estar online
+    window.addEventListener('online', async () => {
+      try {
+        const result = await this.supabase.processPendingScores();
+        if (result && result.processed > 0) {
+        }
+      } catch (e) {
+        console.warn('Error:', e);
+      }
+    });
+
+    // si el usuario ya esta online al cargar la app entonces procesar pendientes
+    if (navigator.onLine) {
+      this.supabase.processPendingScores().catch(() => {});
+    }
+
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       let url = '/assets/ost/bechamel.mp3';
       if (level > 100) {
@@ -127,13 +165,5 @@ export class App implements OnInit, OnDestroy {
       this.audioService.playMusic(url, true, 2);
     });
     this.goldenCroquetaService.startSpawnCheck();
-  }
-  ngOnDestroy() {
-    this.levelSub?.unsubscribe();
-    this.playerStats.stopTimer();
-  }
-
-  protected onSplashComplete(): void {
-    this.playerStats.startTimer();
   }
 }

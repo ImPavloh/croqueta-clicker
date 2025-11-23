@@ -18,7 +18,13 @@ Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para
 - **Sistema de niveles**: Gana experiencia y sube de nivel desbloqueando contenido
 - **Logros (Achievements)**: 30+ logros por desbloquear con diferentes categorías
 - **Croqueta dorada**: Evento especial aleatorio con bonificación x2
-- **Skins personalizables**: 10+ skins desbloqueables para personalizar tu croqueta
+- **Skins personalizables**: 30+ skins desbloqueables para personalizar tu croqueta
+- **Música y efectos de sonido**: Audio dinámico que mejora la experiencia de juego
+- **Opciones de configuración**: Ajustes de audio, gráficos y rendimiento
+- **Estadísticas detalladas**: Panel con estadísticas de juego y progreso
+- **Multilenguaje**: Soporte para español e inglés
+- **Modo offline**: Juega sin conexión y sincroniza al volver online
+- **Tabla de clasificación**: Compite con otros jugadores por el mejor puntaje
 
 ### Características técnicas
 
@@ -30,6 +36,7 @@ Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para
 - **Interfaz responsiva**: Diseño adaptado para moviles y ordenadores
 - **Audio dinámico**: Música y efectos de sonido
 - **Efectos visuales**: Partículas, animaciones y efectos
+- **Testing**: Tests unitarios con Karma y Jasmine
 
 ---
 

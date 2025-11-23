@@ -1,12 +1,12 @@
 import { Component, Input, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, NgIf, RouterLink, RouterLinkActive],
   templateUrl: './button.html',
   styleUrls: ['./button.css'],
   host: {
@@ -20,7 +20,7 @@ export class ButtonComponent {
   @Input() variant:
     | 'primary'
     | 'secondary'
-    | 'terciary'
+    | 'tertiary'
     | 'quaternary'
     | 'danger'
     | 'success'
@@ -31,6 +31,7 @@ export class ButtonComponent {
   @Input() hoverable: boolean = true;
   @Input() clickable: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() size?: 'sm' | 'md' | 'lg' | 'xl';
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() routerLink?: string | any[];
   @Input() routerLinkActiveExact: boolean = false;

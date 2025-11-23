@@ -78,7 +78,7 @@
       @if (!bought && unlocked) {
       <app-button
         type="button"
-        variant="terciary"
+        variant="tertiary"
         (click)="buyUpgrade(); $event.stopPropagation()"
         [disabled]="pointsService.points().lt(config.price)"
         [hoverable]="pointsService.points().gte(config.price)"

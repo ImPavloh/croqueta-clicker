@@ -1,12 +1,24 @@
 @if (modalService.currentModal()) {
-<div class="modal-overlay" (click)="closeModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
+<div
+  class="modal-overlay"
+  (click)="closeModal()"
+  [class.open]="!isClosing()"
+  [class.closing]="isClosing()"
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    [class.open]="!isClosing()"
+    [class.closing]="isClosing()"
+  >
     <div class="modal-header">
       <h2>{{ getModalTitle() }}</h2>
       <button class="close-btn" (click)="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      @switch (modalService.currentModal()) { @case ('upgrades') {
+      @switch (modalService.currentModal()) {
+      <!-- Modals (pages) -->
+      @case ('upgrades') {
       <app-upgrades />
       } @case ('achievements') {
       <app-achievements />
@@ -16,31 +28,49 @@
       <app-options />
       } @case ('debug') {
       <app-debug-menu />
-      } }
-    </div>
-  </div>
-</div>
-}
-
-<!-- diálogo de confirmación -->
-@if (modalService.confirmDialog()) {
-<div class="modal-overlay" (click)="closeConfirm()">
-  <div class="confirm-dialog" (click)="$event.stopPropagation()">
-    <div class="confirm-header">
-      <h2>{{ modalService.confirmDialog()!.title }}</h2>
-    </div>
-    <div class="confirm-body">
-      <p>{{ modalService.confirmDialog()!.message }}</p>
-    </div>
-    <div class="confirm-actions" [class.single-button]="!modalService.confirmDialog()!.cancelText">
-      @if (modalService.confirmDialog()!.cancelText) {
-      <app-button variant="primary" (click)="cancelAction()">
-        {{ modalService.confirmDialog()!.cancelText }}
-      </app-button>
       }
-      <app-button variant="primary" (click)="confirmAction()">
-        {{ modalService.confirmDialog()!.confirmText }}
-      </app-button>
+
+      <!-- Modals reales (componentes) -->
+      @case ('username') {
+      <div class="flex flex-col items-center p-6 space-y-4">
+        <p class="text-center text-balance text-lg text-amber-950">
+          {{ 'user.usernamePrompt' | transloco }}
+        </p>
+
+        <app-input
+          [value]="desiredName()"
+          (valueChange)="desiredName.set($event)"
+          [loading]="usernameLoading()"
+          [message]="usernameMessage()"
+          (submit)="setUsername()"
+          [buttonText]="'user.confirm' | transloco"
+          [loadingText]="'user.checking' | transloco"
+          [type]="'text'"
+        ></app-input>
+      </div>
+
+      } @case ('leaderboard') {
+      <app-leaderboard [mode]="'full'" />
+      } @case ('confirm-dialog') {
+      <div class="confirm-body">
+        <p>{{ modalService.confirmDialog()?.message }}</p>
+      </div>
+
+      <div
+        class="confirm-actions"
+        [class.single-button]="!modalService.confirmDialog()?.cancelText"
+      >
+        @if (modalService.confirmDialog()?.cancelText) {
+        <app-button variant="primary" (click)="cancelAction()">
+          {{ modalService.confirmDialog()?.cancelText }}
+        </app-button>
+        }
+
+        <app-button variant="primary" (click)="confirmAction()">
+          {{ modalService.confirmDialog()?.confirmText }}
+        </app-button>
+      </div>
+      } }
     </div>
   </div>
 </div>

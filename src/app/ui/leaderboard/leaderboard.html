@@ -1,0 +1,161 @@
+@if (mode === 'panel') {
+<!-- la tabla de clasificacion como componente en la zona del clicker -->
+<div class="lp-overlay">
+  <div class="lp-card lp-right" [class.lp-collapsed]="!expanded()">
+    <div class="lp-header" (click)="togglePanel()">
+      <div class="lp-title">
+        <img src="assets/icons/trophy.webp" alt="Leaderboard" class="lp-icon" />
+        <span>{{ 'leaderboard.title' | transloco }}</span>
+      </div>
+      <div class="lp-toggle">
+        @if (expanded()) {
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lp-icon"
+        >
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+          <path d="M4 4l16 16" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        } @else {
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lp-icon"
+        >
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+
+        }
+      </div>
+    </div>
+
+    <div class="lp-body" [attr.aria-hidden]="!expanded()" [class.lp-hidden]="!expanded()">
+      <div class="lp-user-section">
+        @if (username()) {
+        <div class="lp-user-info">
+          <div class="lp-username">{{ username() }}</div>
+          <div class="lp-score">Lvl {{ currentLevel() }}</div>
+        </div>
+        } @else {
+        <div class="lp-no-user">
+          <app-button size="sm" variant="tertiary" (click)="openUsernameModal()">
+            {{ 'user.setUsername' | transloco }}
+          </app-button>
+        </div>
+        }
+      </div>
+
+      <div class="lp-sync-info">
+        <div class="lp-countdown">
+          {{ 'leaderboard.nextSync' | transloco }}:
+          <strong>{{ formatMs(nextUpdateRemaining()) }}</strong>
+        </div>
+      </div>
+      <div class="lp-list">
+        @if (loading()) {
+        <div class="lp-loading">{{ 'leaderboard.loading' | transloco }}</div>
+        } @if (!loading() && top().length === 0) {
+        <div class="lp-empty">{{ 'leaderboard.noScores' | transloco }}</div>
+        } @for (r of top(); let i = $index; track $index) {
+        <div class="lp-row">
+          <span class="lp-rank">{{ i + 1 }}</span>
+          <span class="lp-name">{{ r.username ?? (r.user_id | slice : 0 : 6) }}</span>
+          <span class="lp-points">{{ r.score }}</span>
+        </div>
+        }
+      </div>
+
+      <div class="flex justify-center">
+        <app-button size="sm" variant="tertiary" (click)="openFullLeaderboard()">
+          {{ 'leaderboard.viewAll' | transloco }}
+        </app-button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<!-- la tabla de clasificacion para el modal -->
+<div class="lp-full-container">
+  <div class="lp-search-toolbar">
+    <input
+      type="text"
+      [(ngModel)]="query"
+      (ngModelChange)="scheduleSearchFull()"
+      placeholder="{{ 'leaderboard.searchPlaceholder' | transloco }}"
+      (keydown.enter)="searchFullImmediate()"
+      class="lp-search-input"
+      [disabled]="loading()"
+      aria-label="{{ 'leaderboard.search' | transloco }}"
+    />
+    <button
+      class="lp-btn-small"
+      (click)="searchFullImmediate()"
+      [disabled]="loading()"
+      aria-busy="{{ loading() }}"
+    >
+      @if (loading()) {<span class="lp-spinner" aria-hidden="true">●</span> }
+      {{ 'leaderboard.search' | transloco }}
+    </button>
+  </div>
+
+  @if (message()) {
+  <div class="lp-message">{{ message() }}</div>
+  } @if (loading()) {
+  <div class="lp-loading">{{ 'leaderboard.loading' | transloco }}</div>
+  } @else {
+  <div class="lp-full-table-wrap">
+    <table class="lp-full-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ 'leaderboard.name' | transloco }}</th>
+          <th>{{ 'leaderboard.level' | transloco }}</th>
+          <th>{{ 'leaderboard.when' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of items(); let i = $index; track $index) {
+        <tr>
+          <td>{{ page() * pageSize + i + 1 }}</td>
+          <td>{{ r.username ?? (r.user_id | slice : 0 : 8) }}</td>
+          <td>{{ r.score | short }}</td>
+          <td>{{ r.created_at | date : 'short' }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <div class="lp-pagination">
+    <button class="lp-btn-small" (click)="prevPage()" [disabled]="page() === 0 || loading()">
+      {{ 'leaderboard.previous' | transloco }}
+    </button>
+    <div class="lp-page-info">
+      {{ 'leaderboard.page' | transloco }} {{ page() + 1 }} / {{ totalPages() || 0 }}
+    </div>
+    <button
+      class="lp-btn-small"
+      (click)="nextPage()"
+      [disabled]="page() + 1 >= totalPages() || loading()"
+    >
+      {{ 'leaderboard.next' | transloco }}
+    </button>
+  </div>
+</div>
+}

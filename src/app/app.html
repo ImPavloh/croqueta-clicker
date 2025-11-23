@@ -17,6 +17,7 @@
       <app-floating />
       @if (!isMobile) {
       <app-stats variant="desktop" />
+      <app-leaderboard />
       } @if (isMobile) {
       <div class="mobile-top">
         <app-stats variant="mobile" />
@@ -45,7 +46,7 @@
     }
   </div>
   @if (isDebugMode) {
-  <div class="debug-mode-text">
+  <div class="fixed bottom-5 right-5 bg-amber-950/50 text-red-200 py-2 px-4 rounded text-xs z-200">
     {{ 'debug.alert' | transloco }}
   </div>
   }

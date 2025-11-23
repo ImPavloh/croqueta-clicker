@@ -5,6 +5,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { Card } from '../../ui/card/card';
 import { ButtonComponent } from '../../ui/button/button';
 import { CommonModule } from '@angular/common';
+import { InputComponent } from '@ui/input/input';
 import { PointsService } from '../../services/points.service';
 import { PlayerStats } from '../../services/player-stats.service';
 
@@ -13,7 +14,7 @@ import { PlayerStats } from '../../services/player-stats.service';
   templateUrl: './debug-menu.html',
   styleUrls: ['./debug-menu.css'],
   standalone: true,
-  imports: [FormsModule, TranslocoModule, Card, ButtonComponent, CommonModule],
+  imports: [FormsModule, TranslocoModule, Card, ButtonComponent, CommonModule, InputComponent],
 })
 export class DebugMenuComponent {
   croquetas: number = 0;

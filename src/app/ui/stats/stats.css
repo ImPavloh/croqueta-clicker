@@ -22,9 +22,9 @@
   padding: 10px;
 }
 
-.ds-right {
-  top: 16px;
-  right: 16px;
+.ds-left-bottom {
+  top: 200px;
+  left: 16px;
   padding: 12px 14px;
   display: flex;
   align-items: center;

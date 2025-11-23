@@ -191,7 +191,7 @@
     "languageTooltip": "Change the game language.",
     "resetGameModal": {
       "title": "Reset game",
-      "message": "Are you sure you want to reset your progress? This action cannot be undone and you will lose all your croquettes, upgrades and stats.",
+      "message": "Are you sure you want to reset your progress? This action cannot be undone — it will erase local progress and will also remove your current anonymous leaderboard entry and session.",
       "confirmText": "Yes, reset",
       "cancelText": "Cancel"
     },
@@ -223,6 +223,33 @@
       "text": "Look at my progress in Croqueta Clicker!\n\n🖱️ Total clicks: {totalClicks}\n⏱️ Time played: {timePlaying}\n⭐ Level: {level}\n🥐 Croquettes: {croquetas}\n⚡ Croquettes/sec: {croquetasPerSecond}",
       "clipboardMessage": "Statistics copied to clipboard!"
     }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "viewAll": "View full leaderboard",
+    "nextSync": "Next sync in",
+    "searchPlaceholder": "Search username...",
+    "search": "Search",
+    "name": "Name",
+    "level": "Level",
+    "when": "When",
+    "page": "Page",
+    "previous": "Previous",
+    "next": "Next",
+    "loading": "Loading…",
+    "noScores": "No scores yet"
+  },
+  "user": {
+    "setUsername": "Set your username",
+    "chooseUsername": "Choose your username",
+    "usernamePrompt": "Please choose a unique username",
+    "usernamePlaceholder": "Enter your desired username",
+    "usernameTaken": "This username is already taken. Please choose another one.",
+    "invalidUsername": "Invalid username. Please use only letters, numbers, and underscores (3-15 characters).",
+    "setUsernameSuccess": "Username set successfully!",
+    "setUsernameError": "Error setting username. Please try again.",
+    "checking": "Checking...",
+    "confirm": "Confirm"
   },
   "upgrades": {
     "title": "Upgrades",
@@ -522,8 +549,8 @@
     "cps": "Croquettes per second",
     "cpc": "Croquettes per click",
     "set": "Set",
-    "unlockAllSkins": "Unlock All Skins",
-    "unlockAllAchievements": "Unlock All Achievements",
+    "unlockAllSkins": "Unlock Skins",
+    "unlockAllAchievements": "Unlock Achievements",
     "resetGame": "Reset Game",
     "confirm": {
       "title": "Enable debug mode",
@@ -531,6 +558,6 @@
       "confirm": "Enable",
       "cancel": "Cancel"
     },
-    "alert": "Debug Mode"
+    "alert": "DEBUG MODE"
   }
 }

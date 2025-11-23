@@ -17,6 +17,34 @@
   height: 100%;
 }
 
+.btn-sm {
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  min-width: 60px;
+}
+
+.btn-md {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  min-width: 90px;
+}
+
+.btn-lg {
+  padding: 16px 30px;
+  border-radius: 16px;
+  font-size: 18px;
+  min-width: 140px;
+}
+
+.btn-xl {
+  padding: 20px 36px;
+  border-radius: 18px;
+  font-size: 20px;
+  min-width: 180px;
+}
+
 .btn:disabled,
 .btn.disabled {
   opacity: 0.5;
@@ -71,14 +99,14 @@
   border-color: #2563eb;
 }
 
-/* Variante Terciary */
-.btn-terciary {
+/* Variante tertiary */
+.btn-tertiary {
   color: #6b5633;
   background: linear-gradient(135deg, #e8cfa1 0%, #f3e2c2 50%, #e8cfa1 100%);
   border-color: #d4a574;
 }
 
-.btn-terciary:hover {
+.btn-tertiary:hover {
   background: linear-gradient(135deg, #f3e2c2 0%, #e8cfa1 50%, #f3e2c2 100%);
   border-color: #c9a05f;
 }

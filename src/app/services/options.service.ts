@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
+import { SupabaseService } from './supabase.service';
 import { GAME_PREFIX } from '@app/config/constants';
 
 @Injectable({
@@ -36,7 +37,10 @@ export class OptionsService {
   readonly musicVolume$: Observable<number> = this._musicVolume$.asObservable();
   readonly sfxVolume$: Observable<number> = this._sfxVolume$.asObservable();
 
-  constructor(public achievementsService: AchievementsService) {
+  constructor(
+    public achievementsService: AchievementsService,
+    private supabaseService: SupabaseService
+  ) {
     // comprueba si localStorage funciona
     this._localStorageAvailable = this.checkLocalStorageAvailability();
     if (!this._localStorageAvailable) {
@@ -159,10 +163,11 @@ export class OptionsService {
   exportProgress(): void {
     if (typeof localStorage === 'undefined') return;
 
-    this.performExport();
+    // ejecutar exportación asíncrona
+    void this.performExport();
   }
 
-  private performExport(): void {
+  private async performExport(): Promise<void> {
     // capturar SOLO los datos del juego (keys con prefijo)
     const saveData: Record<string, string> = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -177,11 +182,33 @@ export class OptionsService {
       }
     }
 
+    // Tambien incluir en la exportación datos adicionales útiles
+    const pending = localStorage.getItem('leaderboard:pending');
+
+    let supabaseSession: any = null;
+    let userId: string | null = null;
+    try {
+      const client = this.supabaseService.getClient();
+      // getSession returns { data: { session } }
+      const sessResp = await client.auth.getSession();
+      supabaseSession = sessResp?.data?.session ?? null;
+      userId = sessResp?.data?.session?.user?.id ?? null;
+    } catch (e) {
+      // ignorar si el cliente de supabase no está listo
+      supabaseSession = null;
+    }
+
     const exportData = {
-      version: '1.0',
+      version: '1.1',
       timestamp: new Date().toISOString(),
       game: 'croqueta-clicker',
+      userId: userId,
       data: saveData,
+      pendingLeaderboard: pending,
+      supabaseSession: supabaseSession,
+      // Security notice included in export
+      _securityNotice:
+        'Este archivo contiene tokens de sesión sensibles. NO LO COMPARTAS CON NADIE. Úsalo solo en tus propios dispositivos.',
     };
 
     const dataStr = JSON.stringify(exportData, null, 2);
@@ -203,7 +230,7 @@ export class OptionsService {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
           const imported = JSON.parse(content);
@@ -233,6 +260,74 @@ export class OptionsService {
             }
           }
           keysToRemove.forEach((key) => localStorage.removeItem(key));
+
+          // First: if the imported file contained a supabase session, try to restore it
+          // This enables transferring your anonymous identity between devices.
+          // The system will attempt to refresh the session if tokens are expired.
+          let sessionRestored = false;
+          try {
+            const session = (imported as any).supabaseSession;
+            if (session && session.access_token && session.refresh_token) {
+              console.info('[Import] Intentando restaurar sesión anónima de Supabase...');
+              try {
+                const client = this.supabaseService.getClient();
+                // setSession will automatically refresh if the access_token is expired
+                // but the refresh_token is still valid
+                const result = await client.auth.setSession({
+                  access_token: session.access_token,
+                  refresh_token: session.refresh_token,
+                });
+
+                if (result.error) {
+                  console.warn('[Import] Error al restaurar sesión:', result.error.message);
+                  console.info('[Import] Se creará una nueva sesión anónima automáticamente.');
+                } else {
+                  sessionRestored = true;
+                  console.info(
+                    '[Import] ✓ Sesión restaurada correctamente. User ID:',
+                    result.data.session?.user?.id
+                  );
+
+                  // Validate that the restored user_id matches the exported one (if available)
+                  const exportedUserId = (imported as any).userId;
+                  const restoredUserId = result.data.session?.user?.id;
+                  if (exportedUserId && restoredUserId && exportedUserId !== restoredUserId) {
+                    console.warn(
+                      '[Import] ⚠️ ADVERTENCIA: El user_id restaurado no coincide con el exportado.'
+                    );
+                    console.warn(
+                      '[Import] Exportado:',
+                      exportedUserId,
+                      '| Restaurado:',
+                      restoredUserId
+                    );
+                  }
+                }
+              } catch (e) {
+                console.warn('[Import] Excepción al restaurar sesión:', e);
+              }
+            } else {
+              console.info('[Import] No se encontró sesión de Supabase en el archivo.');
+            }
+          } catch (e) {
+            console.warn('[Import] Error procesando sesión:', e);
+          }
+
+          if (!sessionRestored) {
+            console.info(
+              '[Import] Continuando sin sesión restaurada. La app usará la sesión actual/nueva.'
+            );
+          }
+
+          // Restaurar cola pendiente del leaderboard si está presente (esto preserva la cola offline)
+          try {
+            const pending = (imported as any).pendingLeaderboard ?? null;
+            if (pending !== null && pending !== undefined) {
+              localStorage.setItem('leaderboard:pending', String(pending));
+            }
+          } catch (e) {
+            // ignorar
+          }
 
           // cargar los datos con el prefijo
           let itemsLoaded = 0;

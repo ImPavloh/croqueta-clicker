@@ -249,14 +249,3 @@
     padding-bottom: clamp(1rem, 3vh, 2rem);
   }
 }
-
-.debug-mode-text {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: red;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-}

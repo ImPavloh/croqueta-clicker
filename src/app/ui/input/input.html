@@ -1,0 +1,40 @@
+@if (label) {
+<ng-container>
+  <div class="input-label">{{ label }}</div>
+</ng-container>
+}
+
+<div class="input-controls">
+  <input
+    class="input-field"
+    [ngModel]="value"
+    (ngModelChange)="onChange($event)"
+    [placeholder]="placeholder"
+    [type]="type"
+    [disabled]="loading"
+    (keydown.enter)="onKeydownEnter()"
+    [attr.min]="type === 'number' ? min : null"
+    [attr.max]="type === 'number' ? max : null"
+    [attr.step]="type === 'number' ? step : null"
+  />
+
+  @if (!hideButton) {
+  <ng-container>
+    <app-button class="btn-action" (click)="onSubmit()" [disabled]="loading || value === ''">
+      {{
+        loading
+          ? loadingText || buttonText || ('debug.set' | transloco)
+          : buttonText || ('debug.set' | transloco)
+      }}
+    </app-button>
+  </ng-container>
+  }
+</div>
+
+@if (message) {
+<ng-container>
+  <div class="input-message">{{ message }}</div>
+</ng-container>
+}
+
+<app-button style="display: none"></app-button>
