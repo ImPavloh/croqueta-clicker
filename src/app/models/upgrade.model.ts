@@ -1,10 +1,10 @@
-import Decimal from "break_infinity.js";
+import Decimal from 'break_infinity.js';
 
 export interface UpgradeModel {
   id: number;
   name: string;
   image: string;
-  price: Decimal;
+  price: number | Decimal;
   clicks: number;
   level: number;
   exp: number;

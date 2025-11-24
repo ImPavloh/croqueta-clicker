@@ -1,14 +1,9 @@
-// Archivo: points.service.spec.ts
-// Tests para PointsService
-
 import { TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
 import { PointsService } from './points.service';
 import { GoldenCroquetaService } from './golden-croqueta.service';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import Decimal from 'break_infinity.js';
-
-// --- Mocks de Servicios ---
 
 // Mock para GoldenCroquetaService
 class MockGoldenCroquetaService {
@@ -21,8 +16,6 @@ const mockFloatingService = jasmine.createSpyObj('FloatingService', ['show']);
 
 // Mock para OptionsService
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
-
-// --- Suite de Pruebas ---
 
 describe('PointsService', () => {
   let service: PointsService;
@@ -46,7 +39,7 @@ describe('PointsService', () => {
     mockOptionsService.getGameItem.and.returnValue(undefined);
   });
 
-  // --- Pruebas de Inicialización y Estado por Defecto ---
+  // Pruebas de Inicialización y estado por defecto
   describe('Inicialización', () => {
     it('should be created and initialize with default values', fakeAsync(() => {
       service = TestBed.inject(PointsService);
@@ -58,16 +51,21 @@ describe('PointsService', () => {
     }));
   });
 
-  // --- Pruebas de Carga (loadFromStorage) ---
+  // Pruebas de carga (loadFromStorage)
   describe('Carga desde Storage', () => {
     it('should load values from OptionsService on creation', fakeAsync(() => {
       mockOptionsService.getGameItem.and.callFake((key: string) => {
         switch (key) {
-          case 'points': return '1000';
-          case 'pointsPerSecond': return '50';
-          case 'pointsPerClick': return '5';
-          case 'multiply': return '3';
-          default: return undefined;
+          case 'points':
+            return '1000';
+          case 'pointsPerSecond':
+            return '50';
+          case 'pointsPerClick':
+            return '5';
+          case 'multiply':
+            return '3';
+          default:
+            return undefined;
         }
       });
       service = TestBed.inject(PointsService);
@@ -79,7 +77,7 @@ describe('PointsService', () => {
     }));
   });
 
-  // --- Pruebas de Funcionalidad Core (Timers Activos) ---
+  // Pruebas de funcionalidad Core (Timers activos)
   describe('Funcionalidad Core (Timers Activos)', () => {
     beforeEach(() => {
       // El servicio se inyectará dentro de cada 'it' envuelto en fakeAsync
@@ -87,7 +85,7 @@ describe('PointsService', () => {
 
     it('should add points per click (no bonus) and show floating text', fakeAsync(() => {
       service = TestBed.inject(PointsService);
-      tick(2000); // Avanzar para pasar el estado 'isInitializing'
+      tick(2000); // Avanzar para pasar el estado isInitializing
       service.upgradePointPerClick(10);
       mockOptionsService.setGameItem.calls.reset();
       service.addPointsPerClick(100, 200);
@@ -172,16 +170,19 @@ describe('PointsService', () => {
       service = TestBed.inject(PointsService);
       tick(2000); // Permitir guardado
 
-      // Usar el NÚMERO 456.7 (en lugar del string '456.7') 
-      // simula el error de precisión de punto flotante.
-      service.upgradePointsPerSecond(456.7); 
-      
-      // La aserción 'eq' de la librería Decimal debería manejar la precisión
-      expect(service.pointsPerSecond().eq(new Decimal('456.7'))).toBeTrue(); 
-      
-      // El test debe esperar el string impreciso que 'break_infinity.js' 
-      // genera cuando se le pasa un 'number' en lugar de un 'string'.
-      expect(mockOptionsService.setGameItem).toHaveBeenCalledWith('pointsPerSecond', '456.70000000000005');
+      // Usar el NÚMERO 456.7 (en lugar del string 456.7)
+      // simula el error de precisión de punto flotante
+      service.upgradePointsPerSecond(456.7);
+
+      // La aserción eq de la librería Decimal debería manejar la precisión
+      expect(service.pointsPerSecond().eq(new Decimal('456.7'))).toBeTrue();
+
+      // El test debe esperar el string impreciso que break_infinity
+      // genera cuando se le pasa un number en lugar de un string
+      expect(mockOptionsService.setGameItem).toHaveBeenCalledWith(
+        'pointsPerSecond',
+        '456.70000000000005'
+      );
 
       discardPeriodicTasks();
     }));

@@ -16,16 +16,16 @@
 }
 
 .producer-grid-image {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .producer-grid-name {
-  font-size: 0.938rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.2;
   color: #6b5633;
   max-width: 100%;
   overflow: hidden;
@@ -38,23 +38,19 @@
   flex-shrink: 0;
 }
 
-.producer-grid-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  align-items: center;
-  width: 100%;
-  margin-top: auto;
+.producer-grid-name.locked-name {
+  opacity: 0.8;
 }
 
 .producer-grid-price {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   margin: 0;
+  margin-top: auto;
 }
 
 .producer-grid-quantity {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   font-weight: 800;
   color: #b87333;
   margin: 0;
@@ -62,29 +58,245 @@
 }
 
 .producer-grid-production {
-  font-size: 0.813rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #15803d;
   margin: 0;
   opacity: 0.95;
 }
 
-@media (max-width: 640px) {
+.producer-list-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+}
+
+.producer-list-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.producer-list-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.producer-list-name {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 700;
+  color: #6b5633;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.producer-list-price {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.buy-multiplier {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.producer-list-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.stat-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b5633;
+  opacity: 0.6;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.stat-value.owned {
+  color: #b87333;
+}
+
+.stat-value.production {
+  color: #15803d;
+  font-size: 16px;
+}
+
+.stat-value.will-produce {
+  color: #6b5633;
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(139, 69, 19, 0.15);
+}
+
+.producer-grid-locked .locked-image {
+  filter: grayscale(80%) contrast(90%) brightness(85%);
+  opacity: 0.9;
+}
+
+.locked-badge-grid {
+  font-size: 1.5rem;
+  opacity: 0.5;
+  margin: 0.25rem 0;
+}
+
+.locked-level-text {
+  font-size: 11px;
+  color: #6b5633;
+  opacity: 0.7;
+  margin: 0;
+  margin-top: auto;
+}
+
+.producer-locked-list {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  opacity: 0.7;
+}
+
+.producer-locked-image {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: grayscale(80%) contrast(90%) brightness(85%);
+}
+
+.producer-locked-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.producer-locked-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.producer-locked-level {
+  font-size: 12px;
+  opacity: 0.7;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
   .producer-grid-content {
     padding: 0.5rem 0.35rem;
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
 
   .producer-grid-image {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
   }
 
   .producer-grid-name {
-    font-size: 0.813rem;
+    font-size: 0.75rem;
+    line-height: 1.1;
+  }
+
+  .producer-grid-price {
+    font-size: 1rem;
+  }
+
+  .producer-grid-quantity {
+    font-size: 1.25rem;
   }
 
   .producer-grid-production {
-    font-size: 0.75rem;
+    font-size: 0.688rem;
+  }
+
+  .locked-badge-grid {
+    font-size: 1.25rem;
+  }
+
+  .locked-level-text {
+    font-size: 10px;
+  }
+
+  .producer-list-content,
+  .producer-locked-list {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .producer-list-image,
+  .producer-locked-image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .producer-list-name,
+  .producer-locked-name {
+    font-size: 14px;
+  }
+
+  .producer-list-price {
+    font-size: 13px;
+  }
+
+  .stat-label {
+    font-size: 8px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-value.production {
+    font-size: 14px;
+  }
+
+  .stat-value.will-produce {
+    font-size: 12px;
+  }
+
+  .stat-divider {
+    height: 28px;
+  }
+
+  .producer-locked-level {
+    font-size: 11px;
   }
 }

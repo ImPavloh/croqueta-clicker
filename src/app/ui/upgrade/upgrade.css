@@ -3,57 +3,35 @@
   width: 100%;
 }
 
-/* Wrapper principal */
-.upgrade-wrapper {
-  background: linear-gradient(135deg, #f3eac2 0%, #e8ddb5 100%);
-  border: 2px solid rgba(139, 69, 19, 0.15);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-
-.upgrade-wrapper:hover {
-  border-color: rgba(139, 69, 19, 0.3);
-  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
-}
-
-.upgrade-wrapper.expanded {
-  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2);
-}
-
-.upgrade-wrapper.locked {
-  opacity: 0.6;
-  background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
-}
-
-.upgrade-wrapper.bought {
-  opacity: 0.8;
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  border-color: rgba(40, 167, 69, 0.3);
-}
-
-/* Preview colapsado */
-.upgrade-preview {
-  padding: 12px;
-  position: relative;
-}
-
-.preview-content {
+.upgrade-content {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 60px;
+  gap: 14px;
 }
 
-.preview-image {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
+.upgrade-image-container {
+  position: relative;
   flex-shrink: 0;
 }
 
-.preview-info {
+.upgrade-image {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+:host ::ng-deep .upgrade-button.available:hover .upgrade-image {
+  transform: scale(1.08);
+}
+
+:host ::ng-deep .upgrade-button.locked .upgrade-image {
+  filter: grayscale(1) brightness(0.85);
+  opacity: 0.5;
+}
+
+.upgrade-info {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -61,172 +39,96 @@
   gap: 4px;
 }
 
-.preview-name {
+.upgrade-title {
   font-weight: 600;
   color: #8b4513;
   font-size: 14px;
   margin: 0;
-  white-space: nowrap;
+  line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.preview-price {
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0;
+:host ::ng-deep .upgrade-button.locked .upgrade-title {
+  color: #6c757d;
 }
 
-.preview-price.can-afford {
+:host ::ng-deep .upgrade-button.bought .upgrade-title {
   color: #28a745;
 }
 
-.preview-price.cannot-afford {
-  color: #dc3545;
-}
-
-.preview-owned {
+.upgrade-requirement {
   font-size: 12px;
-  color: #28a745;
+  color: #6c757d;
+  margin: 0;
   font-weight: 500;
+}
+
+.upgrade-status {
+  font-size: 11px;
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.expand-icon {
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-  color: #8b4513;
-  font-size: 12px;
-  opacity: 0.6;
-}
-
-.expand-icon.rotated {
-  transform: rotate(180deg);
-}
-
-/* Contenido expandido */
-.upgrade-expanded {
-  border-top: 2px solid rgba(139, 69, 19, 0.1);
-  background: rgba(255, 255, 255, 0.5);
-  animation: expandIn 0.3s ease-out;
-}
-
-@keyframes expandIn {
-  from {
-    opacity: 0;
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 500px;
-  }
-}
-
-.expanded-content {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.expanded-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #8b4513;
-  margin: 0;
-}
-
-.expanded-description {
-  font-size: 14px;
-  color: #6b5633;
-  margin: 0;
-  line-height: 1.5;
-  font-style: italic;
-}
-
-.expanded-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: rgba(139, 69, 19, 0.05);
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-}
-
-.stat-label {
-  color: #8b4513;
-  font-weight: 500;
-}
-
-.stat-value {
-  color: #333;
-  font-weight: 600;
-}
-
-.buy-button {
-  margin-top: 8px;
-}
-
-.locked-message,
-.bought-message {
-  text-align: center;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.locked-message {
-  background: rgba(108, 117, 125, 0.1);
-  color: #6c757d;
-}
-
-.bought-message {
-  background: rgba(40, 167, 69, 0.1);
+.bought-status {
   color: #28a745;
 }
 
-.locked-message p,
-.bought-message p {
-  margin: 0;
+.upgrade-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .preview-content {
-    gap: 8px;
-    min-height: 50px;
+.upgrade-bonus {
+  color: #ff6b35;
+  font-weight: 700;
+  background: rgba(255, 107, 53, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.upgrade-price {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+.upgrade-price.affordable {
+  color: #28a745;
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .upgrade-button {
+    min-height: 64px;
   }
 
-  .preview-image {
-    width: 40px;
-    height: 40px;
-  }
-
-  .preview-name {
-    font-size: 13px;
-  }
-
-  .expanded-content {
-    padding: 12px;
+  .upgrade-content {
     gap: 12px;
   }
 
-  .expanded-image {
-    width: 56px;
-    height: 56px;
+  .upgrade-image {
+    width: 44px;
+    height: 44px;
   }
 
-  .expanded-title {
-    font-size: 16px;
+  .upgrade-title {
+    font-size: 13px;
+  }
+
+  .upgrade-requirement,
+  .upgrade-status {
+    font-size: 11px;
+  }
+
+  .upgrade-details {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .upgrade-bonus {
+    padding: 2px 6px;
   }
 }

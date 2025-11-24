@@ -188,9 +188,8 @@ export class OptionsService {
     let supabaseSession: any = null;
     let userId: string | null = null;
     try {
-      const client = this.supabaseService.getClient();
-      // getSession returns { data: { session } }
-      const sessResp = await client.auth.getSession();
+      // Use the service wrapper to avoid navigator lock errors
+      const sessResp = await this.supabaseService.getSession();
       supabaseSession = sessResp?.data?.session ?? null;
       userId = sessResp?.data?.session?.user?.id ?? null;
     } catch (e) {

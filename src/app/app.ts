@@ -37,6 +37,7 @@ import { ModalService } from '@services/modal.service';
 import { DebugService } from '@services/debug.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { SupabaseService } from '@services/supabase.service';
+import { SwUpdate } from '@angular/service-worker';
 import { Leaderboard } from '@ui/leaderboard/leaderboard';
 
 @Component({
@@ -82,7 +83,8 @@ export class App implements OnInit, OnDestroy {
     private modalService: ModalService,
     private debugService: DebugService,
     private translocoService: TranslocoService,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private swUpdate: SwUpdate
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
   }
@@ -150,12 +152,17 @@ export class App implements OnInit, OnDestroy {
       } catch (e) {
         console.warn('Error:', e);
       }
+      // Al recuperar conexión, también comprobamos actualizaciones (forzadas)
+      this.maybeCheckForUpdate(true);
     });
 
     // si el usuario ya esta online al cargar la app entonces procesar pendientes
     if (navigator.onLine) {
       this.supabase.processPendingScores().catch(() => {});
     }
+
+    // Inicializamos el chequeo diario de actualizaciones (si el SW está habilitado)
+    this.setupDailyUpdateCheck();
 
     this.levelSub = this.playerStats.level$.subscribe((level) => {
       let url = '/assets/ost/bechamel.mp3';
@@ -169,5 +176,62 @@ export class App implements OnInit, OnDestroy {
       this.audioService.playMusic(url, true, 2);
     });
     this.goldenCroquetaService.startSpawnCheck();
+  }
+
+  // hago todo esto aquí por el cache del service worker que si no no funciona del todo bien, no siempre se actualiza
+  private readonly UPDATE_CHECK_KEY = 'lastUpdateCheck';
+  private readonly UPDATE_INTERVAL_MS = 1000 * 60 * 60 * 24; // 24 horas
+
+  private setupDailyUpdateCheck() {
+    if (!this.swUpdate?.isEnabled) return;
+
+    // cuando hay una nueva versión disponible preguntamos al usuario
+    this.swUpdate.versionUpdates.subscribe((evt) => {
+      if (evt?.type !== 'VERSION_READY') return;
+      try {
+        this.modalService.showConfirm({
+          title:
+            this.translocoService.translate('update.available.title') || 'Actualización disponible',
+          message:
+            this.translocoService.translate('update.available.message') ||
+            'Hay una nueva versión de la aplicación disponible. ¿Recargar ahora para aplicar la actualización?',
+          confirmText: this.translocoService.translate('update.available.confirm') || 'Recargar',
+          cancelText: this.translocoService.translate('update.available.cancel') || 'Más tarde',
+          onConfirm: async () => {
+            try {
+              await this.swUpdate.activateUpdate();
+            } finally {
+              location.reload();
+            }
+          },
+        });
+      } catch (e) {
+        // fallback, se intenta aplicar de forma silenciosa
+        this.swUpdate
+          .activateUpdate()
+          .then(() => location.reload())
+          .catch(() => {});
+      }
+    });
+
+    // chequeo inicial si procede
+    this.maybeCheckForUpdate(false);
+  }
+
+  private async maybeCheckForUpdate(force = false) {
+    if (!this.swUpdate?.isEnabled) return;
+    if (!navigator.onLine) return;
+
+    try {
+      const last = Number(localStorage.getItem(this.UPDATE_CHECK_KEY) || 0);
+      const now = Date.now();
+
+      if (force || now - last > this.UPDATE_INTERVAL_MS) {
+        localStorage.setItem(this.UPDATE_CHECK_KEY, String(now));
+        await this.swUpdate.checkForUpdate();
+      }
+    } catch (e) {
+      console.warn('Update check failed', e);
+    }
   }
 }

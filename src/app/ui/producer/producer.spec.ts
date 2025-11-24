@@ -88,4 +88,24 @@ describe('Producer', () => {
     expect(component.unlocked).toBeTrue();
     expect(component.price.toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
   });
+
+  it('renders locked state with required level when not unlocked', () => {
+    fixture = TestBed.createComponent(Producer);
+    component = fixture.componentInstance;
+
+    // establecer un nivel requerido mayor al del jugador (mockPlayerStats.level$ es 0)
+    component.config = { ...mockConfig, level: 5 } as ProducerModel;
+
+    fixture.detectChanges();
+
+    // componente debe existir y estar bloqueado
+    expect(component.unlocked).toBeFalse();
+
+    const el = fixture.nativeElement as HTMLElement;
+    const locked = el.querySelector('.producer-locked');
+    expect(locked).toBeTruthy();
+
+    // debe mostrar el número de nivel requerido
+    expect(el.textContent).toContain('5');
+  });
 });

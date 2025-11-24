@@ -237,7 +237,12 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "loading": "Cargando…",
-    "noScores": "No hay puntuaciones aún"
+    "noScores": "No hay puntuaciones aún",
+    "scoreSubmissionsDisabled": "El envío de puntuaciones está deshabilitado en modo DEBUG",
+    "disabledDebug": "Deshabilitado en modo DEBUG",
+    "offline": "Sin conexión",
+    "levelSynced": "Nivel sincronizado para este intervalo.",
+    "errorWithDetail": "Error: {{message}}"
   },
   "user": {
     "setUsername": "Establecer usuario",
@@ -248,8 +253,20 @@
     "invalidUsername": "Nombre de usuario inválido. Usa solo letras, números y guiones bajos (3-15 caracteres).",
     "setUsernameSuccess": "¡Nombre de usuario establecido con éxito!",
     "setUsernameError": "Error al establecer el nombre de usuario. Por favor, inténtalo de nuevo.",
+    "setUsernameErrorDetail": "No se pudo establecer el nombre: {{error}}",
+    "enterUsername": "Por favor, introduce un nombre de usuario",
+    "usernameReservedOffline": "Sin conexión: el nombre de usuario quedará reservado cuando vuelvas a conectarte.",
+    "debugDisabledInteractions": "Los cambios de usuario y las interacciones con la clasificación están deshabilitadas en modo DEBUG",
     "checking": "Comprobando...",
     "confirm": "Confirmar"
+  },
+  "update": {
+    "available": {
+      "title": "Actualización disponible",
+      "message": "Hay una nueva versión de Croqueta Clicker disponible. ¿Recargar ahora para aplicarla?",
+      "confirm": "Recargar",
+      "cancel": "Más tarde"
+    }
   },
   "upgrades": {
     "title": "Mejoras",
@@ -288,7 +305,9 @@
     "upgrade_33": "La croqueta",
     "perClick": "por clic",
     "price": "Precio",
-    "level": "Nivel"
+    "level": "Nivel",
+    "requiredLevel": "Nivel requerido",
+    "bought": "Ya comprado"
   },
   "producers": {
     "title": "Productores",

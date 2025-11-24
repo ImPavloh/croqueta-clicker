@@ -1,8 +1,8 @@
-import { Component, computed, inject, signal, OnDestroy, Input, effect } from '@angular/core';
+import { Component, computed, inject, signal, OnInit, Input, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
 import { PointsService } from '@services/points.service';
@@ -18,7 +18,7 @@ import { ButtonComponent } from '@ui/button/button';
   templateUrl: './leaderboard.html',
   styleUrl: './leaderboard.css',
 })
-export class Leaderboard {
+export class Leaderboard implements OnInit {
   @Input() mode: 'panel' | 'full' = 'panel';
 
   private supabase = inject(SupabaseService);
@@ -26,6 +26,7 @@ export class Leaderboard {
   private points = inject(PointsService);
   private modalService = inject(ModalService);
   private playerStats = inject(PlayerStats);
+  private translocoService = inject(TranslocoService);
 
   top = signal<Array<any>>([]);
   loading = signal(false);
@@ -62,21 +63,30 @@ export class Leaderboard {
   private usernamePromptHandle?: any;
   private _onlineHandler?: () => void;
 
-  private readonly UPDATE_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 horas
+  private readonly UPDATE_INTERVAL_MS = 1 * 60 * 60 * 1000; // 1 hora
 
   private searchDebounceHandle?: any;
   private readonly SEARCH_DEBOUNCE_MS = 300;
   private readonly CACHE_TTL_MS = 60 * 1000;
+  private readonly PANEL_CACHE_TTL_MS = this.UPDATE_INTERVAL_MS;
   private requestToken = 0;
   private cache = new Map<string, { ts: number; data: any[] | null; count: number | null }>();
+  private panelCache: { ts: number; data: any[] } | null = null;
+
+  private _nextRunKeyPrefix = 'leaderboard:next_run:';
+
+  ngOnInit() {
+    if (this.mode === 'full') {
+      this.searchFullImmediate();
+    }
+  }
 
   constructor() {
     if (this.mode === 'full') {
-      this.searchFullImmediate();
       return;
-    } else {
-      this.refresh();
     }
+
+    this.refresh();
 
     // verificar username después del splash
     effect(() => {
@@ -116,18 +126,65 @@ export class Leaderboard {
         if (!this.debugService?.isDebugMode) await this.supabase.processPendingScores();
       } catch {}
       this._refreshPendingCount();
-      await this.refresh();
+      // usar caché si está disponible al volver online
+      await this.refresh(false);
     };
     window.addEventListener('online', this._onlineHandler);
+
+    // persistir el inicio del ciclo cuando el usuario sube de nivel 0 -> >0
+    // así si recarga la página no se reinicia el contador
+    effect(() => {
+      try {
+        // no hacer nada en debug mode
+        if (this.debugService?.isDebugMode) return;
+      } catch {}
+
+      const lvl = this.currentLevel();
+      const u = this.user();
+      if (!u) return;
+
+      // si el nivel es 0 no hacemos nada (mejorable)
+      if (!lvl || lvl <= 0) return;
+
+      // si no existe last submit para este usuario usar el momento actual
+      try {
+        const key = this._lastSubmitKeyForUser(u.id);
+        const existing = localStorage.getItem(key);
+        if (!existing) {
+          // marcar ahora como inicio del ciclo, no se enviará score aquí
+          localStorage.setItem(key, String(Date.now()));
+
+          // reconfigurar timers (por si se cargó antes de subir de nivel)
+          this.setupPeriodicSubmitAndRefresh();
+        }
+      } catch {}
+    });
   }
 
-  async refresh() {
+  async refresh(forceRefresh = false) {
+    // verificar caché si no es forzado
+    if (!forceRefresh && this.panelCache) {
+      const now = Date.now();
+      if (now - this.panelCache.ts < this.PANEL_CACHE_TTL_MS) {
+        // caché válido, usar datos cacheados
+        this.top.set(this.panelCache.data);
+        return;
+      }
+    }
+
     this.loading.set(true);
     const res = await this.supabase.getTopScores(5);
     if (res.error) {
-      this.message.set('Error: ' + res.error.message);
+      this.message.set(
+        this.translocoService.translate('leaderboard.errorWithDetail', {
+          message: res.error?.message ?? '',
+        })
+      );
     } else {
-      this.top.set(res.data ?? []);
+      const data = res.data ?? [];
+      this.top.set(data);
+      // guardar en caché
+      this.panelCache = { ts: Date.now(), data };
     }
     this.loading.set(false);
   }
@@ -135,7 +192,7 @@ export class Leaderboard {
   // mejorable xD
   async submitScore() {
     if (this.debugService?.isDebugMode) {
-      this.message.set('Score submissions are disabled in DEBUG mode');
+      this.message.set(this.translocoService.translate('leaderboard.scoreSubmissionsDisabled'));
       return;
     }
 
@@ -165,6 +222,9 @@ export class Leaderboard {
       localStorage.setItem(key, String(Date.now()));
       this.nextRunMs = Date.now() + this.UPDATE_INTERVAL_MS;
       this.nextUpdateRemaining.set(this.nextRunMs - Date.now());
+      try {
+        localStorage.setItem(this._nextRunKeyForUser(userId), String(this.nextRunMs));
+      } catch {}
     } catch {
       // rezar si falla
     }
@@ -193,9 +253,9 @@ export class Leaderboard {
       return;
     }
 
-    // Block in debug mode
+    // block en debug mode
     if (this.debugService?.isDebugMode) {
-      this.message.set('Disabled while in DEBUG mode');
+      this.message.set(this.translocoService.translate('leaderboard.disabledDebug'));
       this.loading.set(false);
       return;
     }
@@ -204,20 +264,28 @@ export class Leaderboard {
     const current = Number(this.currentLevel());
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       this.supabase.enqueuePendingScore(current, { source: 'auto' });
-      this.message.set('Offline');
+      this.message.set(this.translocoService.translate('leaderboard.offline'));
       this._refreshPendingCount();
+      this.loading.set(false);
+      return;
+    }
+
+    // no subir si el nivel es 0 (usuario recién empezado)
+    if (current === 0) {
       this.loading.set(false);
       return;
     }
 
     const res = await this.supabase.submitScore(current);
     if (!res.error) {
-      if (current > 0) this._markSubmittedNow(uid);
-      this.message.set('Level synced for this interval.');
-      await this.refresh();
+      this._markSubmittedNow(uid);
+      this.message.set(this.translocoService.translate('leaderboard.levelSynced'));
+      // invalidar caché y forzar refresh después de sincronización exitosa
+      this.panelCache = null;
+      await this.refresh(true);
     } else {
       this.supabase.enqueuePendingScore(current, { source: 'auto', error: res.error?.message });
-      this.message.set('Offline');
+      this.message.set(this.translocoService.translate('leaderboard.offline'));
       this._refreshPendingCount();
     }
     this.loading.set(false);
@@ -225,6 +293,18 @@ export class Leaderboard {
 
   private scheduleAt(nextMs: number, job: () => void) {
     this.nextRunMs = Date.now() + nextMs;
+    try {
+      const u = this.user();
+      if (u) localStorage.setItem(this._nextRunKeyForUser(u.id), String(this.nextRunMs));
+    } catch {}
+
+    this.nextUpdateRemaining.set(Math.max(0, this.nextRunMs - Date.now()));
+    if (this.countdownTimerHandle) clearInterval(this.countdownTimerHandle);
+    this.countdownTimerHandle = setInterval(() => {
+      if (!this.nextRunMs) return;
+      this.nextUpdateRemaining.set(Math.max(0, this.nextRunMs - Date.now()));
+    }, 1000);
+
     this.scheduleTimerHandle = setTimeout(() => {
       try {
         job();
@@ -235,28 +315,58 @@ export class Leaderboard {
   }
 
   private setupPeriodicSubmitAndRefresh() {
+    // limpiar timers previos para evitar duplicados
+    if (this.countdownTimerHandle) {
+      clearInterval(this.countdownTimerHandle);
+      this.countdownTimerHandle = undefined;
+    }
+    if (this.scheduleTimerHandle) {
+      clearTimeout(this.scheduleTimerHandle);
+      this.scheduleTimerHandle = undefined;
+    }
     // do nothing if debug mode is active
     try {
-      if (this.debugService?.isDebugMode) return;
+      if (this.debugService?.isDebugMode) {
+        this.nextUpdateRemaining.set(0);
+        return;
+      }
     } catch {}
     const u = this.user();
-    if (!u) return;
+    if (!u) {
+      // sin usuario, mostrar tiempo completo del intervalo
+      this.nextRunMs = Date.now() + this.UPDATE_INTERVAL_MS;
+      this.nextUpdateRemaining.set(this.UPDATE_INTERVAL_MS);
+      return;
+    }
 
     const uid = u.id as string;
 
     let nextRun = Date.now();
+    let isFirstTime = true;
     try {
+      const nrKey = this._nextRunKeyForUser(uid);
+      const persistedNext = localStorage.getItem(nrKey);
+      if (persistedNext) {
+        const p = Number(persistedNext);
+        if (!Number.isNaN(p)) {
+          nextRun = p;
+          isFirstTime = false;
+        }
+      }
+
       const v = localStorage.getItem(this._lastSubmitKeyForUser(uid));
       if (v) {
         const last = Number(v);
         if (!Number.isNaN(last)) {
-          nextRun = last + this.UPDATE_INTERVAL_MS;
+          if (isFirstTime) nextRun = last + this.UPDATE_INTERVAL_MS;
+          isFirstTime = false;
         }
       }
     } catch {}
 
     const now = Date.now();
-    const msUntil = Math.max(0, nextRun - now);
+    // si es primera vez establecer el intervalo completo
+    const msUntil = isFirstTime ? this.UPDATE_INTERVAL_MS : Math.max(0, nextRun - now);
     this.nextRunMs = now + msUntil;
 
     this.nextUpdateRemaining.set(Math.max(0, this.nextRunMs - Date.now()));
@@ -267,9 +377,19 @@ export class Leaderboard {
 
     this.scheduleAt(msUntil, async () => {
       await this._doSubmitIfAllowed();
-      await this.refresh();
+      // forzar refresh después de sincronización programada
+      await this.refresh(true);
+      // limpiar persisted next run because submit updated last_submit
+      try {
+        const u2 = this.user();
+        if (u2) localStorage.removeItem(this._nextRunKeyForUser(u2.id));
+      } catch {}
       if (!this.nextRunMs) this.nextRunMs = Date.now() + this.UPDATE_INTERVAL_MS;
     });
+  }
+
+  private _nextRunKeyForUser(userId: string) {
+    return `${this._nextRunKeyPrefix}${userId}`;
   }
 
   private _refreshPendingCount() {
@@ -363,7 +483,11 @@ export class Leaderboard {
       if (token !== this.requestToken) return;
 
       if (res.error) {
-        this.message.set(res.error.message || 'Error');
+        this.message.set(
+          this.translocoService.translate('leaderboard.errorWithDetail', {
+            message: res.error?.message ?? '',
+          })
+        );
         this.items.set([]);
         this.total.set(null);
       } else {
@@ -374,7 +498,9 @@ export class Leaderboard {
       }
     } catch (e: any) {
       if (token !== this.requestToken) return;
-      this.message.set(String(e));
+      this.message.set(
+        this.translocoService.translate('leaderboard.errorWithDetail', { message: String(e) })
+      );
       this.items.set([]);
       this.total.set(null);
     } finally {

@@ -41,14 +41,9 @@ export class Upgrade {
 
   unlocked: boolean = true;
   bought: boolean = false;
-  expanded: boolean = false;
 
   ngOnInit() {
     this.loadFromStorage();
-  }
-
-  toggleExpand() {
-    this.expanded = !this.expanded;
   }
 
   // comprobar si la mejora está desbloqueada

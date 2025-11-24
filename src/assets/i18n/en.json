@@ -237,7 +237,12 @@
     "previous": "Previous",
     "next": "Next",
     "loading": "Loading…",
-    "noScores": "No scores yet"
+    "noScores": "No scores yet",
+    "scoreSubmissionsDisabled": "Score submissions are disabled in DEBUG mode",
+    "disabledDebug": "Disabled while in DEBUG mode",
+    "offline": "Offline",
+    "levelSynced": "Level synced for this interval.",
+    "errorWithDetail": "Error: {{message}}"
   },
   "user": {
     "setUsername": "Set your username",
@@ -248,8 +253,20 @@
     "invalidUsername": "Invalid username. Please use only letters, numbers, and underscores (3-15 characters).",
     "setUsernameSuccess": "Username set successfully!",
     "setUsernameError": "Error setting username. Please try again.",
+    "setUsernameErrorDetail": "Could not set name: {{error}}",
+    "enterUsername": "Please enter a username",
+    "usernameReservedOffline": "Offline — the username will be reserved when you reconnect.",
+    "debugDisabledInteractions": "Username changes and leaderboard interactions are disabled in DEBUG mode",
     "checking": "Checking...",
     "confirm": "Confirm"
+  },
+  "update": {
+    "available": {
+      "title": "Update available",
+      "message": "A new version of Croqueta Clicker is available. Reload now to apply it?",
+      "confirm": "Reload",
+      "cancel": "Later"
+    }
   },
   "upgrades": {
     "title": "Upgrades",
@@ -288,7 +305,9 @@
     "upgrade_33": "The croquette",
     "perClick": "per click",
     "price": "Price",
-    "level": "Level"
+    "level": "Level",
+    "requiredLevel": "Required level",
+    "bought": "Already bought"
   },
   "producers": {
     "title": "Producers",

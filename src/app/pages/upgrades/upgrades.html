@@ -1,36 +1,67 @@
-<div class="h-full w-full flex flex-row">
-  <!--producers-->
-  <div class="flex flex-col w-full flex-1">
-    <app-shop-controls />
-    <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
-      <div class="producers-list flex flex-col gap-4 md:p-4">
-        @for (producer of producers; track producer.id) {
-        <app-producer
-          [config]="producer"
-          [class.producer-compact]="shopControls.gridView()"
-        ></app-producer>
-        } @empty {
-        <div
-          class="no-producers-placeholder flex justify-center items-center p-8 text-amber-800 italic opacity-70"
-        >
-          <p>{{ 'producers.noProducers' | transloco }}</p>
+<div class="h-full w-full flex flex-col md:flex-row">
+  <!-- en movil mostrar tabs -->
+  <div class="mobile-tabs md:hidden flex items-center justify-center gap-2 p-2">
+    <app-button
+      type="button"
+      variant="nav"
+      [class.active]="mobileTab === 'upgrades'"
+      (click)="mobileTab = 'upgrades'"
+    >
+      {{ 'upgrades.title' | transloco }}
+    </app-button>
+
+    <app-button
+      type="button"
+      variant="nav"
+      [class.active]="mobileTab === 'producers'"
+      (click)="mobileTab = 'producers'"
+    >
+      {{ 'producers.title' | transloco }}
+    </app-button>
+  </div>
+  <!--producers + upgrades (en movil) -->
+  <div class="mobile-panels-wrapper w-full flex flex-col-reverse md:flex-row">
+    <!--producers-->
+    <div
+      class="producers-panel flex flex-col w-full flex-1 min-w-0"
+      [class.mobile-hidden]="mobileTab === 'upgrades'"
+    >
+      <app-shop-controls />
+      <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
+        <div class="producers-list flex flex-col gap-2 md:gap-4 p-2 md:p-4">
+          @for (producer of producers; track producer.id) {
+          <app-producer
+            [config]="producer"
+            [class.producer-compact]="shopControls.gridView()"
+          ></app-producer>
+          } @empty {
+          <div
+            class="no-producers-placeholder flex justify-center items-center p-8 text-amber-800 italic opacity-70"
+          >
+            <p>{{ 'producers.noProducers' | transloco }}</p>
+          </div>
+          }
         </div>
-        }
       </div>
     </div>
-  </div>
 
-  <hr class="divider-vertical" />
+    <hr class="divider-vertical" />
 
-  <!--upgrades-->
-  <div class="flex flex-col upgrades-section">
-    <h3 class="text-amber-800 font-semibold text-lg text-center uppercase">
-      {{ 'upgrades.title' | transloco }}
-    </h3>
-    <div class="upgrades flex flex-col">
-      @for (upgrade of allUpgrades(); track upgrade.id) {
-      <app-upgrade [config]="upgrade"></app-upgrade>
-      }
+    <!--upgrades-->
+    <div
+      class="upgrades-panel flex flex-col upgrades-section"
+      [class.mobile-hidden]="mobileTab === 'producers'"
+    >
+      <h3
+        class="hidden md:block text-amber-800 font-semibold text-base md:text-lg text-center uppercase py-2"
+      >
+        {{ 'upgrades.title' | transloco }}
+      </h3>
+      <div class="upgrades flex flex-col">
+        @for (upgrade of allUpgrades(); track upgrade.id) {
+        <app-upgrade [config]="upgrade"></app-upgrade>
+        }
+      </div>
     </div>
   </div>
 </div>

@@ -4,19 +4,17 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 export function configureTransloco(components: any[] = [], imports: any[] = []) {
   TestBed.configureTestingModule({
-    imports: [
-      ...components,       // TODOS los componentes standalone
-      ...imports,          // otros módulos necesarios
-    ],
+    imports: [...components, ...imports],
     providers: [
       provideHttpClientTesting(),
       provideTransloco({
-      config: {
-        availableLangs: ['en', 'es'],
-        defaultLang: 'es',
-        reRenderOnLangChange: true,
-      }
-    }),
+        config: {
+          availableLangs: ['en', 'es'],
+          defaultLang: 'es',
+          fallbackLang: 'en',
+          reRenderOnLangChange: true,
+        },
+      }),
     ],
   });
 }

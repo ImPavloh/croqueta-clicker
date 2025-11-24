@@ -11,86 +11,83 @@
 >
   @if (unlocked) { @if (shopControls.gridView()) {
   <div class="producer-grid-content">
-    <div class="flex flex-row gap-2 w-full items-center">
-      <div>
-        <img
-          class="producer-grid-image"
-          src="{{ config.image }}"
-          alt="{{ config.name | transloco }}"
-        />
-        <p class="producer-grid-name">{{ config.name | transloco }}</p>
-      </div>
-      <div class="flex flex-col justify-evenly ml-auto text-right">
-        @if (quantity > 0) {
-        <p class="producer-grid-quantity">x{{ quantity }}</p>
-        <p class="producer-grid-production">
-          {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
-        </p>
-        }
-      </div>
-    </div>
+    <img class="producer-grid-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
+    <p class="producer-grid-name">{{ config.name | transloco }}</p>
 
-    <div class="producer-grid-stats">
-      <p
-        class="producer-grid-price"
-        [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'"
-      >
-        {{ price | short }} ¢
+    @if (quantity > 0) {
+    <div class="flex flex-col items-center gap-1 mt-auto">
+      <p class="producer-grid-quantity">x{{ quantity }}</p>
+      <p class="producer-grid-production">
+        {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
       </p>
     </div>
+    }
+
+    <p
+      class="producer-grid-price"
+      [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'"
+    >
+      {{ price | short }} ¢
+    </p>
   </div>
   } @else {
-  <div class="flex w-full items-center justify-between gap-2 sm:gap-4 flex-row">
-    <div class="producer-left flex items-center gap-2 sm:gap-4 flex-1 w-full">
-      <img
-        class="size-14 sm:size-20 shrink-0"
-        src="{{ config.image }}"
-        alt="{{ config.name | transloco }}"
-      />
-      <div class="flex flex-col justify-center gap-0.5 sm:gap-1">
-        <p class="text-lg sm:text-2xl leading-tight">{{ config.name | transloco }}</p>
-        <div class="flex items-baseline gap-1 sm:gap-2">
-          <p
-            class="text-sm sm:text-base"
-            [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'"
-          >
-            {{ price | short }} ¢
-          </p>
-          @if (shopControls.buyAmount() > 1) {
-          <span class="text-[10px] sm:text-xs opacity-60">(x{{ shopControls.buyAmount() }})</span>
-          }
-        </div>
+  <div class="producer-list-content">
+    <img class="producer-list-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
+
+    <div class="producer-list-info">
+      <p class="producer-list-name">{{ config.name | transloco }}</p>
+      <div class="producer-list-price">
+        <span [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'">
+          {{ price | short }} ¢
+        </span>
+        @if (shopControls.buyAmount() > 1) {
+        <span class="buy-multiplier">(x{{ shopControls.buyAmount() }})</span>
+        }
       </div>
     </div>
 
-    <div class="flex items-center gap-3 sm:gap-6 shrink-0 w-auto justify-between sm:justify-end">
-      <div class="flex flex-col items-center">
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
-          {{ 'producers.owned' | transloco }}
-        </p>
-        <p class="text-2xl sm:text-3xl font-bold text-amber-700">{{ quantity }}</p>
+    <div class="producer-list-stats">
+      @if (quantity > 0) {
+      <div class="stat-group">
+        <p class="stat-label">{{ 'producers.owned' | transloco }}</p>
+        <p class="stat-value owned">{{ quantity }}</p>
       </div>
-
-      <div class="h-12 sm:h-16 w-px bg-amber-800 opacity-20"></div>
-
-      <div class="producer-stats flex flex-col items-end">
-        @if (quantity > 0) {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
-          {{ 'producers.production' | transloco }}
-        </p>
-        <p class="text-lg sm:text-2xl font-bold text-green-700">
+      <div class="stat-divider"></div>
+      <div class="stat-group">
+        <p class="stat-label">{{ 'producers.production' | transloco }}</p>
+        <p class="stat-value production">
           {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
         </p>
-        } @else {
-        <p class="text-[10px] sm:text-xs opacity-60 uppercase tracking-wide">
-          {{ 'producers.willProduce' | transloco }}
-        </p>
-        <p class="text-base sm:text-xl font-semibold text-gray-600">
+      </div>
+      } @else {
+      <div class="stat-group">
+        <p class="stat-label">{{ 'producers.willProduce' | transloco }}</p>
+        <p class="stat-value will-produce">
           {{ points | short }} {{ 'producers.cps' | transloco }}
         </p>
-        <p class="text-[10px] sm:text-xs opacity-50">{{ 'producers.perUnit' | transloco }}</p>
-        }
       </div>
+      }
+    </div>
+  </div>
+  } } @else { @if (shopControls.gridView()) {
+  <div class="producer-grid-content producer-grid-locked">
+    <img
+      class="producer-grid-image locked-image"
+      src="{{ config.image }}"
+      alt="{{ config.name | transloco }}"
+    />
+    <p class="producer-grid-name locked-name">{{ config.name | transloco }}</p>
+    <p class="locked-level-text">{{ 'producers.level' | transloco }} {{ config.level }}</p>
+  </div>
+  } @else {
+  <div class="producer-locked-list">
+    <img
+      class="producer-locked-image"
+      src="{{ config.image }}"
+      alt="{{ config.name | transloco }}"
+    />
+    <div class="producer-locked-info">
+      <p class="producer-locked-name">{{ config.name | transloco }}</p>
     </div>
   </div>
   } }

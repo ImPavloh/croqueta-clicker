@@ -92,21 +92,19 @@ export class Modal {
   async setUsername() {
     // bloquear en modo debug
     if (this.debugService?.isDebugMode) {
-      this.usernameMessage.set(
-        'Username changes and leaderboard interactions are disabled in DEBUG mode'
-      );
+      this.usernameMessage.set(this.translocoService.translate('user.debugDisabledInteractions'));
       return;
     }
     const name = (this.desiredName() || '').trim();
     if (!name) {
-      this.usernameMessage.set('Please enter a username');
+      this.usernameMessage.set(this.translocoService.translate('user.enterUsername'));
       return;
     }
 
     this.usernameLoading.set(true);
     const taken = await this.supabase.isUsernameTaken(name);
     if (taken) {
-      this.usernameMessage.set('That username is taken — try a different one.');
+      this.usernameMessage.set(this.translocoService.translate('user.usernameTaken'));
       this.usernameLoading.set(false);
       return;
     }
@@ -119,36 +117,23 @@ export class Modal {
           { reason: 'username-reserve' },
           { usernameChange: name }
         );
-        this.usernameMessage.set('Offline, the username will be reserved when you reconnect.');
+        this.usernameMessage.set(this.translocoService.translate('user.usernameReservedOffline'));
         this.usernameLoading.set(false);
         this.modalService.closeModal();
         this.usernameMessage.set('');
         this.desiredName.set('');
         return;
       }
-      this.usernameMessage.set('Could not set name: ' + resp.error.message);
+      this.usernameMessage.set(
+        this.translocoService.translate('user.setUsernameErrorDetail', {
+          error: resp.error?.message ?? '',
+        })
+      );
       this.usernameLoading.set(false);
       return;
     }
 
-    try {
-      const sres = await this.supabase.submitScore(0);
-      if (sres.error) {
-        this.supabase.enqueuePendingScore(
-          0,
-          { reason: 'username-reserve' },
-          { usernameChange: name }
-        );
-      }
-    } catch {
-      this.supabase.enqueuePendingScore(
-        0,
-        { reason: 'username-reserve' },
-        { usernameChange: name }
-      );
-    }
-
-    this.usernameMessage.set('Username set successfully!');
+    this.usernameMessage.set(this.translocoService.translate('user.setUsernameSuccess'));
     this.usernameLoading.set(false);
     this.closeModal();
     this.usernameMessage.set('');

@@ -11,8 +11,71 @@ export class SupabaseService {
 
   constructor(private injector: Injector) {
     this.supabase = createClient(SUPABASE.URL, SUPABASE.ANON_KEY, {
-      auth: { persistSession: true },
+      auth: {
+        persistSession: true,
+        storageKey: 'sb-cosvywlgllqpnqdrphtt-auth-token',
+        storage: this._createNonBlockingStorage(),
+      },
     });
+  }
+
+  // temp fix aunque no lo arregla igualmente
+  // https://github.com/supabase/supabase-js/issues/936
+  private _createNonBlockingStorage() {
+    const cache = new Map<string, string>();
+
+    return {
+      getItem: async (key: string): Promise<string | null> => {
+        try {
+          return localStorage.getItem(key) ?? cache.get(key) ?? null;
+        } catch {
+          return cache.get(key) ?? null;
+        }
+      },
+      setItem: async (key: string, value: string): Promise<void> => {
+        cache.set(key, value);
+        try {
+          localStorage.setItem(key, value);
+        } catch {
+          // error silencioso
+        }
+      },
+      removeItem: async (key: string): Promise<void> => {
+        cache.delete(key);
+        try {
+          localStorage.removeItem(key);
+        } catch {
+          // error silencioso
+        }
+      },
+    };
+  }
+
+  // helper para reintentar llamadas que fallen por errores de navigator lock (timeout o lock busy)
+  private async _withNavigatorLockRetry<T>(
+    fn: () => Promise<T>,
+    attempts = 3,
+    baseDelay = 250
+  ): Promise<T> {
+    let lastErr: any = null;
+    for (let i = 0; i < attempts; i++) {
+      try {
+        return await fn();
+      } catch (e: any) {
+        lastErr = e;
+        const m = String(e?.message ?? '').toLowerCase();
+        if (!m.includes('navigatorlockacquiretimeouterror') && !m.includes('lockmanager')) {
+          throw e;
+        }
+
+        if (i === attempts - 1) break;
+
+        const wait = baseDelay * Math.pow(2, i);
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+
+    throw lastErr;
   }
 
   private get debugService(): DebugService | null {
@@ -28,26 +91,29 @@ export class SupabaseService {
 
   // Crea una sesión anónima
   async signInAnonymously() {
-    const resp = await this.supabase.auth.signInAnonymously();
-    return resp;
+    return this._withNavigatorLockRetry(() => this.supabase.auth.signInAnonymously());
   }
 
   async signOut() {
-    return this.supabase.auth.signOut();
+    return this._withNavigatorLockRetry(() => this.supabase.auth.signOut());
   }
 
   getUser() {
-    return this.supabase.auth.getUser();
+    return this._withNavigatorLockRetry(() => this.supabase.auth.getUser());
+  }
+
+  getSession() {
+    return this._withNavigatorLockRetry(() => this.supabase.auth.getSession());
   }
 
   // Actualiza el nombre del usuario autenticado
   async updateUserName(name: string) {
     try {
       if (this.debugService?.isDebugMode)
-        return { error: new Error('Operation disabled in debug mode'), data: null } as any;
+        return { error: new Error('Operación deshabilitada en modo DEBUG'), data: null } as any;
     } catch {}
 
-    return this.supabase.auth.updateUser({ data: { name } });
+    return this._withNavigatorLockRetry(() => this.supabase.auth.updateUser({ data: { name } }));
   }
 
   // Verifica si un nombre de usuario ya existe en la tabla de clasificacion
@@ -65,11 +131,11 @@ export class SupabaseService {
   async deleteOwnLeaderboardEntry() {
     try {
       if (this.debugService?.isDebugMode)
-        return { error: new Error('Operation disabled in debug mode') } as any;
+        return { error: new Error('Operación deshabilitada en modo DEBUG') } as any;
     } catch {}
-    const sessionResp = await this.supabase.auth.getUser();
+    const sessionResp = await this.getUser();
     const user = sessionResp.data.user;
-    if (!user) return { error: new Error('Not authenticated') } as any;
+    if (!user) return { error: new Error('Usuario no autenticado') } as any;
 
     const { data, error } = await this.supabase.from('leaderboard').delete().eq('user_id', user.id);
     return { data, error } as { data: any; error: PostgrestError | null };
@@ -106,7 +172,9 @@ export class SupabaseService {
 
     // creo que esto es innecesario pero bueno, lo dejo de momento
     try {
-      const u = this.supabase.auth.getUser();
+      // kick off a safe getUser() call to warm session cache without risking
+      // unhandled navigator lock errors.
+      const u = this.getUser();
     } catch {}
 
     const entry = {
@@ -118,7 +186,7 @@ export class SupabaseService {
     if (extra && typeof extra === 'object') Object.assign(entry, extra);
 
     try {
-      const s = this.supabase.auth.getUser();
+      const s = this.getUser();
       s.then((res) => {
         if (res?.data?.user) {
           entry.user_id = res.data.user.id;
@@ -164,7 +232,7 @@ export class SupabaseService {
     const list = this._readPending();
     if (!list || list.length === 0) return { processed: 0, failed: 0 };
 
-    const session = await this.supabase.auth.getUser();
+    const session = await this.getUser();
     const user = session.data.user;
     if (!user) return { processed: 0, failed: list.length };
 
@@ -262,11 +330,11 @@ export class SupabaseService {
     //  bloquear en modo debug
     try {
       if (this.debugService?.isDebugMode)
-        return { error: new Error('Operation disabled in debug mode'), data: null } as any;
+        return { error: new Error('Operación deshabilitada en modo DEBUG'), data: null } as any;
     } catch {}
-    const sessionResp = await this.supabase.auth.getUser();
+    const sessionResp = await this.getUser();
     const user = sessionResp.data.user;
-    if (!user) return { error: new Error('Not authenticated'), data: null } as any;
+    if (!user) return { error: new Error('Usuario no autenticado'), data: null } as any;
 
     const payload: LeaderboardRow = {
       user_id: user.id,
@@ -275,15 +343,45 @@ export class SupabaseService {
       meta: meta ?? null,
     };
 
-    const { data, error } = await this.supabase
-      .from('leaderboard')
-      .upsert(payload, { onConflict: 'user_id' })
-      .select();
+    try {
+      const { data, error } = await this.supabase
+        .from('leaderboard')
+        .upsert(payload, { onConflict: 'user_id' })
+        .select();
 
-    return {
-      error: error as PostgrestError | null,
-      data: data as unknown as LeaderboardRow[] | null,
-    };
+      // If Postgrest returned an error (e.g. RLS / policy rejection) forward it
+      if (error) {
+        // Provide a bit more context for 403s
+        if ((error as any).status === 403) {
+          (error as any).message = (error as any).message
+            ? `${(error as any).message} (rejected by RLS/policies)`
+            : 'Request rejected by RLS/policies';
+        }
+
+        return {
+          error: error as PostgrestError | null,
+          data: data as unknown as LeaderboardRow[] | null,
+        };
+      }
+
+      return { error: null, data: data as unknown as LeaderboardRow[] | null };
+    } catch (e: any) {
+      // Handle navigator lock / internal supabase-js thrown errors gracefully
+      const m = String(e?.message || '').toLowerCase();
+      if (m.includes('navigatorlockacquiretimeouterror') || m.includes('lockmanager')) {
+        // Return a recoverable error object so callers can enqueue/reschedule
+        return {
+          error: {
+            message: 'Navigator lock acquisition failed (temporary)',
+            details: String(e),
+          } as any,
+          data: null,
+        } as any;
+      }
+
+      // Unknown exception: rethrow to surface in dev
+      throw e;
+    }
   }
 
   // Devuelve el cliente supabase

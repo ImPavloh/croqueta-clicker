@@ -7,16 +7,15 @@ import { PointsService } from '@services/points.service';
 import { AudioService } from '@services/audio.service';
 import { OptionsService } from '@services/options.service';
 
-// --- SIMULACIÓN DE SERVICIOS (MOCKS) ---
-// Define mocks para cada servicio inyectado en Upgrade.ts
-// Nota: Usamos 'as any' para simplificar la simulación del tipo Decimal.
+// SIMULACIÓN DE SERVICIOS (MOCKS)
+// mocks para cada servicio inyectado en Upgrade
 
 const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
   'level$',
   'addExp',
   'upgradeExpPerClick',
 ]);
-mockPlayerStats.level$ = of(0); // Simula el Observable para toSignal
+mockPlayerStats.level$ = of(0);
 
 const mockPointsService = jasmine.createSpyObj('PointsService', [
   'points',
@@ -24,9 +23,9 @@ const mockPointsService = jasmine.createSpyObj('PointsService', [
   'pointsPerClick',
   'upgradePointPerClick',
 ]);
-// Simula que 'points()' devuelve un objeto que responde a gte() y lt()
-// gte() -> greater than or equal (suficientes puntos para comprar)
-// lt() -> less than (insuficientes puntos)
+// Simula que points() devuelve un objeto que responde a gte() y lt()
+// gte() suficientes puntos para comprar
+// lt() insuficientes puntos
 mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
 // Simula pointsPerClick()
 mockPointsService.pointsPerClick.and.returnValue({ plus: () => ({}) } as any);
@@ -40,14 +39,12 @@ mockOptionsService.getGameItem.and.returnValue(null);
 const mockConfig: UpgradeModel = {
   id: 1,
   level: 0,
-  price: 100, // Debe ser un número, ya que el componente lo convierte a Decimal
+  price: 100,
   clicks: 1,
   exp: 10,
   name: 'Mock Upgrade',
   image: 'mock.png',
 };
-
-// ----------------------------------------
 
 describe('Upgrade', () => {
   let component: Upgrade;
@@ -70,19 +67,19 @@ describe('Upgrade', () => {
     fixture = TestBed.createComponent(Upgrade);
     component = fixture.componentInstance;
 
-    // 1. Establecer el @Input() config ANTES de la detección de cambios inicial
+    // Establece el Input config ANTES de la detección de cambios inicial
     component.config = mockConfig;
 
-    // 2. Detener cambios para disparar ngOnInit y los effects
+    // Detiene cambios para disparar ngOnInit y los effects
     fixture.detectChanges();
 
-    // 3. Verificar que el componente se haya creado
+    // Verifica que el componente se haya creado
     expect(component).toBeTruthy();
 
-    // 4. Verificar que la inicialización de estado funcione correctamente
-    // El nivel de mockPlayerStats es 0, y mockConfig.level es 0, por lo tanto 'unlocked' debe ser true.
+    // Verifica que la inicialización de estado funcione correctamente
+    // El nivel de mockPlayerStats es 0 y mockConfig level es 0, por lo tanto unlocked tiene que ser true
     expect(component.unlocked).toBeTrue();
-    // Por defecto, 'bought' debe ser false (ya que mockOptionsService devuelve null)
+    // Por defecto bought debe ser false (ya que mockOptionsService devuelve null)
     expect(component.bought).toBeFalse();
   });
 });
