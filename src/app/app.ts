@@ -129,12 +129,16 @@ export class App implements OnInit, OnDestroy {
     // Asegurar que exista una sesion anónima de supabase para interacciones con la leadboard
     // Intencionalmente mantenemos el juego local
     // la autenticación solo se usa para las entradas de la leadboard
-    this.supabase.getUser().then((r) => {
+    this.supabase.getUser().then(async (r) => {
       if (!r?.data?.user) {
-        this.supabase.signInAnonymously().catch(() => {
+        await this.supabase.signInAnonymously().catch(() => {
           // ignorar errores (el leaderboard lo maneja, o deberia)
         });
       }
+
+      setTimeout(() => {
+        this.modalService.shouldCheckUsername.set(true);
+      }, 100);
     });
 
     // procesar pendientes cuando vuelva a estar online

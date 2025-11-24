@@ -88,8 +88,9 @@ export class Modal {
     this.modalService.cancel();
   }
 
+  // todos los mensajes set hay que cambiarlos a traducciones
   async setUsername() {
-    // block username changes while in debug mode
+    // bloquear en modo debug
     if (this.debugService?.isDebugMode) {
       this.usernameMessage.set(
         'Username changes and leaderboard interactions are disabled in DEBUG mode'

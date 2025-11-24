@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 import { SUPABASE } from '../../environments/supabase.config';
 import { DebugService } from '@services/debug.service';
@@ -7,17 +7,23 @@ import type { LeaderboardEntry, LeaderboardRow } from '@models/leaderboard.model
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
   private supabase: SupabaseClient;
+  private _debugService: any | null = null;
 
-  constructor(private debugService: DebugService) {
+  constructor(private injector: Injector) {
     this.supabase = createClient(SUPABASE.URL, SUPABASE.ANON_KEY, {
       auth: { persistSession: true },
     });
   }
 
-  // Inicia sesión con magic link para el email dado
-  async signInWithEmail(email: string) {
-    const resp = await this.supabase.auth.signInWithOtp({ email });
-    return resp;
+  private get debugService(): DebugService | null {
+    if (this._debugService === null) {
+      try {
+        this._debugService = this.injector.get(DebugService, null as any);
+      } catch {
+        this._debugService = null;
+      }
+    }
+    return this._debugService;
   }
 
   // Crea una sesión anónima
@@ -116,7 +122,7 @@ export class SupabaseService {
       s.then((res) => {
         if (res?.data?.user) {
           entry.user_id = res.data.user.id;
-          entry.username = res.data.user.user_metadata?.['name'] ?? res.data.user.email ?? null;
+          entry.username = res.data.user.user_metadata?.['name'] ?? null;
           const idx = current.findIndex((c) => c.user_id === entry.user_id);
           if (idx >= 0) {
             const existing = current[idx];
@@ -264,7 +270,7 @@ export class SupabaseService {
 
     const payload: LeaderboardRow = {
       user_id: user.id,
-      username: user.user_metadata?.['name'] ?? user.email ?? undefined,
+      username: user.user_metadata?.['name'] ?? undefined,
       score,
       meta: meta ?? null,
     };

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, OnDestroy, Input } from '@angular/core';
+import { Component, computed, inject, signal, OnDestroy, Input, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -53,7 +53,7 @@ export class Leaderboard {
   username = computed(() => {
     const u = this.user();
     if (!u) return null;
-    return u.user_metadata?.['name'] || u.email || null;
+    return u.user_metadata?.['name'] || null;
   });
 
   private nextRunMs: number | null = null;
@@ -73,9 +73,18 @@ export class Leaderboard {
   constructor() {
     if (this.mode === 'full') {
       this.searchFullImmediate();
+      return;
     } else {
       this.refresh();
     }
+
+    // verificar username después del splash
+    effect(() => {
+      if (this.modalService.shouldCheckUsername()) {
+        this.checkAndPromptUsername();
+        this.modalService.shouldCheckUsername.set(false);
+      }
+    });
 
     // ver cambios de auth (login/logout)
     this.supabase.getClient().auth.onAuthStateChange((_event, session) => {
@@ -88,29 +97,9 @@ export class Leaderboard {
     this.supabase.getUser().then(async (r) => {
       const u = r.data.user ?? null;
       if (!u) {
-        // do not create network-backed anonymous sessions while in debug mode
-        if (!this.debugService?.isDebugMode) {
-          const anon = await this.supabase.signInAnonymously();
-          if (!anon.error) {
-            const rr = await this.supabase.getUser();
-            this.user.set(rr.data.user ?? null);
-          }
-        }
+        // en vez de crear la sesión aquí que se haga después del splash
       } else {
         this.user.set(u);
-      }
-
-      // mostrar el modal si aun no tiene usuario — pero esperar 5s para no pedirlo al instante
-      if (this.user() && !this.username()) {
-        // limpiar si hay un timer anterior
-        if (this.usernamePromptHandle) clearTimeout(this.usernamePromptHandle);
-        this.usernamePromptHandle = setTimeout(() => {
-          // verificar todavía no tenga nombre antes de abrir el modal
-          if (this.user() && !this.username()) {
-            this.openUsernameModal();
-          }
-          this.usernamePromptHandle = undefined;
-        }, 5000);
       }
 
       // configurar envios refrescos
@@ -323,6 +312,18 @@ export class Leaderboard {
 
   openUsernameModal() {
     this.modalService.openModal('username');
+  }
+
+  async checkAndPromptUsername() {
+    // Esperar a que se establezca la sesión del usuario
+    const result = await this.supabase.getUser();
+    if (result?.data?.user) {
+      this.user.set(result.data.user);
+      if (!this.username()) {
+        this.openUsernameModal();
+      }
+      if (this.user()) this.setupPeriodicSubmitAndRefresh();
+    }
   }
 
   openFullLeaderboard() {

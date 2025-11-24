@@ -26,6 +26,7 @@ export interface ConfirmDialogData {
 export class ModalService {
   public currentModal = signal<ModalType>(null);
   public confirmDialog = signal<ConfirmDialogData | null>(null);
+  public shouldCheckUsername = signal<boolean>(false);
 
   openModal(type: ModalType) {
     this.currentModal.set(type);
