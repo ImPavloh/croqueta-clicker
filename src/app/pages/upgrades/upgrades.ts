@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Producer } from '@ui/producer/producer';
 import { Upgrade } from '@ui/upgrade/upgrade';
@@ -31,10 +31,21 @@ export class Upgrades {
 
   constructor(public shopControls: ShopControlsService, private pointsService: PointsService) {}
 
-  // Mostrar todos los upgrades organizados por estado
-  allUpgrades = computed(() => {
+  // Mostrar upgrades filtrados por estado (comprados / no comprados)
+  filteredUpgrades = computed(() => {
     this.optionsService.gameItemsVersion();
-    return [...this.upgrades];
+    const list = [...this.upgrades];
+    const hideBought = this.shopControls.getShowBoughtFilter('upgrades')();
+    if (!hideBought) {
+      // If filter is OFF => show all upgrades
+      return list;
+    }
+    // If true => hide bought => show only not-bought
+    return list.filter((u) => {
+      const bought = this.optionsService.getGameItem('upgrade_' + u.id + '_bought');
+      const isBought = bought === 'true';
+      return !isBought;
+    });
   });
 
   // Obtener cantidad de un productor desde localStorage

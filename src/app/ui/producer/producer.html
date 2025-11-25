@@ -9,7 +9,7 @@
   (click)="buyProducer()"
   [noSound]="true"
 >
-  @if (unlocked) { @if (shopControls.gridView()) {
+  @if (unlocked) {
   <div class="producer-grid-content">
     <img class="producer-grid-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
     <p class="producer-grid-name">{{ config.name | transloco }}</p>
@@ -31,45 +31,6 @@
     </p>
   </div>
   } @else {
-  <div class="producer-list-content">
-    <img class="producer-list-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
-
-    <div class="producer-list-info">
-      <p class="producer-list-name">{{ config.name | transloco }}</p>
-      <div class="producer-list-price">
-        <span [ngClass]="pointsService.points().gte(price) ? 'text-green-700' : 'text-red-600'">
-          {{ price | short }} ¢
-        </span>
-        @if (shopControls.buyAmount() > 1) {
-        <span class="buy-multiplier">(x{{ shopControls.buyAmount() }})</span>
-        }
-      </div>
-    </div>
-
-    <div class="producer-list-stats">
-      @if (quantity > 0) {
-      <div class="stat-group">
-        <p class="stat-label">{{ 'producers.owned' | transloco }}</p>
-        <p class="stat-value owned">{{ quantity }}</p>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-group">
-        <p class="stat-label">{{ 'producers.production' | transloco }}</p>
-        <p class="stat-value production">
-          {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
-        </p>
-      </div>
-      } @else {
-      <div class="stat-group">
-        <p class="stat-label">{{ 'producers.willProduce' | transloco }}</p>
-        <p class="stat-value will-produce">
-          {{ points | short }} {{ 'producers.cps' | transloco }}
-        </p>
-      </div>
-      }
-    </div>
-  </div>
-  } } @else { @if (shopControls.gridView()) {
   <div class="producer-grid-content producer-grid-locked">
     <img
       class="producer-grid-image locked-image"
@@ -79,17 +40,6 @@
     <p class="producer-grid-name locked-name">{{ config.name | transloco }}</p>
     <p class="locked-level-text">{{ 'producers.level' | transloco }} {{ config.level }}</p>
   </div>
-  } @else {
-  <div class="producer-locked-list">
-    <img
-      class="producer-locked-image"
-      src="{{ config.image }}"
-      alt="{{ config.name | transloco }}"
-    />
-    <div class="producer-locked-info">
-      <p class="producer-locked-name">{{ config.name | transloco }}</p>
-    </div>
-  </div>
-  } }
+  }
 </app-button>
 }

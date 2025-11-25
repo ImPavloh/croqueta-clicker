@@ -31,7 +31,7 @@ export class Leaderboard implements OnInit {
   top = signal<Array<any>>([]);
   loading = signal(false);
   message = signal('');
-  expanded = signal(true);
+  expanded = signal(false);
   nextUpdateRemaining = signal<number>(0);
   user = signal<any | null>(null);
   pendingCount = signal<number>(0);
@@ -173,7 +173,7 @@ export class Leaderboard implements OnInit {
     }
 
     this.loading.set(true);
-    const res = await this.supabase.getTopScores(5);
+    const res = await this.supabase.getTopScores(3);
     if (res.error) {
       this.message.set(
         this.translocoService.translate('leaderboard.errorWithDetail', {
@@ -324,7 +324,6 @@ export class Leaderboard implements OnInit {
       clearTimeout(this.scheduleTimerHandle);
       this.scheduleTimerHandle = undefined;
     }
-    // do nothing if debug mode is active
     try {
       if (this.debugService?.isDebugMode) {
         this.nextUpdateRemaining.set(0);

@@ -2,6 +2,8 @@
   display: block;
   overflow: hidden !important;
   height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
 }
 
 .upgrades-section {
@@ -14,14 +16,19 @@
   max-width: 400px;
 }
 
+.upgrades-section {
+  min-height: 0;
+}
+
 .upgrades {
   mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0.5rem;
   overflow-y: auto;
+  max-height: 100%;
+  box-sizing: border-box;
   flex: 1;
 
   /* ahora mismo el usuario no sabe que puede hacer scroll (se lo ocultamos),
@@ -48,6 +55,13 @@
   padding: 8px 10px;
   outline: none;
   color: #b87333;
+}
+
+.controls-grid {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .controls-grid .search-input:focus {
@@ -83,8 +97,6 @@
 
 .upgrades {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0));
-  border-radius: 8px;
-  padding: 0.25rem 0.25rem;
 }
 
 .producers-container {
@@ -93,6 +105,8 @@
   overflow-y: auto;
   flex: 1 1 auto;
   min-height: 0;
+  max-height: 100%;
+  box-sizing: border-box;
 
   /* ahora mismo el usuario no sabe que puede hacer scroll (se lo ocultamos),
   enseñaserlo visualmente con una flecha o algo similar */
@@ -164,20 +178,19 @@
     max-width: none;
     padding-bottom: 0;
     order: 1;
-    max-height: 50vh;
   }
 
   .upgrades {
-    mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
     gap: 6px;
     padding: 0.5rem 0.25rem;
   }
 
   .producers-container {
     padding: 0.5rem 0.25rem;
-    mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
   }
 
   .divider-vertical {

@@ -26,14 +26,11 @@
       class="producers-panel flex flex-col w-full flex-1 min-w-0"
       [class.mobile-hidden]="mobileTab === 'upgrades'"
     >
-      <app-shop-controls />
-      <div class="producers-container" [ngClass]="{ 'producers-grid': shopControls.gridView() }">
-        <div class="producers-list flex flex-col gap-2 md:gap-4 p-2 md:p-4">
+      <app-shop-controls context="producers" />
+      <div class="producers-container producers-grid">
+        <div class="producers-list gap-2 md:gap-4 p-2 md:p-4">
           @for (producer of producers; track producer.id) {
-          <app-producer
-            [config]="producer"
-            [class.producer-compact]="shopControls.gridView()"
-          ></app-producer>
+          <app-producer [config]="producer" class="producer-compact"></app-producer>
           } @empty {
           <div
             class="no-producers-placeholder flex justify-center items-center p-8 text-amber-800 italic opacity-70"
@@ -52,13 +49,16 @@
       class="upgrades-panel flex flex-col upgrades-section"
       [class.mobile-hidden]="mobileTab === 'producers'"
     >
-      <h3
-        class="hidden md:block text-amber-800 font-semibold text-base md:text-lg text-center uppercase py-2"
-      >
-        {{ 'upgrades.title' | transloco }}
-      </h3>
-      <div class="upgrades flex flex-col">
-        @for (upgrade of allUpgrades(); track upgrade.id) {
+      <div class="w-full flex items-center justify-center 2xl:justify-between">
+        <div class="hidden md:block">
+          <app-shop-controls context="upgrades"></app-shop-controls>
+        </div>
+      </div>
+      <div class="block md:hidden px-2">
+        <app-shop-controls context="upgrades"></app-shop-controls>
+      </div>
+      <div class="upgrades flex flex-col gap-2 md:gap-4 p-2 md:p-4">
+        @for (upgrade of filteredUpgrades(); track upgrade.id) {
         <app-upgrade [config]="upgrade"></app-upgrade>
         }
       </div>

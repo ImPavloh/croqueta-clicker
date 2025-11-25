@@ -127,7 +127,6 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-japonesa.webp',
     unlockRequirement: { type: 'croquetas', value: 40000 },
   },
-  /*
   {
     id: 26,
     rarity: 'skins.rarity.rare',
@@ -136,8 +135,8 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.26.description',
     image: '/assets/skins/croqueta-love.webp',
     unlockRequirement: { type: 'level', value: 12 },
+    background: '/assets/backgrounds/bg-coqueta.webp',
   },
-  */
   {
     id: 27,
     rarity: 'skins.rarity.rare',
@@ -175,7 +174,6 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-alien.webp',
     unlockRequirement: { type: 'level', value: 25 },
   },
-  /*
   {
     id: 24,
     rarity: 'skins.rarity.epic',
@@ -185,8 +183,8 @@ export const SKINS: SkinModel[] = [
     image: '/assets/skins/croqueta-halloween.webp',
     particleImage: '/assets/skins/croqueta-halloween.webp',
     unlockRequirement: { type: 'level', value: 35 },
+    background: '/assets/backgrounds/bg-halloween.webp',
   },
-  */
   {
     id: 28,
     rarity: 'skins.rarity.epic',
@@ -197,7 +195,6 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-monster.webp',
     unlockRequirement: { type: 'croquetas', value: 350000 },
   },
-  /*
   {
     id: 29,
     rarity: 'skins.rarity.epic',
@@ -206,8 +203,8 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.29.description',
     image: '/assets/skins/croqueta-navidad.webp',
     unlockRequirement: { type: 'exp', value: 5000 },
+    background: '/assets/backgrounds/bg-navidad.webp',
   },
-  */
 
   // ============================================================
   // 🔵 ÉPICAS

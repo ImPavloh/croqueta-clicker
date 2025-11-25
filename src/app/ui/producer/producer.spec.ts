@@ -1,15 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Producer } from './producer';
-import { ProducerModel } from '@models/producer.model'; // Asegúrate de importar el modelo
-import { of } from 'rxjs'; // Necesario para simular Observables
+import { ProducerModel } from '@models/producer.model';
+import { of } from 'rxjs';
 import { PlayerStats } from '@services/player-stats.service';
 import { PointsService } from '@services/points.service';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
 
-// --- SIMULACIÓN DE SERVICIOS (MOCKS) ---
-// Define mocks para cada servicio inyectado en Producer.ts
+// mocks para cada servicio inyectado en Producer
 const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
   'level$',
   'addExp',
@@ -24,16 +23,13 @@ const mockPointsService = jasmine.createSpyObj('PointsService', [
   'upgradePointsPerSecond',
   'pointsPerClick',
 ]);
-// Simula los métodos que devuelven Signals/Decimal. Usaremos un objeto Decimal simulado.
+
+// simula los métodos que devuelven Signals/Decimal. Usaremos un objeto Decimal simulado.
 mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
 
 const mockAudioService = jasmine.createSpyObj('AudioService', ['playSfx']);
-const mockShopControlsService = jasmine.createSpyObj('ShopControlsService', [
-  'buyAmount',
-  'gridView',
-]);
+const mockShopControlsService = jasmine.createSpyObj('ShopControlsService', ['buyAmount']);
 mockShopControlsService.buyAmount.and.returnValue(1); // Simula el signal de compra
-mockShopControlsService.gridView.and.returnValue(false); // Por defecto, vista lista
 
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
 
@@ -50,8 +46,6 @@ const mockConfig: ProducerModel = {
   image: '',
   description: '',
 };
-
-// ----------------------------------------
 
 describe('Producer', () => {
   let component: Producer;
@@ -75,16 +69,16 @@ describe('Producer', () => {
     fixture = TestBed.createComponent(Producer);
     component = fixture.componentInstance;
 
-    // 👈 1. Establecer el @Input() config ANTES de la detección de cambios inicial
+    // Establecer el @Input() config ANTES de la detección de cambios inicial
     component.config = mockConfig;
 
-    // 👈 2. Detener cambios para disparar ngOnInit y los effects (que ahora verifican 'config')
+    // Detener cambios para disparar ngOnInit y los effects (que ahora verifican config)
     fixture.detectChanges();
 
-    // 👈 3. Verificar que el componente se haya creado
+    // Verificar que el componente se haya creado
     expect(component).toBeTruthy();
 
-    // 👈 OPCIONAL: Verificar que las inicializaciones básicas ocurrieron
+    // comprobar que las inicializaciones básicas ocurrieron
     expect(component.unlocked).toBeTrue();
     expect(component.price.toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
   });

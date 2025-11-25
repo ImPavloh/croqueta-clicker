@@ -4,6 +4,7 @@ import { OptionsService } from './options.service';
 export type BuyAmount = 1 | 10 | 25;
 export type SortOrder = 'default' | 'price-asc' | 'price-desc' | 'name';
 export type FilterType = 'all' | 'affordable';
+export type UpgradesBoughtFilter = 'all' | 'bought' | 'not-bought';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,8 @@ export class ShopControlsService {
   private _buyAmount = signal<BuyAmount>(1);
   readonly buyAmount = this._buyAmount.asReadonly();
 
-  // vista de la tienda: lista-grid
-  private _gridView = signal<boolean>(false);
-  readonly gridView = this._gridView.asReadonly();
+  // ver solo upgrades comprados (true) o no comprados (false) por contexto
+  private _showBoughtFilters = new Map<string, ReturnType<typeof signal>>();
 
   constructor() {
     this.loadFromStorage();
@@ -28,9 +28,15 @@ export class ShopControlsService {
     this.saveToStorage();
   }
 
-  // cambiar layout de vista a grid o lista
-  setGridView(value: boolean) {
-    this._gridView.set(value);
+  setShowBoughtFilter(context: string, show: boolean) {
+    const s = this.ensureFilterSignal(context);
+    s.set(show);
+    this.saveToStorage();
+  }
+
+  toggleShowBoughtFilter(context: string) {
+    const s = this.ensureFilterSignal(context);
+    s.update((v) => !v);
     this.saveToStorage();
   }
 
@@ -52,21 +58,36 @@ export class ShopControlsService {
       this._buyAmount.set(Number(stored) as BuyAmount);
     }
 
-    // cargar vista grid
-    const storedGrid = this.optionsService.getGameItem('shopGridView');
-    if (storedGrid === 'true' || storedGrid === 'false') {
-      this._gridView.set(storedGrid === 'true');
-    }
+    const storedUpgradesFilter = this.optionsService.getGameItem('filterUpgradesBought');
+    if (storedUpgradesFilter === 'true') this.ensureFilterSignal('upgrades').set(true);
+    else if (storedUpgradesFilter === 'false') this.ensureFilterSignal('upgrades').set(false);
+
+    const storedProducersFilter = this.optionsService.getGameItem('filterProducersBought');
+    if (storedProducersFilter === 'true') this.ensureFilterSignal('producers').set(true);
+    else if (storedProducersFilter === 'false') this.ensureFilterSignal('producers').set(false);
   }
 
   private saveToStorage() {
     if (typeof localStorage === 'undefined') return;
     this.optionsService.setGameItem('buyAmount', String(this._buyAmount()));
-    this.optionsService.setGameItem('shopGridView', String(this._gridView()));
+    const up = this._showBoughtFilters.get('upgrades');
+    if (up) this.optionsService.setGameItem('filterUpgradesBought', String(up()));
+    const pr = this._showBoughtFilters.get('producers');
+    if (pr) this.optionsService.setGameItem('filterProducersBought', String(pr()));
+  }
+
+  public getShowBoughtFilter(context: string) {
+    return this.ensureFilterSignal(context).asReadonly();
+  }
+
+  private ensureFilterSignal(context: string) {
+    if (!this._showBoughtFilters.has(context)) {
+      this._showBoughtFilters.set(context, signal<boolean>(false));
+    }
+    return this._showBoughtFilters.get(context)!;
   }
 
   public reset() {
     this._buyAmount.set(1);
-    this._gridView.set(false);
   }
 }

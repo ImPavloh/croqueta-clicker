@@ -60,12 +60,14 @@
         }
       </div>
 
+      @if (!(nextUpdateRemaining() !== null) || !(nextUpdateRemaining() <= 0)) {
       <div class="lp-sync-info">
         <div class="lp-countdown">
           {{ 'leaderboard.nextSync' | transloco }}:
           <strong>{{ formatMs(nextUpdateRemaining()) }}</strong>
         </div>
       </div>
+      }
       <div class="lp-list">
         @if (loading()) {
         <div class="lp-loading">{{ 'leaderboard.loading' | transloco }}</div>

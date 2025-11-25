@@ -307,7 +307,8 @@
     "price": "Price",
     "level": "Level",
     "requiredLevel": "Required level",
-    "bought": "Already bought"
+    "bought": "Already bought",
+    "hideBought": "Hide bought"
   },
   "producers": {
     "title": "Producers",
@@ -348,8 +349,6 @@
     "buyAmount_1": "Buy 1 at a time",
     "buyAmount_10": "Buy 10 at a time",
     "buyAmount_25": "Buy 25 at a time",
-    "listView": "List view",
-    "gridView": "Grid view",
     "noProducers": "No purchasable producers",
     "level": "Level",
     "bought": "Already bought",

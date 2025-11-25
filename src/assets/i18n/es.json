@@ -307,7 +307,8 @@
     "price": "Precio",
     "level": "Nivel",
     "requiredLevel": "Nivel requerido",
-    "bought": "Ya comprado"
+    "bought": "Ya comprado",
+    "hideBought": "Ocultar comprados"
   },
   "producers": {
     "title": "Productores",
@@ -348,8 +349,6 @@
     "buyAmount_1": "Comprar de 1 en 1",
     "buyAmount_10": "Comprar de 10 en 10",
     "buyAmount_25": "Comprar de 25 en 25",
-    "listView": "Vista lista",
-    "gridView": "Vista cuadrícula",
     "noProducers": "No hay productores comprables",
     "level": "Nivel",
     "bought": "Ya comprado",
