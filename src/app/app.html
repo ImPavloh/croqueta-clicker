@@ -25,6 +25,9 @@
       <div class="clicker-wrapper">
         <app-clicker />
       </div>
+      @if (isMobile) {
+      <app-leaderboard mode="panel" class="mobile-leaderboard" />
+      }
       <div class="mobile-bottom">
         <app-counter />
       </div>

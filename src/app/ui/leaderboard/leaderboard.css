@@ -444,6 +444,62 @@
   .lp-overlay {
     display: none;
   }
+
+  .lp-title {
+    gap: 0px;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay {
+    display: block;
+    pointer-events: none;
+    z-index: 900;
+  }
+
+  :host(.mobile-leaderboard) .lp-right {
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 72px;
+    transition: width 220ms ease, right 220ms ease, transform 220ms ease;
+  }
+
+  :host(.mobile-leaderboard) .lp-right.lp-collapsed {
+    width: 56px;
+    height: 56px;
+  }
+
+  :host(.mobile-leaderboard) .lp-right:not(.lp-collapsed) {
+    width: 240px;
+  }
+
+  :host(.mobile-leaderboard) .lp-collapsed .lp-title span {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :host(.mobile-leaderboard) .lp-collapsed .lp-toggle {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+  }
+
+  :host(.mobile-leaderboard) .lp-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.32);
+    justify-content: center;
+  }
+
+  :host(.mobile-leaderboard) .lp-right.lp-collapsed .lp-header {
+    padding: 8px;
+  }
+
+  :host(.mobile-leaderboard) .lp-body {
+    max-height: 60vh;
+  }
 }
 
 @media (max-height: 700px) {
