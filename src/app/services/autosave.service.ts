@@ -29,7 +29,7 @@ export class AutosaveService implements OnDestroy {
 
       // también guardar cuando se cierra/recarga la página (a no ser que se recargue la pagina por un reseteo o carga manual de datos)
       window.addEventListener('beforeunload', this.saveAll.bind(this));
-      // Safari (iOS) suele no disparar beforeunload — usar pagehide y visibilitychange
+      // Safari (iOS) suele no disparar beforeunload, usar pagehide y visibilitychange
       window.addEventListener('pagehide', this.saveAll.bind(this));
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') this.saveAll();

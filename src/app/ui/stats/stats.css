@@ -361,6 +361,29 @@
   margin: 0 auto;
 }
 
+.penalty-inline {
+  background: linear-gradient(135deg, #6b1f1f 0%, #5a1919 50%, #3b0f0f 100%);
+  border: 2px solid rgba(139, 0, 0, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.03),
+    0 0 0 2px rgba(139, 0, 0, 0.15);
+  padding: 8px 12px;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 0 auto;
+}
+
+.penalty-text {
+  font-size: 13px;
+  color: #ffd7d7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
 .bonus-content {
   display: flex;
   flex-direction: row;

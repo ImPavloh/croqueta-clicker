@@ -1,7 +1,5 @@
 import { SkinModel } from 'app/models/skin.model';
 
-// fondos implementados pero no usados (no hay imagenes de fondo de momento/no me convence ~ Pavloh)
-
 export const SKINS: SkinModel[] = [
   // ============================================================
   // 🟤 COMUNES
@@ -75,6 +73,7 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-coqueta.webp',
     unlockRequirement: { type: 'level', value: 13 },
     background: '/assets/backgrounds/bg-coqueta.webp',
+    counterLabel: 'skins.skin.20.counterLabel',
   },
   {
     id: 22,
@@ -84,7 +83,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.22.description',
     image: '/assets/skins/croqueta-3d.webp',
     particleImage: '/assets/skins/croqueta-3d.webp',
-    unlockRequirement: { type: 'level', value: 14 },
+    unlockRequirement: { type: 'level', value: 15 },
   },
   {
     id: 8,
@@ -94,7 +93,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.8.description',
     image: '/assets/skins/croqueta-dorada.webp',
     particleImage: '/assets/skins/croqueta-dorada.webp',
-    unlockRequirement: { type: 'level', value: 15 },
+    unlockRequirement: { type: 'achievement', id: 'bonus_event' },
     background: '/assets/backgrounds/bg-gold.webp',
   },
   {
@@ -105,7 +104,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.9.description',
     image: '/assets/skins/croqueta-quemada.webp',
     particleImage: '/assets/skins/croqueta-quemada.webp',
-    unlockRequirement: { type: 'croquetas', value: 10000 },
+    unlockRequirement: { type: 'achievement', id: 'penalty_event' },
     background: '/assets/backgrounds/bg-quemado.webp',
   },
   {

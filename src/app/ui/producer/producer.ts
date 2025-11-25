@@ -1,4 +1,5 @@
-import { Component, effect, inject, Input } from '@angular/core';
+import { Component, effect, inject, Input, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
@@ -16,7 +17,7 @@ import { TranslocoModule } from '@jsverse/transloco';
 @Component({
   selector: 'app-producer',
   standalone: true,
-  imports: [NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
+  imports: [CommonModule, NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
 })
@@ -37,7 +38,31 @@ export class Producer {
     }
   });
 
-  private level = toSignal(this.playerStats.level$, { initialValue: 0 });
+  public level = toSignal(this.playerStats.level$, { initialValue: 0 });
+  // experiencia actual y la necesaria para el siguiente nivel
+  currentExp = computed(() => this.playerStats.currentExp());
+  expToNext = computed(() => this.playerStats.expToNext());
+
+  // progreso hacia el nivel requerido (en %). Representamos el progreso como:
+  // progress = (current level + fraction of current level completed) / requiredLevel
+  // Esto permite ver cuánto queda aproximado para alcanzar el level objetivo aunque esté varios niveles por delante.
+  levelProgressPercent = computed(() => {
+    if (!this.config) return 0;
+    const target = Number(this.config.level) || 0;
+    if (target <= 0) return 100;
+
+    const currentLevel = this.level();
+    if (currentLevel >= target) return 100;
+
+    const curExp = Number(this.currentExp() || 0);
+    const nextExp = Number(this.expToNext() || 0);
+
+    const fractionInLevel = nextExp > 0 ? curExp / nextExp : 0;
+    const fractionalLevels = currentLevel + fractionInLevel;
+
+    const percent = (fractionalLevels / target) * 100;
+    return Math.max(0, Math.min(100, percent));
+  });
 
   levelEffect = effect(() => {
     if (this.config) {

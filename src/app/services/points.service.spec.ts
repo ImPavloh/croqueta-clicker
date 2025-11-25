@@ -1,6 +1,7 @@
 import { TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
 import { PointsService } from './points.service';
 import { GoldenCroquetaService } from './golden-croqueta.service';
+import { BurntCroquetaService } from './burnt-croqueta.service';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import Decimal from 'break_infinity.js';
@@ -9,6 +10,11 @@ import Decimal from 'break_infinity.js';
 class MockGoldenCroquetaService {
   isBonusActive = jasmine.createSpy('isBonusActive').and.returnValue(false);
   bonusMultiplier: Decimal = new Decimal(1);
+}
+
+class MockBurntCroquetaService {
+  isPenaltyActive = jasmine.createSpy('isPenaltyActive').and.returnValue(false);
+  penaltyMultiplier: Decimal = new Decimal(1);
 }
 
 // Mock para FloatingService
@@ -20,6 +26,7 @@ const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem'
 describe('PointsService', () => {
   let service: PointsService;
   let mockGoldenCroqueta: MockGoldenCroquetaService;
+  let mockBurntCroqueta: MockBurntCroquetaService;
 
   beforeEach(() => {
     mockGoldenCroqueta = new MockGoldenCroquetaService();
@@ -33,6 +40,7 @@ describe('PointsService', () => {
         { provide: GoldenCroquetaService, useValue: mockGoldenCroqueta },
         { provide: FloatingService, useValue: mockFloatingService },
         { provide: OptionsService, useValue: mockOptionsService },
+        { provide: BurntCroquetaService, useValue: mockBurntCroqueta },
       ],
     });
 
@@ -147,6 +155,18 @@ describe('PointsService', () => {
       discardPeriodicTasks();
     }));
 
+    it('should add points per second (with burnt penalty) via interval', fakeAsync(() => {
+      service = TestBed.inject(PointsService);
+      tick(2000);
+      service.upgradePointsPerSecond(25);
+      mockBurntCroqueta.isPenaltyActive.and.returnValue(true);
+      mockBurntCroqueta.penaltyMultiplier = new Decimal(0.5);
+      tick(1000);
+      expect(service.points().eq(new Decimal(12.5))).toBeTrue();
+      expect(mockFloatingService.show).toHaveBeenCalledWith('+12.5');
+      discardPeriodicTasks();
+    }));
+
     it('should NOT save to storage during initialization (first 2 seconds)', fakeAsync(() => {
       service = TestBed.inject(PointsService);
       service.addPointsPerClick();
@@ -197,6 +217,26 @@ describe('PointsService', () => {
       service.substractPoints(30);
       expect(service.points().eq(new Decimal(70))).toBeTrue();
       expect(mockOptionsService.setGameItem).toHaveBeenCalledWith('points', '70');
+      discardPeriodicTasks();
+    }));
+    it('should add points per click (with burnt croqueta inactive)', fakeAsync(() => {
+      service = TestBed.inject(PointsService);
+      tick(2000);
+      service.upgradePointPerClick(10);
+      mockBurntCroqueta.isPenaltyActive.and.returnValue(false);
+      service.addPointsPerClick();
+      expect(service.points().eq(new Decimal(10))).toBeTrue();
+      discardPeriodicTasks();
+    }));
+
+    it('should apply burnt croqueta penalty to clicks (reduce by multiplier)', fakeAsync(() => {
+      service = TestBed.inject(PointsService);
+      tick(2000);
+      service.upgradePointPerClick(10);
+      mockBurntCroqueta.isPenaltyActive.and.returnValue(true);
+      mockBurntCroqueta.penaltyMultiplier = new Decimal(0.5);
+      service.addPointsPerClick();
+      expect(service.points().eq(new Decimal(5))).toBeTrue();
       discardPeriodicTasks();
     }));
 

@@ -27,7 +27,9 @@ import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
 import { AutosaveService } from '@services/autosave.service';
 import { GoldenCroquetaService } from '@services/golden-croqueta.service';
+import { BurntCroquetaService } from '@services/burnt-croqueta.service';
 import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
+import { BurntCroqueta } from '@ui/burnt-croqueta/burnt-croqueta';
 import { Splash } from '@ui/splash/splash';
 import { StatsComponent } from '@ui/stats/stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
@@ -57,6 +59,7 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
     Modal,
     FloatingButtons,
     GoldenCroqueta,
+    BurntCroqueta,
     TranslocoModule,
     Splash,
     StatsComponent,
@@ -79,6 +82,7 @@ export class App implements OnInit, OnDestroy {
     private autosaveService: AutosaveService,
     private achievementsService: AchievementsService,
     private goldenCroquetaService: GoldenCroquetaService,
+    private burntCroquetaService: BurntCroquetaService,
     private skinsService: SkinsService,
     private modalService: ModalService,
     private debugService: DebugService,
@@ -137,10 +141,6 @@ export class App implements OnInit, OnDestroy {
           // ignorar errores (el leaderboard lo maneja, o deberia)
         });
       }
-
-      setTimeout(() => {
-        this.modalService.shouldCheckUsername.set(true);
-      }, 100);
     });
 
     // procesar pendientes cuando vuelva a estar online
@@ -176,6 +176,8 @@ export class App implements OnInit, OnDestroy {
       this.audioService.playMusic(url, true, 2);
     });
     this.goldenCroquetaService.startSpawnCheck();
+    // ensure the burnt croqueta spawn loop also runs
+    this.burntCroquetaService.startSpawnCheck();
   }
 
   // hago todo esto aquí por el cache del service worker que si no no funciona del todo bien, no siempre se actualiza

@@ -26,7 +26,7 @@ class MockPlayerStats {
   level$ = of(0);
 }
 
-describe('Leaderboard — username prompt delay', () => {
+describe('Leaderboard username prompt behavior', () => {
   let fixture: ComponentFixture<Leaderboard>;
   let component: Leaderboard;
   let modalService: MockModalService;
@@ -65,7 +65,7 @@ describe('Leaderboard — username prompt delay', () => {
     ) as unknown as MockModalService;
   });
 
-  it('does not open username modal immediately, opens after ~5s', fakeAsync(() => {
+  it('panel mode should not autoopen the username modal', fakeAsync(() => {
     fixture.detectChanges();
 
     tick(0);
@@ -73,6 +73,15 @@ describe('Leaderboard — username prompt delay', () => {
     expect(modalService.openModal).not.toHaveBeenCalled();
 
     tick(5000);
+    expect(modalService.openModal).not.toHaveBeenCalled();
+  }));
+
+  it('full mode should check and open username modal on init if user has no name', fakeAsync(() => {
+    fixture.componentInstance.mode = 'full';
+    fixture.detectChanges();
+
+    tick(0);
+
     expect(modalService.openModal).toHaveBeenCalledWith('username');
   }));
 });

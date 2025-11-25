@@ -104,6 +104,10 @@
       "title": "The golden croquette",
       "description": "Click on the golden croquette."
     },
+    "penalty_event": {
+      "title": "The burnt croquette",
+      "description": "Oh no... the burnt croquette gives you fewer points when clicked."
+    },
     "primer_skin": {
       "title": "New look",
       "description": "Change your skin for the first time."
@@ -191,7 +195,7 @@
     "languageTooltip": "Change the game language.",
     "resetGameModal": {
       "title": "Reset game",
-      "message": "Are you sure you want to reset your progress? This action cannot be undone — it will erase local progress and will also remove your current anonymous leaderboard entry and session.",
+      "message": "Are you sure you want to reset your progress? This action cannot be undone, it will erase local progress and will also remove your current anonymous leaderboard entry and session.",
       "confirmText": "Yes, reset",
       "cancelText": "Cancel"
     },
@@ -255,7 +259,7 @@
     "setUsernameError": "Error setting username. Please try again.",
     "setUsernameErrorDetail": "Could not set name: {{error}}",
     "enterUsername": "Please enter a username",
-    "usernameReservedOffline": "Offline — the username will be reserved when you reconnect.",
+    "usernameReservedOffline": "Offline, the username will be reserved when you reconnect.",
     "debugDisabledInteractions": "Username changes and leaderboard interactions are disabled in DEBUG mode",
     "checking": "Checking...",
     "confirm": "Confirm"
@@ -332,7 +336,7 @@
     "producer_9_description": "An interdimensional portal that brings croquettes from other universes.",
     "producer_10_name": "Fry-up Singularity",
     "producer_10_description": "AI that dominates the universe and produces croquettes on a large scale.",
-    "producer_11_name": "CrispyCosmos Corp. ©",
+    "producer_11_name": "CrispyCosmos Corp.",
     "producer_11_description": "Corporation that exploits resources from different timelines to manufacture croquettes.",
     "producer_12_name": "Quantum Breading Engine",
     "producer_12_description": "A quantum engine that synthesizes croquettes instantly.",
@@ -356,7 +360,8 @@
     "exp": "Experience",
     "requiredLevel": "Required level",
     "buy": "Buy",
-    "owned": "Already bought"
+    "owned": "Already bought",
+    "locked": "Locked"
   },
   "skins": {
     "title": "Skins",
@@ -385,7 +390,11 @@
       "4": { "name": "Cheese", "description": "A creamy and delicious cheese croquette" },
       "5": { "name": "Cod", "description": "A traditional and tasty cod croquette" },
       "6": { "name": "Mushroom", "description": "An exquisite and aromatic mushroom croquette" },
-      "7": { "name": "Coquette", "description": "A divine and stylish croquette" },
+      "7": {
+        "name": "Coquette",
+        "description": "A divine and stylish croquette",
+        "counterLabel": "coquettes"
+      },
       "8": { "name": "Golden", "description": "A luxury croquette, probably toxic." },
       "9": { "name": "Burnt", "description": "Too much time in the fryer... crunchy to a crisp." },
       "10": {
@@ -477,7 +486,8 @@
     "level": "Level",
     "time": "Time",
     "clicks": "Clicks",
-    "bonus": "BONUS"
+    "bonus": "BONUS",
+    "penalty": "BURNED"
   },
   "tutorial": {
     "welcome": "Hi! I'm Croquetita. Welcome to the world of croquettes! Click on the big croquette to start your culinary adventure.",

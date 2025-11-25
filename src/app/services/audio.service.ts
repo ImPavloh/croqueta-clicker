@@ -5,12 +5,9 @@ import { combineLatest, Subscription } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AudioService implements OnDestroy {
   private ctx: AudioContext | null = null;
-
-  // Gains
   private masterGain!: GainNode;
   private sfxGain!: GainNode;
   private musicGain!: GainNode;
-
   private optionsSub?: Subscription;
 
   // Música actual (para crossfade)
@@ -28,7 +25,7 @@ export class AudioService implements OnDestroy {
     // lazy init: no crear AudioContext hasta que sea necesario (por política de user gesture)
   }
 
-  // --- Inicialización lazy del AudioContext y nodos ---
+  // Inicialización lazy del AudioContext y nodos
   private ensureCtx() {
     if (this.ctx) return;
 
@@ -56,7 +53,7 @@ export class AudioService implements OnDestroy {
     this.sfxGain = this.ctx.createGain();
     this.musicGain = this.ctx.createGain();
 
-    // chain: sfxGain -> masterGain -> destination; musicGain -> masterGain -> destination
+    // sfxGain -> masterGain -> destination; musicGain -> masterGain -> destination
     this.sfxGain.connect(this.masterGain);
     this.musicGain.connect(this.masterGain);
     this.masterGain.connect(this.ctx.destination);
@@ -88,7 +85,7 @@ export class AudioService implements OnDestroy {
     });
   }
 
-  // --- Resume (usar en primer gesto del usuario) ---
+  // Resume (usar en primer gesto del usuario)
   // resumeIfNeeded mejorado
   async resumeIfNeeded() {
     // Asegurar contexto y nodos
@@ -104,7 +101,7 @@ export class AudioService implements OnDestroy {
     }
   }
 
-  // ---------------- SFX (pueden superponerse) ----------------
+  // SFX (pueden superponerse)
   /**
    * Reproduce un SFX desde URL. Se decodifica y cachea AudioBuffer.
    * volumeMultiplier es relativo (0..1) y se multiplica por el gain SFX global y master.
@@ -155,7 +152,7 @@ export class AudioService implements OnDestroy {
     this.sfxBufferCache.set(url, buffer);
   }
 
-  // ---------------- Música (no superponer, crossfade) ----------------
+  // Música (no superponer, crossfade)
   /**
    * Cambia música con crossfade suave.
    * - url: ruta
@@ -285,7 +282,7 @@ export class AudioService implements OnDestroy {
     }, (fadeOutSec + 0.05) * 1000);
   }
 
-  // ---------------- Utilities / cleanup ----------------
+  //  Utilities / cleanup
   private clamp(v: number) {
     return Math.max(0, Math.min(1, v));
   }

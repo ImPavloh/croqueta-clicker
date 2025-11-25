@@ -81,13 +81,22 @@ export class PlayerStats {
 
   /**
    * Actualiza la experiencia por click
-   * Fórmula BALANCEADA para progresión lenta y satisfactoria
+   * Recompensa el click activo sin desbordar niveles
+   * Reduce el crecimiento y aplica soft cap en lategame
    */
   upgradeExpPerClick(pointsPerClick: Decimal): void {
-    // XP = (puntosPorClick ^ 0.5) + log10(puntosPorClick + 1) * 2
     const powerPart = pointsPerClick.pow(0.5);
     const logPart = new Decimal(pointsPerClick.plus(1).log10()).times(2);
-    let newExpDecimal = powerPart.plus(logPart).floor();
+    let newExpDecimal = powerPart.plus(logPart).times(0.85);
+
+    // Soft cap sobre la XP resultante para evitar explosiones en lategame
+    // Si la xp por click supera 50 el exceso crece con rendimientos decrecientes
+    const softCap = new Decimal(50);
+    if (newExpDecimal.gt(softCap)) {
+      newExpDecimal = softCap.plus(newExpDecimal.minus(softCap).pow(0.65));
+    }
+
+    newExpDecimal = newExpDecimal.floor();
 
     // convertir a number de forma segura
     let newExp: number;
@@ -100,12 +109,35 @@ export class PlayerStats {
       newExp = Number.MAX_SAFE_INTEGER;
     }
 
+    // aplicar cap porcentual relativo al nivel actual
+    const expToNext = this._expToNext();
+    const capPercent = this.getExpClickCapPercent();
+    const maxAllowed = Math.max(1, Math.floor(expToNext * capPercent));
+    if (newExp > maxAllowed) {
+      newExp = maxAllowed;
+    }
+
     this._expPerClick.set(Math.max(1, newExp)); // nunca menos de 1
+  }
+
+  // porcentaje máximo de exp que se puede otorgar un click respecto a expToNext
+  // escala con el progreso para evitar saltos excesivos de niveles
+  // cuanto más alto el nivel, menor el porcentaje permitido
+  // seguramente haya que ajustarlo en el futuro (sobretodo si metemos los prestigios)
+  private getExpClickCapPercent(): number {
+    const lvl = this._level.value;
+    if (lvl < 5) return 0.08; // muy early 8%
+    if (lvl < 10) return 0.05; // early 5% para enganchar
+    if (lvl < 20) return 0.04; // early tardío 4%
+    if (lvl < 50) return 0.03; // mid temprano 3%
+    if (lvl < 100) return 0.02; // mid tardío 2%
+    if (lvl < 300) return 0.015; // late temprano 1%
+    return 0.005; // late/end game 0.5%
   }
 
   /**
    * Calcula la experiencia necesaria por nivel
-   * Curva AGRESIVA para progresión lenta (PERO satisfactoria)
+   * Curva para progresión satisfactoria
    */
   private calculateExpToNext(): void {
     const n = this._level.value;
@@ -114,27 +146,26 @@ export class PlayerStats {
       return;
     }
 
-    // Fórmula EXPONENCIAL AGRESIVA para niveles lentos:
-    // Early game (0-20): crece rápido para enganchar
-    // Mid game (20-100): crecimiento exponencial fuerte
-    // Late game (100+): exponencial MUY fuerte
+    // Early game (0-20): progresión moderada para enganchar
+    // Mid game (20-100): crecimiento más suave
+    // Late game (100+): desafiante pero alcanzable
 
     let expNeeded: number;
 
     if (n <= 20) {
-      // Early: 100 * 1.25^n (crece rápido pero razonable)
-      expNeeded = Math.floor(100 * Math.pow(1.25, n));
+      // Early: 100 * 1.20^n (más suave que 1.25)
+      expNeeded = Math.floor(100 * Math.pow(1.2, n));
     } else if (n <= 100) {
-      // Mid: base más alta + exponencial más fuerte
-      const earlyGameExp = Math.floor(100 * Math.pow(1.25, 20));
+      // Mid: escalado reducido
+      const earlyGameExp = Math.floor(100 * Math.pow(1.2, 20));
       const midGameLevels = n - 20;
-      expNeeded = Math.floor(earlyGameExp * Math.pow(1.18, midGameLevels));
+      expNeeded = Math.floor(earlyGameExp * Math.pow(1.15, midGameLevels));
     } else {
-      // Late: exponencial MUY fuerte
-      const earlyGameExp = Math.floor(100 * Math.pow(1.25, 20));
-      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.18, 80));
+      // Late: más accesible
+      const earlyGameExp = Math.floor(100 * Math.pow(1.2, 20));
+      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.15, 80));
       const lateGameLevels = n - 100;
-      expNeeded = Math.floor(midGameExp * Math.pow(1.15, lateGameLevels));
+      expNeeded = Math.floor(midGameExp * Math.pow(1.12, lateGameLevels));
     }
 
     this._expToNext.set(Math.max(100, expNeeded));

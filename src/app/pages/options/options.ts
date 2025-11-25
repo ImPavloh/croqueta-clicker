@@ -178,7 +178,6 @@ export class Options {
   }
 
   shareGame() {
-    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     const totalClicks = this.shortNumberPipe.transform(this.playerStats.totalClicks(), 0);
     const timePlaying = this.formatTime(this.playerStats.timePlaying());
     const level = this.playerStats._level.getValue();

@@ -1,6 +1,6 @@
 <app-button
   type="button"
-  variant="quaternary"
+  variant="golden"
   [disabled]="!unlocked || bought || pointsService.points().lt(config.price)"
   [hoverable]="unlocked && !bought && pointsService.points().gte(config.price)"
   [clickable]="unlocked && !bought"

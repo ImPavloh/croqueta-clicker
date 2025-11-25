@@ -38,7 +38,19 @@
       alt="{{ config.name | transloco }}"
     />
     <p class="producer-grid-name locked-name">{{ config.name | transloco }}</p>
-    <p class="locked-level-text">{{ 'producers.level' | transloco }} {{ config.level }}</p>
+    <p class="producer-grid-name locked-name">
+      {{ 'producers.locked' | transloco }}
+    </p>
+
+    <div class="w-full">
+      <div class="level-progress-container" aria-hidden="false">
+        <div class="level-progress-bg">
+          <div class="level-progress-fill" [style.width.%]="levelProgressPercent()"></div>
+        </div>
+
+        <p class="level-progress-text">{{ 'producers.level' | transloco }} {{ config.level }}</p>
+      </div>
+    </div>
   </div>
   }
 </app-button>

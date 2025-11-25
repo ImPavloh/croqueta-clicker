@@ -483,6 +483,10 @@
     width: 0;
   }
 
+  :host(.mobile-leaderboard) .lp-collapsed .lp-header {
+    gap: 0;
+  }
+
   :host(.mobile-leaderboard) .lp-header {
     width: 100%;
     height: 100%;

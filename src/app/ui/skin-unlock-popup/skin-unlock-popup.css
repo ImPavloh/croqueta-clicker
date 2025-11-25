@@ -24,7 +24,7 @@
 
 .card {
   position: relative;
-  min-width: 320px;
+  min-width: 150px;
   max-width: 440px;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(31, 41, 55, 0.98) 0%, rgba(17, 24, 39, 0.99) 100%);

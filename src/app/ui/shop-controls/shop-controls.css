@@ -2,7 +2,6 @@
   display: block;
 }
 
-/* Ensure the root row can adapt on small screens */
 :host > div {
   width: 100%;
 }
@@ -16,7 +15,6 @@
     justify-content: center;
   }
 
-  /* Let button groups wrap nicely */
   :host > div > div {
     flex: 0 1 auto;
   }

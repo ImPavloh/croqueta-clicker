@@ -2,32 +2,30 @@
   <ng-content></ng-content>
 </ng-template>
 
-<ng-container *ngIf="routerLink; else plainButton">
-  <a
-    [routerLink]="routerLink"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
-    [class]="'btn btn-' + variant + ' ' + (size ? 'btn-' + size : '') + ' ' + customClass"
-    [class.clickable]="clickable"
-    [class.disabled]="disabled"
-    [attr.aria-disabled]="disabled ? true : null"
-    [attr.tabindex]="disabled ? -1 : null"
-  >
-    <ng-container [ngTemplateOutlet]="projected"></ng-container>
-  </a>
-</ng-container>
-
-<ng-template #plainButton>
-  <button
-    [type]="type"
-    (click)="onClick()"
-    [class]="'btn btn-' + variant + ' ' + (size ? 'btn-' + size : '') + ' ' + customClass"
-    [class.active]="active"
-    [class.hoverable]="hoverable"
-    [class.clickable]="clickable"
-    [class.disabled]="disabled"
-    [attr.disabled]="disabled ? true : null"
-  >
-    <ng-container [ngTemplateOutlet]="projected"></ng-container>
-  </button>
-</ng-template>
+@if (routerLink) {
+<a
+  [routerLink]="routerLink"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: routerLinkActiveExact }"
+  class="btn btn-{{ variant }} {{ size ? 'btn-' + size : '' }} {{ customClass }}"
+  [class.clickable]="clickable"
+  [class.disabled]="disabled"
+  [attr.aria-disabled]="disabled ? true : null"
+  [attr.tabindex]="disabled ? -1 : null"
+>
+  <ng-container [ngTemplateOutlet]="projected"></ng-container>
+</a>
+} @else {
+<button
+  [type]="type"
+  (click)="onClick()"
+  class="btn btn-{{ variant }} {{ size ? 'btn-' + size : '' }} {{ customClass }}"
+  [class.active]="active"
+  [class.hoverable]="hoverable"
+  [class.clickable]="clickable"
+  [class.disabled]="disabled"
+  [attr.disabled]="disabled ? true : null"
+>
+  <ng-container [ngTemplateOutlet]="projected"></ng-container>
+</button>
+}

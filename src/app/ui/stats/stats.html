@@ -78,6 +78,15 @@
         <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
       </div>
     </div>
+    } @if (burntCroquetaService.isPenaltyActive()) {
+    <div class="penalty-inline">
+      <div class="bonus-content">
+        <span class="penalty-text"
+          >{{ 'clicker.penalty' | transloco }} x{{ burntCroquetaService.penaltyMultiplier }}</span
+        >
+        <span class="bonus-time">{{ burntCroquetaService.penaltyTimeLeft() }}s</span>
+      </div>
+    </div>
     }
   </div>
 </div>
@@ -159,6 +168,15 @@
           >{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span
         >
         <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
+      </div>
+    </div>
+    } @if (burntCroquetaService.isPenaltyActive()) {
+    <div class="penalty-inline ds-bonus">
+      <div class="bonus-content">
+        <span class="penalty-text"
+          >{{ 'clicker.penalty' | transloco }} x{{ burntCroquetaService.penaltyMultiplier }}</span
+        >
+        <span class="bonus-time">{{ burntCroquetaService.penaltyTimeLeft() }}s</span>
       </div>
     </div>
     }

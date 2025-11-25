@@ -9,10 +9,19 @@
 export const GAME_PREFIX = 'croquetaclicker_';
 
 /**
- * Configuración del evento de la Croqueta Dorada
+ * Configuración del evento de la Croqueta Dorada (bonificación)
  */
 export const GOLDEN_CROQUETA_CHECK_INTERVAL_MS = 60000; // Cada 60 segundos, comprueba si debe aparecer
-export const GOLDEN_CROQUETA_SPAWN_CHANCE = 0.12; // 12% de probabilidad en cada intervalo
+export const GOLDEN_CROQUETA_SPAWN_CHANCE = 0.1; // 10% de probabilidad en cada intervalo
 export const GOLDEN_CROQUETA_LIFETIME_MS = 5000; // La croqueta dorada dura 5 segundos en pantalla
 export const GOLDEN_CROQUETA_BONUS_DURATION_MS = 20000; // El bonus dura 20 segundos
 export const GOLDEN_CROQUETA_BONUS_MULTIPLIER = 2; // Multiplica x2 los puntos
+
+/**
+ * Configuración del evento de la Croqueta Quemada (penalización)
+ */
+export const BURNT_CROQUETA_CHECK_INTERVAL_MS = 90000; // Cada 90 segundos, comprueba si debe aparecer
+export const BURNT_CROQUETA_SPAWN_CHANCE = 0.12; // 12% de probabilidad en cada intervalo
+export const BURNT_CROQUETA_LIFETIME_MS = 8000; // Dura 8 segundos en pantalla
+export const BURNT_CROQUETA_PENALTY_DURATION_MS = 20000; // Penalización dura 20 segundos
+export const BURNT_CROQUETA_PENALTY_MULTIPLIER = 0.5; // Reduce a la mitad los puntos

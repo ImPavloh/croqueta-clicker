@@ -104,6 +104,10 @@
       "title": "La croqueta dorada",
       "description": "Haz click en la croqueta dorada."
     },
+    "penalty_event": {
+      "title": "La croqueta quemada",
+      "description": "Ups. La croqueta quemada te da menos puntos si haces click."
+    },
     "primer_skin": {
       "title": "Cambio de look",
       "description": "Cambia de skin por primera vez."
@@ -332,7 +336,7 @@
     "producer_9_description": "Un portal interdimensional que trae croquetas de otros universos.",
     "producer_10_name": "Singularidad Fritanga",
     "producer_10_description": "IA que domina el universo y produce croquetas a gran escala.",
-    "producer_11_name": "CrispyCosmos Corp. ©",
+    "producer_11_name": "CrispyCosmos Corp.",
     "producer_11_description": "Corporación que explota recursos de diferentes lineas temporales para fabricar croquetas.",
     "producer_12_name": "Motor de Rebozado Cuántico",
     "producer_12_description": "Un motor cuántico que sintetiza croquetas instantáneamente.",
@@ -356,7 +360,8 @@
     "exp": "Experiencia",
     "requiredLevel": "Nivel requerido",
     "buy": "Comprar",
-    "owned": "Ya comprado"
+    "owned": "Ya comprado",
+    "locked": "Bloqueado"
   },
   "skins": {
     "title": "Skins",
@@ -385,7 +390,11 @@
       "4": { "name": "Queso", "description": "Una croqueta de queso cremosa y deliciosa" },
       "5": { "name": "Bacalao", "description": "Una croqueta de bacalao tradicional y sabrosa" },
       "6": { "name": "Setas", "description": "Una croqueta de setas exquisita y aromática" },
-      "7": { "name": "Coqueta", "description": "Una croqueta divina y con estilo" },
+      "7": {
+        "name": "Coqueta",
+        "description": "Una croqueta divina y con estilo",
+        "counterLabel": "coquetas"
+      },
       "8": { "name": "Dorada", "description": "Una croqueta de lujo, probablemente tóxica." },
       "9": {
         "name": "Quemada",
@@ -486,7 +495,8 @@
     "level": "Nivel",
     "time": "Tiempo",
     "clicks": "Clicks",
-    "bonus": "BONUS"
+    "bonus": "BONUS",
+    "penalty": "QUEMADA"
   },
   "tutorial": {
     "welcome": "¡Hola! Soy Croquetita ¡Bienvenido al mundo de las croquetas! Haz click en la croqueta grande para empezar tu aventura culinaria.",

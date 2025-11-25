@@ -1,4 +1,13 @@
-import { Component, computed, inject, signal, OnInit, Input, effect } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  OnInit,
+  Input,
+  effect,
+  ElementRef,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +17,7 @@ import { DebugService } from '@services/debug.service';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { ModalService } from '@services/modal.service';
+import { AudioService } from '@services/audio.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
 
@@ -27,6 +37,7 @@ export class Leaderboard implements OnInit {
   private modalService = inject(ModalService);
   private playerStats = inject(PlayerStats);
   private translocoService = inject(TranslocoService);
+  private audioService = inject(AudioService);
 
   top = signal<Array<any>>([]);
   loading = signal(false);
@@ -75,9 +86,17 @@ export class Leaderboard implements OnInit {
 
   private _nextRunKeyPrefix = 'leaderboard:next_run:';
 
+  // handler for closing when tapping outside on mobile devices
+  private _outsideTouchHandler?: (ev: Event) => void;
+  private _isTouchDevice =
+    (typeof navigator !== 'undefined' && ((navigator as any).maxTouchPoints ?? 0) > 0) ||
+    (typeof window !== 'undefined' && 'ontouchstart' in window);
+  private readonly elRef = inject(ElementRef<HTMLElement>);
+
   ngOnInit() {
     if (this.mode === 'full') {
       this.searchFullImmediate();
+      this.checkAndPromptUsername();
     }
   }
 
@@ -158,6 +177,40 @@ export class Leaderboard implements OnInit {
           this.setupPeriodicSubmitAndRefresh();
         }
       } catch {}
+    });
+
+    // close leaderboard when tapping outside on touch devices (mobile)
+    effect(() => {
+      // only relevant for the small panel mode and on touch devices
+      if (this.mode !== 'panel' || !this._isTouchDevice) return;
+
+      // if expanded attach a global touchstart listener that will collapse
+      if (this.expanded()) {
+        // create handler
+        this._outsideTouchHandler = (ev: Event) => {
+          try {
+            const el = this.elRef?.nativeElement as HTMLElement | null;
+            if (!el) return;
+            // if the event happened inside the component, ignore
+            const path = (ev as any).composedPath?.() as EventTarget[] | undefined;
+            if (path && path.includes(el)) return;
+            if (el.contains(ev.target as Node)) return;
+
+            // otherwise collapse
+            this.expanded.set(false);
+          } catch {}
+        };
+
+        document.addEventListener('touchstart', this._outsideTouchHandler as EventListener, {
+          passive: true,
+        });
+      } else {
+        // remove existing handler when not expanded
+        if (this._outsideTouchHandler) {
+          document.removeEventListener('touchstart', this._outsideTouchHandler as EventListener);
+          this._outsideTouchHandler = undefined;
+        }
+      }
     });
   }
 
@@ -423,10 +476,19 @@ export class Leaderboard implements OnInit {
     try {
       if (this._onlineHandler) window.removeEventListener('online', this._onlineHandler);
     } catch {}
+    try {
+      if (this._outsideTouchHandler) {
+        document.removeEventListener('touchstart', this._outsideTouchHandler as EventListener);
+        this._outsideTouchHandler = undefined;
+      }
+    } catch {}
   }
 
   togglePanel() {
     this.expanded.update((v) => !v);
+    try {
+      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    } catch {}
   }
 
   openUsernameModal() {
@@ -460,6 +522,9 @@ export class Leaderboard implements OnInit {
 
   async searchFullImmediate() {
     const q = (this.query() ?? '').trim();
+    try {
+      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    } catch {}
     const p = this.page();
 
     const key = `${q}:${p}`;

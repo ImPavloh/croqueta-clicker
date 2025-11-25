@@ -83,7 +83,7 @@
       </div>
 
       <div class="flex justify-center">
-        <app-button size="sm" variant="tertiary" (click)="openFullLeaderboard()">
+        <app-button size="sm" variant="tertiary" (click)="openFullLeaderboard()" [noSound]="true">
           {{ 'leaderboard.viewAll' | transloco }}
         </app-button>
       </div>
@@ -104,15 +104,10 @@
       [disabled]="loading()"
       aria-label="{{ 'leaderboard.search' | transloco }}"
     />
-    <button
-      class="lp-btn-small"
-      (click)="searchFullImmediate()"
-      [disabled]="loading()"
-      aria-busy="{{ loading() }}"
-    >
+    <app-button size="sm" variant="tertiary" (click)="searchFullImmediate()" [disabled]="loading()">
       @if (loading()) {<span class="lp-spinner" aria-hidden="true">●</span> }
       {{ 'leaderboard.search' | transloco }}
-    </button>
+    </app-button>
   </div>
 
   @if (message()) {
@@ -145,19 +140,25 @@
   }
 
   <div class="lp-pagination">
-    <button class="lp-btn-small" (click)="prevPage()" [disabled]="page() === 0 || loading()">
+    <app-button
+      size="sm"
+      variant="tertiary"
+      (click)="prevPage()"
+      [disabled]="page() === 0 || loading()"
+    >
       {{ 'leaderboard.previous' | transloco }}
-    </button>
+    </app-button>
     <div class="lp-page-info">
       {{ 'leaderboard.page' | transloco }} {{ page() + 1 }} / {{ totalPages() || 0 }}
     </div>
-    <button
-      class="lp-btn-small"
+    <app-button
+      size="sm"
+      variant="tertiary"
       (click)="nextPage()"
       [disabled]="page() + 1 >= totalPages() || loading()"
     >
       {{ 'leaderboard.next' | transloco }}
-    </button>
+    </app-button>
   </div>
 </div>
 }

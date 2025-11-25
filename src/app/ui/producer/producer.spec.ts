@@ -13,8 +13,12 @@ const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
   'level$',
   'addExp',
   'upgradeExpPerClick',
+  'currentExp',
+  'expToNext',
 ]);
 mockPlayerStats.level$ = of(0); // Simula el Observable para toSignal
+mockPlayerStats.currentExp.and.returnValue(40);
+mockPlayerStats.expToNext.and.returnValue(100);
 
 const mockPointsService = jasmine.createSpyObj('PointsService', [
   'points',
@@ -96,10 +100,18 @@ describe('Producer', () => {
     expect(component.unlocked).toBeFalse();
 
     const el = fixture.nativeElement as HTMLElement;
-    const locked = el.querySelector('.producer-locked');
+    const locked =
+      el.querySelector('.producer-locked') || el.querySelector('.producer-grid-locked');
     expect(locked).toBeTruthy();
 
     // debe mostrar el número de nivel requerido
     expect(el.textContent).toContain('5');
+
+    // mostrar barra de progreso y texto con nivel y porcentaje
+    const progressFill = el.querySelector('.level-progress-fill') as HTMLElement | null;
+    expect(progressFill).toBeTruthy();
+
+    const progressText = el.querySelector('.level-progress-text');
+    expect(progressText?.textContent).toContain('0');
   });
 });

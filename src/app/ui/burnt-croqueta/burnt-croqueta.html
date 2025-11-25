@@ -1,0 +1,12 @@
+@if (burntService.state(); as state) { @if (state.visible) {
+<div
+  class="burnt-croqueta-container"
+  [style.top.%]="state.top"
+  [style.left.%]="state.left"
+  [class.fade-in]="state.animation === 'in'"
+  [class.fade-out]="state.animation === 'out'"
+  (click)="onClick()"
+>
+  <img src="/assets/skins/croqueta-quemada.webp" alt="Croqueta Quemada" />
+</div>
+} }

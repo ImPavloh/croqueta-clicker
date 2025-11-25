@@ -5,11 +5,11 @@
     class="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl transition-all duration-200"
     [class.scale-110]="isAnimating()"
   >
-    {{ displayPoints().floor()| short }} {{ getCounterLabel() | transloco }}
+    {{ displayPoints().floor() | short }} {{ getCounterLabel() | transloco }}
   </p>
   @if (pointsService.pointsPerSecond().neq(0)) {
   <p class="text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl">
-    (+{{ pointsService.pointsPerSecond().floor()| short }} {{ 'clicker.cps' | transloco }})
+    (+{{ pointsService.pointsPerSecond() | short : 2 }} {{ 'clicker.cps' | transloco }})
   </p>
   } @else {
   <p class="text-xs xs:text-sm sm:text-base md:text-lg text-balance px-2">

@@ -6,7 +6,7 @@ import { AudioService } from '@services/audio.service';
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [CommonModule, NgIf, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './button.html',
   styleUrls: ['./button.css'],
   host: {
@@ -26,7 +26,8 @@ export class ButtonComponent {
     | 'success'
     | 'warning'
     | 'nav'
-    | 'control' = 'primary';
+    | 'control'
+    | 'golden' = 'primary';
   @Input() active: boolean = false;
   @Input() hoverable: boolean = true;
   @Input() clickable: boolean = false;

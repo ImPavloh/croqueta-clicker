@@ -1,15 +1,15 @@
-import { Injectable, signal, effect, inject, OnDestroy } from '@angular/core';
+import { Injectable, signal, inject, OnDestroy } from '@angular/core';
 import {
-  GOLDEN_CROQUETA_BONUS_DURATION_MS,
-  GOLDEN_CROQUETA_BONUS_MULTIPLIER,
-  GOLDEN_CROQUETA_CHECK_INTERVAL_MS,
-  GOLDEN_CROQUETA_LIFETIME_MS,
-  GOLDEN_CROQUETA_SPAWN_CHANCE,
+  BURNT_CROQUETA_CHECK_INTERVAL_MS,
+  BURNT_CROQUETA_LIFETIME_MS,
+  BURNT_CROQUETA_PENALTY_DURATION_MS,
+  BURNT_CROQUETA_PENALTY_MULTIPLIER,
+  BURNT_CROQUETA_SPAWN_CHANCE,
 } from '../config/constants';
 import { AudioService } from './audio.service';
 import { AchievementsService } from './achievements.service';
 
-export interface GoldenCroquetaState {
+export interface BurntCroquetaState {
   visible: boolean;
   top: number;
   left: number;
@@ -19,11 +19,11 @@ export interface GoldenCroquetaState {
 @Injectable({
   providedIn: 'root',
 })
-export class GoldenCroquetaService implements OnDestroy {
+export class BurntCroquetaService implements OnDestroy {
   private audioService = inject(AudioService);
   private achievementsService = inject(AchievementsService);
 
-  private _state = signal<GoldenCroquetaState>({
+  private _state = signal<BurntCroquetaState>({
     visible: false,
     top: 0,
     left: 0,
@@ -31,17 +31,17 @@ export class GoldenCroquetaService implements OnDestroy {
   });
   readonly state = this._state.asReadonly();
 
-  private _isBonusActive = signal(false);
-  readonly isBonusActive = this._isBonusActive.asReadonly();
+  private _isPenaltyActive = signal(false);
+  readonly isPenaltyActive = this._isPenaltyActive.asReadonly();
 
-  private _bonusTimeLeft = signal(0);
-  readonly bonusTimeLeft = this._bonusTimeLeft.asReadonly();
+  private _penaltyTimeLeft = signal(0);
+  readonly penaltyTimeLeft = this._penaltyTimeLeft.asReadonly();
 
-  readonly bonusMultiplier = GOLDEN_CROQUETA_BONUS_MULTIPLIER;
+  readonly penaltyMultiplier = BURNT_CROQUETA_PENALTY_MULTIPLIER;
 
   private spawnTimer: any;
   private lifetimeTimer: any;
-  private bonusTimer: any;
+  private penaltyTimer: any;
 
   constructor() {
     this.startSpawnCheck();
@@ -51,23 +51,19 @@ export class GoldenCroquetaService implements OnDestroy {
     if (typeof window === 'undefined') return;
 
     this.spawnTimer = setInterval(() => {
-      if (this._state().visible || this._isBonusActive()) {
-        return;
-      }
+      if (this._state().visible || this._isPenaltyActive()) return;
 
-      if (Math.random() < GOLDEN_CROQUETA_SPAWN_CHANCE) {
+      if (Math.random() < BURNT_CROQUETA_SPAWN_CHANCE) {
         this.show();
       }
-    }, GOLDEN_CROQUETA_CHECK_INTERVAL_MS);
+    }, BURNT_CROQUETA_CHECK_INTERVAL_MS);
   }
 
   show() {
     const { top, left } = this.getRandomPosition();
     this._state.set({ visible: true, top, left, animation: 'in' });
 
-    this.lifetimeTimer = setTimeout(() => {
-      this.hide();
-    }, GOLDEN_CROQUETA_LIFETIME_MS);
+    this.lifetimeTimer = setTimeout(() => this.hide(), BURNT_CROQUETA_LIFETIME_MS);
   }
 
   hide() {
@@ -82,20 +78,20 @@ export class GoldenCroquetaService implements OnDestroy {
     if (!this._state().visible) return;
 
     this.hide();
-    this.activateBonus();
+    this.activatePenalty();
   }
 
-  private activateBonus() {
-    this.achievementsService.unlockAchievement('bonus_event');
-    this.audioService.playSfx('/assets/sfx/achievement.mp3');
-    this._isBonusActive.set(true);
-    this._bonusTimeLeft.set(GOLDEN_CROQUETA_BONUS_DURATION_MS / 1000);
+  private activatePenalty() {
+    this.achievementsService.unlockAchievement('penalty_event');
+    this.audioService.playSfx('/assets/sfx/fail.mp3');
+    this._isPenaltyActive.set(true);
+    this._penaltyTimeLeft.set(BURNT_CROQUETA_PENALTY_DURATION_MS / 1000);
 
-    this.bonusTimer = setInterval(() => {
-      this._bonusTimeLeft.update((t) => {
+    this.penaltyTimer = setInterval(() => {
+      this._penaltyTimeLeft.update((t) => {
         if (t <= 1) {
-          clearInterval(this.bonusTimer);
-          this._isBonusActive.set(false);
+          clearInterval(this.penaltyTimer);
+          this._isPenaltyActive.set(false);
           return 0;
         }
         return t - 1;
@@ -112,6 +108,6 @@ export class GoldenCroquetaService implements OnDestroy {
   ngOnDestroy() {
     clearInterval(this.spawnTimer);
     clearTimeout(this.lifetimeTimer);
-    clearInterval(this.bonusTimer);
+    clearInterval(this.penaltyTimer);
   }
 }

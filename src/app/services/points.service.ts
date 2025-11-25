@@ -1,8 +1,10 @@
 import { GoldenCroquetaService } from './golden-croqueta.service';
+import { BurntCroquetaService } from './burnt-croqueta.service';
 import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
+import { PRODUCERS } from '@data/producer.data';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -14,7 +16,9 @@ export class PointsService {
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
+  // multiplicador activo (puede venir de croqueta dorada o croqueta quemada)
   private _multiply = signal<Decimal>(new Decimal(1));
+  readonly multiply = this._multiply.asReadonly();
   private isInitializing = true;
   private lastSaveTime: number = 0;
 
@@ -26,7 +30,8 @@ export class PointsService {
   readonly points = this._points.asReadonly();
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
-  readonly multiply = this._multiply.asReadonly();
+
+  private burntCroquetaService = inject(BurntCroquetaService);
 
   constructor(private floatingService: FloatingService) {
     this.loadFromStorage();
@@ -46,13 +51,12 @@ export class PointsService {
   // métodos para modificar el estado
   // añadir puntos (por click)
   addPointsPerClick(x?: number, y?: number) {
-    // Check for golden croqueta bonus
-    const bonusMultiplier = this.goldenCroquetaService.isBonusActive()
-      ? this.goldenCroquetaService.bonusMultiplier
-      : 1;
+    const multiplier = this.getActiveMultiplier();
+    // keep observable state current for tests/ui
+    this._multiply.set(new Decimal(multiplier));
 
-    // amount = pointsPerClick * multiply * bonusMultiplier
-    const amount = this.pointsPerClick().times(this.multiply()).times(bonusMultiplier);
+    // amount = pointsPerClick * bonusMultiplier
+    const amount = this.pointsPerClick().times(multiplier);
     // actualizar puntos: v + amount
     this._points.update((v) => v.plus(amount));
 
@@ -71,12 +75,9 @@ export class PointsService {
 
   // añadir puntos por segundo
   addPointPerSecond() {
-    // Check for golden croqueta bonus
-    const bonusMultiplier = this.goldenCroquetaService.isBonusActive()
-      ? this.goldenCroquetaService.bonusMultiplier
-      : 1;
-
-    const amount = this.pointsPerSecond().times(bonusMultiplier);
+    const multiplier = this.getActiveMultiplier();
+    this._multiply.set(new Decimal(multiplier));
+    const amount = this.pointsPerSecond().times(multiplier);
     this._points.update((v) => v.plus(amount));
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());
@@ -122,16 +123,39 @@ export class PointsService {
     const cps = this.optionsService.getGameItem('pointsPerSecond');
     if (cps) {
       this._pointsPerSecond.set(new Decimal(cps));
+    } else {
+      // si no hay cps guardado reconstruir sumando los productores guardados
+      try {
+        let total = new Decimal(0);
+        for (const p of PRODUCERS) {
+          const q =
+            Number(this.optionsService.getGameItem('producer_' + p.id + '_quantity') || 0) || 0;
+          if (q <= 0) continue;
+
+          // total = base*q + pointsSum * (q*(q-1)/2)
+          const base = new Decimal(p.pointsBase).times(q);
+          const seq = (q * (q - 1)) / 2;
+          const bonus = new Decimal(p.pointsSum).times(seq);
+          total = total.plus(base).plus(bonus);
+        }
+        this._pointsPerSecond.set(total);
+      } catch (e) {
+        // en caso de error no bloquear la carga, cosa que no debería pasar but who knows
+      }
     }
     // cargar puntos por click
     const cpc = this.optionsService.getGameItem('pointsPerClick');
     if (cpc) {
       this._pointsPerClick.set(new Decimal(cpc));
     }
-    // cargar multiplicador por click
-    const cmc = this.optionsService.getGameItem('multiply');
-    if (cmc) {
-      this._multiply.set(new Decimal(cmc));
+    // cargar multiplicador almacenado (opcional)
+    const m = this.optionsService.getGameItem('multiply');
+    if (m) {
+      try {
+        this._multiply.set(new Decimal(m));
+      } catch (e) {
+        // ignore invalid stored value
+      }
     }
   }
 
@@ -147,7 +171,7 @@ export class PointsService {
     this.optionsService.setGameItem('pointsPerSecond', this._pointsPerSecond().toString());
     // guardar puntos por click
     this.optionsService.setGameItem('pointsPerClick', this._pointsPerClick().toString());
-    // guardar multiplicador por click
+    // guardar multiplicador actual (por compatibilidad con tests / export)
     this.optionsService.setGameItem('multiply', this._multiply().toString());
   }
 
@@ -155,7 +179,6 @@ export class PointsService {
     this._points.set(new Decimal(0));
     this._pointsPerSecond.set(new Decimal(0));
     this._pointsPerClick.set(new Decimal(1));
-    this._multiply.set(new Decimal(1));
   }
 
   public addPoints(amount: number) {
@@ -181,5 +204,19 @@ export class PointsService {
   public setPointsPerClick(amount: number) {
     this._pointsPerClick.set(new Decimal(amount));
     this.saveToStorage();
+  }
+
+  public setMultiply(amount: number) {
+    this._multiply.set(new Decimal(amount));
+    this.saveToStorage();
+  }
+
+  private getActiveMultiplier(): number {
+    // Prioridad: Golden > Burnt > 1
+    if (this.goldenCroquetaService.isBonusActive())
+      return Number(this.goldenCroquetaService.bonusMultiplier);
+    if (this.burntCroquetaService.isPenaltyActive())
+      return Number(this.burntCroquetaService.penaltyMultiplier);
+    return 1;
   }
 }

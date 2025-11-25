@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { PlayerStats } from '@services/player-stats.service';
 import { GoldenCroquetaService } from '@services/golden-croqueta.service';
+import { BurntCroquetaService } from '@services/burnt-croqueta.service';
 
 type StatsVariant = 'mobile' | 'desktop' | 'auto';
 
@@ -22,6 +23,7 @@ export class StatsComponent {
 
   private playerStats = inject(PlayerStats);
   protected goldenCroquetaService = inject(GoldenCroquetaService);
+  protected burntCroquetaService = inject(BurntCroquetaService);
 
   // nivel y experiencia
   level = toSignal(this.playerStats.level$, { initialValue: 0 });

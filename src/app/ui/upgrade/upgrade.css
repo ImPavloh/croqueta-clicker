@@ -27,8 +27,8 @@
 }
 
 :host ::ng-deep .upgrade-button.locked .upgrade-image {
-  filter: grayscale(1) brightness(0.85);
-  opacity: 0.5;
+  filter: grayscale(50%) contrast(98%) brightness(95%);
+  opacity: 1;
 }
 
 .upgrade-info {
@@ -40,7 +40,6 @@
 }
 
 .upgrade-title {
-  font-weight: 600;
   color: #8b4513;
   font-size: 14px;
   margin: 0;
@@ -50,17 +49,21 @@
   white-space: nowrap;
 }
 
-:host ::ng-deep .upgrade-button.locked .upgrade-title {
-  color: #6c757d;
+:host ::ng-deep .upgrade-button.locked {
+  opacity: 1;
+  transition: opacity 180ms ease, filter 180ms ease;
 }
 
-:host ::ng-deep .upgrade-button.bought .upgrade-title {
-  color: #28a745;
+:host ::ng-deep .upgrade-button.locked .upgrade-title {
+  color: rgba(107, 86, 51, 0.95);
+}
+
+:host ::ng-deep .upgrade-button.locked .upgrade-info {
+  opacity: 1;
 }
 
 .upgrade-requirement {
   font-size: 12px;
-  color: #6c757d;
   margin: 0;
   font-weight: 500;
 }
@@ -73,7 +76,8 @@
 }
 
 .bought-status {
-  color: #28a745;
+  color: #166534;
+  font-weight: 700;
 }
 
 .upgrade-details {
@@ -84,20 +88,18 @@
 }
 
 .upgrade-bonus {
-  color: #ff6b35;
-  font-weight: 700;
-  background: rgba(255, 107, 53, 0.1);
-  padding: 2px 8px;
-  border-radius: 6px;
+  color: #7b2607;
+  font-weight: 600;
 }
 
 .upgrade-price {
-  color: #dc3545;
+  color: #b02a37;
   font-weight: 700;
 }
 
 .upgrade-price.affordable {
-  color: #28a745;
+  color: #14532d;
+  font-weight: 800;
 }
 
 @media (max-width: 768px) {
@@ -131,4 +133,15 @@
   .upgrade-bonus {
     padding: 2px 6px;
   }
+}
+
+:host ::ng-deep .upgrade-button.available {
+  box-shadow: 0 6px 18px rgba(21, 128, 61, 0.08);
+  border-radius: 12px;
+  transform-origin: center left;
+}
+
+:host ::ng-deep .upgrade-button.available:hover {
+  box-shadow: 0 10px 30px rgba(21, 128, 61, 0.12);
+  transform: translateY(-2px);
 }
