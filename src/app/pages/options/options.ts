@@ -13,11 +13,12 @@ import { AutosaveService } from '@services/autosave.service';
 import { SkinsService } from '@services/skins.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
-import { AudioService } from '@services/audio.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
 import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
+
+import PackageJson from '../../../../package.json';
 
 @Component({
   selector: 'app-options',
@@ -36,7 +37,8 @@ import { DebugService } from '@services/debug.service';
 })
 export class Options {
   private shortNumberPipe = new ShortNumberPipe();
-  private audioService = inject(AudioService);
+
+  version = PackageJson.version;
 
   constructor(
     public optionsService: OptionsService,
@@ -137,7 +139,7 @@ export class Options {
   importProgress() {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.json';
+    input.accept = '.croqueta';
 
     input.onchange = (e: Event) => {
       const file = (e.target as HTMLInputElement).files?.[0];

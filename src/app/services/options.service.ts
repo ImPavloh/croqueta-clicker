@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 import { SupabaseService } from './supabase.service';
 import { GAME_PREFIX } from '@app/config/constants';
+import * as CryptoJS from 'crypto-js';
+import { CRYPTO } from '../../environments/crypto.config';
 
 @Injectable({
   providedIn: 'root',
@@ -211,14 +213,15 @@ export class OptionsService {
     };
 
     const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const encryptedData = CryptoJS.AES.encrypt(dataStr, CRYPTO.KEY).toString();
+    const dataBlob = new Blob([encryptedData], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(dataBlob);
 
     const link = document.createElement('a');
     link.href = url;
     const dateStr = new Date().toISOString().split('T')[0];
     const timeStr = new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
-    link.download = `croqueta-clicker-partida-${dateStr}-${timeStr}.json`;
+    link.download = `croqueta-clicker-partida-${dateStr}-${timeStr}.croqueta`;
     link.click();
 
     URL.revokeObjectURL(url);
@@ -232,7 +235,8 @@ export class OptionsService {
       reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
-          const imported = JSON.parse(content);
+          const decryptedData = CryptoJS.AES.decrypt(content, CRYPTO.KEY).toString(CryptoJS.enc.Utf8);
+          const imported = JSON.parse(decryptedData);
 
           if (typeof localStorage === 'undefined') {
             reject('localStorage no disponible');
