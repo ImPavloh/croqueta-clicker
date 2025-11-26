@@ -106,7 +106,7 @@
     },
     "penalty_event": {
       "title": "The burnt croquette",
-      "description": "Oh no... the burnt croquette gives you fewer points when clicked."
+      "description": "Oh no... You clicked on the burnt croquette!"
     },
     "primer_skin": {
       "title": "New look",
