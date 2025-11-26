@@ -95,6 +95,7 @@ export class App implements OnInit, OnDestroy {
 
   private level: number = 1;
   private levelSub?: Subscription;
+  private updateCheckIntervalId?: number;
 
   public isMobile: boolean = window.innerWidth <= 1344;
 
@@ -127,6 +128,9 @@ export class App implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.levelSub?.unsubscribe();
     this.playerStats.stopTimer();
+    if (this.updateCheckIntervalId) {
+      clearInterval(this.updateCheckIntervalId);
+    }
   }
 
   protected onSplashComplete(): void {
@@ -218,6 +222,16 @@ export class App implements OnInit, OnDestroy {
 
     // chequeo inicial si procede
     this.maybeCheckForUpdate(false);
+
+    // comprobaciones periódicas mientras la aplicación esté abierta y respetando el intervalo
+    try {
+      if (this.updateCheckIntervalId) clearInterval(this.updateCheckIntervalId);
+      this.updateCheckIntervalId = window.setInterval(() => {
+        this.maybeCheckForUpdate(false);
+      }, this.UPDATE_INTERVAL_MS);
+    } catch (e) {
+      // en pruebas ignorar
+    }
   }
 
   private async maybeCheckForUpdate(force = false) {
