@@ -7,13 +7,7 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
-        "files": [
-          "/favicon.ico",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js"
-        ]
+        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
       }
     },
     {
@@ -37,10 +31,22 @@
           "/assets/**/*.woff2",
           "/assets/**/*.mp3",
           "/assets/**/*.ogg",
-          "/assets/**/*.wav"
+          "/assets/**/*.wav",
+          "/assets/i18n/*.json"
         ]
       }
     }
   ],
-  "dataGroups": []
+  "dataGroups": [
+    {
+      "name": "leaderboard-api",
+      "urls": ["https://cosvywlgllqpnqdrphtt.supabase.co/rest/v1/leaderboard*"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 20,
+        "maxAge": "15m",
+        "timeout": "5s"
+      }
+    }
+  ]
 }
