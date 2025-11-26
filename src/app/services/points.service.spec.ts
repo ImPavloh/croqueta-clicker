@@ -30,6 +30,8 @@ describe('PointsService', () => {
 
   beforeEach(() => {
     mockGoldenCroqueta = new MockGoldenCroquetaService();
+    mockBurntCroqueta = new MockBurntCroquetaService();
+
     mockFloatingService.show.calls.reset();
     mockOptionsService.getGameItem.calls.reset();
     mockOptionsService.setGameItem.calls.reset();

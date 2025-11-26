@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Leaderboard } from './leaderboard';
 import { of } from 'rxjs';
+import { signal } from '@angular/core';
 
 class MockSupabaseService {
   getClient() {
@@ -14,12 +15,23 @@ class MockSupabaseService {
   getPendingScores() {
     return [];
   }
+
+  async getTopScores(limit: number) {
+    return { data: [], error: null };
+  }
+
+  async searchLeaderboard(query: string, page: number, pageSize: number) {
+    return { data: [], count: 0, error: null };
+  }
 }
 
-class MockPointsService {}
+class MockPointsService {
+  points = signal(0);
+}
 
 class MockModalService {
   openModal = jasmine.createSpy('openModal');
+  shouldCheckUsername = signal(false);
 }
 
 class MockPlayerStats {

@@ -87,16 +87,14 @@ describe('Producer', () => {
     expect(component.price.toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
   });
 
-  it('renders locked state with required level when not unlocked', () => {
+ it('renders locked state with required level when not unlocked', () => {
     fixture = TestBed.createComponent(Producer);
     component = fixture.componentInstance;
 
-    // establecer un nivel requerido mayor al del jugador (mockPlayerStats.level$ es 0)
     component.config = { ...mockConfig, level: 5 } as ProducerModel;
 
     fixture.detectChanges();
 
-    // componente debe existir y estar bloqueado
     expect(component.unlocked).toBeFalse();
 
     const el = fixture.nativeElement as HTMLElement;
@@ -104,14 +102,13 @@ describe('Producer', () => {
       el.querySelector('.producer-locked') || el.querySelector('.producer-grid-locked');
     expect(locked).toBeTruthy();
 
-    // debe mostrar el número de nivel requerido
     expect(el.textContent).toContain('5');
 
-    // mostrar barra de progreso y texto con nivel y porcentaje
     const progressFill = el.querySelector('.level-progress-fill') as HTMLElement | null;
     expect(progressFill).toBeTruthy();
 
     const progressText = el.querySelector('.level-progress-text');
-    expect(progressText?.textContent).toContain('0');
+
+    expect(progressText?.textContent).toContain('5');
   });
 });

@@ -23,7 +23,7 @@ describe('SupabaseService (navigator lock resilience)', () => {
     const res = await svc.getUser();
     expect(res).toBeDefined();
     expect((auth.getUser as jasmine.Spy).calls.count()).toBeGreaterThanOrEqual(2);
-    expect(res.data.user.id).toBe('u1');
+    expect(res.data.user?.id).toBe('u1');
   });
 
   it('signInAnonymously retries and succeeds', async () => {
