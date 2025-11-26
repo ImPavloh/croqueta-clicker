@@ -76,14 +76,11 @@ export class App implements OnInit, OnDestroy {
   isDebugMode = false;
 
   constructor(
-    private points: PointsService,
     private playerStats: PlayerStats,
     private audioService: AudioService,
-    private autosaveService: AutosaveService,
     private achievementsService: AchievementsService,
     private goldenCroquetaService: GoldenCroquetaService,
     private burntCroquetaService: BurntCroquetaService,
-    private skinsService: SkinsService,
     private modalService: ModalService,
     private debugService: DebugService,
     private translocoService: TranslocoService,
@@ -93,7 +90,6 @@ export class App implements OnInit, OnDestroy {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
   }
 
-  private level: number = 1;
   private levelSub?: Subscription;
 
   public isMobile: boolean = window.innerWidth <= 1344;

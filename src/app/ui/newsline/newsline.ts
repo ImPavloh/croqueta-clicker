@@ -21,25 +21,27 @@ export class NewsLine {
   private newsService = inject(NewsService);
   private playerStats = inject(PlayerStats);
 
-  // 1. Creamos un observable que emite el nivel de noticias (1, 2, o 3)
+  // Creamos un observable que emite el nivel de noticias basado en el nivel del jugador
   private newsLevel$ = this.playerStats.level$.pipe(
     map((playerLevel) => {
-      if (playerLevel > 30) return 3;
-      if (playerLevel > 15) return 2;
+      if (playerLevel > 200) return 5;
+      if (playerLevel > 100) return 4;
+      if (playerLevel > 50) return 3;
+      if (playerLevel > 30) return 2;
       return 1;
     }),
     distinctUntilChanged() // Solo emitimos si el nivel de noticias cambia
   );
 
-  // 2. Usamos switchMap para cambiar al nuevo observable de noticias cuando el nivel cambia
+  // Usamos switchMap para cambiar al nuevo observable de noticias cuando el nivel cambia
   private news$ = this.newsLevel$.pipe(
     switchMap((level) => this.newsService.getNewsByLevel(level))
   );
 
-  // 3. Convertimos el resultado en una señal para el template
+  // Convertimos el resultado en una señal para el template
   private newsSignal = toSignal(this.news$, { initialValue: [] });
 
-  // 4. Creamos una señal computada final que duplica el array para el efecto de bucle infinito
+  // Creamos una señal computada final que duplica el array para el efecto de bucle infinito
   protected displayItems = computed(() => {
     const items = this.newsSignal();
     return [...items, ...items];

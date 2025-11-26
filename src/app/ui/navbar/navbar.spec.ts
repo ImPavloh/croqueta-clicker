@@ -20,12 +20,9 @@ describe('Navbar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        Navbar, // Importa el componente standalone
-        // 🚨 CLAVE: Añadir RouterTestingModule para simular las directivas RouterLink
+        Navbar,
         RouterTestingModule
       ],
-      // Si NewsLine o ButtonComponent no son standalone, necesitarías declarations: [NewsLine, ButtonComponent]
-      // Pero como están en imports[] en el Navbar, asumimos que son standalone.
     })
     .compileComponents();
 
