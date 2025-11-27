@@ -69,24 +69,26 @@
       </div>
     </div>
 
-    @if (goldenCroquetaService.isBonusActive()) {
-    <div class="bonus-inline">
-      <div class="bonus-content">
-        <span class="bonus-text"
-          >{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span
-        >
-        <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
-      </div>
-    </div>
-    } @if (burntCroquetaService.isPenaltyActive()) {
-    <div class="penalty-inline">
-      <div class="bonus-content">
-        <span class="penalty-text"
-          >{{ 'clicker.penalty' | transloco }} x{{ burntCroquetaService.penaltyMultiplier }}</span
-        >
-        <span class="bonus-time">{{ burntCroquetaService.penaltyTimeLeft() }}s</span>
-      </div>
-    </div>
+    @for (event of activeEvents(); track event.id) {
+      @if (event.type === 'golden') {
+        <div class="bonus-inline">
+          <div class="bonus-content">
+            <span class="bonus-text"
+              >{{ 'clicker.bonus' | transloco }} x{{ event.effect }}</span
+            >
+            <span class="bonus-time">{{ event.remainingTime }}s</span>
+          </div>
+        </div>
+      } @else if (event.type === 'burnt') {
+        <div class="penalty-inline">
+          <div class="bonus-content">
+            <span class="penalty-text"
+              >{{ 'clicker.penalty' | transloco }} x{{ event.effect }}</span
+            >
+            <span class="bonus-time">{{ event.remainingTime }}s</span>
+          </div>
+        </div>
+      }
     }
   </div>
 </div>
@@ -161,24 +163,26 @@
         </div>
       </div>
     </div>
-    @if (goldenCroquetaService.isBonusActive()) {
-    <div class="bonus-inline ds-bonus">
-      <div class="bonus-content">
-        <span class="bonus-text"
-          >{{ 'clicker.bonus' | transloco }} x{{ goldenCroquetaService.bonusMultiplier }}</span
-        >
-        <span class="bonus-time">{{ goldenCroquetaService.bonusTimeLeft() }}s</span>
-      </div>
-    </div>
-    } @if (burntCroquetaService.isPenaltyActive()) {
-    <div class="penalty-inline ds-bonus">
-      <div class="bonus-content">
-        <span class="penalty-text"
-          >{{ 'clicker.penalty' | transloco }} x{{ burntCroquetaService.penaltyMultiplier }}</span
-        >
-        <span class="bonus-time">{{ burntCroquetaService.penaltyTimeLeft() }}s</span>
-      </div>
-    </div>
+    @for (event of activeEvents(); track event.id) {
+      @if (event.type === 'golden') {
+        <div class="bonus-inline ds-bonus">
+          <div class="bonus-content">
+            <span class="bonus-text"
+              >{{ 'clicker.bonus' | transloco }} x{{ event.effect }}</span
+            >
+            <span class="bonus-time">{{ event.remainingTime }}s</span>
+          </div>
+        </div>
+      } @else if (event.type === 'burnt') {
+        <div class="penalty-inline ds-bonus">
+          <div class="bonus-content">
+            <span class="penalty-text"
+              >{{ 'clicker.penalty' | transloco }} x{{ event.effect }}</span
+            >
+            <span class="bonus-time">{{ event.remainingTime }}s</span>
+          </div>
+        </div>
+      }
     }
   </div>
 </div>

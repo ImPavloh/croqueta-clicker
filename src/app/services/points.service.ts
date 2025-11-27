@@ -1,5 +1,3 @@
-import { GoldenCroquetaService } from './golden-croqueta.service';
-import { BurntCroquetaService } from './burnt-croqueta.service';
 import { Injectable, signal, inject } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
@@ -7,82 +5,64 @@ import { OptionsService } from './options.service';
 import { PRODUCERS } from '@data/producer.data';
 import { Subject } from 'rxjs';
 
+interface Multiplier {
+  value: number;
+  duration: number;
+  id: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PointsService {
   private optionsService = inject(OptionsService);
-  private goldenCroquetaService = inject(GoldenCroquetaService);
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
-  // multiplicador activo (puede venir de croqueta dorada o croqueta quemada)
-  private _multiply = signal<Decimal>(new Decimal(1));
-  readonly multiply = this._multiply.asReadonly();
+  private _multipliers = signal<Multiplier[]>([]);
+  private multiplierIdCounter = 0;
   private isInitializing = true;
   private lastSaveTime: number = 0;
 
-  // Subject para emitir eventos de clic manual
   private clickEvent$ = new Subject<Decimal>();
   public readonly onManualClick$ = this.clickEvent$.asObservable();
 
-  // getter público (read-only signal)
   readonly points = this._points.asReadonly();
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
 
-  private burntCroquetaService = inject(BurntCroquetaService);
-
   constructor(private floatingService: FloatingService) {
     this.loadFromStorage();
 
-    // permitir guardados después de 2segs (evita guardados durante la carga inicial, lo mismo no es la mejor solucion pero funciona lol)
     setTimeout(() => {
       this.isInitializing = false;
     }, 2000);
 
-    // Solo ejecutar en navegador
     if (typeof window !== 'undefined') {
-      // Llamar addPointPerSecond cada segundo
       setInterval(() => this.addPointPerSecond(), 1000);
     }
   }
 
-  // métodos para modificar el estado
-  // añadir puntos (por click)
   addPointsPerClick(x?: number, y?: number) {
     const multiplier = this.getActiveMultiplier();
-    // keep observable state current for tests/ui
-    this._multiply.set(new Decimal(multiplier));
-
-    // amount = pointsPerClick * bonusMultiplier
     const amount = this.pointsPerClick().times(multiplier);
-    // actualizar puntos: v + amount
     this._points.update((v) => v.plus(amount));
-
-    // Emitir evento de clic manual con la cantidad ganada
     this.clickEvent$.next(amount);
 
-    // mostrar texto flotante junto a la croqueta
     if (typeof window !== 'undefined' && amount.gt(0)) {
-      // formatea como quieras; aquí uso toString()
       this.floatingService.show('+' + amount.toString(), { x, y });
     }
-
-    // guardar inmediatamente al hacer click
     this.saveToStorage();
   }
 
-  // añadir puntos por segundo
   addPointPerSecond() {
     const multiplier = this.getActiveMultiplier();
-    this._multiply.set(new Decimal(multiplier));
     const amount = this.pointsPerSecond().times(multiplier);
     this._points.update((v) => v.plus(amount));
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());
     }
-    // guardar cada 30 segundos
+
     const currentTime = Date.now();
     if (!this.lastSaveTime || currentTime - this.lastSaveTime > 30000) {
       this.saveToStorage();
@@ -90,41 +70,51 @@ export class PointsService {
     }
   }
 
-  // actualizar puntos por click (recibe number | string | Decimal)
   upgradePointPerClick(value: number | string | Decimal) {
     this._pointsPerClick.set(new Decimal(value));
     this.saveToStorage();
   }
 
-  // actualizar puntos por segundo (recibe number | string | Decimal)
   upgradePointsPerSecond(value: number | string | Decimal) {
     this._pointsPerSecond.set(new Decimal(value));
     this.saveToStorage();
   }
 
-  // restar puntos
   substractPoints(value: number | string | Decimal) {
     const d = new Decimal(value);
     this._points.update((v) => v.minus(d));
     this.saveToStorage();
   }
 
-  // persistencia simple en localStorage
+  addMultiplier(value: number, duration: number) {
+    const id = this.multiplierIdCounter++;
+    const newMultiplier: Multiplier = { id, value, duration };
+    this._multipliers.update(m => [...m, newMultiplier]);
+
+    setTimeout(() => {
+      this._multipliers.update(m => m.filter(m => m.id !== id));
+    }, duration);
+  }
+
+  getActiveMultiplier(): number {
+    return this._multipliers().reduce((acc, m) => acc * m.value, 1);
+  }
+
+  getPointsPerSecond(): Decimal {
+    return this._pointsPerSecond();
+  }
+
   public loadFromStorage() {
-    // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
 
-    // cargar puntos
     const points = this.optionsService.getGameItem('points');
     if (points) {
       this._points.set(new Decimal(points));
     }
-    // cargar puntos por segundo
     const cps = this.optionsService.getGameItem('pointsPerSecond');
     if (cps) {
       this._pointsPerSecond.set(new Decimal(cps));
     } else {
-      // si no hay cps guardado reconstruir sumando los productores guardados
       try {
         let total = new Decimal(0);
         for (const p of PRODUCERS) {
@@ -132,7 +122,6 @@ export class PointsService {
             Number(this.optionsService.getGameItem('producer_' + p.id + '_quantity') || 0) || 0;
           if (q <= 0) continue;
 
-          // total = base*q + pointsSum * (q*(q-1)/2)
           const base = new Decimal(p.pointsBase).times(q);
           const seq = (q * (q - 1)) / 2;
           const bonus = new Decimal(p.pointsSum).times(seq);
@@ -140,39 +129,22 @@ export class PointsService {
         }
         this._pointsPerSecond.set(total);
       } catch (e) {
-        // en caso de error no bloquear la carga, cosa que no debería pasar but who knows
+        // ignore error
       }
     }
-    // cargar puntos por click
     const cpc = this.optionsService.getGameItem('pointsPerClick');
     if (cpc) {
       this._pointsPerClick.set(new Decimal(cpc));
     }
-    // cargar multiplicador almacenado (opcional)
-    const m = this.optionsService.getGameItem('multiply');
-    if (m) {
-      try {
-        this._multiply.set(new Decimal(m));
-      } catch (e) {
-        // ignore invalid stored value
-      }
-    }
   }
 
   public saveToStorage() {
-    // en carga inicial no guardar aún
     if (this.isInitializing) return;
-
-    // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
-    // guardar puntos como string
+
     this.optionsService.setGameItem('points', this._points().toString());
-    // guardar puntos por segundo
     this.optionsService.setGameItem('pointsPerSecond', this._pointsPerSecond().toString());
-    // guardar puntos por click
     this.optionsService.setGameItem('pointsPerClick', this._pointsPerClick().toString());
-    // guardar multiplicador actual (por compatibilidad con tests / export)
-    this.optionsService.setGameItem('multiply', this._multiply().toString());
   }
 
   public reset() {
@@ -181,8 +153,8 @@ export class PointsService {
     this._pointsPerClick.set(new Decimal(1));
   }
 
-  public addPoints(amount: number) {
-    this._points.update((v) => v.plus(new Decimal(amount)));
+  public addPoints(amount: Decimal) {
+    this._points.update((v) => v.plus(amount));
     this.saveToStorage();
   }
 
@@ -206,17 +178,86 @@ export class PointsService {
     this.saveToStorage();
   }
 
-  public setMultiply(amount: number) {
-    this._multiply.set(new Decimal(amount));
-    this.saveToStorage();
-  }
+  public formatPoints(value: Decimal | number | string | null | undefined, maxDecimals = 2): string {
+    if (value == null) return '0';
 
-  private getActiveMultiplier(): number {
-    // Prioridad: Golden > Burnt > 1
-    if (this.goldenCroquetaService.isBonusActive())
-      return Number(this.goldenCroquetaService.bonusMultiplier);
-    if (this.burntCroquetaService.isPenaltyActive())
-      return Number(this.burntCroquetaService.penaltyMultiplier);
-    return 1;
+    // Convertir a Decimal de forma segura
+    let num: Decimal;
+    try {
+      num = value instanceof Decimal ? value : new Decimal(value);
+    } catch {
+      return String(value);
+    }
+
+    const sign = num.lt(0) ? '-' : '';
+    const abs = num.abs();
+
+    // Escalas con sufijos
+    const units: { value: Decimal; symbol: string }[] = [
+      { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
+      { value: new Decimal(1e60), symbol: 'Nv' }, // novendecillón
+      { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
+      { value: new Decimal(1e54), symbol: 'Sd' }, // septendecillón
+      { value: new Decimal(1e51), symbol: 'Sxd' }, // sexdecillón
+      { value: new Decimal(1e48), symbol: 'Qnd' }, // quindecillón
+      { value: new Decimal(1e45), symbol: 'Qtd' }, // cuatordecillón
+      { value: new Decimal(1e42), symbol: 'Trd' }, // tredecillón
+      { value: new Decimal(1e39), symbol: 'Dod' }, // duodecillón
+      { value: new Decimal(1e36), symbol: 'Und' }, // undecillón
+      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
+      { value: new Decimal(1e30), symbol: 'No' }, // nonillón
+      { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
+      { value: new Decimal(1e24), symbol: 'Sp' }, // septillón
+      { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
+      { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
+      { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
+      { value: new Decimal(1e12), symbol: 'T' }, // trillón
+      { value: new Decimal(1e9), symbol: 'B' }, // mil millones (billón)
+      { value: new Decimal(1e6), symbol: 'M' }, // millón
+      { value: new Decimal(1e3), symbol: 'K' }, // mil
+    ];
+
+    for (const u of units) {
+      if (abs.gte(u.value)) {
+        const normalized = abs.div(u.value);
+        const decimals = normalized.lt(10)
+          ? Math.min(2, maxDecimals)
+          : normalized.lt(100)
+          ? Math.min(1, maxDecimals)
+          : 0;
+
+        try {
+          const formatted = normalized
+            .toFixed(decimals)
+            .replace(/\.0+$/, '')
+            .replace(/(\.[0-9]*[1-9])0+$/, '$1');
+          return `${sign}${formatted}${u.symbol}`;
+        } catch {
+          // usar notación científica como fallback
+          return `${sign}${normalized.toExponential(2)}${u.symbol}`;
+        }
+      }
+    }
+
+    // Mostrar número completo si es menor a 1000
+    if (abs.lt(10000)) {
+      try {
+        const formatted = abs
+          .toFixed(maxDecimals)
+          .replace(/\.0+$/, '')
+          .replace(/(\.[0-9]*[1-9])0+$/, '$1');
+        return `${sign}${formatted}`;
+      } catch {
+        // usar el valor sin formato como fallback
+        return `${sign}${abs.toString()}`;
+      }
+    }
+
+    // Fallback para números que no coincidan con ninguna escala
+    try {
+      return `${sign}${abs.toFixed(0)}`;
+    } catch {
+      return `${sign}${abs.toString()}`;
+    }
   }
 }

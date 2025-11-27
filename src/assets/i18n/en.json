@@ -100,13 +100,17 @@
       "title": "The Infinite Croquetteer",
       "description": "Reach level 10000."
     },
-    "bonus_event": {
+    "golden_event": {
       "title": "The golden croquette",
       "description": "Click on the golden croquette."
     },
-    "penalty_event": {
+    "burnt_event": {
       "title": "The burnt croquette",
       "description": "Oh no... You clicked on the burnt croquette!"
+    },
+    "cosmic_event": {
+      "title": "The cosmic croquette",
+      "description": "Click on the cosmic croquette."
     },
     "primer_skin": {
       "title": "New look",

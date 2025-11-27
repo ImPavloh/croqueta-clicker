@@ -16,7 +16,6 @@ import { Counter } from '@ui/counter/counter';
 import { Particles } from '@ui/particles/particles';
 import { Floating } from '@ui/floating/floating';
 import { Croquetita } from '@ui/croquetita/croquetita';
-import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
 import { LevelUpPopup } from '@ui/level-up-popup/level-up-popup';
@@ -25,22 +24,18 @@ import { Modal } from '@ui/modal/modal';
 import { FloatingButtons } from '@ui/floating-buttons/floating-buttons';
 import { Subscription } from 'rxjs';
 import { AudioService } from '@services/audio.service';
-import { AutosaveService } from '@services/autosave.service';
-import { GoldenCroquetaService } from '@services/golden-croqueta.service';
-import { BurntCroquetaService } from '@services/burnt-croqueta.service';
-import { GoldenCroqueta } from '@ui/golden-croqueta/golden-croqueta';
-import { BurntCroqueta } from '@ui/burnt-croqueta/burnt-croqueta';
 import { Splash } from '@ui/splash/splash';
 import { StatsComponent } from '@ui/stats/stats';
 import { SkinUnlockPopup } from '@ui/skin-unlock-popup/skin-unlock-popup';
 import { Backgrounds } from '@ui/backgrounds/backgrounds';
-import { SkinsService } from '@services/skins.service';
 import { ModalService } from '@services/modal.service';
 import { DebugService } from '@services/debug.service';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { SupabaseService } from '@services/supabase.service';
 import { SwUpdate } from '@angular/service-worker';
 import { Leaderboard } from '@ui/leaderboard/leaderboard';
+import { EventComponent } from '@ui/event/event';
+import { EventService } from '@services/event.service';
 
 @Component({
   selector: 'app-root',
@@ -58,14 +53,13 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
     NewsLine,
     Modal,
     FloatingButtons,
-    GoldenCroqueta,
-    BurntCroqueta,
     TranslocoModule,
     Splash,
     StatsComponent,
     SkinUnlockPopup,
     Backgrounds,
     Leaderboard,
+    EventComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -79,13 +73,12 @@ export class App implements OnInit, OnDestroy {
     private playerStats: PlayerStats,
     private audioService: AudioService,
     private achievementsService: AchievementsService,
-    private goldenCroquetaService: GoldenCroquetaService,
-    private burntCroquetaService: BurntCroquetaService,
     private modalService: ModalService,
     private debugService: DebugService,
     private translocoService: TranslocoService,
     private supabase: SupabaseService,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private eventService: EventService
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
   }
@@ -132,18 +125,13 @@ export class App implements OnInit, OnDestroy {
   protected onSplashComplete(): void {
     this.playerStats.startTimer();
 
-    // Asegurar que exista una sesion anónima de supabase para interacciones con la leadboard
-    // Intencionalmente mantenemos el juego local
-    // la autenticación solo se usa para las entradas de la leadboard
     this.supabase.getUser().then(async (r) => {
       if (!r?.data?.user) {
         await this.supabase.signInAnonymously().catch(() => {
-          // ignorar errores (el leaderboard lo maneja, o deberia)
         });
       }
     });
 
-    // procesar pendientes cuando vuelva a estar online
     window.addEventListener('online', async () => {
       try {
         const result = await this.supabase.processPendingScores();
@@ -152,16 +140,13 @@ export class App implements OnInit, OnDestroy {
       } catch (e) {
         console.warn('Error:', e);
       }
-      // Al recuperar conexión, también comprobamos actualizaciones (forzadas)
       this.maybeCheckForUpdate(true);
     });
 
-    // si el usuario ya esta online al cargar la app entonces procesar pendientes
     if (navigator.onLine) {
       this.supabase.processPendingScores().catch(() => {});
     }
 
-    // Inicializamos el chequeo diario de actualizaciones (si el SW está habilitado)
     this.setupDailyUpdateCheck();
 
     this.levelSub = this.playerStats.level$.subscribe((level) => {
@@ -175,19 +160,14 @@ export class App implements OnInit, OnDestroy {
 
       this.audioService.playMusic(url, true, 2);
     });
-    this.goldenCroquetaService.startSpawnCheck();
-    // ensure the burnt croqueta spawn loop also runs
-    this.burntCroquetaService.startSpawnCheck();
   }
 
-  // hago todo esto aquí por el cache del service worker que si no no funciona del todo bien, no siempre se actualiza
   private readonly UPDATE_CHECK_KEY = 'lastUpdateCheck';
   private readonly UPDATE_INTERVAL_MS = 1000 * 60 * 60 * 24; // 24 horas
 
   private setupDailyUpdateCheck() {
     if (!this.swUpdate?.isEnabled) return;
 
-    // cuando hay una nueva versión disponible preguntamos al usuario
     this.swUpdate.versionUpdates.subscribe((evt) => {
       if (evt?.type !== 'VERSION_READY') return;
       try {
@@ -208,7 +188,6 @@ export class App implements OnInit, OnDestroy {
           },
         });
       } catch (e) {
-        // fallback, se intenta aplicar de forma silenciosa
         this.swUpdate
           .activateUpdate()
           .then(() => location.reload())
@@ -216,17 +195,14 @@ export class App implements OnInit, OnDestroy {
       }
     });
 
-    // chequeo inicial si procede
     this.maybeCheckForUpdate(false);
 
-    // comprobaciones periódicas mientras la aplicación esté abierta y respetando el intervalo
     try {
       if (this.updateCheckIntervalId) clearInterval(this.updateCheckIntervalId);
       this.updateCheckIntervalId = window.setInterval(() => {
         this.maybeCheckForUpdate(false);
       }, this.UPDATE_INTERVAL_MS);
     } catch (e) {
-      // en pruebas ignorar
     }
   }
 

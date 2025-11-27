@@ -100,13 +100,17 @@
       "title": "El Croquetero Infinito",
       "description": "Alcanza el nivel 10000."
     },
-    "bonus_event": {
+    "golden_event": {
       "title": "La croqueta dorada",
       "description": "Haz click en la croqueta dorada."
     },
-    "penalty_event": {
+    "burnt_event": {
       "title": "La croqueta quemada",
       "description": "Ups... Has hecho click en la croqueta quemada."
+    },
+    "cosmic_event": {
+      "title": "La croqueta cósmica",
+      "description": "Haz click en la croqueta cósmica."
     },
     "primer_skin": {
       "title": "Cambio de look",

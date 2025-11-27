@@ -1,0 +1,46 @@
+.event-container {
+  position: absolute;
+  cursor: pointer;
+  z-index: 1000;
+  opacity: 0;
+}
+
+.event-container[data-state="fading-in"] {
+  animation: fadeIn 0.5s forwards;
+}
+
+.event-container[data-state="visible"] {
+  opacity: 1;
+}
+
+.event-container[data-state="fading-out"] {
+  animation: fadeOut 0.5s forwards;
+}
+
+.event-image {
+  width: 53px;
+  height: 100px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

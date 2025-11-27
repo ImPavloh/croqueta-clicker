@@ -163,20 +163,26 @@ export const ACHIEVEMENTS: Achievement[] = [
   // ⭐ EVENTOS (Implementado)
   // ------------------------------------------------------------
   {
-    id: 'bonus_event',
-    title: 'achievements.bonus_event.title',
-    description: 'achievements.bonus_event.description',
+    id: 'golden_event',
+    title: 'achievements.golden_event.title',
+    description: 'achievements.golden_event.description',
     icon: '/assets/achievements/event/golden.webp',
     secret: true,
   },
   {
-    id: 'penalty_event',
-    title: 'achievements.penalty_event.title',
-    description: 'achievements.penalty_event.description',
-    icon: '/assets/achievements/event/golden.webp',
+    id: 'burnt_event',
+    title: 'achievements.burnt_event.title',
+    description: 'achievements.burnt_event.description',
+    icon: '/assets/achievements/event/quemada.webp',
     secret: true,
   },
-
+  {
+    id: 'cosmic_event',
+    title: 'achievements.cosmic_event.title',
+    description: 'achievements.cosmic_event.description',
+    icon: '/assets/achievements/event/cosmica.webp',
+    secret: true,
+  },
   // ------------------------------------------------------------
   // 🏭 PRODUCTORES
   // ------------------------------------------------------------

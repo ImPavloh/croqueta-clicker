@@ -93,7 +93,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.8.description',
     image: '/assets/skins/croqueta-dorada.webp',
     particleImage: '/assets/skins/croqueta-dorada.webp',
-    unlockRequirement: { type: 'achievement', id: 'bonus_event' },
+    unlockRequirement: { type: 'achievement', id: 'golden_event' },
     background: '/assets/backgrounds/bg-gold.webp',
   },
   {
@@ -104,7 +104,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.9.description',
     image: '/assets/skins/croqueta-quemada.webp',
     particleImage: '/assets/skins/croqueta-quemada.webp',
-    unlockRequirement: { type: 'achievement', id: 'penalty_event' },
+    unlockRequirement: { type: 'achievement', id: 'burnt_event' },
     background: '/assets/backgrounds/bg-quemado.webp',
   },
   {
@@ -224,7 +224,7 @@ export const SKINS: SkinModel[] = [
     description: 'skins.skin.10.description',
     image: '/assets/skins/croqueta-cosmica.webp',
     particleImage: '/assets/skins/croqueta-cosmica.webp',
-    unlockRequirement: { type: 'croquetas', value: 150000 },
+    unlockRequirement: { type: 'achievement', id: 'cosmic_event' },
     background: '/assets/backgrounds/bg-galaxy.webp',
   },
   {

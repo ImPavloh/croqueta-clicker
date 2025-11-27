@@ -3,8 +3,7 @@ import { ChangeDetectionStrategy, Component, Input, computed, inject } from '@an
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { PlayerStats } from '@services/player-stats.service';
-import { GoldenCroquetaService } from '@services/golden-croqueta.service';
-import { BurntCroquetaService } from '@services/burnt-croqueta.service';
+import { EventService } from '@services/event.service';
 
 type StatsVariant = 'mobile' | 'desktop' | 'auto';
 
@@ -22,8 +21,9 @@ export class StatsComponent {
   @Input() variant: StatsVariant = 'auto';
 
   private playerStats = inject(PlayerStats);
-  protected goldenCroquetaService = inject(GoldenCroquetaService);
-  protected burntCroquetaService = inject(BurntCroquetaService);
+  private eventService = inject(EventService);
+
+  activeEvents = computed(() => this.eventService.getEvents()().filter(e => e.active));
 
   // nivel y experiencia
   level = toSignal(this.playerStats.level$, { initialValue: 0 });

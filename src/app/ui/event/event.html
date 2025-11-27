@@ -1,0 +1,13 @@
+@for (event of events(); track event.id) { @if (event.spawned) {
+  <div
+    class="event-container"
+    [attr.data-state]="event.state"
+    [style.top.%]="event.position.y"
+    [style.left.%]="event.position.x"
+    (click)="onClick(event.id, $event)"
+  >
+
+  <img
+    [src]="event.image" alt="event" class="event-image" />
+</div>
+} }
