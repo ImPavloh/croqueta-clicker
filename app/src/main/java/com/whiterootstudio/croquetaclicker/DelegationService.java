@@ -1,4 +1,4 @@
-package com.pavloh.croquetaclicker;
+package com.whiterootstudio.croquetaclicker;
 
 
 

@@ -21,8 +21,8 @@ plugins {
 }
 
 def twaManifest = [
-    applicationId: 'com.pavloh.croquetaclicker',
-    hostName: 'croquetaclicker.pavloh.com', // The domain being opened in the TWA.
+    applicationId: 'com.whiterootstudio.croquetaclicker',
+    hostName: 'croquetaclicker.whiteroot.studio', // The domain being opened in the TWA.
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'Croqueta Clicker', // The application name.
     launcherName: 'Croqueta Clicker', // The name shown on the Android Launcher.
@@ -52,9 +52,9 @@ def twaManifest = [
 
 android {
     compileSdkVersion 36
-    namespace "com.pavloh.croquetaclicker"
+    namespace "com.whiterootstudio.croquetaclicker"
     defaultConfig {
-        applicationId "com.pavloh.croquetaclicker"
+        applicationId "com.whiterootstudio.croquetaclicker"
         minSdkVersion 21
         targetSdkVersion 35
         versionCode 1
@@ -76,12 +76,12 @@ android {
             // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
             // is used by Chrome OS and Meta Quest to open the Web version of the PWA instead of
             // the TWA, as it will probably give a better user experience for non-mobile devices.
-            resValue "string", "webManifestUrl", 'https://croquetaclicker.pavloh.com/manifest.webmanifest'
+            resValue "string", "webManifestUrl", 'https://croquetaclicker.whiteroot.studio/manifest.webmanifest'
 
 
 
             // This is used by Meta Quest.
-            resValue "string", "fullScopeUrl", 'https://croquetaclicker.pavloh.com/'
+            resValue "string", "fullScopeUrl", 'https://croquetaclicker.whiteroot.studio/'
 
 
 

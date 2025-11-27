@@ -4,7 +4,7 @@
 
 ¡Haz click en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas!
 
-Visita **[croquetaclicker.pavloh.com](https://croquetaclicker.pavloh.com)** para jugarlo ya :)
+Visita **[croquetaclicker.whiteroot.studio](https://croquetaclicker.whiteroot.studio)** para jugarlo ya :)
 
 ---
 
