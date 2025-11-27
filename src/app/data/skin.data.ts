@@ -73,7 +73,7 @@ export const SKINS: SkinModel[] = [
     particleImage: '/assets/skins/croqueta-coqueta.webp',
     unlockRequirement: { type: 'level', value: 13 },
     background: '/assets/backgrounds/bg-coqueta.webp',
-    counterLabel: 'skins.skin.20.counterLabel',
+    counterLabel: 'skins.skin.7.counterLabel',
   },
   {
     id: 22,

@@ -259,4 +259,20 @@ export class Options {
       return `${secs}s`;
     }
   }
+
+  replayTutorial() {
+    this.modalService.showConfirm({
+      title: this.translocoService.translate('options.replayTutorialModal.title'),
+      message: this.translocoService.translate('options.replayTutorialModal.message'),
+      confirmText: this.translocoService.translate('options.replayTutorialModal.confirmText'),
+      cancelText: this.translocoService.translate('options.replayTutorialModal.cancelText'),
+      onConfirm: () => {
+        this.optionsService.removeGameItem('tutorial_completed');
+        this.optionsService.removeGameItem('splash_shown');
+        setTimeout(() => {
+          window.location.reload();
+        }, 80);
+      },
+    });
+  }
 }

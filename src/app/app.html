@@ -1,7 +1,9 @@
 <main>
   <app-backgrounds></app-backgrounds>
   <div class="main-container">
+    @if (splashVisible()) {
     <app-splash (splashComplete)="onSplashComplete()" />
+    }
     <app-modal />
     <app-achievement-popup />
     @if (isMobile) {
@@ -36,8 +38,9 @@
         <app-clicker />
         <app-counter />
       </div>
-      }
+      } @if (tutorialCompleted()) {
       <app-croquetita />
+      }
     </div>
     @if (!isMobile) {
     <div class="menu-container">
@@ -54,3 +57,6 @@
   </div>
   }
 </main>
+@if (tutorialVisible()) {
+<app-tutorial-overlay (completed)="onTutorialFinished()" />
+}

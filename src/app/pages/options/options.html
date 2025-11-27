@@ -124,6 +124,12 @@
             </app-button>
           </app-tooltip>
 
+          <app-tooltip [text]="'options.replayTutorialTooltip' | transloco">
+            <app-button customClass="w-34 lg:w-44" variant="golden" (click)="replayTutorial()">
+              {{ 'options.replayTutorialButton' | transloco }}
+            </app-button>
+          </app-tooltip>
+
           <app-tooltip [text]="'options.resetGameTooltip' | transloco">
             <app-button customClass="w-34 lg:w-44" variant="danger" (click)="restartGame()">
               {{ 'options.resetGameButton' | transloco }}

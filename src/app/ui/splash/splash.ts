@@ -16,11 +16,13 @@ export class Splash implements OnInit {
   public readonly splashComplete = output<void>();
 
   ngOnInit(): void {
-    // ocultar splash automáticamente tras 5s
+    // El splash se oculta solo con click o tras 5s
     if (typeof window !== 'undefined') {
       setTimeout(() => {
-        this.splashShown.set(false);
-        this.splashComplete.emit();
+        if (this.splashShown()) {
+          this.splashShown.set(false);
+          this.splashComplete.emit();
+        }
       }, 5000);
     }
   }

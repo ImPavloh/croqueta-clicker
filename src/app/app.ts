@@ -16,6 +16,8 @@ import { Counter } from '@ui/counter/counter';
 import { Particles } from '@ui/particles/particles';
 import { Floating } from '@ui/floating/floating';
 import { Croquetita } from '@ui/croquetita/croquetita';
+import { TutorialOverlayComponent } from '@ui/tutorial-overlay/tutorial-overlay';
+import { OptionsService } from '@services/options.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
 import { LevelUpPopup } from '@ui/level-up-popup/level-up-popup';
@@ -60,6 +62,7 @@ import { EventService } from '@services/event.service';
     Backgrounds,
     Leaderboard,
     EventComponent,
+    TutorialOverlayComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -68,6 +71,10 @@ import { EventService } from '@services/event.service';
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
   isDebugMode = false;
+  tutorialVisible = signal(false);
+  tutorialCompleted = signal(false);
+  splashVisible = signal(false);
+  firstTimeUser = signal(false);
 
   constructor(
     private playerStats: PlayerStats,
@@ -78,9 +85,28 @@ export class App implements OnInit, OnDestroy {
     private translocoService: TranslocoService,
     private supabase: SupabaseService,
     private swUpdate: SwUpdate,
-    private eventService: EventService
+    private eventService: EventService,
+    private options: OptionsService
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
+    const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';
+    const splashShown = this.options.getGameItem('splash_shown') === 'true';
+
+    this.tutorialCompleted.set(tutorialDone);
+
+    // Usuario nuevo: mostrar tutorial primero
+    if (!tutorialDone && !splashShown) {
+      this.firstTimeUser.set(true);
+      this.tutorialVisible.set(true);
+    }
+    // Usuario que ya vio el tutorial pero no el splash
+    else if (tutorialDone && !splashShown) {
+      this.splashVisible.set(true);
+    }
+    // Usuario que ya vio todo: iniciar directamente
+    else if (tutorialDone && splashShown) {
+      setTimeout(() => this.onSplashComplete(), 100);
+    }
   }
 
   private levelSub?: Subscription;
@@ -123,12 +149,13 @@ export class App implements OnInit, OnDestroy {
   }
 
   protected onSplashComplete(): void {
+    this.splashVisible.set(false);
+    this.options.setGameItem('splash_shown', 'true');
     this.playerStats.startTimer();
 
     this.supabase.getUser().then(async (r) => {
       if (!r?.data?.user) {
-        await this.supabase.signInAnonymously().catch(() => {
-        });
+        await this.supabase.signInAnonymously().catch(() => {});
       }
     });
 
@@ -202,8 +229,7 @@ export class App implements OnInit, OnDestroy {
       this.updateCheckIntervalId = window.setInterval(() => {
         this.maybeCheckForUpdate(false);
       }, this.UPDATE_INTERVAL_MS);
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   private async maybeCheckForUpdate(force = false) {
@@ -220,6 +246,15 @@ export class App implements OnInit, OnDestroy {
       }
     } catch (e) {
       console.warn('Update check failed', e);
+    }
+  }
+
+  protected onTutorialFinished() {
+    this.tutorialVisible.set(false);
+    this.tutorialCompleted.set(true);
+
+    if (this.firstTimeUser()) {
+      this.splashVisible.set(true);
     }
   }
 }

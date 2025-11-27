@@ -217,6 +217,14 @@
       "errorMessage": "Error downloading the game: ",
       "confirmText": "Accept"
     },
+    "replayTutorialButton": "Replay tutorial",
+    "replayTutorialTooltip": "Replay the tutorial.",
+    "replayTutorialModal": {
+      "title": "Replay tutorial",
+      "message": "Do you want to replay the initial tutorial? It will reload to show it.",
+      "confirmText": "Yes, replay",
+      "cancelText": "Cancel"
+    },
     "importGameModal": {
       "title": "Import game",
       "message": "Do you want to load this game? Your current progress will be completely replaced.",
@@ -566,7 +574,44 @@
     "help_navigation": "Use the menus to get the most out of your croquette experience.",
     "help_achievements": "Did you know you can see all your detailed achievements?",
     "help_skins": "Skins don't give bonuses, but they make your croquette look great or at least different...",
-    "general_help": "Need help? Explore the different menus or just keep clicking. You decide!"
+    "general_help": "Need help? Explore the different menus or just keep clicking. You decide!",
+    "overlay": {
+      "intro": {
+        "title": "Welcome",
+        "body": "I'm Croquetita, your guide. In this tutorial I'll teach you the basics: how to earn croquettes, XP and level up."
+      },
+      "points": {
+        "title": "Croquettes",
+        "body": "Click on the big croquette to earn croquettes. Producers can generate croquettes automatically."
+      },
+      "experience": {
+        "title": "Experience",
+        "body": "Gain experience by cooking croquettes. Level up to unlock bonuses and content."
+      },
+      "producers": {
+        "title": "Producers",
+        "body": "Producers automatically generate croquettes. Buy and upgrade them to speed up progress."
+      },
+      "upgrades": {
+        "title": "Upgrades",
+        "body": "Upgrades increase croquettes per click and producer efficiency. Prioritize them wisely."
+      },
+      "events": {
+        "title": "Events",
+        "body": "Special events spawn occasionally with bonuses or penalties."
+      },
+      "skins": {
+        "title": "Skins",
+        "body": "Skins are cosmetic. Unlock them via achievements, levels or special tasks."
+      },
+      "finish": {
+        "title": "Ready",
+        "body": "Great! You know the basics. Explore the game and come back to the tutorial anytime."
+      },
+      "prev": "Previous",
+      "next": "Next",
+      "finish_button": "Start Playing"
+    }
   },
   "navbar": {
     "upgrades": "Upgrades",

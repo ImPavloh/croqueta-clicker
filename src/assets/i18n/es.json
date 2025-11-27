@@ -217,6 +217,14 @@
       "errorMessage": "Error al descargar la partida: ",
       "confirmText": "Aceptar"
     },
+    "replayTutorialButton": "Repetir tutorial",
+    "replayTutorialTooltip": "Repite el tutorial de nuevo.",
+    "replayTutorialModal": {
+      "title": "Repetir tutorial",
+      "message": "¿Quieres volver a ver el tutorial inicial? Se recargará para mostrarlo.",
+      "confirmText": "Sí, repetir",
+      "cancelText": "Cancelar"
+    },
     "importGameModal": {
       "title": "Importar partida",
       "message": "¿Quieres cargar esta partida? Tu progreso actual será reemplazado completamente.",
@@ -575,7 +583,44 @@
     "help_navigation": "Usa los menús para sacar el máximo provecho de tu experiencia croquetera.",
     "help_achievements": "¿Sabías que puedes ver todos tus logros detallados?",
     "help_skins": "Las skins no dan bonificaciones, pero hacen que tu croqueta se vea genial o al menos diferente...",
-    "general_help": "¿Necesitas ayuda? Explora los diferentes menús o simplemente sigue clickeando. ¡Tú decides!"
+    "general_help": "¿Necesitas ayuda? Explora los diferentes menús o simplemente sigue clickeando. ¡Tú decides!",
+    "overlay": {
+      "intro": {
+        "title": "Bienvenido",
+        "body": "Soy Croquetita, tu guía. En este tutorial te enseño lo básico: cómo ganar croquetas, experiencia y nivelar."
+      },
+      "points": {
+        "title": "Croquetas",
+        "body": "Haz click en la croqueta grande para ganar croquetas. También hay productores que generan croquetas automáticamente."
+      },
+      "experience": {
+        "title": "Experiencia",
+        "body": "Gana experiencia subiendo de nivel al cocinar croquetas y desbloquear contenido nuevo."
+      },
+      "producers": {
+        "title": "Productores",
+        "body": "Los productores generan croquetas pasivamente. Compra y mejora productores para acelerar tu progreso."
+      },
+      "upgrades": {
+        "title": "Mejoras",
+        "body": "Las mejoras aumentan croquetas por click y la eficiencia de tus productores. Priorízalas cuando suban de coste."
+      },
+      "events": {
+        "title": "Eventos",
+        "body": "De vez en cuando aparecen eventos especiales que dan bonificaciones o penalizaciones temporales."
+      },
+      "skins": {
+        "title": "Skins",
+        "body": "Las skins son cosméticas y las desbloqueas con logros, niveles u objetivos. ¡Pruébalas todas!"
+      },
+      "finish": {
+        "title": "Listo",
+        "body": "¡Perfecto! Ya conoces lo básico. Siéntete libre de explorar y volver al tutorial más tarde."
+      },
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "finish_button": "Empezar"
+    }
   },
   "navbar": {
     "upgrades": "Mejoras",
