@@ -1,80 +1,57 @@
-import { Component, computed, inject, signal, effect } from '@angular/core';
-import { PlayerStats } from '@services/player-stats.service';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AchievementList } from '@ui/achievement-list/achievement-list';
-import { STATS } from '@data/stats.data';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslocoModule } from '@jsverse/transloco';
+
+import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
+import { AchievementsService } from '@services/achievements.service';
+import { Achievement } from '@data/achievements.data';
+import { Tooltip } from '@ui/tooltip/tooltip';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-achievements',
   standalone: true,
-  imports: [CommonModule, AchievementList, TranslocoModule],
+  imports: [CommonModule, Tooltip, TranslocoPipe],
   templateUrl: './achievements.html',
   styleUrl: './achievements.css',
 })
-export class Achievements {
-  private playerStats = inject(PlayerStats);
+export class Achievements implements OnDestroy{
+  achievementsWithState: Array<Achievement & { unlocked: boolean }> = [];
+    private subs = new Subscription();
 
-  level = toSignal(this.playerStats._level, { initialValue: 0 });
+    constructor(
+      private svc: AchievementsService,
+      private transloco: TranslocoService
+    ) {
+      // inicializar con el estado actual (método público)
+      this.achievementsWithState = this.svc.getAllWithState();
 
-  stats = STATS;
+      // suscribirse a cambios en unlockedMap$ y actualizar la vista inmediatamente
+      this.subs.add(
+        this.svc.unlockedMap$.subscribe(() => {
+          this.achievementsWithState = this.svc.getAllWithState();
+        })
+      );
+    }
 
-  // Stats individuales
-  clicksStat = STATS.find((s) => s.id === 'total_clicks')!;
-  timeStat = STATS.find((s) => s.id === 'time_playing')!;
+    ngOnDestroy(): void {
+      this.subs.unsubscribe();
+    }
 
-  // Circular progress bar - radio aumentado a 78
-  circumference = 2 * Math.PI * 78; // radio = 78
-  shouldTransition = signal(true);
+    get unlockedCount(): number {
+      return this.svc.getUnlockedCount();
+    }
 
-  private previousProgress = 0;
+    get totalCount(): number {
+      return this.svc.getTotalCount();
+    }
 
-  private expProgress = computed(() => {
-    const current = this.playerStats.currentExp();
-    const next = this.playerStats.expToNext();
-    return next > 0 ? current / next : 0;
-  });
-
-  strokeDashoffset = computed(() => {
-    const progress = this.expProgress();
-    return this.circumference - progress * this.circumference;
-  });
-
-  // Exponer valores de experiencia
-  currentExp = computed(() => this.playerStats.currentExp());
-  expToNext = computed(() => this.playerStats.expToNext());
-
-  constructor() {
-    effect(() => {
-      const currentProgress = this.expProgress();
-
-      if (currentProgress < this.previousProgress - 0.5) {
-        this.shouldTransition.set(false);
-
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            this.shouldTransition.set(true);
-          });
-        });
+    getTooltipText(item: Achievement & { unlocked: boolean }): string {
+      if (!item.unlocked && item.secret) {
+        return this.transloco.translate('achievements.secretAchievement');
       }
-
-      this.previousProgress = currentProgress;
-    });
-  }
-
-  // Computar valores reactivamente
-  values = computed(() => {
-    return {
-      totalClicks: this.playerStats.totalClicks(),
-      timePlaying: this.playerStats.timePlaying(),
-      level: this.level(),
-    };
-  });
-
-  getValue(key: string): number {
-    // Usar aserción de tipo
-    const statsValues = this.values() as any;
-    return statsValues[key] || 0;
-  }
+      if (item.description) {
+        return this.transloco.translate(item.description);
+      }
+      return this.transloco.translate('achievements.noDescription');
+    }
 }

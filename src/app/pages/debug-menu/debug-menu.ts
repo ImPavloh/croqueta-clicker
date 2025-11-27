@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { FormsModule } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -22,11 +22,10 @@ export class DebugMenuComponent {
   cps: number = 0;
   cpc: number = 0;
 
-  constructor(
-    private gameService: GameService,
-    private pointsService: PointsService,
-    private playerStats: PlayerStats
-  ) {}
+  private gameService = inject(GameService);
+  private pointsService = inject(PointsService);
+  private playerStats = inject(PlayerStats);
+
 
   setCroquetas() {
     this.pointsService.setPoints(this.croquetas);

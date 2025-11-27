@@ -3,3 +3,38 @@
   height: 100%;
   width: 100%;
 }
+.achievement-list-scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem;
+  padding-right: 0.75rem;
+  scrollbar-width: thin;
+  scrollbar-color: #b89c5a #f3eac2;
+  mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 2%, black 95%, transparent);
+}
+
+.achievement-list-scrollable::-webkit-scrollbar {
+  width: 12px;
+}
+
+.achievement-list-scrollable::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b89c5a 0%, #ccb78b 50%, #b89c5a 100%);
+  border-radius: 10px;
+  border: 2px solid #f3eac2;
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+.achievement-list-scrollable::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ccb78b 0%, #b89c5a 50%, #ccb78b 100%);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.6);
+}
+
+.achievement-list-scrollable::-webkit-scrollbar-track {
+  background: #f3eac2;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
