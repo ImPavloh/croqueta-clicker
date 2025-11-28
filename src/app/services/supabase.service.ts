@@ -2,6 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 import { SUPABASE } from '../../environments/supabase.config';
 import { DebugService } from '@services/debug.service';
+import { UsernameService } from './username.service';
 import type { LeaderboardEntry, LeaderboardRow } from '@models/leaderboard.model';
 
 @Injectable({ providedIn: 'root' })
@@ -19,8 +20,22 @@ export class SupabaseService {
     });
   }
 
+  private _usernameService: UsernameService | null = null;
+
+  private get usernameService(): UsernameService | null {
+    if (this._usernameService === null) {
+      try {
+        this._usernameService = this.injector.get(UsernameService, null as any);
+      } catch {
+        this._usernameService = null;
+      }
+    }
+    return this._usernameService;
+  }
+
   // temp fix aunque no lo arregla igualmente
   // https://github.com/supabase/supabase-js/issues/936
+  // TODO: arreglar esto como sea
   private _createNonBlockingStorage() {
     const cache = new Map<string, string>();
 
@@ -113,6 +128,11 @@ export class SupabaseService {
         return { error: new Error('Operación deshabilitada en modo DEBUG'), data: null } as any;
     } catch {}
 
+    try {
+      if (this.usernameService && !this.usernameService.validate(name).valid)
+        return { error: new Error('Invalid username'), data: null } as any;
+    } catch {}
+
     return this._withNavigatorLockRetry(() => this.supabase.auth.updateUser({ data: { name } }));
   }
 
@@ -172,8 +192,6 @@ export class SupabaseService {
 
     // creo que esto es innecesario pero bueno, lo dejo de momento
     try {
-      // kick off a safe getUser() call to warm session cache without risking
-      // unhandled navigator lock errors.
       const u = this.getUser();
     } catch {}
 
