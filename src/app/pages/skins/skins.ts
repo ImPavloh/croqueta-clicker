@@ -12,10 +12,17 @@ import { SkinsService } from '@services/skins.service';
   styleUrl: './skins.css',
 })
 export class Skins {
+  //Servicio para gestionar las skins y su estado de desbloqueo.
   private skinsService = inject(SkinsService);
+
+  //Array con la lista completa de todas las skins disponibles en el juego.
   skins = SKINS;
 
-  // agrupa las skins por su grupo y las ordena por su orden o id
+  /**
+   * Agrupa las skins por su rareza y las ordena.
+   * La agrupación sigue un orden predefinido de rareza y luego por el orden o ID de la skin.
+   * @returns Un array de objetos, donde cada objeto contiene la clave de la rareza y un array de skins correspondientes.
+   */
   get groupedSkins() {
     const groups = new Map<string, Array<(typeof SKINS)[number]>>();
 
@@ -47,6 +54,11 @@ export class Skins {
       .map(([key, arr]) => ({ key, skins: arr }));
   }
 
+  /**
+   * Comprueba si una skin específica ha sido desbloqueada por el jugador.
+   * @param skin La skin a comprobar.
+   * @returns `true` si la skin está desbloqueada, `false` en caso contrario.
+   */
   isSkinUnlocked(skin: any): boolean {
     return this.skinsService.isSkinUnlocked(skin);
   }

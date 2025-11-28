@@ -19,16 +19,29 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrl: './upgrades.css',
 })
 export class Upgrades {
+
+  //Array con la lista completa de todas las mejoras disponibles en el juego.
   upgrades = UPGRADES;
+
+  //Array con la lista completa de todos los productores disponibles en el juego.
   producers = PRODUCERS;
 
+  //Controla la pestaña activa en la vista móvil, que puede ser 'upgrades' o 'producers'.
   public mobileTab: 'upgrades' | 'producers' = 'upgrades';
 
+  //Servicio para gestionar las opciones y el estado guardado del juego.
   private optionsService = inject(OptionsService);
 
+  /**
+   * @param shopControls Servicio para gestionar los controles de la tienda, como los filtros.
+   */
   constructor(public shopControls: ShopControlsService) {}
 
-  // Mostrar upgrades filtrados por estado (comprados / no comprados)
+  /**
+   * Señal computada que devuelve una lista de mejoras filtrada.
+   * Si el filtro 'Ocultar comprados' está activo, solo muestra las mejoras no compradas.
+   * Reacciona a los cambios en el filtro y en los datos del juego.
+   */
   filteredUpgrades = computed(() => {
     this.optionsService.gameItemsVersion();
     const list = [...this.upgrades];

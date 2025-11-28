@@ -38,26 +38,44 @@ import PackageJson from '../../../../package.json';
 export class Options {
   private shortNumberPipe = new ShortNumberPipe();
 
+  //Versión de la aplicación, obtenida desde el fichero package.json.
   version = PackageJson.version;
 
-  constructor(
-    public optionsService: OptionsService,
-    private modalService: ModalService,
-    private playerStats: PlayerStats,
-    private pointsService: PointsService,
-    private autosaveService: AutosaveService,
-    private skinsService: SkinsService,
-    private shopControlsService: ShopControlsService,
-    private translocoService: TranslocoService,
-    private achievementsService: AchievementsService,
-    private supabase: SupabaseService,
-    private debugService: DebugService
-  ) {}
+  //Servicio para gestionar las opciones del juego.
+  public optionsService = inject(OptionsService);
+  //Servicio para mostrar modales de confirmación.
+  private modalService = inject(ModalService);
+  //Servicio para gestionar las estadísticas del jugador.
+  private playerStats = inject(PlayerStats);
+  //Servicio para gestionar los puntos (croquetas).
+  private pointsService = inject(PointsService);
+  //Servicio para el guardado automático y manual.
+  private autosaveService = inject(AutosaveService);
+  //Servicio para gestionar las skins.
+  private skinsService = inject(SkinsService);
+  //Servicio para los controles de la tienda.
+  private shopControlsService = inject(ShopControlsService);
+  //Servicio para la internacionalización.
+  private translocoService = inject(TranslocoService);
+  //Servicio para gestionar los logros.
+  private achievementsService = inject(AchievementsService);
+  //Servicio para la interacción con la base de datos de Supabase (leaderboard).
+  private supabase = inject(SupabaseService);
+  //Servicio para gestionar el modo debug.
+  private debugService = inject(DebugService);
 
+  /**
+   * Método del ciclo de vida de Angular. Se ejecuta al iniciar el componente.
+   * Carga el idioma guardado por el usuario.
+   */
   ngOnInit() {
     this.setSavedLang();
   }
 
+  /**
+   * Muestra un modal de confirmación para reiniciar el juego. Si se confirma,
+   * borra los datos locales y remotos (leaderboard) y reinicia el estado del juego.
+   */
   restartGame() {
     this.modalService.showConfirm({
       title: this.translocoService.translate('options.resetGameModal.title'),
@@ -94,6 +112,10 @@ export class Options {
   }
 
   // Guardar manualmente el progreso actual
+  /**
+   * Guarda manualmente el progreso actual del juego utilizando el `AutosaveService`
+   * y muestra un modal de confirmación con el resultado de la operación.
+   */
   saveProgress() {
     const success = this.autosaveService.saveManually();
 
@@ -111,6 +133,10 @@ export class Options {
   }
 
   // mostrar diálogo para exportar partida no un alert sino el modal:
+  /**
+   * Exporta el progreso del juego a un fichero. Primero guarda el estado actual
+   * y luego invoca al servicio de opciones para generar y descargar el archivo.
+   */
   exportProgress() {
     try {
       // Primero guardamos el estado actual antes de exportar
@@ -136,6 +162,10 @@ export class Options {
     }
   }
 
+  /**
+   * Abre un diálogo para que el usuario seleccione un fichero de guardado (`.croqueta`).
+   * Si se selecciona un fichero, muestra un modal de confirmación antes de importarlo y reemplazar la partida actual.
+   */
   importProgress() {
     const input = document.createElement('input');
     input.type = 'file';
@@ -179,6 +209,10 @@ export class Options {
     input.click();
   }
 
+  /**
+   * Recopila las estadísticas actuales del jugador y utiliza la API `navigator.share` para compartirlas.
+   * Si la API no está disponible, copia las estadísticas al portapapeles.
+   */
   shareGame() {
     const totalClicks = this.shortNumberPipe.transform(this.playerStats.totalClicks(), 0);
     const timePlaying = this.formatTime(this.playerStats.timePlaying());
@@ -211,7 +245,11 @@ export class Options {
     }
   }
 
+  /** Contador de clicks en el nombre del estudio. */
   studioClicked = 0;
+  /**
+   * Incrementa el contador de clicks en el nombre del estudio y desbloquea logros secretos al alcanzar ciertos umbrales.
+   */
   clickOnStudio() {
     this.studioClicked++;
     if (this.studioClicked >= 10) {
@@ -222,6 +260,10 @@ export class Options {
     }
   }
 
+  /**
+   * Cambia el idioma activo del juego y lo guarda en el almacenamiento local.
+   * @param lang El código del idioma a activar (ej. 'es', 'en').
+   */
   changeLanguage(lang: string) {
     this.translocoService.setActiveLang(lang);
     // si no hay localStorage, no hacer nada
@@ -230,6 +272,9 @@ export class Options {
     this.optionsService.setGameItem('lang', lang);
   }
 
+  /**
+   * Carga y establece el idioma guardado en el almacenamiento local al iniciar la aplicación.
+   */
   setSavedLang() {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
@@ -240,12 +285,21 @@ export class Options {
     }
   }
 
+  /**
+   * Copia un texto al portapapeles del usuario y muestra una alerta de confirmación.
+   * @param text El texto a copiar.
+   */
   private copyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(() => {
       alert(this.translocoService.translate('options.shareGameModal.clipboardMessage'));
     });
   }
 
+  /**
+   * Formatea un número de segundos a un string legible en formato `Xh Ym Zs`.
+   * @param seconds El número de segundos a formatear.
+   * @returns El tiempo formateado como string.
+   */
   private formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -260,6 +314,10 @@ export class Options {
     }
   }
 
+  /**
+   * Muestra un modal de confirmación para repetir el tutorial. Si se confirma,
+   * elimina las marcas de tutorial completado y recarga la página.
+   */
   replayTutorial() {
     this.modalService.showConfirm({
       title: this.translocoService.translate('options.replayTutorialModal.title'),
