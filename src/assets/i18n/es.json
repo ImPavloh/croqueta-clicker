@@ -389,6 +389,9 @@
     },
     "unlock": {
       "unlocked": "Desbloqueada",
+      "skin_unlocked": "¡Skin desbloqueada!",
+      "use_now": "Usar ahora",
+      "save_and_close": "Guardar y cerrar",
       "level": "Nivel {{value}}",
       "croquettes": "{{value}} croquetas",
       "exp": "{{value}} EXP",

@@ -8,11 +8,6 @@ import { SkinModel, UnlockRequirement } from '@models/skin.model';
 import { SKINS } from '@data/skin.data';
 import { TranslocoService } from '@jsverse/transloco';
 
-export interface SkinUnlockNotification {
-  skin: SkinModel;
-  timestamp: number;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -36,8 +31,8 @@ export class SkinsService {
   // skins desbloqueadas (tracking para notis)
   private unlockedSkins = new Set<number>();
 
-  private queueSubject = new BehaviorSubject<SkinUnlockNotification[]>([]);
-  readonly queue$: Observable<SkinUnlockNotification[]> = this.queueSubject.asObservable();
+  private queueSubject = new BehaviorSubject<SkinModel[]>([]);
+  readonly queue$: Observable<SkinModel[]> = this.queueSubject.asObservable();
 
   constructor(private achievementsService: AchievementsService) {
     this.loadFromStorage();
@@ -150,7 +145,7 @@ export class SkinsService {
 
   removeSkinFromQueue(skinId: number) {
     const currentQueue = this.queueSubject.value; // O como llames a tu BehaviorSubject
-    const updatedQueue = currentQueue.filter((item) => item.skin.id !== skinId);
+    const updatedQueue = currentQueue.filter((item) => item.id !== skinId);
     this.queueSubject.next(updatedQueue); // Al hacer .next(), Angular avisa al componente de nuevo
   }
   // actualizar fondo segun skin
@@ -225,19 +220,16 @@ export class SkinsService {
   }
 
   notifySkinUnlock(skin: SkinModel): void {
-    const notification: SkinUnlockNotification = {
-      skin,
-      timestamp: Date.now(),
-    };
+    skin.timestamp = Date.now(); 
 
     const queue = this.queueSubject.getValue();
-    const exists = queue.some((n) => n.skin.id === skin.id && Date.now() - n.timestamp < 5000);
+    const exists = queue.some((n) => n.id === skin.id && Date.now() - (n.timestamp || 0) < 5000);
     if (!exists) {
-      this.queueSubject.next([...queue, notification]);
+      this.queueSubject.next([...queue, skin]);
     }
   }
 
-  consumeNext(): SkinUnlockNotification | null {
+  consumeNext(): SkinModel | null {
     const queue = this.queueSubject.getValue();
     if (queue.length === 0) return null;
 

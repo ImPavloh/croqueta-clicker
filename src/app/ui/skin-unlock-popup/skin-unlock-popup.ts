@@ -1,20 +1,21 @@
 import { Component, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SkinUnlockNotification } from '@services/skins.service';
 import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
 import { SkinsService } from '@services/skins.service';
 import { ButtonComponent } from '@ui/button/button';
+import { TranslocoModule } from '@jsverse/transloco';
+import { SkinModel } from '@models/skin.model';
 
 @Component({
   selector: 'app-skin-unlock-popup',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, TranslocoModule],
   templateUrl: './skin-unlock-popup.html',
   styleUrls: ['./skin-unlock-popup.css'],
 })
 export class SkinUnlockPopup implements OnDestroy {
-  current: SkinUnlockNotification | null = null;
+  current: SkinModel | null = null;
   visible = false;
   private isProcessing = false;
   private subs = new Subscription();
@@ -51,7 +52,7 @@ export class SkinUnlockPopup implements OnDestroy {
     }
   }
 
-  private showFor(notification: SkinUnlockNotification): Promise<void> {
+  private showFor(notification: SkinModel ): Promise<void> {
     return new Promise((resolve) => {
       this.zone.run(() => {
         this.current = notification;
@@ -72,7 +73,7 @@ export class SkinUnlockPopup implements OnDestroy {
     if (!this.current) return;
 
     this.zone.run(() => {
-      this.skinsService.updateSkin(this.current!.skin.id);
+      this.skinsService.updateSkin(this.current!.id);
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
       this.close();
     });

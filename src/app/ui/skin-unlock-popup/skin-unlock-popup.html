@@ -4,25 +4,25 @@
     <div class="content-wrapper">
       <div class="text-content">
         <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
-          ¡Skin desbloqueada!
+          {{ 'skins.unlock.skin_unlocked' | transloco }}
         </div>
-        <div id="skin-unlock-title" class="skin-title">{{ current.skin.name }}</div>
-        <div class="skin-description">{{ current.skin.description }}</div>
+        <div id="skin-unlock-title" class="skin-title">{{ current.name | transloco }}</div>
+        <div class="skin-description">{{ current.description | transloco }}</div>
       </div>
       <div class="icon">
-        <img [src]="current.skin.image" [alt]="current.skin.name" />
+        <img [src]="current.image" [alt]="current.name | transloco" />
         <div class="icon-glow"></div>
       </div>
-      @if (current.skin.rarity) {
-      <div class="skin-rarity rarity-{{ current.skin.rarity }}">
-        {{ current.skin.rarity | uppercase }}
+      @if (current.rarity) {
+      <div class="skin-rarity rarity-{{ current.rarity.replaceAll('.','-') }}">
+        {{ current.rarity | transloco | uppercase }}
       </div>
       }
     </div>
 
     <div class="button-group">
-      <app-button variant="success" (click)="onUse()"> Usar ahora </app-button>
-      <app-button variant="secondary" (click)="onClose()"> Guardar y cerrar </app-button>
+      <app-button variant="success" (click)="onUse()"> {{ 'skins.unlock.use_now' | transloco }} </app-button>
+      <app-button variant="secondary" (click)="onClose()"> {{ 'skins.unlock.save_and_close' | transloco }} </app-button>
     </div>
   </div>
 </div>

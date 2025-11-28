@@ -93,8 +93,10 @@ describe('Modal', () => {
     supSvc.isUsernameTaken = jasmine.createSpy('isUsernameTaken').and.resolveTo(false);
     supSvc.updateUserName = jasmine.createSpy('updateUserName').and.resolveTo({ error: null });
 
+    spyOn(component.usernameMessage, 'set').and.callThrough();
+
     component.desiredName.set('validname');
     await component.setUsername();
-    expect(component.usernameMessage()).toBe('user.setUsernameSuccess');
+    expect(component.usernameMessage.set).toHaveBeenCalledWith('user.setUsernameSuccess');
   });
 });

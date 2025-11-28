@@ -389,6 +389,9 @@
     },
     "unlock": {
       "unlocked": "Unlocked",
+      "skin_unlocked": "Skin unlocked!",
+      "use_now": "Use now",
+      "save_and_close": "Save and close",
       "level": "Level {{value}}",
       "croquettes": "{{value}} croquettes",
       "exp": "{{value}} EXP",

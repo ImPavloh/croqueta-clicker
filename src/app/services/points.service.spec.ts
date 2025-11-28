@@ -1,21 +1,8 @@
 import { TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
 import { PointsService } from './points.service';
-import { GoldenCroquetaService } from './golden-croqueta.service';
-import { BurntCroquetaService } from './burnt-croqueta.service';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import Decimal from 'break_infinity.js';
-
-// Mock para GoldenCroquetaService
-class MockGoldenCroquetaService {
-  isBonusActive = jasmine.createSpy('isBonusActive').and.returnValue(false);
-  bonusMultiplier: Decimal = new Decimal(1);
-}
-
-class MockBurntCroquetaService {
-  isPenaltyActive = jasmine.createSpy('isPenaltyActive').and.returnValue(false);
-  penaltyMultiplier: Decimal = new Decimal(1);
-}
 
 // Mock para FloatingService
 const mockFloatingService = jasmine.createSpyObj('FloatingService', ['show']);
@@ -25,13 +12,8 @@ const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem'
 
 describe('PointsService', () => {
   let service: PointsService;
-  let mockGoldenCroqueta: MockGoldenCroquetaService;
-  let mockBurntCroqueta: MockBurntCroquetaService;
 
   beforeEach(() => {
-    mockGoldenCroqueta = new MockGoldenCroquetaService();
-    mockBurntCroqueta = new MockBurntCroquetaService();
-
     mockFloatingService.show.calls.reset();
     mockOptionsService.getGameItem.calls.reset();
     mockOptionsService.setGameItem.calls.reset();
@@ -39,10 +21,8 @@ describe('PointsService', () => {
     TestBed.configureTestingModule({
       providers: [
         PointsService,
-        { provide: GoldenCroquetaService, useValue: mockGoldenCroqueta },
         { provide: FloatingService, useValue: mockFloatingService },
         { provide: OptionsService, useValue: mockOptionsService },
-        { provide: BurntCroquetaService, useValue: mockBurntCroqueta },
       ],
     });
 
@@ -56,7 +36,7 @@ describe('PointsService', () => {
       expect(service.points().eq(0)).toBeTrue();
       expect(service.pointsPerSecond().eq(0)).toBeTrue();
       expect(service.pointsPerClick().eq(1)).toBeTrue();
-      expect(service.multiply().eq(1)).toBeTrue();
+      expect(service.getActiveMultiplier()).toBe(1);
       discardPeriodicTasks();
     }));
   });
@@ -72,8 +52,6 @@ describe('PointsService', () => {
             return '50';
           case 'pointsPerClick':
             return '5';
-          case 'multiply':
-            return '3';
           default:
             return undefined;
         }
@@ -82,7 +60,6 @@ describe('PointsService', () => {
       expect(service.points().eq(new Decimal(1000))).toBeTrue();
       expect(service.pointsPerSecond().eq(new Decimal(50))).toBeTrue();
       expect(service.pointsPerClick().eq(new Decimal(5))).toBeTrue();
-      expect(service.multiply().eq(new Decimal(3))).toBeTrue();
       discardPeriodicTasks();
     }));
   });
@@ -105,12 +82,11 @@ describe('PointsService', () => {
       discardPeriodicTasks();
     }));
 
-    it('should add points per click (with golden croqueta bonus)', fakeAsync(() => {
+    it('should add points per click (with multiplier)', fakeAsync(() => {
       service = TestBed.inject(PointsService);
       tick(2000);
       service.upgradePointPerClick(10);
-      mockGoldenCroqueta.isBonusActive.and.returnValue(true);
-      mockGoldenCroqueta.bonusMultiplier = new Decimal(5);
+      service.addMultiplier(5, 5000); // Multiplicador x5 por 5 segundos
       service.addPointsPerClick();
       expect(service.points().eq(new Decimal(50))).toBeTrue();
       expect(mockFloatingService.show).toHaveBeenCalledWith('+50', { x: undefined, y: undefined });
@@ -145,24 +121,22 @@ describe('PointsService', () => {
       discardPeriodicTasks();
     }));
 
-    it('should add points per second (with bonus) via interval', fakeAsync(() => {
+    it('should add points per second (with multiplier) via interval', fakeAsync(() => {
       service = TestBed.inject(PointsService);
       tick(2000);
       service.upgradePointsPerSecond(25);
-      mockGoldenCroqueta.isBonusActive.and.returnValue(true);
-      mockGoldenCroqueta.bonusMultiplier = new Decimal(2);
+      service.addMultiplier(2, 5000); // Multiplicador x2
       tick(1000);
       expect(service.points().eq(new Decimal(50))).toBeTrue();
       expect(mockFloatingService.show).toHaveBeenCalledWith('+50');
       discardPeriodicTasks();
     }));
 
-    it('should add points per second (with burnt penalty) via interval', fakeAsync(() => {
+    it('should add points per second (with penalty multiplier) via interval', fakeAsync(() => {
       service = TestBed.inject(PointsService);
       tick(2000);
       service.upgradePointsPerSecond(25);
-      mockBurntCroqueta.isPenaltyActive.and.returnValue(true);
-      mockBurntCroqueta.penaltyMultiplier = new Decimal(0.5);
+      service.addMultiplier(0.5, 5000); // Multiplicador x0.5
       tick(1000);
       expect(service.points().eq(new Decimal(12.5))).toBeTrue();
       expect(mockFloatingService.show).toHaveBeenCalledWith('+12.5');
@@ -221,22 +195,12 @@ describe('PointsService', () => {
       expect(mockOptionsService.setGameItem).toHaveBeenCalledWith('points', '70');
       discardPeriodicTasks();
     }));
-    it('should add points per click (with burnt croqueta inactive)', fakeAsync(() => {
-      service = TestBed.inject(PointsService);
-      tick(2000);
-      service.upgradePointPerClick(10);
-      mockBurntCroqueta.isPenaltyActive.and.returnValue(false);
-      service.addPointsPerClick();
-      expect(service.points().eq(new Decimal(10))).toBeTrue();
-      discardPeriodicTasks();
-    }));
 
-    it('should apply burnt croqueta penalty to clicks (reduce by multiplier)', fakeAsync(() => {
+    it('should apply penalty to clicks (reduce by multiplier)', fakeAsync(() => {
       service = TestBed.inject(PointsService);
       tick(2000);
       service.upgradePointPerClick(10);
-      mockBurntCroqueta.isPenaltyActive.and.returnValue(true);
-      mockBurntCroqueta.penaltyMultiplier = new Decimal(0.5);
+      service.addMultiplier(0.5, 5000);
       service.addPointsPerClick();
       expect(service.points().eq(new Decimal(5))).toBeTrue();
       discardPeriodicTasks();
@@ -253,7 +217,8 @@ describe('PointsService', () => {
       expect(service.points().eq(0)).toBeTrue();
       expect(service.pointsPerSecond().eq(0)).toBeTrue();
       expect(service.pointsPerClick().eq(1)).toBeTrue();
-      expect(service.multiply().eq(1)).toBeTrue();
+      // reset() no resetea multiplicadores en la implementación actual, pero por defecto no hay multiplicadores si no se añaden
+      expect(service.getActiveMultiplier()).toBe(1);
       discardPeriodicTasks();
     }));
   });

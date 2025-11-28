@@ -17,4 +17,5 @@ export interface SkinModel {
   counterLabel?: string;
   unlockRequirement?: UnlockRequirement;
   background?: string;
+  timestamp?: number;
 }

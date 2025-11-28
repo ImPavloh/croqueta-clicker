@@ -49,8 +49,8 @@ export class Croquetita implements OnDestroy {
       if (queue.length > 0 && !this.isOpen()) {
 
         // FIFO: Cogemos la PRIMERA skin que entró (índice 0), no la última
-        const notification = queue[0];
-        const skinId = notification.skin.id;
+        const skin = queue[0];
+        const skinId = skin.id;
         this.currentSkinIdInDisplay = skinId; // Guardamos ID para borrarlo al cerrar
 
         const messageId = `skin_unlocked_${skinId}`;
