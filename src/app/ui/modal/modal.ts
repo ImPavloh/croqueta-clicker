@@ -5,6 +5,7 @@ import { ModalService } from '@services/modal.service';
 import { AudioService } from '@services/audio.service';
 import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
+import { UsernameService } from '@services/username.service';
 import { Upgrades } from '@pages/upgrades/upgrades';
 import { Achievements } from '@pages/achievements/achievements';
 import { Skins } from '@pages/skins/skins';
@@ -40,6 +41,7 @@ export class Modal {
   private translocoService = inject(TranslocoService);
   private supabase = inject(SupabaseService);
   private debugService = inject(DebugService);
+  private usernameService = inject(UsernameService);
 
   desiredName = signal('');
   usernameLoading = signal(false);
@@ -98,6 +100,25 @@ export class Modal {
     const name = (this.desiredName() || '').trim();
     if (!name) {
       this.usernameMessage.set(this.translocoService.translate('user.enterUsername'));
+      return;
+    }
+
+    // Validate username locally before calling supabase
+    const validation = this.usernameService.validate(name);
+    if (!validation.valid) {
+      switch (validation.reason) {
+        case 'length':
+          this.usernameMessage.set(this.translocoService.translate('user.invalidUsernameTooLong'));
+          break;
+        case 'banned':
+          this.usernameMessage.set(this.translocoService.translate('user.invalidUsernameBanned'));
+          break;
+        case 'weird':
+          this.usernameMessage.set(this.translocoService.translate('user.invalidUsernameWeird'));
+          break;
+        default:
+          this.usernameMessage.set(this.translocoService.translate('user.invalidUsername'));
+      }
       return;
     }
 
