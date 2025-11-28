@@ -402,18 +402,39 @@
     },
     "unlock_message": "¡Has desbloqueado la skin \"{{skinName}}\"!",
     "skin": {
-      "1": { "name": "Normal", "description": "Una croqueta pocha del Wercadona" },
-      "2": { "name": "Jamón", "description": "Una croqueta deliciosa de jamón ibérico" },
-      "3": { "name": "Pollo", "description": "Una croqueta de pollo jugosa y sabrosa" },
-      "4": { "name": "Queso", "description": "Una croqueta de queso cremosa y deliciosa" },
-      "5": { "name": "Bacalao", "description": "Una croqueta de bacalao tradicional y sabrosa" },
-      "6": { "name": "Setas", "description": "Una croqueta de setas exquisita y aromática" },
+      "1": {
+        "name": "Normal",
+        "description": "Una croqueta pocha del Wercadona"
+      },
+      "2": {
+        "name": "Jamón",
+        "description": "Una croqueta deliciosa de jamón ibérico"
+      },
+      "3": {
+        "name": "Pollo",
+        "description": "Una croqueta de pollo jugosa y sabrosa"
+      },
+      "4": {
+        "name": "Queso",
+        "description": "Una croqueta de queso cremosa y deliciosa"
+      },
+      "5": {
+        "name": "Bacalao",
+        "description": "Una croqueta de bacalao tradicional y sabrosa"
+      },
+      "6": {
+        "name": "Setas",
+        "description": "Una croqueta de setas exquisita y aromática"
+      },
       "7": {
         "name": "Coqueta",
         "description": "Una croqueta divina y con estilo",
         "counterLabel": "coquetas"
       },
-      "8": { "name": "Dorada", "description": "Una croqueta de lujo, probablemente tóxica." },
+      "8": {
+        "name": "Dorada",
+        "description": "Una croqueta de lujo, probablemente tóxica."
+      },
       "9": {
         "name": "Quemada",
         "description": "Demasiado tiempo en la freidora... crujiente nivel carbón."
@@ -430,11 +451,27 @@
         "name": "Papa",
         "description": "La croqueta elegida: sabia, firme y un poco pasada de sal."
       },
-      "13": { "name": "Empresaria", "description": "Una croqueta lista para los negocios." },
-      "14": { "name": "DJ", "description": "La croqueta que pone la música en la fiesta." },
-      "15": { "name": "Super", "description": "Una croqueta heroica que salva el día." },
-      "16": { "name": "Dios", "description": "Más allá de la bechamel y el pan rallado..." },
-      "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "¿croquetas?" },
+      "13": {
+        "name": "Empresaria",
+        "description": "Una croqueta lista para los negocios."
+      },
+      "14": {
+        "name": "DJ",
+        "description": "La croqueta que pone la música en la fiesta."
+      },
+      "15": {
+        "name": "Super",
+        "description": "Una croqueta heroica que salva el día."
+      },
+      "16": {
+        "name": "Dios",
+        "description": "Más allá de la bechamel y el pan rallado..."
+      },
+      "17": {
+        "name": "Phillipe",
+        "description": "phillipe.",
+        "counterLabel": "¿croquetas?"
+      },
       "18": {
         "name": "Cookie",
         "description": "Una croqueta en crisis de identidad.",
@@ -450,7 +487,10 @@
         "description": "Un bocadillo relleno de croquetas, para los más valientes.",
         "counterLabel": "¿bocadillos?"
       },
-      "21": { "name": "Real", "description": "La croqueta definitiva." },
+      "21": {
+        "name": "Real",
+        "description": "La croqueta definitiva."
+      },
       "22": {
         "name": "3D",
         "description": "Una croqueta low-poly, pero igual de sabrosa.",
@@ -523,7 +563,7 @@
     "first_producer": "¡Ya puedes comprar tu primer productor! Ve al menú de la derecha y compra un \"Click\" que cocinará croquetas automáticamente.",
     "first_upgrade": "Las mejoras aumentan la cantidad de croquetas por click. ¡Invierte en ellas sabiamente!",
     "producers_tip": "Tip: Los productores más caros son más eficientes. ¡Ahorra para los mejores!",
-    "keep_upgrading": "Estás progresando genial. No olvides comprar mejoras para aumentar tu click power.",
+    "keep_upgrading": "Estás progresando genial. No olvides comprar mejoras para aumentar tus croquetas por click.",
     "thousand_milestone": "¡1.000 croquetas! Esto es solo el comienzo. El imperio de las croquetas te espera.",
     "balance_tip": "Balancea tu inversión entre productores y mejoras para máxima eficiencia.",
     "five_thousand": "¡5.000 croquetas! Estás en el camino correcto. ¡Sigue así!",
@@ -651,5 +691,9 @@
       "cancel": "Cancelar"
     },
     "alert": "MODO DEBUG"
+  },
+  "resolution": {
+    "message": "Recarga la página para adaptar la nueva resolución",
+    "button": "Recargar"
   }
 }

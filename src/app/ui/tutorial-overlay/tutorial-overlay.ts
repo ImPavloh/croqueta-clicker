@@ -6,8 +6,9 @@ import {
   Output,
   EventEmitter,
   inject,
+  computed,
 } from '@angular/core';
-import { TranslocoModule } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { OptionsService } from '@services/options.service';
 import { TUTORIAL_OVERLAY_STEPS } from '@data/tutorial-overlay.data';
 import { TutorialOverlayStep } from '@models/tutorial-overlay.model';
@@ -23,6 +24,7 @@ import { ButtonComponent } from '@ui/button/button';
 })
 export class TutorialOverlayComponent {
   private options = inject(OptionsService);
+  private transloco = inject(TranslocoService);
 
   @Output() completed = new EventEmitter<void>();
 
@@ -30,6 +32,17 @@ export class TutorialOverlayComponent {
 
   currentIndex = signal(0);
   fading = signal(false);
+
+  currentStepImage = computed(() => {
+    const step = this.steps[this.currentIndex()];
+    const lang = this.transloco.getActiveLang();
+
+    if (step.localizedImages && step.localizedImages[lang]) {
+      return step.localizedImages[lang];
+    }
+
+    return step.image || '/assets/croquetita/croquetita.webp';
+  });
 
   get isLast(): boolean {
     return this.currentIndex() === this.steps.length - 1;

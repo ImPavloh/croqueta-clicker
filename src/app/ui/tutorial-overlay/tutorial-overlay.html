@@ -5,19 +5,11 @@
       <div class="header-controls">
         <div class="step-indicator">{{ currentIndex() + 1 }} / {{ steps.length }}</div>
         <div class="progress-bar">
-          <div
-            class="progress-fill"
-            [style.width.%]="((currentIndex() + 1) / steps.length) * 100"
-          ></div>
+          <div class="progress-fill" [style.width.%]="((currentIndex() + 1) / steps.length) * 100"></div>
         </div>
         <div class="close-btn">
-          <app-button
-            variant="control"
-            (click)="close()"
-            size="sm"
-            class="close-button-custom"
-            aria-label="{{ 'tutorial.overlay.close' | transloco }}"
-          >
+          <app-button variant="control" (click)="close()" size="sm" class="close-button-custom"
+            aria-label="{{ 'tutorial.overlay.close' | transloco }}">
             ×
           </app-button>
         </div>
@@ -26,28 +18,19 @@
     <div class="tutorial-body" [class.fade]="fading()">
       <div class="tutorial-text">
         <div class="step-image">
-          <img
-            [src]="steps[currentIndex()].image || '/assets/croquetita/croquetita.webp'"
-            alt="{{ steps[currentIndex()].titleKey | transloco }}"
-            loading="lazy"
-          />
+          <img [src]="currentStepImage()" alt="{{ steps[currentIndex()].titleKey | transloco }}" loading="lazy" />
         </div>
         <p class="text-center text-balance">{{ steps[currentIndex()].bodyKey | transloco }}</p>
 
         <div class="nav-buttons">
-          <app-button
-            variant="primary"
-            (click)="prev()"
-            [disabled]="currentIndex() === 0"
-            size="md"
-          >
+          <app-button variant="primary" (click)="prev()" [disabled]="currentIndex() === 0" size="md">
             {{ 'tutorial.overlay.prev' | transloco }}
           </app-button>
           <app-button [variant]="isLast ? 'golden' : 'primary'" (click)="next()" size="md">
             {{
-              isLast
-                ? ('tutorial.overlay.finish_button' | transloco)
-                : ('tutorial.overlay.next' | transloco)
+            isLast
+            ? ('tutorial.overlay.finish_button' | transloco)
+            : ('tutorial.overlay.next' | transloco)
             }}
           </app-button>
         </div>

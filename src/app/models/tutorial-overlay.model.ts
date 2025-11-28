@@ -3,4 +3,5 @@ export interface TutorialOverlayStep {
   titleKey: string;
   bodyKey: string;
   image?: string;
+  localizedImages?: Record<string, string>;
 }

@@ -14,7 +14,7 @@
         <div class="icon-glow"></div>
       </div>
       @if (current.rarity) {
-      <div class="skin-rarity rarity-{{ current.rarity.replaceAll('.','-') }}">
+      <div class="skin-rarity" [ngClass]="getRarityClass(current.rarity)">
         {{ current.rarity | transloco | uppercase }}
       </div>
       }

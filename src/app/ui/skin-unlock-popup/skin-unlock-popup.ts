@@ -102,4 +102,12 @@ export class SkinUnlockPopup implements OnDestroy {
       });
     }, 450);
   }
+
+  getRarityClass(rarity: string | undefined): string {
+    if (!rarity) return '';
+    // Assuming rarity is in format 'skins.rarity.common'
+    const parts = rarity.split('.');
+    const rarityName = parts[parts.length - 1];
+    return `rarity-${rarityName}`;
+  }
 }

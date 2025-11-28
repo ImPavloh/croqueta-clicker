@@ -1,4 +1,13 @@
 <main>
+  @if (resolutionChanged()) {
+  <div class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-white p-8 text-center">
+    <h2 class="text-2xl mb-4">{{ 'resolution.message' | transloco }}</h2>
+    <button (click)="reloadPage()"
+      class="px-6 py-3 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors cursor-pointer">
+      {{ 'resolution.button' | transloco }}
+    </button>
+  </div>
+  }
   <app-backgrounds></app-backgrounds>
   <div class="main-container">
     @if (splashVisible()) {
@@ -59,4 +68,7 @@
 </main>
 @if (tutorialVisible()) {
 <app-tutorial-overlay (completed)="onTutorialFinished()" />
+}
+@if (languageSelectionVisible()) {
+<app-language-selection (completed)="onLanguageSelectionFinished()" />
 }

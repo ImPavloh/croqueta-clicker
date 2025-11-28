@@ -17,7 +17,11 @@ export const TUTORIAL_OVERLAY_STEPS: TutorialOverlayStep[] = [
     id: 'experience',
     titleKey: 'tutorial.overlay.experience.title',
     bodyKey: 'tutorial.overlay.experience.body',
-    image: '/assets/tutorial/experience.webp',
+    image: '/assets/tutorial/experience_es.webp',
+    localizedImages: {
+      es: '/assets/tutorial/experience_es.webp',
+      en: '/assets/tutorial/experience_en.webp',
+    },
   },
   {
     id: 'producers',
@@ -47,6 +51,10 @@ export const TUTORIAL_OVERLAY_STEPS: TutorialOverlayStep[] = [
     id: 'finish',
     titleKey: 'tutorial.overlay.finish.title',
     bodyKey: 'tutorial.overlay.finish.body',
-    image: '/assets/banners/banner_croqueta_clicker.webp',
+    image: '/assets/tutorial/play_es.webp',
+    localizedImages: {
+      es: '/assets/tutorial/play_es.webp',
+      en: '/assets/tutorial/play_en.webp',
+    },
   },
 ];

@@ -350,10 +350,12 @@
     transform: scale(1);
     opacity: 0.8;
   }
+
   50% {
     transform: scale(1.25);
     opacity: 1;
   }
+
   100% {
     transform: scale(1);
     opacity: 0.8;
@@ -510,7 +512,212 @@
   .lp-right {
     top: 10px;
   }
+
+}
+
+.lp-full-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: #6b5633;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.lp-full-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(184, 156, 90, 0.15);
+  color: #6b5633;
+}
+
+.lp-spinner {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 12px;
+  color: #8b7343;
+  transform-origin: center;
+  animation: lp-pulse 900ms infinite ease-in-out;
+}
+
+@keyframes lp-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+.lp-btn-small[disabled],
+.lp-btn-small.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+}
+
+.lp-search-input[disabled] {
+  background: #fbf8f2;
+  color: #9b7f51;
+  border-color: rgba(184, 156, 90, 0.25);
+}
+
+.lp-full-table tbody tr {
+  transition: background 0.2s ease;
+  background: #fff;
+}
+
+.lp-full-table tbody tr:hover {
+  background: rgba(184, 156, 90, 0.08);
+}
+
+.lp-full-table tbody tr:nth-child(even) {
+  background: rgba(243, 234, 194, 0.3);
+}
+
+.lp-full-table tbody tr:nth-child(even):hover {
+  background: rgba(184, 156, 90, 0.12);
+}
+
+.lp-full-table th:first-child,
+.lp-full-table td:first-child {
+  width: 60px;
+  text-align: center;
+  font-family: monospace;
+  font-weight: 900;
+  color: #b89c5a;
+}
+
+.lp-full-table td:nth-child(3) {
+  font-family: monospace;
+  font-weight: 700;
+  color: #8b7343;
+}
+
+.lp-full-table td:nth-child(4) {
+  color: rgba(107, 86, 51, 0.6);
+  font-size: 11px;
+}
+
+.lp-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(184, 156, 90, 0.08);
+  border-radius: 8px;
+  border: 1px solid #b89c5a;
+}
+
+.lp-page-info {
+  font-size: 13px;
+  color: #6b5633;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.lp-btn-small:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lp-btn-small:disabled:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(255, 255, 255, 0.5);
+  transform: none;
+}
+
+@media (max-width: 1344px) {
+  .lp-overlay {
+    display: none;
+  }
+
+  .lp-title {
+    gap: 0px;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay {
+    display: block;
+    pointer-events: none;
+    z-index: 900;
+  }
+
+  :host(.mobile-leaderboard) .lp-right {
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 72px;
+    transition: width 220ms ease, right 220ms ease, transform 220ms ease;
+  }
+
+  :host(.mobile-leaderboard) .lp-right.lp-collapsed {
+    width: 56px;
+    height: 56px;
+  }
+
+  :host(.mobile-leaderboard) .lp-right:not(.lp-collapsed) {
+    width: 240px;
+  }
+
+  :host(.mobile-leaderboard) .lp-collapsed .lp-title span {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :host(.mobile-leaderboard) .lp-collapsed .lp-toggle {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+  }
+
+  :host(.mobile-leaderboard) .lp-collapsed .lp-header {
+    gap: 0;
+  }
+
+  :host(.mobile-leaderboard) .lp-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.32);
+    justify-content: center;
+  }
+
+  :host(.mobile-leaderboard) .lp-right.lp-collapsed .lp-header {
+    padding: 8px;
+  }
+
+  :host(.mobile-leaderboard) .lp-body {
+    max-height: 60vh;
+  }
+}
+
+@media (max-height: 700px) {
+  .lp-right {
+    top: 10px;
+  }
+
   .lp-list {
     max-height: 200px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1344px) {
+  :host(.mobile-leaderboard) .lp-right {
+    top: auto;
+    bottom: 20px;
+    transform: none;
+    right: 20px;
   }
 }

@@ -17,6 +17,7 @@ import { Particles } from '@ui/particles/particles';
 import { Floating } from '@ui/floating/floating';
 import { Croquetita } from '@ui/croquetita/croquetita';
 import { TutorialOverlayComponent } from '@ui/tutorial-overlay/tutorial-overlay';
+import { LanguageSelectionComponent } from '@ui/language-selection/language-selection';
 import { OptionsService } from '@services/options.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { AchievementPopup } from '@ui/achievement-popup/achievement-popup';
@@ -63,6 +64,7 @@ import { EventService } from '@services/event.service';
     Leaderboard,
     EventComponent,
     TutorialOverlayComponent,
+    LanguageSelectionComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
@@ -72,6 +74,7 @@ export class App implements OnInit, OnDestroy {
   protected readonly title = signal('croqueta-clicker');
   isDebugMode = false;
   tutorialVisible = signal(false);
+  languageSelectionVisible = signal(false);
   tutorialCompleted = signal(false);
   splashVisible = signal(false);
   firstTimeUser = signal(false);
@@ -92,12 +95,25 @@ export class App implements OnInit, OnDestroy {
     const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';
     const splashShown = this.options.getGameItem('splash_shown') === 'true';
 
+    // Cargar idioma guardado
+    const savedLang = this.options.getGameItem('lang');
+    if (savedLang) {
+      this.translocoService.setActiveLang(savedLang);
+    }
+
     this.tutorialCompleted.set(tutorialDone);
 
     // Usuario nuevo: mostrar tutorial primero
+    // Usuario nuevo: mostrar seleccion de idioma primero, luego tutorial
+    const languageSelected = this.options.getGameItem('language_selected') === 'true';
+
     if (!tutorialDone && !splashShown) {
       this.firstTimeUser.set(true);
-      this.tutorialVisible.set(true);
+      if (!languageSelected) {
+        this.languageSelectionVisible.set(true);
+      } else {
+        this.tutorialVisible.set(true);
+      }
     }
     // Usuario que ya vio el tutorial pero no el splash
     else if (tutorialDone && !splashShown) {
@@ -113,12 +129,28 @@ export class App implements OnInit, OnDestroy {
   private updateCheckIntervalId?: number;
 
   public isMobile: boolean = window.innerWidth <= 1344;
+  public resolutionChanged = signal(false);
+  private initialIsMobile = this.isMobile;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    const newIsMobile = window.innerWidth <= 1344;
+    if (newIsMobile !== this.initialIsMobile) {
+      this.resolutionChanged.set(true);
+    } else {
+      this.resolutionChanged.set(false);
+    }
+  }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
       this.openDebugMenu();
     }
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 
   openDebugMenu() {
@@ -138,7 +170,7 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnDestroy() {
     this.levelSub?.unsubscribe();
@@ -155,7 +187,7 @@ export class App implements OnInit, OnDestroy {
 
     this.supabase.getUser().then(async (r) => {
       if (!r?.data?.user) {
-        await this.supabase.signInAnonymously().catch(() => {});
+        await this.supabase.signInAnonymously().catch(() => { });
       }
     });
 
@@ -171,7 +203,7 @@ export class App implements OnInit, OnDestroy {
     });
 
     if (navigator.onLine) {
-      this.supabase.processPendingScores().catch(() => {});
+      this.supabase.processPendingScores().catch(() => { });
     }
 
     this.setupDailyUpdateCheck();
@@ -218,7 +250,7 @@ export class App implements OnInit, OnDestroy {
         this.swUpdate
           .activateUpdate()
           .then(() => location.reload())
-          .catch(() => {});
+          .catch(() => { });
       }
     });
 
@@ -229,7 +261,7 @@ export class App implements OnInit, OnDestroy {
       this.updateCheckIntervalId = window.setInterval(() => {
         this.maybeCheckForUpdate(false);
       }, this.UPDATE_INTERVAL_MS);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   private async maybeCheckForUpdate(force = false) {
@@ -249,12 +281,17 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  protected onTutorialFinished() {
+  onTutorialFinished() {
     this.tutorialVisible.set(false);
     this.tutorialCompleted.set(true);
 
     if (this.firstTimeUser()) {
       this.splashVisible.set(true);
     }
+  }
+
+  onLanguageSelectionFinished() {
+    this.languageSelectionVisible.set(false);
+    this.tutorialVisible.set(true);
   }
 }

@@ -402,19 +402,43 @@
     },
     "unlock_message": "¡You have unlocked the skin \"{{skinName}}\"!",
     "skin": {
-      "1": { "name": "Normal", "description": "A humble croquette from the supermarket" },
-      "2": { "name": "Ham", "description": "A delicious Iberian ham croquette" },
-      "3": { "name": "Chicken", "description": "A juicy and tasty chicken croquette" },
-      "4": { "name": "Cheese", "description": "A creamy and delicious cheese croquette" },
-      "5": { "name": "Cod", "description": "A traditional and tasty cod croquette" },
-      "6": { "name": "Mushroom", "description": "An exquisite and aromatic mushroom croquette" },
+      "1": {
+        "name": "Normal",
+        "description": "A humble croquette from the supermarket"
+      },
+      "2": {
+        "name": "Ham",
+        "description": "A delicious Iberian ham croquette"
+      },
+      "3": {
+        "name": "Chicken",
+        "description": "A juicy and tasty chicken croquette"
+      },
+      "4": {
+        "name": "Cheese",
+        "description": "A creamy and delicious cheese croquette"
+      },
+      "5": {
+        "name": "Cod",
+        "description": "A traditional and tasty cod croquette"
+      },
+      "6": {
+        "name": "Mushroom",
+        "description": "An exquisite and aromatic mushroom croquette"
+      },
       "7": {
         "name": "Coquette",
         "description": "A divine and stylish croquette",
         "counterLabel": "coquettes"
       },
-      "8": { "name": "Golden", "description": "A luxury croquette, probably toxic." },
-      "9": { "name": "Burnt", "description": "Too much time in the fryer... crunchy to a crisp." },
+      "8": {
+        "name": "Golden",
+        "description": "A luxury croquette, probably toxic."
+      },
+      "9": {
+        "name": "Burnt",
+        "description": "Too much time in the fryer... crunchy to a crisp."
+      },
       "10": {
         "name": "Cosmic",
         "description": "Shines with the power of the universe. Not suitable for humans."
@@ -427,11 +451,27 @@
         "name": "Pope",
         "description": "The chosen croquette: wise, firm and a little too salty."
       },
-      "13": { "name": "Businesswoman", "description": "A croquette ready for business." },
-      "14": { "name": "DJ", "description": "The croquette that plays the music at the party." },
-      "15": { "name": "Super", "description": "A heroic croquette that saves the day." },
-      "16": { "name": "God", "description": "Beyond bechamel and breadcrumbs..." },
-      "17": { "name": "Phillipe", "description": "phillipe.", "counterLabel": "croquettes?" },
+      "13": {
+        "name": "Businesswoman",
+        "description": "A croquette ready for business."
+      },
+      "14": {
+        "name": "DJ",
+        "description": "The croquette that plays the music at the party."
+      },
+      "15": {
+        "name": "Super",
+        "description": "A heroic croquette that saves the day."
+      },
+      "16": {
+        "name": "God",
+        "description": "Beyond bechamel and breadcrumbs..."
+      },
+      "17": {
+        "name": "Phillipe",
+        "description": "phillipe.",
+        "counterLabel": "croquettes?"
+      },
       "18": {
         "name": "Cookie",
         "description": "A croquette in an identity crisis.",
@@ -447,7 +487,10 @@
         "description": "A sandwich filled with croquettes, for the bravest.",
         "counterLabel": "sandwiches?"
       },
-      "21": { "name": "Real", "description": "The ultimate croquette." },
+      "21": {
+        "name": "Real",
+        "description": "The ultimate croquette."
+      },
       "22": {
         "name": "3D",
         "description": "A low-poly croquette, but just as tasty.",
@@ -457,7 +500,10 @@
         "name": "Frozen",
         "description": "Icy on the inside and outside. Microwave at your own risk."
       },
-      "24": { "name": "Halloween", "description": "A spooky croquette full of pumpkin mischief." },
+      "24": {
+        "name": "Halloween",
+        "description": "A spooky croquette full of pumpkin mischief."
+      },
       "25": {
         "name": "Japanese",
         "description": "Breaded with honor: soy, a hint of wasabi and a mystery roll."
@@ -486,7 +532,10 @@
         "name": "Pirate",
         "description": "Arr! Steals croquettes and sings sea shanties while frying."
       },
-      "32": { "name": "Rugby", "description": "Tough, compact and perfect for post-match energy." },
+      "32": {
+        "name": "Rugby",
+        "description": "Tough, compact and perfect for post-match energy."
+      },
       "33": {
         "name": "Alien",
         "description": "Foreign visitor, with a childish and conflictive personality"
@@ -514,7 +563,7 @@
     "first_producer": "You can now buy your first producer! Go to the menu on the right and buy a \"Click\" that will automatically cook croquettes.",
     "first_upgrade": "Upgrades increase the number of croquettes per click. Invest in them wisely!",
     "producers_tip": "Tip: The most expensive producers are more efficient. Save up for the best ones!",
-    "keep_upgrading": "You're making great progress. Don't forget to buy upgrades to increase your click power.",
+    "keep_upgrading": "You're making great progress. Don't forget to buy upgrades to increase your croquettes per click.",
     "thousand_milestone": "1,000 croquettes! This is just the beginning. The croquette empire awaits you.",
     "balance_tip": "Balance your investment between producers and upgrades for maximum efficiency.",
     "five_thousand": "5,000 croquettes! You're on the right track. Keep it up!",
@@ -642,5 +691,9 @@
       "cancel": "Cancel"
     },
     "alert": "DEBUG MODE"
+  },
+  "resolution": {
+    "message": "Reload the page to adapt to the new resolution",
+    "button": "Reload"
   }
 }
