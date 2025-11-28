@@ -44,7 +44,6 @@ h2,
 h1 {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  touch-action: none;
   user-select: none;
   -webkit-user-drag: none;
   -moz-user-select: none;
@@ -92,7 +91,24 @@ app-root {
     -webkit-tap-highlight-color: transparent;
   }
 
+  html,
   body {
-    backdrop-filter: none;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  img,
+  svg,
+  video,
+  button,
+  a,
+  span,
+  strong,
+  p,
+  h3,
+  h2,
+  h1 {
+    touch-action: auto;
   }
 }
