@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
-import { Achievement } from '@data/achievements.data';
 import { Tooltip } from '@ui/tooltip/tooltip';
 import { Subscription } from 'rxjs';
+import { AchievementModel } from '@models/achivement.model';
 
 @Component({
   selector: 'app-achievements',
@@ -18,9 +18,8 @@ import { Subscription } from 'rxjs';
 export class Achievements implements OnDestroy{
 
   //Array que contiene todos los logros junto con su estado de desbloqueo.
-  achievementsWithState: Array<Achievement & { unlocked: boolean }> = [];
+  achievementsWithState: Array<AchievementModel & { unlocked: boolean }> = [];
   private subs = new Subscription();
-
 
   //Servicio para gestionar la lógica de los logros.
   private svc = inject(AchievementsService);
@@ -68,7 +67,7 @@ export class Achievements implements OnDestroy{
    * @param item El logro (con su estado de desbloqueo) para el que se generará el texto.
    * @returns El texto traducido para el tooltip.
    */
-  getTooltipText(item: Achievement & { unlocked: boolean }): string {
+  getTooltipText(item: AchievementModel & { unlocked: boolean }): string {
     if (!item.unlocked && item.secret) {
       return this.transloco.translate('achievements.secretAchievement');
     }

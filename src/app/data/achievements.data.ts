@@ -1,12 +1,7 @@
-export interface Achievement {
-  id: string;
-  title: string;
-  description: string; // si es secreto, omitimos la descripción
-  icon: string;
-  secret?: boolean; // true = oculto (no mostrar la descripción en la lista)
-}
+import { AchievementModel } from "@models/achivement.model";
 
-export const ACHIEVEMENTS: Achievement[] = [
+
+export const ACHIEVEMENTS: AchievementModel[] = [
   // ------------------------------------------------------------
   // CLICKS (Implementado)
   // ------------------------------------------------------------

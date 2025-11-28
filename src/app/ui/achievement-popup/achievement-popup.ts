@@ -1,10 +1,10 @@
 import { Component, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
-import { Achievement } from '@data/achievements.data';
 import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
 import { TranslocoModule } from '@jsverse/transloco';
+import { AchievementModel } from '@models/achivement.model';
 
 @Component({
   selector: 'app-achievement-popup',
@@ -14,7 +14,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrls: ['./achievement-popup.css'],
 })
 export class AchievementPopup implements OnDestroy {
-  current: Achievement | null = null;
+  current: AchievementModel | null = null;
   visible = false;
   private isProcessing = false;
   private hideTimeout: any = null;
@@ -58,7 +58,7 @@ export class AchievementPopup implements OnDestroy {
     }
   }
 
-  private showFor(item: Achievement): Promise<void> {
+  private showFor(item: AchievementModel): Promise<void> {
     return new Promise((resolve) => {
       this.current = item;
       this.visible = true;
