@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToggleSwitch } from './toggle-switch';
+import { DynamicControls } from './dynamic-controls';
 
-describe('ToggleSwitch', () => {
-  let component: ToggleSwitch;
-  let fixture: ComponentFixture<ToggleSwitch>;
+describe('DynamicControls', () => {
+  let component: DynamicControls;
+  let fixture: ComponentFixture<DynamicControls>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToggleSwitch]
+      imports: [DynamicControls]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ToggleSwitch);
+    fixture = TestBed.createComponent(DynamicControls);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,38 @@
+ @switch (control.controlType) {
+      @case ('range-slider') {
+        <div class="flex items-center justify-between gap-4">
+          @if (control.label) {
+            <span class="text-xl min-w-20">{{ control.label | transloco}}</span>
+          }
+          <input
+            type="range"
+            [min]="control.min"
+            [max]="control.max"
+            [step]="control.step"
+            class="flex-1"
+            [value]="control.value"
+            (input)="onValueChange($event)"
+            (change)="onValueChange($event)"
+          />
+          @if (control.showValue) {
+            <span class="min-w-12 text-right text-xl">{{ control.value }}{{ control.valueUnit }}</span>
+          }
+        </div>
+      }
+      @case ('toggle-switch') {
+        <div class="flex items-center justify-between gap-4">
+          @if (control.label) {
+            <span class="text-xl min-w-40">{{ control.label | transloco }}</span>
+          }
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              [ngModel]="control.checked"
+              (ngModelChange)="onToggleChange($event)"
+            />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      }
+      <!--Agrega más casos según necesites -->
+    }

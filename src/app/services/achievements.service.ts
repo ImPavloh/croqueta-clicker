@@ -45,8 +45,14 @@ export class AchievementsService {
       const raw = localStorage.getItem(GAME_PREFIX + 'achievements');
       // Datos inválidos
       if (!raw) return;
-      const parsed = JSON.parse(raw) as Record<string, boolean>;
-      this.unlockedMapSubject.next(parsed ?? {});
+      const parsed = JSON.parse(raw);
+
+      // Verificación de tipo en tiempo de ejecución para mayor seguridad.
+      if (typeof parsed === 'object' && parsed !== null) {
+        this.unlockedMapSubject.next(parsed as Record<string, boolean>);
+      } else {
+        this.unlockedMapSubject.next({});
+      }
     } catch (e) {
       console.warn('No se pudo leer achievements desde localStorage', e);
     }
@@ -93,6 +99,9 @@ export class AchievementsService {
     const already = !!currentMap[id];
     if (already) return false;
 
+    // Se llama a la comprobación de meta-logros ANTES de desbloquear el actual
+    this.checkAchievements();
+
     const ach = this.getAchievementById(id);
     if (!ach) {
       console.warn(`Achievement ${id} no existe.`);
@@ -110,7 +119,6 @@ export class AchievementsService {
       this.queueSubject.next([...q, ach]);
     }
 
-    this.checkAchievements();
     return true;
   }
 
@@ -120,10 +128,10 @@ export class AchievementsService {
    */
   private checkAchievements(){
     if (this.getUnlockedCount() >= 1){
-      this.unlockAchievement("primer_achievement")
+      this.unlockAchievement("primer_achievement");
     }
     if (this.getUnlockedCount() >= this.getTotalCount() -1){
-      this.unlockAchievement("todos_achievements")
+      this.unlockAchievement("todos_achievements");
     }
   }
 

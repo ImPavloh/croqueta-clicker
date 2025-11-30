@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { ToggleSwitchControlModel } from './../../models/ui-controls.model';
+import { Component, inject, Input } from '@angular/core';
 import { Card } from '@ui/card/card';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from '@ui/tooltip/tooltip';
@@ -7,8 +8,6 @@ import { ModalService } from '@services/modal.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { PointsService } from '@services/points.service';
 import { ButtonComponent } from '@ui/button/button';
-import { RangeSlider } from '@ui/range-slider/range-slider';
-import { ToggleSwitch } from '@ui/toggle-switch/toggle-switch';
 import { AutosaveService } from '@services/autosave.service';
 import { SkinsService } from '@services/skins.service';
 import { ShopControlsService } from '@services/shop-controls.service';
@@ -19,6 +18,9 @@ import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
 
 import PackageJson from '../../../../package.json';
+import { RangeSliderControlModel, UiControlModel } from '@models/ui-controls.model';
+import { INTERFACE_CONTROL, VOLUMEN_CONTROL } from '@data/ui-controls.data';
+import { DynamicControls } from '@ui/dynamic-controls/dynamic-controls';
 
 @Component({
   selector: 'app-options',
@@ -27,10 +29,9 @@ import PackageJson from '../../../../package.json';
     Card,
     FormsModule,
     ButtonComponent,
-    RangeSlider,
-    ToggleSwitch,
     Tooltip,
     TranslocoModule,
+    DynamicControls
   ],
   templateUrl: './options.html',
   styleUrl: './options.css',
@@ -40,6 +41,10 @@ export class Options {
 
   //Versión de la aplicación, obtenida desde el fichero package.json.
   version = PackageJson.version;
+
+
+  volumenControls = VOLUMEN_CONTROL;
+  interfaceControls = INTERFACE_CONTROL;
 
   //Servicio para gestionar las opciones del juego.
   public optionsService = inject(OptionsService);
@@ -332,5 +337,38 @@ export class Options {
         }, 80);
       },
     });
+  }
+
+  onControlChange(control: UiControlModel, value: any) {
+    switch (control.controlType) {
+      case 'range-slider':
+        this.handleVolumeChange(control as RangeSliderControlModel, value);
+        break;
+      case 'toggle-switch':
+        this.handleToggleChange(control as ToggleSwitchControlModel, value);
+        break;
+    }
+  }
+
+  private handleVolumeChange(control: RangeSliderControlModel, value: number) {
+    const label = control.label;
+    if (label === 'options.generalVolumeLabel') {
+      this.optionsService.setGeneralVolume(value);
+    } else if (label === 'options.musicVolumeLabel') {
+      this.optionsService.setMusicVolume(value);
+    } else if (label === 'options.sfxVolumeLabel') {
+      this.optionsService.setSfxVolume(value);
+    }
+  }
+
+  private handleToggleChange(control: ToggleSwitchControlModel, checked: boolean) {
+    const label = control.label;
+    if (label === 'options.showMascotLabel') {
+      this.optionsService.setShowCroquetita(checked);
+    } else if (label === 'options.showParticlesLabel') {
+      this.optionsService.setShowParticles(checked);
+    } else if (label === 'options.showFloatingPointsLabel') {
+      this.optionsService.setShowFloatingText(checked);
+    }
   }
 }

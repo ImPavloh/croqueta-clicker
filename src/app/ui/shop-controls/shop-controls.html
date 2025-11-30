@@ -44,10 +44,10 @@
   <div class="flex items-center gap-2">
     <div class="flex items-center gap-2">
       @if (context === 'upgrades') {
-      <app-toggle-switch
-        [checked]="hideBought"
-        (checkedChange)="onHideBoughtChange($event)"
-      ></app-toggle-switch>
+      <app-dynamic-controls
+        [control]="ShopControls"
+        (valueChange)="onHideBoughtChange($event)"
+      ></app-dynamic-controls>
       <div class="text-sm text-amber-800">{{ 'upgrades.hideBought' | transloco }}</div>
       }
     </div>

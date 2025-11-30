@@ -6,29 +6,14 @@
         {{ 'options.volumeTitle' | transloco }}
       </p>
       <div class="max-w-md w-full mx-auto flex flex-col gap-4">
+        @for (control of volumenControls; track $index){
         <app-tooltip [text]="'options.generalVolumeTooltip' | transloco">
-          <app-range-slider
-            [label]="'options.generalVolumeLabel' | transloco"
-            [value]="optionsService.generalVolume()"
-            (valueChange)="optionsService.setGeneralVolume($event)"
-          ></app-range-slider>
+          <app-dynamic-controls
+            [control]="control"
+            (valueChange)="onControlChange(control, $event)"
+          ></app-dynamic-controls>
         </app-tooltip>
-
-        <app-tooltip [text]="'options.musicVolumeTooltip' | transloco">
-          <app-range-slider
-            [label]="'options.musicVolumeLabel' | transloco"
-            [value]="optionsService.musicVolume()"
-            (valueChange)="optionsService.setMusicVolume($event)"
-          ></app-range-slider>
-        </app-tooltip>
-
-        <app-tooltip [text]="'options.sfxVolumeTooltip' | transloco">
-          <app-range-slider
-            [label]="'options.sfxVolumeLabel' | transloco"
-            [value]="optionsService.sfxVolume()"
-            (valueChange)="optionsService.setSfxVolume($event)"
-          ></app-range-slider>
-        </app-tooltip>
+      }
       </div>
     </div>
   </app-card>
@@ -40,29 +25,14 @@
         {{ 'options.interfaceTitle' | transloco }}
       </p>
       <div class="max-w-2xs w-full mx-auto flex flex-col gap-4">
+        @for (control of interfaceControls; track $index){
         <app-tooltip [text]="'options.showMascotTooltip' | transloco">
-          <app-toggle-switch
-            [label]="'options.showMascotLabel' | transloco"
-            [checked]="optionsService.showCroquetita()"
-            (checkedChange)="optionsService.setShowCroquetita($event)"
-          ></app-toggle-switch>
+          <app-dynamic-controls
+            [control]="control"
+            (valueChange)="onControlChange(control, $event)"
+          ></app-dynamic-controls>
         </app-tooltip>
-
-        <app-tooltip [text]="'options.showParticlesTooltip' | transloco">
-          <app-toggle-switch
-            [label]="'options.showParticlesLabel' | transloco"
-            [checked]="optionsService.showParticles()"
-            (checkedChange)="optionsService.setShowParticles($event)"
-          ></app-toggle-switch>
-        </app-tooltip>
-
-        <app-tooltip [text]="'options.showFloatingPointsTooltip' | transloco">
-          <app-toggle-switch
-            [label]="'options.showFloatingPointsLabel' | transloco"
-            [checked]="optionsService.showFloatingText()"
-            (checkedChange)="optionsService.setShowFloatingText($event)"
-          ></app-toggle-switch>
-        </app-tooltip>
+      }
       </div>
     </div>
   </app-card>
