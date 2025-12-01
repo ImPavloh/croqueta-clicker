@@ -266,6 +266,7 @@
 .lp-full-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 16px;
   padding: 8px;
   max-width: 100%;
@@ -512,7 +513,6 @@
   .lp-right {
     top: 10px;
   }
-
 }
 
 .lp-full-table th {

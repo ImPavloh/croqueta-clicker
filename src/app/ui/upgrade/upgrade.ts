@@ -11,6 +11,11 @@ import { UpgradeModel } from '@models/upgrade.model';
 
 import { TranslocoModule } from '@jsverse/transloco';
 
+/**
+ * Componente que representa una mejora de puntos por clic.
+ * Muestra la información de la mejora, permite comprarla (una sola vez)
+ * y gestiona su desbloqueo basado en el nivel del jugador.
+ */
 @Component({
   selector: 'app-upgrade',
   standalone: true,
@@ -27,32 +32,45 @@ export class Upgrade {
   private audioService = inject(AudioService);
   private optionsService = inject(OptionsService);
 
+  /** Configuración de la mejora (pasada desde el componente padre) */
   @Input() config!: UpgradeModel;
+
+  /** Índice de la tarjeta (para estilos de animación) */
   @Input() cardIndex: number = 0;
 
+  /** Nivel actual del jugador */
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
-  levelEffect = effect(() => {
+  /** Effect que comprueba el nivel para desbloqueo */ levelEffect = effect(() => {
     if (this.config) {
       const currentLevel = this.level();
       this.checkLevel(currentLevel);
     }
   });
 
+  /** Indica si la mejora está desbloqueada (según nivel del jugador) */
   unlocked: boolean = true;
+
+  /** Indica si la mejora ya ha sido comprada */
   bought: boolean = false;
 
   ngOnInit() {
     this.loadFromStorage();
   }
 
-  // comprobar si la mejora está desbloqueada
+  /**
+   * Comprueba si la mejora debe estar desbloqueada según el nivel actual.
+   * @param currentLevel Nivel actual del jugador
+   */
   checkLevel(currentLevel: number) {
     if (!this.config) return;
     this.unlocked = currentLevel >= this.config.level;
   }
 
-  // Método para comprar la mejora
+  /**
+   * Compra la mejora si el jugador tiene suficientes croquetas.
+   * Actualiza los puntos por clic, la experiencia y marca la mejora como comprada.
+   */
   buyUpgrade() {
     // pointsPerClick es Decimal (desde PointsService), sumamos clicks (number)
     const pointsClickDecimal: Decimal = this.pointsService

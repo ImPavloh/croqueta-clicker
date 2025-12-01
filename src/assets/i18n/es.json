@@ -695,5 +695,10 @@
   "resolution": {
     "message": "Recarga la página para adaptar la nueva resolución",
     "button": "Recargar"
+  },
+  "news": {
+    "title": "Noticias",
+    "level": "Nivel",
+    "noNews": "No hay noticias disponibles para este nivel."
   }
 }

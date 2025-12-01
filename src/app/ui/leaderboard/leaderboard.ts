@@ -50,7 +50,7 @@ export class Leaderboard implements OnInit {
 
   query = signal('');
   page = signal(0);
-  pageSize = 20;
+  pageSize = 5;
   items = signal<Array<any>>([]);
   total = signal<number | null>(null);
 

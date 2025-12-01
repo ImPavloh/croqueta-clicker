@@ -93,51 +93,58 @@
 } @else {
 <!-- la tabla de clasificacion para el modal -->
 <div class="lp-full-container">
-  <div class="lp-search-toolbar">
-    <input
-      type="text"
-      [(ngModel)]="query"
-      (ngModelChange)="scheduleSearchFull()"
-      placeholder="{{ 'leaderboard.searchPlaceholder' | transloco }}"
-      (keydown.enter)="searchFullImmediate()"
-      class="lp-search-input"
-      [disabled]="loading()"
-      aria-label="{{ 'leaderboard.search' | transloco }}"
-    />
-    <app-button size="sm" variant="tertiary" (click)="searchFullImmediate()" [disabled]="loading()">
-      @if (loading()) {<span class="lp-spinner" aria-hidden="true">●</span> }
-      {{ 'leaderboard.search' | transloco }}
-    </app-button>
-  </div>
+  <div class="gap-4 flex flex-col">
+    <div class="lp-search-toolbar">
+      <input
+        type="text"
+        [(ngModel)]="query"
+        (ngModelChange)="scheduleSearchFull()"
+        placeholder="{{ 'leaderboard.searchPlaceholder' | transloco }}"
+        (keydown.enter)="searchFullImmediate()"
+        class="lp-search-input"
+        [disabled]="loading()"
+        aria-label="{{ 'leaderboard.search' | transloco }}"
+      />
+      <app-button
+        size="sm"
+        variant="tertiary"
+        (click)="searchFullImmediate()"
+        [disabled]="loading()"
+      >
+        @if (loading()) {<span class="lp-spinner" aria-hidden="true">●</span> }
+        {{ 'leaderboard.search' | transloco }}
+      </app-button>
+    </div>
 
-  @if (message()) {
-  <div class="lp-message">{{ message() }}</div>
-  } @if (loading()) {
-  <div class="lp-loading">{{ 'leaderboard.loading' | transloco }}</div>
-  } @else {
-  <div class="lp-full-table-wrap">
-    <table class="lp-full-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>{{ 'leaderboard.name' | transloco }}</th>
-          <th>{{ 'leaderboard.level' | transloco }}</th>
-          <th>{{ 'leaderboard.when' | transloco }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (r of items(); let i = $index; track $index) {
-        <tr>
-          <td>{{ page() * pageSize + i + 1 }}</td>
-          <td>{{ r.username ?? (r.user_id | slice : 0 : 8) }}</td>
-          <td>{{ r.score | short }}</td>
-          <td>{{ r.created_at | date : 'short' }}</td>
-        </tr>
-        }
-      </tbody>
-    </table>
+    @if (message()) {
+    <div class="lp-message">{{ message() }}</div>
+    } @if (loading()) {
+    <div class="lp-loading">{{ 'leaderboard.loading' | transloco }}</div>
+    } @else {
+    <div class="lp-full-table-wrap">
+      <table class="lp-full-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'leaderboard.name' | transloco }}</th>
+            <th>{{ 'leaderboard.level' | transloco }}</th>
+            <th>{{ 'leaderboard.when' | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of items(); let i = $index; track $index) {
+          <tr>
+            <td>{{ page() * pageSize + i + 1 }}</td>
+            <td>{{ r.username ?? (r.user_id | slice : 0 : 8) }}</td>
+            <td>{{ r.score | short }}</td>
+            <td>{{ r.created_at | date : 'short' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
   </div>
-  }
 
   <div class="lp-pagination">
     <app-button

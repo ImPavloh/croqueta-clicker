@@ -1,11 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import Decimal from 'break_infinity.js';
 
+/**
+ * Pipe para formatear números grandes en notación abreviada.
+ * Convierte números como 1000000 a "1M", 1000000000 a "1B", etc.
+ * Soporta números muy grandes usando la librería break_infinity.js.
+ */
 @Pipe({
   name: 'short',
   standalone: true,
 })
 export class ShortNumberPipe implements PipeTransform {
+  /**
+   * Transforma un número en su representación abreviada.
+   * @param value Número a formatear (Decimal, number, string o null/undefined)
+   * @param maxDecimals Número máximo de decimales a mostrar (por defecto 2)
+   * @returns String con el número formateado
+   */
   transform(value: Decimal | number | string | null | undefined, maxDecimals = 2): string {
     if (value == null) return '0';
 

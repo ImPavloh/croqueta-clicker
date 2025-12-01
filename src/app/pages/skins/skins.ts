@@ -11,8 +11,13 @@ import { SkinsService } from '@services/skins.service';
   templateUrl: './skins.html',
   styleUrl: './skins.css',
 })
+/**
+ * Componente de la página de skins.
+ * Muestra todas las skins disponibles y permite al jugador seleccionarlas
+ * si las tiene desbloqueadas.
+ */
 export class Skins {
-  //Servicio para gestionar las skins y su estado de desbloqueo.
+  /** Servicio para gestionar las skins y su estado de desbloqueo */
   private skinsService = inject(SkinsService);
 
   //Array con la lista completa de todas las skins disponibles en el juego.

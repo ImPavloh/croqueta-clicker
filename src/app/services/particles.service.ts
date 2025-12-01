@@ -1,35 +1,66 @@
 import { Injectable, signal } from '@angular/core';
 
+/**
+ * Interfaz que define la estructura de una partícula visual.
+ */
 export interface Particle {
+  /** Identificador único de la partícula */
   uid: number;
+  /** Posición X en píxeles */
   x: number;
+  /** Posición Y en píxeles */
   y: number;
+  /** Velocidad horizontal */
   vx: number;
+  /** Velocidad vertical */
   vy: number;
+  /** Color de la partícula (para tipo 'circle') */
   color: string;
+  /** Tamaño en píxeles */
   size: number;
+  /** Duración de la animación en milisegundos */
   duration: number;
+  /** Tipo de partícula a renderizar */
   type: 'circle' | 'croqueta' | 'custom';
+  /** Rotación en grados */
   rotation: number;
+  /** Ruta de la imagen (para tipos 'croqueta' o 'custom') */
   image?: string;
 }
 
+/**
+ * Servicio para gestionar efectos de partículas en el juego.
+ * Controla el spawn, animación y limpieza de partículas visuales.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ParticlesService {
+  /** Signal privado que contiene todas las partículas activas */
   private _particles = signal<Particle[]>([]);
+
+  /** Signal público de solo lectura con las partículas activas */
   readonly particles = this._particles.asReadonly();
 
+  /** Contador para asignar IDs únicos a cada partícula */
   private lastId = 0;
+
+  /** Número máximo de partículas activas simultáneas */
   private readonly maxParticles = this.getMaxParticles();
 
   constructor() {}
 
+  /**
+   * Calcula el número máximo de partículas basado en el dispositivo.
+   * Reduce el límite en dispositivos móviles o de bajo rendimiento.
+   * @returns Número máximo de partículas permitidas
+   */
   private getMaxParticles(): number {
     if (typeof window === 'undefined') return 50;
 
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
     const isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
 
     if (isMobile) return 30;
@@ -37,7 +68,13 @@ export class ParticlesService {
     return 75;
   }
 
-  // crear partículas desde una posición específica
+  /**
+   * Crea partículas circulares desde una posición específica.
+   * Las partículas se dispersan en todas las direcciones.
+   * @param x Posición X inicial en píxeles
+   * @param y Posición Y inicial en píxeles
+   * @param count Número de partículas a crear (por defecto 8)
+   */
   spawn(x: number, y: number, count: number = 8) {
     // limitar partículas activas para evitar lag (importante xD) ~ sobretodo como se haga spam de clics
     if (this._particles().length >= this.maxParticles) {
@@ -78,7 +115,13 @@ export class ParticlesService {
     this._particles.update((arr) => [...arr, ...particles]);
   }
 
-  // crear partículas de croquetas cayendo desde arriba
+  /**
+   * Crea partículas con imagen de croqueta que caen desde arriba.
+   * Usado para efectos visuales especiales.
+   * @param containerWidth Ancho del contenedor para distribuir las partículas
+   * @param count Número de partículas a crear (por defecto 5)
+   * @param customImage Ruta opcional de imagen personalizada
+   */
   spawnFallingCroquetas(containerWidth: number, count: number = 5, customImage?: string) {
     // lo mismo de antes, limitar particulas activas
     if (this._particles().length >= this.maxParticles) {
@@ -119,7 +162,9 @@ export class ParticlesService {
     this._particles.update((arr) => [...arr, ...particles]);
   }
 
-  // limpiar todas las partículas
+  /**
+   * Elimina todas las partículas activas inmediatamente.
+   */
   clear() {
     this._particles.set([]);
   }

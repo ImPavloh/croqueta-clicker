@@ -25,23 +25,19 @@ import { DynamicControls } from '@ui/dynamic-controls/dynamic-controls';
 @Component({
   selector: 'app-options',
   standalone: true,
-  imports: [
-    Card,
-    FormsModule,
-    ButtonComponent,
-    Tooltip,
-    TranslocoModule,
-    DynamicControls
-  ],
+  imports: [Card, FormsModule, ButtonComponent, Tooltip, TranslocoModule, DynamicControls],
   templateUrl: './options.html',
   styleUrl: './options.css',
 })
+/**
+ * Componente de la página de opciones.
+ * Permite al jugador configurar volumen, gráficos, idioma y gestionar su partida.
+ */
 export class Options {
   private shortNumberPipe = new ShortNumberPipe();
 
   //Versión de la aplicación, obtenida desde el fichero package.json.
   version = PackageJson.version;
-
 
   volumenControls = VOLUMEN_CONTROL;
   interfaceControls = INTERFACE_CONTROL;

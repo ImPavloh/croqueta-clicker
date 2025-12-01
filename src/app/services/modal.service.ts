@@ -8,6 +8,7 @@ export type ModalType =
   | 'debug'
   | 'username'
   | 'leaderboard'
+  | 'news'
   | 'confirm-dialog'
   | null;
 
@@ -46,13 +47,11 @@ export class ModalService {
       cancelText: 'Cancelar',
       ...data,
     });
-    // open the confirmation modal so callers don't need to call openModal manually
     this.openModal('confirm-dialog');
   }
 
   closeConfirm() {
     this.confirmDialog.set(null);
-    // if the confirm dialog is currently showing as a modal, close it too
     if (this.currentModal() === 'confirm-dialog') {
       this.closeModal();
     }

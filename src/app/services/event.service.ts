@@ -20,6 +20,10 @@ import { AchievementsService } from './achievements.service';
 import { PointsService } from './points.service';
 import { FloatingService } from './floating.service';
 
+/**
+ * Servicio para gestionar eventos especiales del juego (croqueta dorada, quemada, bonus).
+ * Controla el spawn, la activación y la duración de estos eventos aleatorios.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -29,18 +33,31 @@ export class EventService implements OnDestroy {
   private pointsService = inject(PointsService);
   private floatingService = inject(FloatingService);
 
+  /** Signal que contiene todos los eventos activos */
   private events = signal<GameEvent[]>([]);
+
+  /** Contador para asignar IDs únicos a cada evento */
   private eventIdCounter = 0;
+
+  /** Timer para comprobar periódicamente si debe aparecer un nuevo evento */
   private spawnTimer: any;
 
   constructor() {
     this.startSpawnCheck();
   }
 
+  /**
+   * Obtiene los eventos activos como signal de solo lectura.
+   * @returns Signal readonly con el array de eventos activos
+   */
   getEvents() {
     return this.events.asReadonly();
   }
 
+  /**
+   * Inicia el temporizador que comprueba periódicamente si debe aparecer un evento.
+   * Solo se crea un evento si no hay otro activo.
+   */
   startSpawnCheck() {
     if (typeof window === 'undefined') return;
 
@@ -56,9 +73,7 @@ export class EventService implements OnDestroy {
         this.spawnEvent('burnt');
       } else if (
         rand <
-        GOLDEN_EVENT_SPAWN_CHANCE +
-          BURNT_EVENT_SPAWN_CHANCE +
-          BONUS_EVENT_SPAWN_CHANCE
+        GOLDEN_EVENT_SPAWN_CHANCE + BURNT_EVENT_SPAWN_CHANCE + BONUS_EVENT_SPAWN_CHANCE
       ) {
         this.spawnEvent('bonus');
       }
@@ -111,19 +126,19 @@ export class EventService implements OnDestroy {
         break;
     }
 
-    this.events.update(events => [...events, event]);
+    this.events.update((events) => [...events, event]);
 
     setTimeout(() => {
-      this.events.update(events =>
-        events.map(e => (e.id === id ? { ...e, state: 'visible' } : e)),
+      this.events.update((events) =>
+        events.map((e) => (e.id === id ? { ...e, state: 'visible' } : e))
       );
     }, 100);
 
     setTimeout(() => {
-      const currentEvent = this.events().find(e => e.id === id);
+      const currentEvent = this.events().find((e) => e.id === id);
       if (currentEvent && !currentEvent.active) {
-        this.events.update(events =>
-          events.map(e => (e.id === id ? { ...e, state: 'fading-out' } : e)),
+        this.events.update((events) =>
+          events.map((e) => (e.id === id ? { ...e, state: 'fading-out' } : e))
         );
         setTimeout(() => this.removeEvent(id), EVENT_FADE_OUT_MS);
       }
@@ -131,7 +146,7 @@ export class EventService implements OnDestroy {
   }
 
   clicked(eventId: number, mouseEvent: MouseEvent) {
-    let event = this.events().find(e => e.id === eventId);
+    let event = this.events().find((e) => e.id === eventId);
     if (!event || !event.spawned) return;
 
     this.audioService.playSfx('/assets/sfx/achievement.mp3');
@@ -154,14 +169,12 @@ export class EventService implements OnDestroy {
       });
     }
 
-    this.events.update(events =>
-      events.map(e =>
-        e.id === eventId
-          ? { ...e, spawned: false, active: true, state: 'fading-out' }
-          : e,
-      ),
+    this.events.update((events) =>
+      events.map((e) =>
+        e.id === eventId ? { ...e, spawned: false, active: true, state: 'fading-out' } : e
+      )
     );
-    event = this.events().find(e => e.id === eventId)!;
+    event = this.events().find((e) => e.id === eventId)!;
 
     setTimeout(() => {
       this.activateEventEffect(event!);
@@ -183,23 +196,17 @@ export class EventService implements OnDestroy {
   }
 
   private startDurationTimer(eventId: number, duration: number) {
-    this.events.update(events =>
-      events.map(e =>
-        e.id === eventId ? { ...e, remainingTime: duration / 1000 } : e,
-      ),
+    this.events.update((events) =>
+      events.map((e) => (e.id === eventId ? { ...e, remainingTime: duration / 1000 } : e))
     );
 
     const interval = setInterval(() => {
-      let event = this.events().find(e => e.id === eventId);
+      let event = this.events().find((e) => e.id === eventId);
       if (event && event.active) {
-        this.events.update(events =>
-          events.map(e =>
-            e.id === eventId
-              ? { ...e, remainingTime: e.remainingTime! - 1 }
-              : e,
-          ),
+        this.events.update((events) =>
+          events.map((e) => (e.id === eventId ? { ...e, remainingTime: e.remainingTime! - 1 } : e))
         );
-        event = this.events().find(e => e.id === eventId);
+        event = this.events().find((e) => e.id === eventId);
 
         if (event!.remainingTime! <= 0) {
           clearInterval(interval);
@@ -212,7 +219,7 @@ export class EventService implements OnDestroy {
   }
 
   private removeEvent(eventId: number) {
-    this.events.update(events => events.filter(e => e.id !== eventId));
+    this.events.update((events) => events.filter((e) => e.id !== eventId));
   }
 
   private getEventLifetime(type: 'golden' | 'burnt' | 'bonus'): number {

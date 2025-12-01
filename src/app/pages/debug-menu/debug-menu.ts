@@ -16,10 +16,16 @@ import { PlayerStats } from '../../services/player-stats.service';
   standalone: true,
   imports: [FormsModule, TranslocoModule, Card, ButtonComponent, CommonModule, InputComponent],
 })
+
+/**
+ * Componente del menú de debug.
+ * Da herramientas para modificar valores del juego durante el desarrollo y testing.
+ */
 export class DebugMenuComponent {
-   //Valor para establecer el número de croquetas.
+  /** Valor para establecer el número de croquetas */
   croquetas: number = 0;
-  //Valor para establecer la experiencia.
+
+  /** Valor para establecer la experiencia */
   exp: number = 0;
   //Valor para establecer las croquetas por segundo.
   cps: number = 0;

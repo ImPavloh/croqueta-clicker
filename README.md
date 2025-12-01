@@ -4,7 +4,8 @@
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue)
-![Croqueta Clicker](public/assets/banners/banner_croqueta_clicker.webp)
+
+<img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 
 **Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 20 y TypeScript.
 
@@ -70,7 +71,7 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 ┌───▼────────┐    ┌──────────▼────────┐
 │  Clicker   │    │   Router Outlet   │
 │ Container  │    │   (Menu Pages)    │
-│ - Stats    │    │                   │
+│ - Stats    │    │   - News          │
 │ - Clicker  │    │   - Upgrades      │
 │ - Counter  │    │   - Achievements  │
 │ - Particles│    │   - Options       │

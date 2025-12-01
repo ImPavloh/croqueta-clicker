@@ -10,6 +10,7 @@ import { Upgrades } from '@pages/upgrades/upgrades';
 import { Achievements } from '@pages/achievements/achievements';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
+import { News } from '@pages/news/news';
 import { ButtonComponent } from '@ui/button/button';
 import { InputComponent } from '@ui/input/input';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
@@ -24,6 +25,7 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
     Achievements,
     Skins,
     Options,
+    News,
     ButtonComponent,
     InputComponent,
     TranslocoModule,
@@ -71,6 +73,8 @@ export class Modal {
         return this.translocoService.translate('user.chooseUsername');
       case 'leaderboard':
         return this.translocoService.translate('leaderboard.title');
+      case 'news':
+        return this.translocoService.translate('news.title');
       case 'confirm-dialog':
         return this.modalService.confirmDialog()?.title ?? '';
       default:

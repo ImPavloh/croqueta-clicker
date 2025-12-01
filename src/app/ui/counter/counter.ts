@@ -9,6 +9,10 @@ import { Subscription } from 'rxjs';
 
 import { TranslocoModule } from '@jsverse/transloco';
 
+/**
+ * Componente que muestra el contador principal de croquetas.
+ * Incluye animaciones al ganar puntos por clic y muestra el label personalizado según la skin.
+ */
 @Component({
   selector: 'app-counter',
   standalone: true,
@@ -17,10 +21,16 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrl: './counter.css',
 })
 export class Counter implements OnDestroy {
+  /** Lista de todas las skins disponibles */
   skins = SKINS;
+
+  /** Valor mostrado en el contador (puede diferir temporalmente del valor real durante animaciones) */
   displayPoints = signal(new Decimal(0));
+
+  /** Indica si hay una animación de puntos en curso */
   isAnimating = signal(false);
 
+  /** Suscripción a eventos de clic para animaciones */
   private clickSubscription: Subscription | null = null;
 
   constructor(public pointsService: PointsService, private skinsService: SkinsService) {
@@ -35,6 +45,11 @@ export class Counter implements OnDestroy {
     });
   }
 
+  /**
+   * Obtiene el label personalizado del contador según la skin activa.
+   * Aplica singular/plural automáticamente.
+   * @returns Clave de traducción del label
+   */
   getCounterLabel(): string {
     const currentSkinId = this.skinsService.skinId();
     const skin = this.skins.find((s) => s.id === currentSkinId);

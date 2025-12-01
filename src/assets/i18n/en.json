@@ -695,5 +695,10 @@
   "resolution": {
     "message": "Reload the page to adapt to the new resolution",
     "button": "Reload"
+  },
+  "news": {
+    "title": "News",
+    "level": "Level",
+    "noNews": "No news available for this level."
   }
 }

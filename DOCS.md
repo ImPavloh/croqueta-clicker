@@ -105,7 +105,7 @@ Esta carpeta contiene los "blueprints" de todos los elementos del juego, lo que 
 - `upgrade.data.ts`: Define cada mejora de clic, su coste, el bono que otorga y el nivel requerido.
 - `skin.data.ts`: Define las skins, su rareza y sus requisitos de desbloqueo.
 - `achievements.data.ts`: Define todos los logros disponibles.
-- `news.data.ts`: Contiene los mensajes del carrusel de noticias.
+- `news.data.ts`: Contiene los mensajes de noticias.
 - `tutorial.data.ts`: Define los mensajes del tutorial y sus condiciones de aparición.
 
 ## 4. Flujo de interacción típico (Ejemplo: Comprar una mejora)

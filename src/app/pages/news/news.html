@@ -1,0 +1,13 @@
+<div class="news-container">
+  <div class="news-content">
+    @if (newsItems().length > 0) { @for (newsItem of newsItems(); track $index) {
+    <div class="news-item">
+      <p class="news-text">{{ newsItem }}</p>
+    </div>
+    } } @else {
+    <div class="news-empty">
+      <p>{{ 'news.noNews' | transloco }}</p>
+    </div>
+    }
+  </div>
+</div>

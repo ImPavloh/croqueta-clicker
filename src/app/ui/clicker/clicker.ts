@@ -10,6 +10,11 @@ import { Subscription } from 'rxjs';
 import Decimal from 'break_infinity.js';
 import { SKINS } from '@data/skin.data';
 
+/**
+ * Componente principal del juego que gestiona la croqueta clickeable.
+ * Maneja los clics del usuario (incluido multitouch), animaciones,
+ * generación de partículas y desbloqueo de logros relacionados con clicks.
+ */
 @Component({
   selector: 'app-clicker',
   standalone: true,
@@ -19,26 +24,40 @@ import { SKINS } from '@data/skin.data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Clicker implements OnInit, OnDestroy {
+  /** Lista de todas las skins disponibles */
   skins = SKINS;
 
+  /** Skin actualmente visible */
   currentSkin = signal<number>(1);
+
+  /** Skin anterior (para animaciones de cambio) */
   previousSkin = signal<number>(1);
+
+  /** Indica si se debe mostrar la skin anterior durante la transición */
   showPrevious = signal(false);
 
+  /** Indica si el jugador está AFK (inactivo) */
   isAfk = signal(false);
 
+  /** Timer para detectar inactividad */
   private afkTimeout?: any;
+
+  /** Tiempo de inactividad antes de marcar como AFK (5 segundos) */
   private readonly afkDelay = 5000;
 
-  // timestamps (ms) de los clicks recientes; ventana móvil de 10s
+  /** Timestamps de los clicks recientes para detección de spam (ventana de 10s) */
   private clickTimestamps: number[] = [];
+
+  /** Ventana de tiempo para contar clicks rápidos (10 segundos) */
   private readonly clickWindowMs = 10_000;
 
-  // timer para detectar 1 hora sin clicks
+  /** Timer para detectar 1 hora sin clicks (para logro especial) */
   private noClicksTimeout?: any;
-  private readonly noClicksDelayMs = 60 * 60 * 1000; // 1 hora
 
-  // suscripcion al cambio de skin
+  /** Tiempo sin clicks para desbloquear el logro (1 hora) */
+  private readonly noClicksDelayMs = 60 * 60 * 1000;
+
+  /** Suscripción a cambios de skin */
   private skinSub?: Subscription;
 
   constructor(
@@ -54,9 +73,17 @@ export class Clicker implements OnInit, OnDestroy {
     });
   }
 
-  //Consigue la url de la skin seleccionada
+  /**
+   * Obtiene la URL de la imagen de una skin por su ID.
+   * @param skinId ID de la skin
+   * @returns URL de la imagen o string vacío si no se encuentra
+   */
   getSkinImage = (skinId: number) => this.skins.find((s) => s.id === skinId)?.image || '';
 
+  /**
+   * Maneja el evento de clic en la croqueta.
+   * @param event Evento del mouse (opcional para clics generados por código)
+   */
   onClick(event?: MouseEvent) {
     this.audioService.resumeIfNeeded();
     // obtener las coordenadas relativas al contenedor principal (clicker-container)
@@ -77,7 +104,11 @@ export class Clicker implements OnInit, OnDestroy {
     this.processClick(x, y, containerWidth);
   }
 
-  // multitouch
+  /**
+   * Maneja eventos de toque (multitouch) para dispositivos táctiles.
+   * Procesa múltiples toques simultáneos.
+   * @param event Evento de toque
+   */
   onTouchStart(event: TouchEvent) {
     this.audioService.resumeIfNeeded();
     event.preventDefault(); // prevenir el click emulado
@@ -98,6 +129,13 @@ export class Clicker implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Procesa la lógica de un clic: añadir puntos, generar partículas,
+   * reproducir sonido y comprobar logros.
+   * @param x Posición X del clic (opcional)
+   * @param y Posición Y del clic (opcional)
+   * @param containerWidth Ancho del contenedor para calcular posiciones
+   */
   private processClick(x?: number, y?: number, containerWidth = 500) {
     this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
@@ -138,6 +176,9 @@ export class Clicker implements OnInit, OnDestroy {
     ['1dc_croquetas', '1e33'],
   ];
 
+  /**
+   * Comprueba y desbloquea logros basados en la cantidad total de croquetas.
+   */
   checkAchievements() {
     // pointsService.points() devuelve un Decimal (signal)
     const current = this.pointsService.points();
@@ -155,6 +196,10 @@ export class Clicker implements OnInit, OnDestroy {
     this.startNoClicksTimer();
   }
 
+  /**
+   * Previene la activación del botón con teclado (Enter/Espacio).
+   * @param event Evento de teclado
+   */
   preventKey(event: KeyboardEvent) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -162,18 +207,28 @@ export class Clicker implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Inicia el temporizador para detectar inactividad (AFK).
+   */
   startAfkTimer() {
     this.afkTimeout = setTimeout(() => {
       this.isAfk.set(true);
     }, this.afkDelay);
   }
 
+  /**
+   * Reinicia el temporizador de AFK al detectar actividad.
+   */
   resetAfkTimer() {
     clearTimeout(this.afkTimeout);
     this.isAfk.set(false);
     this.startAfkTimer();
   }
 
+  /**
+   * Registra un timestamp de clic y comprueba si se deben desbloquear
+   * logros por clicks rápidos (70, 100, 250 clicks en 10 segundos).
+   */
   private recordClickTimestampAndCheck() {
     const now = Date.now();
     // insertar timestamp y filtrar los antiguos fuera de la ventana
@@ -193,6 +248,9 @@ export class Clicker implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Inicia el temporizador de 1 hora sin clicks para el logro especial.
+   */
   private startNoClicksTimer() {
     // limpia cualquier timer existente
     clearTimeout(this.noClicksTimeout);
@@ -203,6 +261,9 @@ export class Clicker implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Reinicia el temporizador de "sin clicks" al detectar un clic.
+   */
   private resetNoClicksTimer() {
     // llamado en cada click: cancela el timer y lo vuelve a arrancar
     clearTimeout(this.noClicksTimeout);

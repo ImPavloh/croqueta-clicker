@@ -18,9 +18,13 @@ import { TranslocoModule } from '@jsverse/transloco';
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',
 })
+/**
+ * Componente de la página de mejoras y productores.
+ * Muestra la tienda con productores automáticos y mejoras de clic.
+ * Incluye controles de filtrado, ordenamiento y compra en cantidad.
+ */
 export class Upgrades {
-
-  //Array con la lista completa de todas las mejoras disponibles en el juego.
+  /** Array con la lista completa de todas las mejoras disponibles en el juego */
   upgrades = UPGRADES;
 
   //Array con la lista completa de todos los productores disponibles en el juego.

@@ -14,6 +14,11 @@ import Decimal from 'break_infinity.js';
 
 import { TranslocoModule } from '@jsverse/transloco';
 
+/**
+ * Componente que representa un productor de croquetas automático.
+ * Muestra la información del productor, permite comprarlo y gestiona
+ * su desbloqueo basado en el nivel del jugador.
+ */
 @Component({
   selector: 'app-producer',
   standalone: true,
@@ -28,7 +33,7 @@ export class Producer {
   public shopControls = inject(ShopControlsService);
   private optionsService = inject(OptionsService);
 
-  // ID del productor
+  /** Configuración del productor (pasada desde el componente padre) */
   @Input() config!: ProducerModel;
 
   // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
@@ -38,14 +43,19 @@ export class Producer {
     }
   });
 
+  /** Nivel actual del jugador */
   public level = toSignal(this.playerStats.level$, { initialValue: 0 });
-  // experiencia actual y la necesaria para el siguiente nivel
+
+  /** Experiencia actual del jugador */
   currentExp = computed(() => this.playerStats.currentExp());
+
+  /** Experiencia necesaria para el siguiente nivel */
   expToNext = computed(() => this.playerStats.expToNext());
 
-  // progreso hacia el nivel requerido (en %). Representamos el progreso como:
-  // progress = (current level + fraction of current level completed) / requiredLevel
-  // Esto permite ver cuánto queda aproximado para alcanzar el level objetivo aunque esté varios niveles por delante.
+  /**
+   * Progreso hacia el nivel requerido para desbloquear este productor (en %).
+   * Calcula el progreso considerando niveles completos y fracción del nivel actual.
+   */
   levelProgressPercent = computed(() => {
     if (!this.config) return 0;
     const target = Number(this.config.level) || 0;
@@ -71,11 +81,16 @@ export class Producer {
     }
   });
 
-  // cantidad (entera)
+  /** Cantidad de este productor que posee el jugador */
   quantity: number = 0;
-  // precio y puntos como Decimal para evitar pérdida de precisión
+
+  /** Precio actual del productor (Decimal para manejar números grandes) */
   price: Decimal = new Decimal(0);
+
+  /** Croquetas por segundo que genera este productor */
   points: Decimal = new Decimal(0);
+
+  /** Indica si el productor está desbloqueado (según nivel del jugador) */
   unlocked: boolean = true;
 
   ngOnInit() {

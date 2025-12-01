@@ -1,8 +1,22 @@
+/**
+ * Interfaz que define la estructura de una estadística mostrada en el panel de stats.
+ */
 export interface StatModel {
-  id: string;                // identificador único
-  title: string;             // título mostrado
-  key: string;               // referencia al valor en PlayerStats
-  icon: string;              // nombre del icono
+  /** Identificador único */
+  id: string;
+
+  /** Título mostrado en la UI (clave de traducción) */
+  title: string;
+
+  /** Referencia al valor en PlayerStats */
+  key: string;
+
+  /** Nombre del icono */
+  icon: string;
+
+  /** Formato de presentación del valor */
   format: 'number' | 'percentage' | 'time';
-  description?: string;      // texto opcional para tooltip o ayuda
+
+  /** Texto opcional para tooltip o ayuda */
+  description?: string;
 }

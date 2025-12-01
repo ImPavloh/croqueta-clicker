@@ -1,10 +1,7 @@
 import { PlayerStats } from '@services/player-stats.service';
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  computed,
-} from '@angular/core';
+import { ModalService } from '@services/modal.service';
+import { AudioService } from '@services/audio.service';
+import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { NewsService } from '@services/news.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged, map, switchMap } from 'rxjs';
@@ -20,6 +17,8 @@ import { distinctUntilChanged, map, switchMap } from 'rxjs';
 export class NewsLine {
   private newsService = inject(NewsService);
   private playerStats = inject(PlayerStats);
+  private modalService = inject(ModalService);
+  private audioService = inject(AudioService);
 
   // Creamos un observable que emite el nivel de noticias basado en el nivel del jugador
   private newsLevel$ = this.playerStats.level$.pipe(
@@ -46,4 +45,9 @@ export class NewsLine {
     const items = this.newsSignal();
     return [...items, ...items];
   });
+
+  openNewsModal() {
+    this.modalService.openModal('news');
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+  }
 }

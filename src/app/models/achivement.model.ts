@@ -1,7 +1,19 @@
+/**
+ * Interfaz que define la estructura de un logro del juego.
+ */
 export interface AchievementModel {
+  /** Identificador único del logro */
   id: string;
+
+  /** Título del logro (clave de traducción) */
   title: string;
-  description: string; // si es secreto, omitimos la descripción
+
+  /** Descripción del logro (clave de traducción). Si es secreto, se omite hasta desbloquearlo */
+  description: string;
+
+  /** Ruta del icono del logro */
   icon: string;
-  secret?: boolean; // true = oculto (no mostrar la descripción en la lista)
+
+  /** true = logro secreto (no mostrar la descripción hasta desbloquearlo) */
+  secret?: boolean;
 }

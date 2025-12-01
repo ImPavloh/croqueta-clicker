@@ -15,9 +15,16 @@ import { AchievementModel } from '@models/achivement.model';
   styleUrl: './achievements.css',
 })
 
-export class Achievements implements OnDestroy{
-
-  //Array que contiene todos los logros junto con su estado de desbloqueo.
+/**
+ * Componente de la página de logros.
+ * Muestra todos los logros del juego con su estado de desbloqueo,
+ * incluyendo logros secretos ocultos hasta que se desbloquean.
+ */
+export class Achievements implements OnDestroy {
+  /**
+   * Array que contiene todos los logros junto con su estado de desbloqueo.
+   * Cada elemento combina la información del logro con un flag `unlocked`.
+   */
   achievementsWithState: Array<AchievementModel & { unlocked: boolean }> = [];
   private subs = new Subscription();
 
