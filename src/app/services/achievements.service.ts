@@ -99,9 +99,6 @@ export class AchievementsService {
     const already = !!currentMap[id];
     if (already) return false;
 
-    // Se llama a la comprobación de meta-logros ANTES de desbloquear el actual
-    this.checkAchievements();
-
     const ach = this.getAchievementById(id);
     if (!ach) {
       console.warn(`Achievement ${id} no existe.`);
@@ -119,6 +116,9 @@ export class AchievementsService {
       this.queueSubject.next([...q, ach]);
     }
 
+    // Se llama a la comprobación de meta-logros DESPUÉS de desbloquear el actual
+    this.checkAchievements();
+
     return true;
   }
 
@@ -126,12 +126,12 @@ export class AchievementsService {
    * Comprueba y desbloquea logros que dependen de otros, como "primer logro" o "todos los logros".
    * Se llama internamente cada vez que se desbloquea un logro.
    */
-  private checkAchievements(){
-    if (this.getUnlockedCount() >= 1){
-      this.unlockAchievement("primer_achievement");
+  private checkAchievements() {
+    if (this.getUnlockedCount() >= 1) {
+      this.unlockAchievement('primer_achievement');
     }
-    if (this.getUnlockedCount() >= this.getTotalCount() -1){
-      this.unlockAchievement("todos_achievements");
+    if (this.getUnlockedCount() >= this.getTotalCount() - 1) {
+      this.unlockAchievement('todos_achievements');
     }
   }
 

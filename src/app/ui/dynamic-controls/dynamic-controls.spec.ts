@@ -14,6 +14,17 @@ describe('DynamicControls', () => {
 
     fixture = TestBed.createComponent(DynamicControls);
     component = fixture.componentInstance;
+    
+    // Asigna un control mock antes de la detección de cambios
+    component.control = {
+      controlType: 'range-slider',
+      value: 50,
+      min: 0,
+      max: 100,
+      step: 1,
+      label: 'test'
+    };
+
     fixture.detectChanges();
   });
 
