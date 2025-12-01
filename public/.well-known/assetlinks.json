@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.pavloh.croquetaclicker",
+      "package_name": "com.whiterootstudios.croquetaclicker",
       "sha256_cert_fingerprints": [
         "6C:A1:55:19:A8:4B:D0:F6:DA:C4:C4:B6:3F:AB:EE:25:FD:49:6B:8D:68:C9:88:FB:68:EF:74:B4:96:2C:22:0E",
         "66:32:76:AA:AF:12:FD:B2:CB:2F:90:22:1A:AF:26:B7:F3:A9:96:93:C0:9B:6B:C1:0B:A2:F3:A9:78:4D:61:38",

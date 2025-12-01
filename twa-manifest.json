@@ -1,5 +1,5 @@
 {
-  "packageId": "com.whiterootstudio.croquetaclicker",
+  "packageId": "com.whiterootstudios.croquetaclicker",
   "host": "croquetaclicker.whiteroot.studio",
   "name": "Croqueta Clicker",
   "launcherName": "Croqueta Clicker",
@@ -15,6 +15,10 @@
   "startUrl": "/",
   "iconUrl": "https://croquetaclicker.whiteroot.studio/icon_512.png",
   "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "P:\\croqueta-clicker\\android.keystore",
+    "alias": "android"
+  },
   "appVersionName": "1",
   "appVersionCode": 1,
   "shortcuts": [],

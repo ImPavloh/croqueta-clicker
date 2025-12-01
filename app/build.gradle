@@ -21,7 +21,7 @@ plugins {
 }
 
 def twaManifest = [
-    applicationId: 'com.whiterootstudio.croquetaclicker',
+    applicationId: 'com.whiterootstudios.croquetaclicker',
     hostName: 'croquetaclicker.whiteroot.studio', // The domain being opened in the TWA.
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'Croqueta Clicker', // The application name.
@@ -52,9 +52,9 @@ def twaManifest = [
 
 android {
     compileSdkVersion 36
-    namespace "com.whiterootstudio.croquetaclicker"
+    namespace "com.whiterootstudios.croquetaclicker"
     defaultConfig {
-        applicationId "com.whiterootstudio.croquetaclicker"
+        applicationId "com.whiterootstudios.croquetaclicker"
         minSdkVersion 21
         targetSdkVersion 35
         versionCode 1
