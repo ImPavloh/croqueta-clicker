@@ -13,6 +13,9 @@
 
 Visita **[croquetaclicker.whiteroot.studio](https://croquetaclicker.whiteroot.studio)** para jugarlo ya :)
 
+Descarga el juego en Google Play:
+**[https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker](https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker)**
+
 > _Juego desarrollado como proyecto de la asignatura "Desarrollo de Interfaces"._
 
 ---
@@ -193,7 +196,10 @@ Si quieres probar el juego descargado sin compilarlo, descarga el APK debug desd
 
 ## Publicación en Google Play (Trusted Web Activity)
 
-Este proyecto se publicará en Google Play como una **TWA (Trusted Web Activity)**: un contenedor Android mínimo que abre la PWA a pantalla completa dentro de Chrome. El wrapper **no se incluye completamente** en este repositorio para mantenerlo limpio y proteger las claves de firma.
+Este proyecto está en Google Play como una **TWA (Trusted Web Activity)**: un contenedor Android mínimo que abre la PWA a pantalla completa dentro de Chrome. El wrapper **no se incluye completamente** en este repositorio para mantenerlo limpio y proteger las claves de firma.
+
+Descarga el juego en Google Play:
+**[https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker](https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker)**
 
 ---
 
