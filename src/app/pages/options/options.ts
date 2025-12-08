@@ -253,10 +253,10 @@ export class Options {
    */
   clickOnStudio() {
     this.studioClicked++;
-    if (this.studioClicked >= 10) {
+    if (this.studioClicked >= 2) {
       this.achievementsService.unlockAchievement('fanboy');
     }
-    if (this.studioClicked >= 1000) {
+    if (this.studioClicked >= 10) {
       this.achievementsService.unlockAchievement('certified_obsession');
     }
   }

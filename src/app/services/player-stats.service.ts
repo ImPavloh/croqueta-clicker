@@ -142,33 +142,45 @@ export class PlayerStats {
   private calculateExpToNext(): void {
     const n = this._level.value;
     if (n === 0) {
-      this._expToNext.set(100);
+      this._expToNext.set(150);
       return;
     }
 
-    // Early game (0-20): progresión moderada para enganchar
-    // Mid game (20-100): crecimiento más suave
-    // Late game (100+): desafiante pero alcanzable
+    // Early game (1-20)
+    // Mid game (21-60)
+    // Late game (61-120)
+    // Endgame (121+)
 
     let expNeeded: number;
 
     if (n <= 20) {
-      // Early: 100 * 1.20^n (más suave que 1.25)
-      expNeeded = Math.floor(100 * Math.pow(1.2, n));
-    } else if (n <= 100) {
-      // Mid: escalado reducido
-      const earlyGameExp = Math.floor(100 * Math.pow(1.2, 20));
+      // Early: 150 * 1.35^n
+      // Nivel 1: 202, Nivel 5: 675, Nivel 10: 3,048, Nivel 20: 61,917
+      expNeeded = Math.floor(150 * Math.pow(1.35, n));
+    } else if (n <= 60) {
+      // Mid: escalado fuerte pero predecible
+      const earlyGameExp = Math.floor(150 * Math.pow(1.35, 20));
       const midGameLevels = n - 20;
-      expNeeded = Math.floor(earlyGameExp * Math.pow(1.15, midGameLevels));
-    } else {
-      // Late: más accesible
-      const earlyGameExp = Math.floor(100 * Math.pow(1.2, 20));
-      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.15, 80));
-      const lateGameLevels = n - 100;
+      // ~1.18 por nivel = duplica cada ~4 niveles
+      expNeeded = Math.floor(earlyGameExp * Math.pow(1.18, midGameLevels));
+    } else if (n <= 120) {
+      // Late: crecimiento más controlado para no bloquear
+      const earlyGameExp = Math.floor(150 * Math.pow(1.35, 20));
+      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.18, 40));
+      const lateGameLevels = n - 60;
+      // ~1.12 por nivel = duplica cada ~6 niveles
       expNeeded = Math.floor(midGameExp * Math.pow(1.12, lateGameLevels));
+    } else {
+      // Endgame: crecimiento suave para permitir progreso continuo
+      const earlyGameExp = Math.floor(150 * Math.pow(1.35, 20));
+      const midGameExp = Math.floor(earlyGameExp * Math.pow(1.18, 40));
+      const lateGameExp = Math.floor(midGameExp * Math.pow(1.12, 60));
+      const endGameLevels = n - 120;
+      // ~1.08 por nivel = duplica cada ~9 niveles
+      expNeeded = Math.floor(lateGameExp * Math.pow(1.08, endGameLevels));
     }
 
-    this._expToNext.set(Math.max(100, expNeeded));
+    this._expToNext.set(Math.max(150, expNeeded));
   }
 
   /**

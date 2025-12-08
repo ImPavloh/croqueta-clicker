@@ -13,7 +13,7 @@
             (valueChange)="onControlChange(control, $event)"
           ></app-dynamic-controls>
         </app-tooltip>
-      }
+        }
       </div>
     </div>
   </app-card>
@@ -32,7 +32,7 @@
             (valueChange)="onControlChange(control, $event)"
           ></app-dynamic-controls>
         </app-tooltip>
-      }
+        }
       </div>
     </div>
   </app-card>
@@ -206,12 +206,15 @@
         </div>
 
         <div class="text-sm flex flex-row items-center justify-center gap-4">
-          <button
+          <a
             (click)="clickOnStudio()"
+            href="https://whiteroot.studio"
+            target="_blank"
+            rel="noopener noreferrer"
             class="text-sm text-amber-800/50 hover:underline cursor-pointer"
           >
             WhiteRoot Studios © 2025
-          </button>
+          </a>
 
           <a
             href="/privacidad/"
