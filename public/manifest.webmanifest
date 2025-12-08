@@ -1,17 +1,26 @@
 {
-  "name": "Croqueta Clicker",
+  "name": "Croqueta Clicker - Juego Incremental Gratis",
   "short_name": "Croqueta Clicker",
-  "description": "Juego incremental de croquetas. Haz clicks en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas. ¡Juega ya!",
+  "description": "El mejor juego incremental de croquetas. Haz clicks, desbloquea 33 mejoras, 15 productores automáticos, 50+ skins y logros. ¡100% gratis!",
   "theme_color": "#000000",
   "background_color": "#000000",
   "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
   "orientation": "any",
   "scope": "/",
-  "start_url": "/",
+  "id": "croqueta-clicker-pwa",
   "lang": "es",
   "dir": "ltr",
-  "categories": ["games", "entertainment"],
+  "categories": ["games", "entertainment", "casual"],
   "prefer_related_applications": false,
+  "iarc_rating_id": "",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
   "icons": [
     {
       "src": "/icon_192.png",
@@ -26,6 +35,12 @@
       "purpose": "any"
     },
     {
+      "src": "/icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "/favicon.ico",
       "sizes": "16x16 32x32",
       "type": "image/x-icon"
@@ -36,7 +51,55 @@
       "src": "/assets/banners/banner_croqueta_clicker.webp",
       "sizes": "1280x720",
       "type": "image/webp",
-      "label": "Croqueta Clicker"
+      "form_factor": "wide",
+      "label": "Croqueta Clicker - Vista principal del juego"
+    },
+    {
+      "src": "/assets/screenshots/phones.webp",
+      "sizes": "1080x1920",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Croqueta Clicker - Vista móvil"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Jugar",
+      "short_name": "Jugar",
+      "description": "Empezar a hacer clicks",
+      "url": "/upgrades",
+      "icons": [{ "src": "/icon_192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Logros",
+      "short_name": "Logros",
+      "description": "Ver logros desbloqueados",
+      "url": "/achievements",
+      "icons": [{ "src": "/icon_192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Skins",
+      "short_name": "Skins",
+      "description": "Personalizar croqueta",
+      "url": "/skins",
+      "icons": [{ "src": "/icon_192.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker",
+      "id": "com.whiterootstudios.croquetaclicker"
+    }
+  ],
+  "protocol_handlers": [],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }

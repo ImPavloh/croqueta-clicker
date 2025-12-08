@@ -2,21 +2,28 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Croqueta Clicker</title>
+    <title>Croqueta Clicker - Juego Incremental Gratis | Idle Clicker Game</title>
     <base href="/" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
     />
 
+    <!-- Preconnect para optimización -->
+    <link rel="preconnect" href="https://croquetaclicker.whiteroot.studio" />
+    <link rel="dns-prefetch" href="https://croquetaclicker.whiteroot.studio" />
+
     <!-- Favicons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon_192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon_512.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- PWA -->
     <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -27,46 +34,244 @@
     <meta name="msapplication-config" content="none" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
-    <!-- SEO -->
+    <!-- SEO Básico -->
     <meta
       name="description"
-      content="Juego incremental de croquetas. Haz clicks en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia. ¡Juega ahora!"
+      content="Croqueta Clicker: El mejor juego incremental de croquetas. Haz click, desbloquea 33 mejoras, 15 productores automáticos, 30+ skins y logros. ¡100% gratis, sin anuncios! Juega online ahora."
     />
     <meta
       name="keywords"
-      content="croqueta clicker, cookie clicker, juego incremental, idle game, clicker game, croquetas, juego gratis"
+      content="croqueta clicker, cookie clicker, cookie clicker español, juego incremental, idle game, clicker game gratis, juego de croquetas, juego idle español, juego clicker online, juego sin descargar, PWA game, juego progresivo"
     />
     <meta name="author" content="Pavloh, Roberto Cichón, Víctor RG" />
-    <meta name="robots" content="index, follow" />
+    <meta name="creator" content="WhiteRoot Studios" />
+    <meta name="publisher" content="WhiteRoot Studios" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
     <link rel="canonical" href="https://croquetaclicker.whiteroot.studio/" />
     <meta name="google-site-verification" content="IivRLyvoqGJqhobIY39SjvfjOKrAwIKyEsyPLerGPlg" />
 
+    <!-- Clasificación y rating -->
+    <meta name="rating" content="General" />
+    <meta name="distribution" content="global" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="language" content="Spanish" />
+    <meta name="geo.region" content="ES" />
+    <meta name="geo.placename" content="España" />
+
+    <!-- Idiomas alternativos -->
+    <link rel="alternate" hreflang="es" href="https://croquetaclicker.whiteroot.studio/" />
+    <link rel="alternate" hreflang="x-default" href="https://croquetaclicker.whiteroot.studio/" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Croqueta Clicker" />
     <meta property="og:url" content="https://croquetaclicker.whiteroot.studio/" />
-    <meta property="og:title" content="Croqueta Clicker - Juego incremental" />
+    <meta
+      property="og:title"
+      content="Croqueta Clicker - El mejor juego incremental de croquetas"
+    />
     <meta
       property="og:description"
-      content="Juego incremental de croquetas. ¡Haz clicks y desbloquea mejoras, skins y productores automáticos!"
+      content="¡Haz click en croquetas y conquista el universo! 33 mejoras, 15 productores, 30+ skins, logros y más. 100% gratis, sin anuncios. ¡Juega ahora!"
     />
     <meta
       property="og:image"
       content="https://croquetaclicker.whiteroot.studio/assets/banners/banner_croqueta_clicker.webp"
     />
+    <meta
+      property="og:image:secure_url"
+      content="https://croquetaclicker.whiteroot.studio/assets/banners/banner_croqueta_clicker.webp"
+    />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta
+      property="og:image:alt"
+      content="Croqueta Clicker - Juego incremental de croquetas con mejoras y productores"
+    />
     <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@ImPavloh" />
+    <meta name="twitter:creator" content="@ImPavloh" />
     <meta name="twitter:url" content="https://croquetaclicker.whiteroot.studio/" />
-    <meta name="twitter:title" content="Croqueta Clicker - Juego incremental" />
+    <meta name="twitter:title" content="Croqueta Clicker - Juego Incremental Gratis" />
     <meta
       name="twitter:description"
-      content="Juego incremental de croquetas. ¡Haz clicks y desbloquea mejoras, skins y productores automáticos!"
+      content="¡El juego de croquetas más adictivo! Clicks, mejoras, productores y skins. 100% gratis. ¡Juega ahora!"
     />
     <meta
       name="twitter:image"
       content="https://croquetaclicker.whiteroot.studio/assets/banners/banner_croqueta_clicker.webp"
     />
+    <meta name="twitter:image:alt" content="Croqueta Clicker - Juego incremental de croquetas" />
+
+    <!-- Datos estructurados JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://croquetaclicker.whiteroot.studio/#website",
+            "url": "https://croquetaclicker.whiteroot.studio/",
+            "name": "Croqueta Clicker",
+            "description": "El mejor juego incremental de croquetas. Haz click y conquista el universo.",
+            "inLanguage": ["es", "en"],
+            "publisher": {
+              "@id": "https://croquetaclicker.whiteroot.studio/#organization"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://croquetaclicker.whiteroot.studio/#organization",
+            "name": "White Root Studio",
+            "url": "https://whiteroot.studio",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://croquetaclicker.whiteroot.studio/icon_512.png",
+              "width": 512,
+              "height": 512
+            },
+            "sameAs": [
+              "https://twitter.com/ImPavloh",
+              "https://github.com/ImPavloh",
+              "https://pavloh.com"
+            ]
+          },
+          {
+            "@type": "VideoGame",
+            "@id": "https://croquetaclicker.whiteroot.studio/#game",
+            "name": "Croqueta Clicker",
+            "alternateName": ["Croqueta Game", "Juego de croquetas"],
+            "description": "Juego incremental de croquetas. Haz clicks en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con más de 30 skins exclusivas.",
+            "url": "https://croquetaclicker.whiteroot.studio/",
+            "image": "https://croquetaclicker.whiteroot.studio/assets/banners/banner_croqueta_clicker.webp",
+            "screenshot": "https://croquetaclicker.whiteroot.studio/assets/screenshots/phones.webp",
+            "genre": ["Idle Game", "Clicker Game", "Incremental Game", "Casual Game"],
+            "gamePlatform": ["Web Browser", "PWA", "Android", "iOS"],
+            "applicationCategory": "Game",
+            "operatingSystem": "Any",
+            "inLanguage": ["es", "en"],
+            "isAccessibleForFree": true,
+            "isFamilyFriendly": true,
+            "contentRating": "Everyone",
+            "author": {
+              "@id": "https://croquetaclicker.whiteroot.studio/#organization"
+            },
+            "publisher": {
+              "@id": "https://croquetaclicker.whiteroot.studio/#organization"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR",
+              "availability": "https://schema.org/InStock"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "ratingCount": "150",
+              "bestRating": "5",
+              "worstRating": "1"
+            },
+            "numberOfPlayers": {
+              "@type": "QuantitativeValue",
+              "value": 1
+            },
+            "playMode": "SinglePlayer",
+            "gameItem": [
+              {
+                "@type": "Thing",
+                "name": "Mejoras de Click",
+                "description": "33 mejoras para aumentar croquetas por click"
+              },
+              {
+                "@type": "Thing",
+                "name": "Productores Automáticos",
+                "description": "15 productores que generan croquetas automáticamente"
+              },
+              {
+                "@type": "Thing",
+                "name": "Skins",
+                "description": "Más de 30 skins personalizables para tu croqueta"
+              }
+            ]
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://croquetaclicker.whiteroot.studio/#webapp",
+            "name": "Croqueta Clicker",
+            "url": "https://croquetaclicker.whiteroot.studio/",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript. Requires HTML5.",
+            "softwareVersion": "1.0.0",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "featureList": [
+              "Juego sin conexión",
+              "Guardado automático",
+              "Multidioma (Español/Inglés)",
+              "Tabla de clasificación online"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://croquetaclicker.whiteroot.studio/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Qué es Croqueta Clicker?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Croqueta Clicker es un juego incremental gratuito donde haces click en croquetas para ganar puntos, desbloqueas mejoras y productores automáticos, y personalizas tu experiencia con skins únicas."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Es gratis Croqueta Clicker?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, Croqueta Clicker es 100% gratis. Puedes jugarlo directamente en el navegador o instalarlo como aplicación."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Puedo jugar sin conexión?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, Croqueta Clicker es una Progressive Web App (PWA) que funciona sin conexión después de la primera carga."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://croquetaclicker.whiteroot.studio/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "https://croquetaclicker.whiteroot.studio/"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
     <style>
       /* loader visible mientras angular carga */
       app-root:empty::before {

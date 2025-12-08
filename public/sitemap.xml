@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Página principal -->
   <url>
     <loc>https://croquetaclicker.whiteroot.studio/</loc>
-    <lastmod>2025-11-14</lastmod>
+    <lastmod>2025-12-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="es" href="https://croquetaclicker.whiteroot.studio/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://croquetaclicker.whiteroot.studio/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://croquetaclicker.whiteroot.studio/" />
+    <image:image>
+      <image:loc>https://croquetaclicker.whiteroot.studio/assets/banners/banner_croqueta_clicker.webp</image:loc>
+      <image:title>Croqueta Clicker - Juego Incremental</image:title>
+      <image:caption>El mejor juego incremental de croquetas</image:caption>
+    </image:image>
   </url>
+
+  <!-- Mejoras -->
+  <url>
+    <loc>https://croquetaclicker.whiteroot.studio/upgrades</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Logros -->
+  <url>
+    <loc>https://croquetaclicker.whiteroot.studio/achievements</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Skins -->
+  <url>
+    <loc>https://croquetaclicker.whiteroot.studio/skins</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Opciones -->
+  <url>
+    <loc>https://croquetaclicker.whiteroot.studio/options</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Política de privacidad -->
+  <url>
+    <loc>https://croquetaclicker.whiteroot.studio/privacidad/</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>

@@ -1,4 +1,19 @@
 User-agent: *
 Allow: /
 
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /assets/
+
+Disallow: /ngsw-worker.json
+Disallow: /*.js.map$
+
 Sitemap: https://croquetaclicker.whiteroot.studio/sitemap.xml
+Host: https://croquetaclicker.whiteroot.studio
