@@ -3,7 +3,7 @@
 ![Angular](https://img.shields.io/badge/Angular-20.3-dd0031?style=flat&logo=angular)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.0.0-blue)
+![Version](https://img.shields.io/badge/Version-1.1.1-blue)
 
 <img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 

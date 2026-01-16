@@ -39,6 +39,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { Leaderboard } from '@ui/leaderboard/leaderboard';
 import { EventComponent } from '@ui/event/event';
 import { EventService } from '@services/event.service';
+import { TimeService } from '@services/time.service';
 
 @Component({
   selector: 'app-root',
@@ -83,13 +84,14 @@ export class App implements OnInit, OnDestroy {
     private playerStats: PlayerStats,
     private audioService: AudioService,
     private achievementsService: AchievementsService,
-    private modalService: ModalService,
+    protected modalService: ModalService,
     private debugService: DebugService,
     private translocoService: TranslocoService,
     private supabase: SupabaseService,
     private swUpdate: SwUpdate,
     private eventService: EventService,
-    private options: OptionsService
+    private options: OptionsService,
+    protected timeService: TimeService
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
     const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';

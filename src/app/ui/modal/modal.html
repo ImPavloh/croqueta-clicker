@@ -30,6 +30,18 @@
       <app-debug-menu />
       } @case ('news') {
       <app-news />
+      } @case ('event-info') {
+      <div class="flex flex-col items-center p-6 text-center space-y-6">
+        <img src="assets/skins/croqueta-dorada.webp" class="w-32 h-32 drop-shadow-[0_0_15px_rgba(255,215,0,0.6)] animate-pulse" alt="Croqueta Dorada">
+        <h3 class="text-2xl font-bold text-amber-600">{{ 'event.croquetaDay.title' | transloco }}</h3>
+        <p class="text-lg text-amber-900">
+          {{ 'event.croquetaDay.description' | transloco }}
+        </p>
+        <div class="bg-amber-100 p-4 rounded-lg border border-amber-300 w-full">
+            <p class="font-bold text-amber-800 text-xl">x3 {{ 'event.multiplier' | transloco }}</p>
+            <p class="text-sm text-amber-700">{{ 'event.multiplier.desc' | transloco }}</p>
+        </div>
+      </div>
       }
 
       <!-- Modals reales (componentes) -->

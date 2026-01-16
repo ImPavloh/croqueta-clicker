@@ -4,6 +4,7 @@ import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import { PRODUCERS } from '@data/producer.data';
 import { Subject } from 'rxjs';
+import { TimeService } from './time.service';
 
 interface Multiplier {
   value: number;
@@ -31,7 +32,7 @@ export class PointsService {
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
 
-  constructor(private floatingService: FloatingService) {
+  constructor(private floatingService: FloatingService, private timeService: TimeService) {
     this.loadFromStorage();
 
     setTimeout(() => {
@@ -97,7 +98,11 @@ export class PointsService {
   }
 
   getActiveMultiplier(): number {
-    return this._multipliers().reduce((acc, m) => acc * m.value, 1);
+    let multiplier = this._multipliers().reduce((acc, m) => acc * m.value, 1);
+    if (this.timeService.isCroquetaDay()) {
+      multiplier *= 3;
+    }
+    return multiplier;
   }
 
   getPointsPerSecond(): Decimal {

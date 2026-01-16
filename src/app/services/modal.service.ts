@@ -10,6 +10,7 @@ export type ModalType =
   | 'leaderboard'
   | 'news'
   | 'confirm-dialog'
+  | 'event-info'
   | null;
 
 export interface ConfirmDialogData {

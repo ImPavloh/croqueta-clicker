@@ -4,11 +4,16 @@ import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import Decimal from 'break_infinity.js';
 
+import { TimeService } from './time.service';
+
 // Mock para FloatingService
 const mockFloatingService = jasmine.createSpyObj('FloatingService', ['show']);
 
 // Mock para OptionsService
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
+
+// Mock para TimeService
+const mockTimeService = jasmine.createSpyObj('TimeService', ['isCroquetaDay']);
 
 describe('PointsService', () => {
   let service: PointsService;
@@ -17,12 +22,14 @@ describe('PointsService', () => {
     mockFloatingService.show.calls.reset();
     mockOptionsService.getGameItem.calls.reset();
     mockOptionsService.setGameItem.calls.reset();
+    mockTimeService.isCroquetaDay.and.returnValue(false);
 
     TestBed.configureTestingModule({
       providers: [
         PointsService,
         { provide: FloatingService, useValue: mockFloatingService },
         { provide: OptionsService, useValue: mockOptionsService },
+        { provide: TimeService, useValue: mockTimeService },
       ],
     });
 

@@ -17,6 +17,7 @@ import { DebugService } from '@services/debug.service';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { ModalService } from '@services/modal.service';
+import { TimeService } from '@services/time.service';
 import { AudioService } from '@services/audio.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
@@ -34,10 +35,11 @@ export class Leaderboard implements OnInit {
   private supabase = inject(SupabaseService);
   private debugService = inject(DebugService);
   private points = inject(PointsService);
-  private modalService = inject(ModalService);
+  protected modalService = inject(ModalService);
   private playerStats = inject(PlayerStats);
   private translocoService = inject(TranslocoService);
   private audioService = inject(AudioService);
+  protected timeService = inject(TimeService);
 
   top = signal<Array<any>>([]);
   loading = signal(false);

@@ -11,4 +11,9 @@
   <button class="floating-btn options-btn" (click)="openOptions()" title="Opciones">
     <img class="btn-icon" src="/assets/icons/settings.webp" alt="Opciones" />
   </button>
+  @if (timeService.isCroquetaDay()) {
+  <button class="floating-btn" (click)="modalService.openModal('event-info')" title="¡Día de la Croqueta!">
+    <img class="btn-icon animate-bounce drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" src="/assets/skins/croqueta-dorada.webp" alt="Event" />
+  </button>
+  }
 </div>

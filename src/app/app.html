@@ -9,7 +9,7 @@
   </div>
   }
   <app-backgrounds></app-backgrounds>
-  <div class="main-container">
+  <div class="main-container" [class.croqueta-day-glow]="timeService.isCroquetaDay()">
     @if (splashVisible()) {
     <app-splash (splashComplete)="onSplashComplete()" />
     }
@@ -29,6 +29,14 @@
       @if (!isMobile) {
       <app-stats variant="desktop" />
       <app-leaderboard />
+      @if (timeService.isCroquetaDay()) {
+      <div 
+        class="absolute z-50 cursor-pointer animate-bounce hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" 
+        style="top: 100px; right: 17px;"
+        (click)="modalService.openModal('event-info')">
+          <img src="assets/skins/croqueta-dorada.webp" class="w-20 h-20 object-contain" alt="Croqueta Day">
+      </div>
+      }
       } @if (isMobile) {
       <div class="mobile-top">
         <app-stats variant="mobile" />
