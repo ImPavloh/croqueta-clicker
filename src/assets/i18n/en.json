@@ -1,8 +1,12 @@
 {
   "event.croquetaDay.title": "Croqueta Day!",
   "event.croquetaDay.description": "Today is January 16th, International Croqueta Day! Enjoy a very crunchy celebration.",
+  "event.croquetaDay.month": "January",
   "event.multiplier": "Global Multiplier",
   "event.multiplier.desc": "All your click and producer earnings are multiplied by 3 today.",
+  "event.tip.clicks": "Each click is worth triple",
+  "event.tip.producers": "All producers generate x3",
+  "event.tip.time": "Only for 24 hours!",
   "achievements": {
     "title": "Achievements",
     "secretAchievement": "??? Secret Achievement ???",

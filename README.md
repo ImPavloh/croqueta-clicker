@@ -37,6 +37,7 @@ Descarga el juego en Google Play:
 - **Multilenguaje**: Soporte para español e inglés
 - **Modo offline**: Juega sin conexión y sincroniza al volver online
 - **Tabla de clasificación**: Compite con otros jugadores por el mejor puntaje
+- **Eventos especiales**: Eventos temporales con bonificaciones únicas
 
 ### Características técnicas
 

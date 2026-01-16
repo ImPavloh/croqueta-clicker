@@ -1,8 +1,12 @@
 {
-  "event.croquetaDay.title": "¡Día de la Croqueta!",
+  "event.croquetaDay.title": "¡Día de la croqueta!",
   "event.croquetaDay.description": "¡Hoy es 16 de Enero, el Día Internacional de la Croqueta! Disfruta de una celebración muy crujiente.",
-  "event.multiplier": "Multiplicador Global",
+  "event.croquetaDay.month": "de Enero",
+  "event.multiplier": "Multiplicador global",
   "event.multiplier.desc": "Todos tus beneficios de clicks y productores se multiplican por 3 hoy.",
+  "event.tip.clicks": "Cada click vale el triple",
+  "event.tip.producers": "Todos los productores generan x3",
+  "event.tip.time": "¡Solo durante 24 horas!",
   "achievements": {
     "title": "Logros",
     "secretAchievement": "??? Logro secreto ???",

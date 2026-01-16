@@ -1,9 +1,13 @@
 <main>
   @if (resolutionChanged()) {
-  <div class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-white p-8 text-center">
+  <div
+    class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-white p-8 text-center"
+  >
     <h2 class="text-2xl mb-4">{{ 'resolution.message' | transloco }}</h2>
-    <button (click)="reloadPage()"
-      class="px-6 py-3 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors cursor-pointer">
+    <button
+      (click)="reloadPage()"
+      class="px-6 py-3 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors cursor-pointer"
+    >
       {{ 'resolution.button' | transloco }}
     </button>
   </div>
@@ -30,14 +34,13 @@
       <app-stats variant="desktop" />
       <app-leaderboard />
       @if (timeService.isCroquetaDay()) {
-      <div 
-        class="absolute z-50 cursor-pointer animate-bounce hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(255,215,0,0.6)]" 
-        style="top: 100px; right: 17px;"
-        (click)="modalService.openModal('event-info')">
-          <img src="assets/skins/croqueta-dorada.webp" class="w-20 h-20 object-contain" alt="Croqueta Day">
+      <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
+        <div class="indicator-glow"></div>
+        <div class="indicator-ring"></div>
+        <img src="assets/skins/croqueta-dorada.webp" class="indicator-img" alt="Croqueta Day" />
+        <span class="indicator-badge">x3</span>
       </div>
-      }
-      } @if (isMobile) {
+      } } @if (isMobile) {
       <div class="mobile-top">
         <app-stats variant="mobile" />
       </div>
@@ -76,7 +79,6 @@
 </main>
 @if (tutorialVisible()) {
 <app-tutorial-overlay (completed)="onTutorialFinished()" />
-}
-@if (languageSelectionVisible()) {
+} @if (languageSelectionVisible()) {
 <app-language-selection (completed)="onLanguageSelectionFinished()" />
 }

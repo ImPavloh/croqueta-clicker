@@ -12,8 +12,12 @@ const mockFloatingService = jasmine.createSpyObj('FloatingService', ['show']);
 // Mock para OptionsService
 const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
 
-// Mock para TimeService
-const mockTimeService = jasmine.createSpyObj('TimeService', ['isCroquetaDay']);
+// Mock para TimeService - isCroquetaDay es un signal (función)
+const mockTimeService = {
+  isCroquetaDay: jasmine.createSpy('isCroquetaDay').and.returnValue(false),
+  isTimeManipulated: jasmine.createSpy('isTimeManipulated').and.returnValue(false),
+  eventInfo: jasmine.createSpy('eventInfo').and.returnValue({ isActive: false, multiplier: 3 }),
+};
 
 describe('PointsService', () => {
   let service: PointsService;
