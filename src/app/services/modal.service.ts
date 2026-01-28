@@ -45,7 +45,6 @@ export class ModalService {
   showConfirm(data: ConfirmDialogData) {
     this.confirmDialog.set({
       confirmText: 'Confirmar',
-      cancelText: 'Cancelar',
       ...data,
     });
     this.openModal('confirm-dialog');

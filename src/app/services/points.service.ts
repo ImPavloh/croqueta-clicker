@@ -6,6 +6,8 @@ import { PRODUCERS } from '@data/producer.data';
 import { Subject } from 'rxjs';
 import { TimeService } from './time.service';
 import { AutosaveService } from './autosave.service';
+import { TranslocoService } from '@jsverse/transloco';
+import { ModalService } from './modal.service';
 
 interface Multiplier {
   value: number;
@@ -19,6 +21,7 @@ interface Multiplier {
 export class PointsService {
   private optionsService = inject(OptionsService);
   private injector = inject(Injector);
+  private modalService = inject(ModalService);
 
   private get autosaveService(): AutosaveService {
     return this.injector.get(AutosaveService);
@@ -32,6 +35,9 @@ export class PointsService {
   private isInitializing = true;
   private lastSaveTime: number = 0;
 
+  // Configurable offline threshold
+  private readonly OFFLINE_THRESHOLD_MS = 600000; // 10 minute
+
   private clickEvent$ = new Subject<Decimal>();
   public readonly onManualClick$ = this.clickEvent$.asObservable();
 
@@ -41,6 +47,11 @@ export class PointsService {
 
   constructor(private floatingService: FloatingService, private timeService: TimeService) {
     this.loadFromStorage();
+
+    // Defer check to ensure app is fully initialized and avoid potential constructor race conditions
+    setTimeout(() => {
+      this.checkOfflineProgress();
+    }, 1000);
 
     setTimeout(() => {
       this.isInitializing = false;
@@ -109,6 +120,11 @@ export class PointsService {
   }
 
   getPointsPerSecond(): Decimal {
+    // Retornamos el valor base. El multiplicador se aplica en el momento de añadir los puntos.
+    // OJO: Si la UI muestra CpS * multiplicador, habría que ajustarlo aquí o en la UI.
+    // Actualmente parece que getPointsPerSecond devuelve el base.
+    // Vamos a dejarlo así para no romper la UI, pero el cálculo offline usará el base por ahora (o con multiplicador si queremos ser generosos).
+    // Usualmente offline no incluye multiplicadores temporales, pero si son pasivos permanentes sí.
     return this._pointsPerSecond();
   }
 
@@ -144,6 +160,11 @@ export class PointsService {
     if (cpc) {
       this._pointsPerClick.set(new Decimal(cpc));
     }
+
+    const lastSave = this.optionsService.getGameItem('last_save_time');
+    if (lastSave) {
+      this.lastSaveTime = Number(lastSave);
+    }
   }
 
   public saveToStorage() {
@@ -153,6 +174,87 @@ export class PointsService {
     this.optionsService.setGameItem('points', this._points().toString());
     this.optionsService.setGameItem('pointsPerSecond', this._pointsPerSecond().toString());
     this.optionsService.setGameItem('pointsPerClick', this._pointsPerClick().toString());
+    this.optionsService.setGameItem('last_save_time', Date.now().toString());
+  }
+
+  private translocoService = inject(TranslocoService);
+
+  // ... (rest of the properties)
+
+  private checkOfflineProgress() {
+    try {
+      console.log('Checking offline progress...', { lastSaveTime: this.lastSaveTime, now: Date.now() });
+      if (!this.lastSaveTime) {
+        console.log('No last save time found.');
+        return;
+      }
+
+      const now = Date.now();
+      const diff = now - this.lastSaveTime;
+      console.log('Time diff:', diff, 'Threshold:', this.OFFLINE_THRESHOLD_MS);
+
+      if (diff > this.OFFLINE_THRESHOLD_MS) {
+        // Recalculate CPS to be sure
+        const cps = this.calculateCpsFromProducers();
+        console.log('CPS:', cps.toString());
+
+        if (cps.lte(0)) {
+          console.log('CPS is <= 0');
+          return;
+        }
+
+        // Calcular segundos completos
+        const seconds = Math.floor(diff / 1000);
+
+        // 50% de producción (0.5x)
+        const offlineFactor = 0.5;
+        const earned = cps.times(seconds).times(offlineFactor);
+        console.log('Offline earned:', earned.toString());
+
+        if (earned.gt(0)) {
+          console.log('Awarding points');
+          this.addPoints(earned);
+
+          // Formatear el mensaje
+          const formattedEarned = this.formatPoints(earned);
+
+          // Usar setTimeout para asegurar que la UI esté lista o darle un pequeño delay visual
+          setTimeout(() => {
+            this.modalService.showConfirm({
+              title: this.translocoService.translate('offline.title'),
+              message: this.translocoService.translate('offline.message', { amount: formattedEarned }),
+              confirmText: this.translocoService.translate('offline.confirm'),
+              onConfirm: () => {
+                this.modalService.closeConfirm();
+              }
+            });
+          }, 1000);
+        }
+      } else {
+        console.log('Diff below threshold');
+      }
+    } catch (error) {
+      console.warn('Error checking offline progress:', error);
+    }
+  }
+
+  // Method to recalculate CPS on demand securely
+  private calculateCpsFromProducers(): Decimal {
+    try {
+      let total = new Decimal(0);
+      for (const p of PRODUCERS) {
+        const q = Number(this.optionsService.getGameItem('producer_' + p.id + '_quantity') || 0) || 0;
+        if (q <= 0) continue;
+
+        const base = new Decimal(p.pointsBase).times(q);
+        const seq = (q * (q - 1)) / 2;
+        const bonus = new Decimal(p.pointsSum).times(seq);
+        total = total.plus(base).plus(bonus);
+      }
+      return total;
+    } catch (e) {
+      return new Decimal(0);
+    }
   }
 
   public reset() {

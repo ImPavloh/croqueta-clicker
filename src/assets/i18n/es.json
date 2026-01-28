@@ -708,5 +708,10 @@
     "title": "Noticias",
     "level": "Nivel",
     "noNews": "No hay noticias disponibles para este nivel."
+  },
+  "offline": {
+    "title": "¡Bienvenido de vuelta!",
+    "message": "Mientras no estabas se han producido {{amount}} croquetas.",
+    "confirm": "Genial"
   }
 }

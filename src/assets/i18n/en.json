@@ -708,5 +708,10 @@
     "title": "News",
     "level": "Level",
     "noNews": "No news available for this level."
+  },
+  "offline": {
+    "title": "Welcome back!",
+    "message": "While you were away, {{amount}} croquettes were produced.",
+    "confirm": "Awesome"
   }
 }
