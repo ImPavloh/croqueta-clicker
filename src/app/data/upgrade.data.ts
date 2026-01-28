@@ -59,7 +59,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 7),
     clicks: 35,
-    level: 7,
+    level: 6,
     exp: 120,
   },
   {
@@ -68,7 +68,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 10),
     clicks: 90,
-    level: 10,
+    level: 8,
     exp: 280,
   },
   {
@@ -77,7 +77,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 13),
     clicks: 220,
-    level: 13,
+    level: 10,
     exp: 650,
   },
   {
@@ -86,7 +86,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 17),
     clicks: 550,
-    level: 17,
+    level: 12,
     exp: 1_500,
   },
   {
@@ -95,7 +95,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 21),
     clicks: 1_400,
-    level: 21,
+    level: 14,
     exp: 3_500,
   },
   {
@@ -104,7 +104,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 25),
     clicks: 3_500,
-    level: 25,
+    level: 16,
     exp: 8_000,
   },
   {
@@ -113,7 +113,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 30),
     clicks: 9_000,
-    level: 30,
+    level: 18,
     exp: 18_000,
   },
   {
@@ -122,7 +122,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 35),
     clicks: 22_000,
-    level: 35,
+    level: 20,
     exp: 40_000,
   },
 
@@ -135,7 +135,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 40),
     clicks: 55_000,
-    level: 40,
+    level: 25,
     exp: 90_000,
   },
   {
@@ -144,7 +144,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 45),
     clicks: 140_000,
-    level: 45,
+    level: 30,
     exp: 200_000,
   },
   {
@@ -153,7 +153,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 50),
     clicks: 350_000,
-    level: 50,
+    level: 35,
     exp: 450_000,
   },
   {
@@ -162,7 +162,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 55),
     clicks: 900_000,
-    level: 55,
+    level: 40,
     exp: 1_000_000,
   },
   {
@@ -171,7 +171,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 60),
     clicks: 2_200_000,
-    level: 60,
+    level: 45,
     exp: 2_200_000,
   },
   {
@@ -180,7 +180,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 65),
     clicks: 5_500_000,
-    level: 65,
+    level: 50,
     exp: 5_000_000,
   },
   {
@@ -189,7 +189,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 70),
     clicks: 14_000_000,
-    level: 70,
+    level: 55,
     exp: 11_000_000,
   },
   {
@@ -198,7 +198,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 75),
     clicks: 35_000_000,
-    level: 75,
+    level: 60,
     exp: 25_000_000,
   },
   {
@@ -207,7 +207,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 80),
     clicks: 85_000_000,
-    level: 80,
+    level: 65,
     exp: 55_000_000,
   },
   {
@@ -216,7 +216,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 85),
     clicks: 210_000_000,
-    level: 85,
+    level: 70,
     exp: 120_000_000,
   },
 
@@ -229,7 +229,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 90),
     clicks: 520_000_000,
-    level: 90,
+    level: 75,
     exp: 270_000_000,
   },
   {
@@ -238,7 +238,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 95),
     clicks: 1_300_000_000,
-    level: 95,
+    level: 80,
     exp: 600_000_000,
   },
   {
@@ -247,7 +247,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 100),
     clicks: 3_200_000_000,
-    level: 100,
+    level: 85,
     exp: 1_300_000_000,
   },
   {
@@ -256,7 +256,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 105),
     clicks: 8_000_000_000,
-    level: 105,
+    level: 90,
     exp: 3_000_000_000,
   },
   {
@@ -265,7 +265,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 110),
     clicks: 20_000_000_000,
-    level: 110,
+    level: 95,
     exp: 6_500_000_000,
   },
   {
@@ -274,7 +274,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 115),
     clicks: 50_000_000_000,
-    level: 115,
+    level: 100,
     exp: 15_000_000_000,
   },
   {
@@ -283,7 +283,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 120),
     clicks: 120_000_000_000,
-    level: 120,
+    level: 110,
     exp: 35_000_000_000,
   },
   {
@@ -292,7 +292,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 125),
     clicks: 300_000_000_000,
-    level: 125,
+    level: 120,
     exp: 80_000_000_000,
   },
   {
@@ -332,7 +332,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 200),
     clicks: 50_000_000_000_000,
-    level: 200,
+    level: 175,
     exp: 5_000_000_000_000,
   },
   {
@@ -341,7 +341,7 @@ export const UPGRADES: UpgradeModel[] = [
     image: '/assets/upgrades/general.webp',
     price: calculatePrice(levelBase, precioBase, 300),
     clicks: 500_000_000_000_000,
-    level: 300,
+    level: 200,
     exp: 50_000_000_000_000,
   },
 ];

@@ -49,7 +49,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 320,
     pointsSum: 60,
     description: 'producers.producer_4_description',
-    level: 20,
+    level: 15,
     exp: 1_200,
   },
 
@@ -65,7 +65,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 2_400,
     pointsSum: 450,
     description: 'producers.producer_5_description',
-    level: 30,
+    level: 20,
     exp: 8_000,
   },
   {
@@ -77,7 +77,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 18_000,
     pointsSum: 3_500,
     description: 'producers.producer_6_description',
-    level: 50,
+    level: 30,
     exp: 55_000,
   },
   {
@@ -89,7 +89,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 135_000,
     pointsSum: 28_000,
     description: 'producers.producer_7_description',
-    level: 65,
+    level: 40,
     exp: 350_000,
   },
 
@@ -105,7 +105,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1_000_000,
     pointsSum: 210_000,
     description: 'producers.producer_8_description',
-    level: 80,
+    level: 50,
     exp: 2_500_000,
   },
   {
@@ -117,7 +117,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 7_500_000,
     pointsSum: 1_600_000,
     description: 'producers.producer_9_description',
-    level: 100,
+    level: 65,
     exp: 18_000_000,
   },
   {
@@ -129,7 +129,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 56_000_000,
     pointsSum: 12_000_000,
     description: 'producers.producer_10_description',
-    level: 120,
+    level: 80,
     exp: 120_000_000,
   },
 
@@ -145,7 +145,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 420_000_000,
     pointsSum: 90_000_000,
     description: 'producers.producer_11_description',
-    level: 150,
+    level: 100,
     exp: 800_000_000,
   },
   {
@@ -157,7 +157,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 3_200_000_000,
     pointsSum: 700_000_000,
     description: 'producers.producer_12_description',
-    level: 180,
+    level: 125,
     exp: 5_000_000_000,
   },
   {
@@ -169,7 +169,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 24_000_000_000,
     pointsSum: 5_500_000_000,
     description: 'producers.producer_13_description',
-    level: 210,
+    level: 150,
     exp: 35_000_000_000,
   },
   {
@@ -181,7 +181,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 180_000_000_000,
     pointsSum: 42_000_000_000,
     description: 'producers.producer_14_description',
-    level: 240,
+    level: 175,
     exp: 250_000_000_000,
   },
   {
@@ -193,7 +193,7 @@ export const PRODUCERS: ProducerModel[] = [
     pointsBase: 1_400_000_000_000,
     pointsSum: 330_000_000_000,
     description: 'producers.producer_15_description',
-    level: 500,
+    level: 200,
     exp: 2_000_000_000_000,
   },
 ];
