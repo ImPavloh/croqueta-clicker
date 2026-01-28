@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, OnDestroy } from '@angular/core';
 
 /**
  * Interfaz que define la estructura de una partícula visual.
@@ -26,6 +26,8 @@ export interface Particle {
   rotation: number;
   /** Ruta de la imagen (para tipos 'croqueta' o 'custom') */
   image?: string;
+  /** Timestamp de creación para calcular expiración */
+  startTime: number;
 }
 
 /**
@@ -35,7 +37,7 @@ export interface Particle {
 @Injectable({
   providedIn: 'root',
 })
-export class ParticlesService {
+export class ParticlesService implements OnDestroy {
   /** Signal privado que contiene todas las partículas activas */
   private _particles = signal<Particle[]>([]);
 
@@ -48,7 +50,23 @@ export class ParticlesService {
   /** Número máximo de partículas activas simultáneas */
   private readonly maxParticles = this.getMaxParticles();
 
-  constructor() {}
+  /** Pool de partículas reutilizables para reducir GC */
+  private deadPool: Particle[] = [];
+
+  private cleanupIntervalId?: any;
+
+  constructor() {
+    // Iniciar bucle de limpieza batched (cada 500ms es suficiente para borrar)
+    if (typeof window !== 'undefined') {
+      this.cleanupIntervalId = setInterval(() => this.cleanup(), 500);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.cleanupIntervalId) {
+      clearInterval(this.cleanupIntervalId);
+    }
+  }
 
   /**
    * Calcula el número máximo de partículas basado en el dispositivo.
@@ -85,31 +103,47 @@ export class ParticlesService {
 
     const particles: Particle[] = [];
     const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFFE0', '#FFF8DC'];
+    const now = Date.now();
 
     for (let i = 0; i < adjustedCount; i++) {
-      const uid = ++this.lastId;
-      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+      const angle = (Math.PI * 2 * i) / adjustedCount + (Math.random() - 0.5) * 0.5;
       const speed = 2 + Math.random() * 3;
+      let particle: Particle;
 
-      const particle: Particle = {
-        uid,
-        x,
-        y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        size: 4 + Math.random() * 6,
-        duration: 600 + Math.random() * 400,
-        type: 'circle',
-        rotation: 0,
-      };
+      // Reutilizar del pool si es posible
+      if (this.deadPool.length > 0) {
+        particle = this.deadPool.pop()!;
+        // Reset properties
+        particle.uid = ++this.lastId;
+        particle.x = x;
+        particle.y = y;
+        particle.vx = Math.cos(angle) * speed;
+        particle.vy = Math.sin(angle) * speed;
+        particle.color = colors[Math.floor(Math.random() * colors.length)];
+        particle.size = 4 + Math.random() * 6;
+        particle.duration = 600 + Math.random() * 400;
+        particle.type = 'circle';
+        particle.rotation = 0;
+        particle.image = undefined;
+        particle.startTime = now;
+      } else {
+        // Crear nueva si el pool está vacío
+        particle = {
+          uid: ++this.lastId,
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: 4 + Math.random() * 6,
+          duration: 600 + Math.random() * 400,
+          type: 'circle',
+          rotation: 0,
+          startTime: now,
+        };
+      }
 
       particles.push(particle);
-
-      // eliminar partícula después de su duración
-      setTimeout(() => {
-        this._particles.update((arr) => arr.filter((p) => p.uid !== uid));
-      }, particle.duration);
     }
 
     this._particles.update((arr) => [...arr, ...particles]);
@@ -131,35 +165,84 @@ export class ParticlesService {
     const adjustedCount = this.maxParticles <= 30 ? Math.min(count, 2) : count;
 
     const particles: Particle[] = [];
+    const now = Date.now();
 
     for (let i = 0; i < adjustedCount; i++) {
-      const uid = ++this.lastId;
-      const x = Math.random() * containerWidth;
-      const y = -50;
+      let particle: Particle;
 
-      const particle: Particle = {
-        uid,
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: 3 + Math.random() * 2,
-        color: '',
-        size: 30 + Math.random() * 20,
-        duration: 1500 + Math.random() * 500,
-        type: 'custom',
-        rotation: Math.random() * 360,
-        image: customImage,
-      };
+      if (this.deadPool.length > 0) {
+        particle = this.deadPool.pop()!;
+        particle.uid = ++this.lastId;
+        particle.x = Math.random() * containerWidth;
+        particle.y = -50;
+        particle.vx = (Math.random() - 0.5) * 0.5;
+        particle.vy = 3 + Math.random() * 2;
+        particle.color = '';
+        particle.size = 30 + Math.random() * 20;
+        particle.duration = 1500 + Math.random() * 500;
+        particle.type = 'custom';
+        particle.rotation = Math.random() * 360;
+        particle.image = customImage;
+        particle.startTime = now;
+      } else {
+        particle = {
+          uid: ++this.lastId,
+          x: Math.random() * containerWidth,
+          y: -50,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: 3 + Math.random() * 2,
+          color: '',
+          size: 30 + Math.random() * 20,
+          duration: 1500 + Math.random() * 500,
+          type: 'custom',
+          rotation: Math.random() * 360,
+          image: customImage,
+          startTime: now,
+        };
+      }
 
       particles.push(particle);
-
-      // eliminar partícula después de su duración
-      setTimeout(() => {
-        this._particles.update((arr) => arr.filter((p) => p.uid !== uid));
-      }, particle.duration);
     }
 
     this._particles.update((arr) => [...arr, ...particles]);
+  }
+
+  /**
+   * Elimina las partículas expiradas en lote.
+   */
+  private cleanup() {
+    const now = Date.now();
+    // Solo actualizamos el signal si realmente hay algo que borrar
+    // Para ello comprobamos si hay alguna partícula expirada antes de filtrar
+    // Sin embargo, hacer find() y luego filter() podría ser redundante.
+    // Dado que el update es costoso solo si cambia la referencia, podemos comprobar
+    // si el length cambia.
+
+    // Optimización: leer el valor actual
+    const current = this._particles();
+    if (current.length === 0) return;
+
+    // Separar activas de expiradas
+    const active: Particle[] = [];
+    const expired: Particle[] = [];
+
+    for (const p of current) {
+      if (now - p.startTime < p.duration) {
+        active.push(p);
+      } else {
+        expired.push(p);
+      }
+    }
+
+    if (active.length !== current.length) {
+      // Reciclar las expiradas
+      this.deadPool.push(...expired);
+      // Limitar tamaño del pool para no consumir memoria infinita si se dejan de usar
+      if (this.deadPool.length > 200) {
+        this.deadPool.length = 200;
+      }
+      this._particles.set(active);
+    }
   }
 
   /**

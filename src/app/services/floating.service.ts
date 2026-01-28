@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, OnDestroy } from '@angular/core';
 
 /**
  * Interfaz que define la estructura de un mensaje flotante en la UI.
@@ -20,6 +20,8 @@ export interface FloatingMessage {
   x?: number;
   /** Posición Y absoluta (opcional, si no se usa ry) */
   y?: number;
+  /** Timestamp de creación */
+  startTime: number;
 }
 
 /**
@@ -29,7 +31,7 @@ export interface FloatingMessage {
 @Injectable({
   providedIn: 'root',
 })
-export class FloatingService {
+export class FloatingService implements OnDestroy {
   /** Signal privado que contiene todos los mensajes flotantes activos */
   private _messages = signal<FloatingMessage[]>([]);
 
@@ -39,7 +41,22 @@ export class FloatingService {
   /** Contador para asignar IDs únicos a cada mensaje */
   private lastId = 0;
 
-  constructor() {}
+  /** Pool de mensajes reutilizables */
+  private deadPool: FloatingMessage[] = [];
+
+  private cleanupIntervalId?: any;
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.cleanupIntervalId = setInterval(() => this.cleanup(), 500);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.cleanupIntervalId) {
+      clearInterval(this.cleanupIntervalId);
+    }
+  }
 
   /**
    * Muestra un mensaje flotante en la UI.
@@ -69,14 +86,53 @@ export class FloatingService {
       ry = Math.round((Math.random() - 0.5) * 40); // -20..20
     }
 
-    const msg: FloatingMessage = { uid, text, rx, ry, duration, x, y };
+    const now = Date.now();
+    let msg: FloatingMessage;
+
+    if (this.deadPool.length > 0) {
+      msg = this.deadPool.pop()!;
+      msg.uid = uid;
+      msg.text = text;
+      msg.rx = rx;
+      msg.ry = ry;
+      msg.duration = duration;
+      msg.x = x;
+      msg.y = y;
+      msg.startTime = now;
+      // Reset optional properties if needed, though they are overwritten above if set
+    } else {
+      msg = { uid, text, rx, ry, duration, x, y, startTime: now };
+    }
+
     this._messages.update((a) => [...a, msg]);
 
-    // borrar
-    setTimeout(() => {
-      this._messages.update((a) => a.filter((m) => m.uid !== uid));
-    }, duration + 50);
-
     return uid;
+  }
+
+  private cleanup() {
+    const now = Date.now();
+    const current = this._messages();
+    if (current.length === 0) return;
+
+    // +50 ms de margen como en el original
+    // Separar activos de expirados
+    const active: FloatingMessage[] = [];
+    const expired: FloatingMessage[] = [];
+
+    for (const m of current) {
+      // +50 ms de margen
+      if (now - m.startTime < m.duration + 50) {
+        active.push(m);
+      } else {
+        expired.push(m);
+      }
+    }
+
+    if (active.length !== current.length) {
+      this.deadPool.push(...expired);
+      // Limitar pool
+      if (this.deadPool.length > 50) this.deadPool.length = 50;
+      this._messages.set(active);
+    }
   }
 }

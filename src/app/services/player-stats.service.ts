@@ -1,9 +1,10 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, Injector, NgZone } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { BehaviorSubject } from 'rxjs';
 import { OptionsService } from './options.service';
 import { LevelUpService } from './level-up.service';
 import { AchievementsService } from './achievements.service';
+import { AutosaveService } from './autosave.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,12 @@ export class PlayerStats {
   private optionsService = inject(OptionsService);
   private levelUpService = inject(LevelUpService);
   private achievementsService = inject(AchievementsService);
+  private injector = inject(Injector);
+  private ngZone = inject(NgZone);
+
+  private get autosaveService(): AutosaveService {
+    return this.injector.get(AutosaveService);
+  }
 
   // state (signals)
   private _totalClicks = signal<number>(0);
@@ -61,22 +68,20 @@ export class PlayerStats {
     this._totalClicks.update((clicks) => clicks + 1);
     this._currentExp.update((total) => total + this._expPerClick());
     this.checkLevelUp();
-    // Guardar cada 10 clicks para evitar saturar localStorage
-    if (this._totalClicks() % 10 === 0) {
-      this.saveToStorage();
-    }
+    // Usar guardado con debounce para evitar saturar localStorage en cada click
+    this.autosaveService.requestSave();
   }
 
   addExp(exp: number): void {
     this._currentExp.update((total) => total + exp);
     this.checkLevelUp();
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   setExp(exp: number): void {
     this._currentExp.set(exp);
     this.checkLevelUp();
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   /**
@@ -268,16 +273,19 @@ export class PlayerStats {
     if (this.isTimerRunning) return;
 
     this.isTimerRunning = true;
-    this.intervalId = setInterval(() => {
-      this._timePlaying.update((current) => {
-        const newValue = current + 1;
-        // guardar cada 10 segundos
-        if (newValue % 10 === 0) {
-          this.saveToStorage();
-        }
-        return newValue;
-      });
-    }, 1000);
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        // Volver a la zona solo para actualizar el signal y la UI
+        this.ngZone.run(() => {
+          this._timePlaying.update((current) => {
+            const newValue = current + 1;
+            // guardar usando debounce
+            this.autosaveService.requestSave();
+            return newValue;
+          });
+        });
+      }, 1000);
+    });
   }
 
   stopTimer() {

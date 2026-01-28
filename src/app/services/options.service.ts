@@ -1,15 +1,21 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, Injector } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 import { SupabaseService } from './supabase.service';
 import { GAME_PREFIX } from '@app/config/constants';
 import * as CryptoJS from 'crypto-js';
 import { CRYPTO } from '../../environments/crypto.config';
+import { AutosaveService } from './autosave.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OptionsService {
+  private injector = inject(Injector);
+
+  private get autosaveService(): AutosaveService {
+    return this.injector.get(AutosaveService);
+  }
   private _generalVolume = signal<number>(100);
   private _musicVolume = signal<number>(100);
   private _sfxVolume = signal<number>(100);
@@ -76,7 +82,7 @@ export class OptionsService {
     const v = this.clamp100(value);
     this._generalVolume.set(v);
     this._generalVolume$.next(this.toUnit(v));
-    this.saveToStorage();
+    this.autosaveService.requestSave();
     this.checkAchievements();
   }
 
@@ -85,7 +91,7 @@ export class OptionsService {
     const v = this.clamp100(value);
     this._musicVolume.set(v);
     this._musicVolume$.next(this.toUnit(v));
-    this.saveToStorage();
+    this.autosaveService.requestSave();
     this.checkAchievements();
   }
 
@@ -93,7 +99,7 @@ export class OptionsService {
     const v = this.clamp100(value);
     this._sfxVolume.set(v);
     this._sfxVolume$.next(this.toUnit(v));
-    this.saveToStorage();
+    this.autosaveService.requestSave();
     this.checkAchievements();
   }
 
@@ -120,17 +126,17 @@ export class OptionsService {
 
   setShowCroquetita(value: boolean) {
     this._showCroquetita.set(value);
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   setShowParticles(value: boolean) {
     this._showParticles.set(value);
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   setShowFloatingText(value: boolean) {
     this._showFloatingText.set(value);
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   checkAchievements() {
@@ -356,13 +362,25 @@ export class OptionsService {
   public loadFromStorage() {
     if (typeof localStorage === 'undefined') return;
     const generalVolume = localStorage.getItem(GAME_PREFIX + 'generalVolume');
-    if (generalVolume !== null) this._generalVolume.set(Number(generalVolume));
+    if (generalVolume !== null) {
+      const v = Number(generalVolume);
+      this._generalVolume.set(v);
+      this._generalVolume$.next(this.toUnit(v));
+    }
 
     const musicVolume = localStorage.getItem(GAME_PREFIX + 'musicVolume');
-    if (musicVolume !== null) this._musicVolume.set(Number(musicVolume));
+    if (musicVolume !== null) {
+      const v = Number(musicVolume);
+      this._musicVolume.set(v);
+      this._musicVolume$.next(this.toUnit(v));
+    }
 
     const sfxVolume = localStorage.getItem(GAME_PREFIX + 'sfxVolume');
-    if (sfxVolume !== null) this._sfxVolume.set(Number(sfxVolume));
+    if (sfxVolume !== null) {
+      const v = Number(sfxVolume);
+      this._sfxVolume.set(v);
+      this._sfxVolume$.next(this.toUnit(v));
+    }
 
     const showCroquetita = localStorage.getItem(GAME_PREFIX + 'showCroquetita');
     if (showCroquetita !== null) this._showCroquetita.set(showCroquetita === 'true');

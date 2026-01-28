@@ -1,10 +1,11 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, Injector } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
 import { PRODUCERS } from '@data/producer.data';
 import { Subject } from 'rxjs';
 import { TimeService } from './time.service';
+import { AutosaveService } from './autosave.service';
 
 interface Multiplier {
   value: number;
@@ -17,6 +18,12 @@ interface Multiplier {
 })
 export class PointsService {
   private optionsService = inject(OptionsService);
+  private injector = inject(Injector);
+
+  private get autosaveService(): AutosaveService {
+    return this.injector.get(AutosaveService);
+  }
+
   private _points = signal<Decimal>(new Decimal(0));
   private _pointsPerSecond = signal<Decimal>(new Decimal(0));
   private _pointsPerClick = signal<Decimal>(new Decimal(1));
@@ -53,7 +60,7 @@ export class PointsService {
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString(), { x, y });
     }
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   addPointPerSecond() {
@@ -64,11 +71,7 @@ export class PointsService {
       this.floatingService.show('+' + amount.toString());
     }
 
-    const currentTime = Date.now();
-    if (!this.lastSaveTime || currentTime - this.lastSaveTime > 30000) {
-      this.saveToStorage();
-      this.lastSaveTime = currentTime;
-    }
+    this.autosaveService.requestSave();
   }
 
   upgradePointPerClick(value: number | string | Decimal) {
@@ -160,7 +163,7 @@ export class PointsService {
 
   public addPoints(amount: Decimal) {
     this._points.update((v) => v.plus(amount));
-    this.saveToStorage();
+    this.autosaveService.requestSave();
   }
 
   public setPoints(amount: number) {
@@ -228,8 +231,8 @@ export class PointsService {
         const decimals = normalized.lt(10)
           ? Math.min(2, maxDecimals)
           : normalized.lt(100)
-          ? Math.min(1, maxDecimals)
-          : 0;
+            ? Math.min(1, maxDecimals)
+            : 0;
 
         try {
           const formatted = normalized

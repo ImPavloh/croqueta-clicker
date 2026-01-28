@@ -160,20 +160,20 @@ export class Clicker implements OnInit, OnDestroy {
     this.audioService.playSfx(crunch[Math.floor(Math.random() * 3)], 1);
   }
 
-  // Logros
-  private readonly achievements = [
-    ['primera_croqueta', '1'],
-    ['1k_croquetas', '1e3'],
-    ['1m_croquetas', '1e6'],
-    ['1b_croquetas', '1e9'],
-    ['1t_croquetas', '1e12'],
-    ['1qa_croquetas', '1e15'],
-    ['1qi_croquetas', '1e18'],
-    ['1sx_croquetas', '1e21'],
-    ['1sp_croquetas', '1e24'],
-    ['1oc_croquetas', '1e27'],
-    ['1nn_croquetas', '1e30'],
-    ['1dc_croquetas', '1e33'],
+  // Pre-calculated thresholds for achievements to avoid new Decimal() on every click
+  private readonly achievementThresholds: { id: string; threshold: Decimal }[] = [
+    { id: 'primera_croqueta', threshold: new Decimal('1') },
+    { id: '1k_croquetas', threshold: new Decimal('1e3') },
+    { id: '1m_croquetas', threshold: new Decimal('1e6') },
+    { id: '1b_croquetas', threshold: new Decimal('1e9') },
+    { id: '1t_croquetas', threshold: new Decimal('1e12') },
+    { id: '1qa_croquetas', threshold: new Decimal('1e15') },
+    { id: '1qi_croquetas', threshold: new Decimal('1e18') },
+    { id: '1sx_croquetas', threshold: new Decimal('1e21') },
+    { id: '1sp_croquetas', threshold: new Decimal('1e24') },
+    { id: '1oc_croquetas', threshold: new Decimal('1e27') },
+    { id: '1nn_croquetas', threshold: new Decimal('1e30') },
+    { id: '1dc_croquetas', threshold: new Decimal('1e33') },
   ];
 
   /**
@@ -182,11 +182,12 @@ export class Clicker implements OnInit, OnDestroy {
   checkAchievements() {
     // pointsService.points() devuelve un Decimal (signal)
     const current = this.pointsService.points();
-    this.achievements.forEach(([id, threshold]) => {
-      if (current.gte(new Decimal(threshold))) {
+    // Iterar sobre los umbrales pre-calculados (mucho más rápido)
+    for (const { id, threshold } of this.achievementThresholds) {
+      if (current.gte(threshold)) {
         this.achievementsService.unlockAchievement(id);
       }
-    });
+    }
   }
 
   ngOnInit() {

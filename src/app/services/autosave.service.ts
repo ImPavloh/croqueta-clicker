@@ -4,6 +4,7 @@ import { PlayerStats } from './player-stats.service';
 import { OptionsService } from './options.service';
 import { PRODUCERS } from '@data/producer.data';
 import { UPGRADES } from '@data/upgrade.data';
+import { Subject, debounceTime, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +18,34 @@ export class AutosaveService implements OnDestroy {
   private readonly AUTOSAVE_INTERVAL = 60000; // 1min
   private isImporting = false;
 
+  // Debounce save logic
+  private saveRequestSubject = new Subject<void>();
+  private saveSubscription: Subscription;
+
   constructor() {
     this.startAutosave();
+
+    // Debounce save requests to happen at most once every 5 seconds
+    this.saveSubscription = this.saveRequestSubject
+      .pipe(debounceTime(5000))
+      .subscribe(() => {
+        this.saveAll();
+      });
+  }
+
+  /**
+   * Solicita un guardado de datos.
+   * La operación real se ejecutará después de 5 segundos de inactividad de solicitudes.
+   * Útil para eventos frecuentes como clicks.
+   */
+  public requestSave() {
+    this.saveRequestSubject.next();
   }
 
   private startAutosave() {
     if (typeof window !== 'undefined') {
       this.intervalId = setInterval(() => {
+        // Force save every minute regardless of debounce
         this.saveAll();
       }, this.AUTOSAVE_INTERVAL);
 
@@ -46,22 +68,15 @@ export class AutosaveService implements OnDestroy {
     try {
       // Si no hay soporte de localStorage robusto (ej. Safari privado) evitar intentar persistir datos
       if (!this.optionsService.isLocalStorageAvailable()) return;
-      const pointsService = this.pointsService as any;
-      const playerStats = this.playerStats as any;
-
-      // Temporalmente permitir guardado
-      const wasInitializingPoints = pointsService.isInitializing;
-      const wasInitializingStats = playerStats.isInitializing;
-
-      pointsService.isInitializing = false;
-      playerStats.isInitializing = false;
 
       this.pointsService.saveToStorage();
+
+      // PlayerStats save
       this.playerStats.saveToStorage();
 
-      // Restaurar estado
-      pointsService.isInitializing = wasInitializingPoints;
-      playerStats.isInitializing = wasInitializingStats;
+      // Options save
+      this.optionsService.saveToStorage();
+
     } catch (error) {
       console.error('Error al guardar automáticamente:', error);
     }
@@ -70,29 +85,13 @@ export class AutosaveService implements OnDestroy {
   // guardar manualmente
   public saveManually(): boolean {
     try {
-      const pointsService = this.pointsService as any;
-      const playerStats = this.playerStats as any;
-
-      const wasInitializingPoints = pointsService.isInitializing;
-      const wasInitializingStats = playerStats.isInitializing;
-
-      pointsService.isInitializing = false;
-      playerStats.isInitializing = false;
-
-      // servicios principales
-      this.pointsService.saveToStorage();
-      this.playerStats.saveToStorage();
-      this.optionsService.saveToStorage();
+      this.saveAll();
 
       // productores (recorrer y forzar guardado)
       this.saveProducersState();
 
       // upgrades
       this.saveUpgradesState();
-
-      // restaurar estado
-      pointsService.isInitializing = wasInitializingPoints;
-      playerStats.isInitializing = wasInitializingStats;
 
       return true;
     } catch (error) {
@@ -137,6 +136,7 @@ export class AutosaveService implements OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    this.saveSubscription?.unsubscribe();
     if (typeof window !== 'undefined') {
       window.removeEventListener('beforeunload', this.saveAll.bind(this));
     }

@@ -71,6 +71,31 @@ export class Options {
    */
   ngOnInit() {
     this.setSavedLang();
+    this.syncControlsWithValues();
+  }
+
+  private syncControlsWithValues() {
+    // Sincronizar sliders de volumen
+    this.volumenControls.forEach((control) => {
+      if (control.label === 'options.generalVolumeLabel') {
+        control.value = this.optionsService.generalVolume();
+      } else if (control.label === 'options.musicVolumeLabel') {
+        control.value = this.optionsService.musicVolume();
+      } else if (control.label === 'options.sfxVolumeLabel') {
+        control.value = this.optionsService.sfxVolume();
+      }
+    });
+
+    // Sincronizar toggles de interfaz
+    this.interfaceControls.forEach((control) => {
+      if (control.label === 'options.showMascotLabel') {
+        control.value = this.optionsService.showCroquetita();
+      } else if (control.label === 'options.showParticlesLabel') {
+        control.value = this.optionsService.showParticles();
+      } else if (control.label === 'options.showFloatingPointsLabel') {
+        control.value = this.optionsService.showFloatingText();
+      }
+    });
   }
 
   /**
@@ -129,7 +154,7 @@ export class Options {
         : this.translocoService.translate('options.saveGameModal.errorMessage'),
       confirmText: this.translocoService.translate('options.saveGameModal.confirmText'),
       cancelText: '',
-      onConfirm: () => {},
+      onConfirm: () => { },
     });
   }
 
@@ -150,7 +175,7 @@ export class Options {
         message: this.translocoService.translate('options.exportGameModal.successMessage'),
         confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
-        onConfirm: () => {},
+        onConfirm: () => { },
       });
     } catch (error) {
       this.modalService.showConfirm({
@@ -158,7 +183,7 @@ export class Options {
         message: this.translocoService.translate('options.exportGameModal.errorMessage') + error,
         confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
-        onConfirm: () => {},
+        onConfirm: () => { },
       });
     }
   }
@@ -199,7 +224,7 @@ export class Options {
                   confirmText: this.translocoService.translate(
                     'options.importGameModal.confirmTextError'
                   ),
-                  onConfirm: () => {},
+                  onConfirm: () => { },
                 });
               });
           },

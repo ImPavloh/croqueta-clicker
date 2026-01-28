@@ -7,6 +7,8 @@ import {
   ChangeDetectionStrategy,
   inject,
   HostListener,
+  NgZone,
+  Renderer2,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -91,7 +93,9 @@ export class App implements OnInit, OnDestroy {
     private swUpdate: SwUpdate,
     private eventService: EventService,
     private options: OptionsService,
-    protected timeService: TimeService
+    protected timeService: TimeService,
+    private ngZone: NgZone,
+    private renderer: Renderer2
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
     const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';
@@ -134,22 +138,7 @@ export class App implements OnInit, OnDestroy {
   public resolutionChanged = signal(false);
   private initialIsMobile = this.isMobile;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    const newIsMobile = window.innerWidth <= 1344;
-    if (newIsMobile !== this.initialIsMobile) {
-      this.resolutionChanged.set(true);
-    } else {
-      this.resolutionChanged.set(false);
-    }
-  }
-
-  @HostListener('window:keydown', ['$event'])
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
-      this.openDebugMenu();
-    }
-  }
+  // Listeners movidos a ngOnInit + runOutsideAngular para rendimiento
 
   reloadPage() {
     window.location.reload();
@@ -172,7 +161,34 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.ngZone.runOutsideAngular(() => {
+      this.renderer.listen(window, 'resize', () => {
+        // Solo verificamos si ha cambiado el breakpoint, no cada pixel
+        const newIsMobile = window.innerWidth <= 1344;
+        if (newIsMobile !== this.initialIsMobile) {
+          // Solo entrar en la zona si realmente cambió el layout
+          this.ngZone.run(() => {
+            this.resolutionChanged.set(true);
+            this.initialIsMobile = newIsMobile;
+          });
+        } else {
+          // Si no cambia el layout, no notificamos a Angular
+          // Opción: this.resolutionChanged.set(false) requeriría entrar en la zona, 
+          // pero si ya es false, mejor no hacer nada.
+        }
+      });
+
+      this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
+        // Solo nos interesa Ctrl+Shift+F12
+        if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
+          this.ngZone.run(() => {
+            this.openDebugMenu();
+          });
+        }
+      });
+    });
+  }
 
   ngOnDestroy() {
     this.levelSub?.unsubscribe();
