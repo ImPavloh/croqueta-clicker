@@ -42,6 +42,7 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
 import { EventComponent } from '@ui/event/event';
 import { EventService } from '@services/event.service';
 import { TimeService } from '@services/time.service';
+import { FpsCounterComponent } from '@ui/fps-counter/fps-counter';
 
 @Component({
   selector: 'app-root',
@@ -68,6 +69,7 @@ import { TimeService } from '@services/time.service';
     EventComponent,
     TutorialOverlayComponent,
     LanguageSelectionComponent,
+    FpsCounterComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
