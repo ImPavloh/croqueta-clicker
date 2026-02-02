@@ -1,15 +1,15 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { configureTransloco } from 'testing/test-helpers';
 import { SwUpdate } from '@angular/service-worker';
 import { of } from 'rxjs';
 
-// Mock simple para el Service Worker Update
 const mockSwUpdate = {
   isEnabled: false,
-  versionUpdates: of(), // Observable vacío
+  versionUpdates: of(),
   checkForUpdate: () => Promise.resolve(false),
-  activateUpdate: () => Promise.resolve(false)
+  activateUpdate: () => Promise.resolve(false),
 };
 
 beforeEach(async () => {
@@ -21,9 +21,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [
-        { provide: SwUpdate, useValue: mockSwUpdate }
-      ]
+      providers: [{ provide: SwUpdate, useValue: mockSwUpdate }],
     }).compileComponents();
   });
 

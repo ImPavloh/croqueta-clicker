@@ -1,7 +1,6 @@
-import { Component, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnDestroy, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
-import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AchievementModel } from '@models/achivement.model';
@@ -9,15 +8,15 @@ import { AchievementModel } from '@models/achivement.model';
 @Component({
   selector: 'app-achievement-popup',
   standalone: true,
-  imports: [CommonModule, TranslocoModule],
+  imports: [TranslocoModule],
   templateUrl: './achievement-popup.html',
   styleUrls: ['./achievement-popup.css'],
 })
 export class AchievementPopup implements OnDestroy {
-  current: AchievementModel | null = null;
-  visible = false;
+  current = signal<AchievementModel | null>(null);
+  visible = signal(false);
   private isProcessing = false;
-  private hideTimeout: any = null;
+  private hideTimeout: ReturnType<typeof setTimeout> | null = null;
   private subs = new Subscription();
 
   private readonly DISPLAY_MS = 3500;
@@ -26,15 +25,13 @@ export class AchievementPopup implements OnDestroy {
   constructor(
     private svc: AchievementsService,
     private audioService: AudioService,
-    private cdr: ChangeDetectorRef,
-    private zone: NgZone
   ) {
     this.subs.add(
       this.svc.queue$.subscribe((queue) => {
         if (queue.length > 0 && !this.isProcessing) {
           this.processQueue().catch((err) => console.error(err));
         }
-      })
+      }),
     );
   }
 
@@ -60,29 +57,22 @@ export class AchievementPopup implements OnDestroy {
 
   private showFor(item: AchievementModel): Promise<void> {
     return new Promise((resolve) => {
-      this.current = item;
-      this.visible = true;
-      this.cdr.detectChanges();
+      this.current.set(item);
+      this.visible.set(true);
 
       this.audioService.playSfx('/assets/sfx/achievement.mp3', 1);
 
       if (this.hideTimeout) clearTimeout(this.hideTimeout);
 
       this.hideTimeout = setTimeout(() => {
-        this.zone.run(() => {
-          this.visible = false;
-          this.cdr.detectChanges();
+        this.visible.set(false);
 
-          if (this.hideTimeout) clearTimeout(this.hideTimeout);
+        if (this.hideTimeout) clearTimeout(this.hideTimeout);
 
-          this.hideTimeout = setTimeout(() => {
-            this.zone.run(() => {
-              this.current = null;
-              this.cdr.detectChanges();
-              resolve();
-            });
-          }, this.FADE_MS);
-        });
+        this.hideTimeout = setTimeout(() => {
+          this.current.set(null);
+          resolve();
+        }, this.FADE_MS);
       }, this.DISPLAY_MS);
     });
   }

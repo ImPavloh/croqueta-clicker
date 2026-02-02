@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Upgrade } from './upgrade';
 import { UpgradeModel } from '@models/upgrade.model';
@@ -10,30 +11,27 @@ import { OptionsService } from '@services/options.service';
 // SIMULACIÓN DE SERVICIOS (MOCKS)
 // mocks para cada servicio inyectado en Upgrade
 
-const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
-  'level$',
-  'addExp',
-  'upgradeExpPerClick',
-]);
-mockPlayerStats.level$ = of(0);
+const mockPlayerStats = {
+  level$: of(0),
+  addExp: vi.fn(),
+  upgradeExpPerClick: vi.fn(),
+};
 
-const mockPointsService = jasmine.createSpyObj('PointsService', [
-  'points',
-  'substractPoints',
-  'pointsPerClick',
-  'upgradePointPerClick',
-]);
-// Simula que points() devuelve un objeto que responde a gte() y lt()
-// gte() suficientes puntos para comprar
-// lt() insuficientes puntos
-mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
-// Simula pointsPerClick()
-mockPointsService.pointsPerClick.and.returnValue({ plus: () => ({}) } as any);
+const mockPointsService = {
+  points: vi.fn().mockReturnValue({ gte: () => true, lt: () => false } as any),
+  substractPoints: vi.fn(),
+  pointsPerClick: vi.fn().mockReturnValue({ plus: () => ({}) } as any),
+  upgradePointPerClick: vi.fn(),
+};
 
-const mockAudioService = jasmine.createSpyObj('AudioService', ['playSfx']);
-const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
-// Simula que loadFromStorage no encuentra nada por defecto
-mockOptionsService.getGameItem.and.returnValue(null);
+const mockAudioService = {
+  playSfx: vi.fn(),
+};
+
+const mockOptionsService = {
+  getGameItem: vi.fn().mockReturnValue(null),
+  setGameItem: vi.fn(),
+};
 
 // Mock de configuración mínima requerida por el componente
 const mockConfig: UpgradeModel = {
@@ -78,8 +76,8 @@ describe('Upgrade', () => {
 
     // Verifica que la inicialización de estado funcione correctamente
     // El nivel de mockPlayerStats es 0 y mockConfig level es 0, por lo tanto unlocked tiene que ser true
-    expect(component.unlocked).toBeTrue();
+    expect(component.unlocked).toBe(true);
     // Por defecto bought debe ser false (ya que mockOptionsService devuelve null)
-    expect(component.bought).toBeFalse();
+    expect(component.bought).toBe(false);
   });
 });

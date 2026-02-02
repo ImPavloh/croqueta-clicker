@@ -1,6 +1,6 @@
-import { Component, OnDestroy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
+import { Component, OnDestroy, signal, inject } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { AudioService } from '@services/audio.service';
 import { SkinsService } from '@services/skins.service';
 import { ButtonComponent } from '@ui/button/button';
@@ -10,20 +10,19 @@ import { SkinModel } from '@models/skin.model';
 @Component({
   selector: 'app-skin-unlock-popup',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, TranslocoModule],
+  imports: [ButtonComponent, TranslocoModule, UpperCasePipe],
   templateUrl: './skin-unlock-popup.html',
   styleUrls: ['./skin-unlock-popup.css'],
 })
 export class SkinUnlockPopup implements OnDestroy {
-  current: SkinModel | null = null;
-  visible = false;
+  current = signal<SkinModel | null>(null);
+  visible = signal(false);
   private isProcessing = false;
   private subs = new Subscription();
+  private _currentResolve: (() => void) | null = null;
 
   private skinsService = inject(SkinsService);
   private audioService = inject(AudioService);
-  private cdr = inject(ChangeDetectorRef);
-  private zone = inject(NgZone);
 
   constructor() {
     this.subs.add(
@@ -31,7 +30,7 @@ export class SkinUnlockPopup implements OnDestroy {
         if (queue.length > 0 && !this.isProcessing) {
           this.processQueue().catch((err) => console.error(err));
         }
-      })
+      }),
     );
   }
 
@@ -52,60 +51,48 @@ export class SkinUnlockPopup implements OnDestroy {
     }
   }
 
-  private showFor(notification: SkinModel ): Promise<void> {
+  private showFor(notification: SkinModel): Promise<void> {
     return new Promise((resolve) => {
-      this.zone.run(() => {
-        this.current = notification;
-        this.cdr.detectChanges();
+      this.current.set(notification);
 
-        setTimeout(() => {
-          this.visible = true;
-          this.cdr.detectChanges();
-          this.audioService.playSfx('/assets/sfx/achievement.mp3', 1);
-        }, 50);
-      });
+      setTimeout(() => {
+        this.visible.set(true);
+        this.audioService.playSfx('/assets/sfx/achievement.mp3', 1);
+      }, 50);
 
-      (this as any)._currentResolve = resolve;
+      this._currentResolve = resolve;
     });
   }
 
   onUse(): void {
-    if (!this.current) return;
+    const curr = this.current();
+    if (!curr) return;
 
-    this.zone.run(() => {
-      this.skinsService.updateSkin(this.current!.id);
-      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
-      this.close();
-    });
+    this.skinsService.updateSkin(curr.id);
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    this.close();
   }
 
   onClose(): void {
-    this.zone.run(() => {
-      this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
-      this.close();
-    });
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+    this.close();
   }
 
   private close(): void {
-    this.visible = false;
-    this.cdr.detectChanges();
+    this.visible.set(false);
 
     setTimeout(() => {
-      this.zone.run(() => {
-        this.current = null;
-        this.cdr.detectChanges();
+      this.current.set(null);
 
-        if ((this as any)._currentResolve) {
-          (this as any)._currentResolve();
-          (this as any)._currentResolve = null;
-        }
-      });
+      if (this._currentResolve) {
+        this._currentResolve();
+        this._currentResolve = null;
+      }
     }, 450);
   }
 
   getRarityClass(rarity: string | undefined): string {
     if (!rarity) return '';
-    // Assuming rarity is in format 'skins.rarity.common'
     const parts = rarity.split('.');
     const rarityName = parts[parts.length - 1];
     return `rarity-${rarityName}`;

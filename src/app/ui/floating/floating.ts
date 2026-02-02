@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FloatingService, FloatingMessage } from '@services/floating.service';
 import { OptionsService } from '@services/options.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
@@ -9,6 +9,7 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
   imports: [ShortNumberPipe],
   templateUrl: './floating.html',
   styleUrls: ['./floating.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Floating {
   private pos = new Map<number, { left: string; top: string }>();

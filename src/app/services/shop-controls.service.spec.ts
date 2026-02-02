@@ -1,24 +1,30 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ShopControlsService, BuyAmount, SortOrder, FilterType } from './shop-controls.service';
 import { OptionsService } from './options.service';
 
 describe('ShopControlsService', () => {
   let service: ShopControlsService;
-  let optionsServiceSpy: jasmine.SpyObj<OptionsService>;
+  let optionsServiceMock: {
+    getGameItem: ReturnType<typeof vi.fn>;
+    setGameItem: ReturnType<typeof vi.fn>;
+  };
 
   // Configuración base antes de cada test
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
+    optionsServiceMock = {
+      getGameItem: vi.fn(),
+      setGameItem: vi.fn(),
+    };
 
     TestBed.configureTestingModule({
-      providers: [ShopControlsService, { provide: OptionsService, useValue: spy }],
+      providers: [ShopControlsService, { provide: OptionsService, useValue: optionsServiceMock }],
     });
   });
 
   // Pruebas con la configuración por defecto (storage vacío)
   describe('with default (empty) storage', () => {
     beforeEach(() => {
-      optionsServiceSpy = TestBed.inject(OptionsService) as jasmine.SpyObj<OptionsService>;
       service = TestBed.inject(ShopControlsService);
     });
 
@@ -27,7 +33,7 @@ describe('ShopControlsService', () => {
       expect(service).toBeTruthy();
 
       // verificar que los spies fueron llamados por el constructor
-      expect(optionsServiceSpy.getGameItem).toHaveBeenCalledWith('buyAmount');
+      expect(optionsServiceMock.getGameItem).toHaveBeenCalledWith('buyAmount');
 
       // verificar los valores por defecto
       expect(service.buyAmount()).toBe(1);
@@ -39,35 +45,34 @@ describe('ShopControlsService', () => {
         const newAmount: BuyAmount = 25;
         service.setBuyAmount(newAmount);
         expect(service.buyAmount()).toBe(newAmount);
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('buyAmount', String(newAmount));
+        expect(optionsServiceMock.setGameItem).toHaveBeenCalledWith('buyAmount', String(newAmount));
       });
-
     });
 
     // Pruebas del método cycleBuyAmount
     describe('cycleBuyAmount', () => {
       it('should cycle 1 -> 10', () => {
         service.setBuyAmount(1);
-        optionsServiceSpy.setGameItem.calls.reset();
+        optionsServiceMock.setGameItem.mockClear();
         service.cycleBuyAmount();
         expect(service.buyAmount()).toBe(10);
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('buyAmount', '10');
+        expect(optionsServiceMock.setGameItem).toHaveBeenCalledWith('buyAmount', '10');
       });
 
       it('should cycle 10 -> 25', () => {
         service.setBuyAmount(10);
-        optionsServiceSpy.setGameItem.calls.reset();
+        optionsServiceMock.setGameItem.mockClear();
         service.cycleBuyAmount();
         expect(service.buyAmount()).toBe(25);
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('buyAmount', '25');
+        expect(optionsServiceMock.setGameItem).toHaveBeenCalledWith('buyAmount', '25');
       });
 
       it('should cycle 25 -> 1', () => {
         service.setBuyAmount(25);
-        optionsServiceSpy.setGameItem.calls.reset();
+        optionsServiceMock.setGameItem.mockClear();
         service.cycleBuyAmount();
         expect(service.buyAmount()).toBe(1);
-        expect(optionsServiceSpy.setGameItem).toHaveBeenCalledWith('buyAmount', '1');
+        expect(optionsServiceMock.setGameItem).toHaveBeenCalledWith('buyAmount', '1');
       });
     });
 
@@ -87,19 +92,19 @@ describe('ShopControlsService', () => {
   describe('loadFromStorage on initialization', () => {
     it('should load stored values from storage on construction', () => {
       // Configurar un mock específico para este test
-      const storedOptionsSpy = jasmine.createSpyObj('OptionsService', [
-        'getGameItem',
-        'setGameItem',
-      ]);
+      const storedOptionsMock = {
+        getGameItem: vi.fn(),
+        setGameItem: vi.fn(),
+      };
 
       // Simular valores válidos en el storage
-      storedOptionsSpy.getGameItem.and.callFake((key: string) => {
+      storedOptionsMock.getGameItem.mockImplementation((key: string) => {
         if (key === 'buyAmount') return '10';
         return null;
       });
 
       // Sobrescribir el provider antes de inyectar
-      TestBed.overrideProvider(OptionsService, { useValue: storedOptionsSpy });
+      TestBed.overrideProvider(OptionsService, { useValue: storedOptionsMock });
 
       // Inyectar el servicio
       const serviceWithStorage = TestBed.inject(ShopControlsService);
@@ -108,17 +113,17 @@ describe('ShopControlsService', () => {
     });
 
     it('should ignore invalid stored values and use defaults', () => {
-      const invalidOptionsSpy = jasmine.createSpyObj('OptionsService', [
-        'getGameItem',
-        'setGameItem',
-      ]);
+      const invalidOptionsMock = {
+        getGameItem: vi.fn(),
+        setGameItem: vi.fn(),
+      };
 
-      invalidOptionsSpy.getGameItem.and.callFake((key: string) => {
+      invalidOptionsMock.getGameItem.mockImplementation((key: string) => {
         if (key === 'buyAmount') return '99'; // Inválido
         return null;
       });
 
-      TestBed.overrideProvider(OptionsService, { useValue: invalidOptionsSpy });
+      TestBed.overrideProvider(OptionsService, { useValue: invalidOptionsMock });
       const invalidService = TestBed.inject(ShopControlsService);
       expect(invalidService.buyAmount()).toBe(1);
     });

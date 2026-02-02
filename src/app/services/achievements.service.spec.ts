@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { AchievementsService } from './achievements.service';
 import { GAME_PREFIX } from '@app/config/constants';
@@ -10,17 +11,28 @@ describe('AchievementsService', () => {
   let store: Record<string, string>;
   const storageKey = GAME_PREFIX + 'achievements';
 
+  let localStorageGetItemSpy: ReturnType<typeof vi.spyOn>;
+  let localStorageSetItemSpy: ReturnType<typeof vi.spyOn>;
+  let localStorageRemoveItemSpy: ReturnType<typeof vi.spyOn>;
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
   // función setup para simular localStorage
   const setupLocalStorageMock = () => {
     store = {};
-    spyOn(localStorage, 'getItem').and.callFake((key: string) => store[key] || null);
-    spyOn(localStorage, 'setItem').and.callFake((key: string, value: string) => {
-      store[key] = value;
-    });
-    spyOn(localStorage, 'removeItem').and.callFake((key: string) => {
-      delete store[key];
-    });
-    spyOn(console, 'warn');
+    localStorageGetItemSpy = vi
+      .spyOn(localStorage, 'getItem')
+      .mockImplementation((key: string) => store[key] || null);
+    localStorageSetItemSpy = vi
+      .spyOn(localStorage, 'setItem')
+      .mockImplementation((key: string, value: string) => {
+        store[key] = value;
+      });
+    localStorageRemoveItemSpy = vi
+      .spyOn(localStorage, 'removeItem')
+      .mockImplementation((key: string) => {
+        delete store[key];
+      });
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   };
 
   // Función para recrear el servicio (para probar la inicialización)
@@ -39,7 +51,7 @@ describe('AchievementsService', () => {
 
   afterEach(() => {
     // Limpiamos los espías
-    (console.warn as jasmine.Spy).calls.reset();
+    consoleWarnSpy.mockClear();
   });
 
   it('should be created', () => {
@@ -68,7 +80,7 @@ describe('AchievementsService', () => {
 
     expect(console.warn).toHaveBeenCalledWith(
       'No se pudo leer achievements desde localStorage',
-      jasmine.any(Error)
+      expect.any(Error),
     );
     expect(newService.getUnlockedCount()).toBe(0); // debe empezar vacío
   });
@@ -76,23 +88,22 @@ describe('AchievementsService', () => {
   it('should save to localStorage when an achievement is unlocked', () => {
     // Asumimos que achh1 existe y no es uno de los especiales
     const testAch = ACHIEVEMENTS.find(
-      (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements'
+      (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements',
     );
     if (!testAch) {
-      fail('Se necesita al menos un logro normal en ACHIEVEMENTS.data');
-      return;
+      throw new Error('Se necesita al menos un logro normal en ACHIEVEMENTS.data');
     }
 
     service.unlockAchievement(testAch.id);
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(storageKey, jasmine.any(String));
+    expect(localStorage.setItem).toHaveBeenCalledWith(storageKey, expect.any(String));
 
     const rawStore = store[storageKey];
     const parsedStore = JSON.parse(rawStore);
 
     // debería haber desbloqueado tanto el logro de prueba como el primer logro
-    expect(parsedStore[testAch.id]).toBeTrue();
-    expect(parsedStore['primer_achievement']).toBeTrue();
+    expect(parsedStore[testAch.id]).toBe(true);
+    expect(parsedStore['primer_achievement']).toBe(true);
   });
 
   describe('unlockAchievement', () => {
@@ -101,13 +112,13 @@ describe('AchievementsService', () => {
     beforeEach(() => {
       // reiniciar estado antes de cada test de unlock
       service.resetAll();
-      (localStorage.setItem as jasmine.Spy).calls.reset();
+      localStorageSetItemSpy.mockClear();
 
       testAch = ACHIEVEMENTS.find(
-        (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements'
+        (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements',
       );
       if (!testAch) {
-        fail('ACHIEVEMENTS data debe tener un logro de prueba válido.');
+        throw new Error('ACHIEVEMENTS data debe tener un logro de prueba válido.');
       }
     });
 
@@ -115,13 +126,13 @@ describe('AchievementsService', () => {
       const id = testAch!.id;
       const result = service.unlockAchievement(id);
 
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
       // se desbloquean 2 (el de prueba + primer_achievement)
       expect(service.getUnlockedCount()).toBe(2);
 
       const map = await firstValueFrom(service.unlockedMap$);
-      expect(map[id]).toBeTrue();
-      expect(map['primer_achievement']).toBeTrue(); // comprobar la lógica circular
+      expect(map[id]).toBe(true);
+      expect(map['primer_achievement']).toBe(true); // comprobar la lógica circular
 
       const queue = await firstValueFrom(service.queue$);
       expect(queue.length).toBe(2);
@@ -132,11 +143,11 @@ describe('AchievementsService', () => {
     it('should not unlock an already unlocked achievement and return false', () => {
       const id = testAch!.id;
       service.unlockAchievement(id); // desbloqueo inicial
-      (localStorage.setItem as jasmine.Spy).calls.reset(); // reseteo del espía
+      localStorageSetItemSpy.mockClear(); // reseteo del espía
 
       const result = service.unlockAchievement(id); // segundo intento
 
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(service.getUnlockedCount()).toBe(2); // sigue en 2
       // la lógica de unlock retorna pronto por lo que no debería haber
       // una nueva llamada a next() que dispare el saveToStorage
@@ -147,7 +158,7 @@ describe('AchievementsService', () => {
 
     it('should not unlock a non-existent achievement, return false, and warn', () => {
       const result = service.unlockAchievement('non-existent-id');
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       expect(console.warn).toHaveBeenCalledWith('Achievement non-existent-id no existe.');
       expect(service.getUnlockedCount()).toBe(0); // Ningún logro desbloqueado
     });
@@ -155,14 +166,13 @@ describe('AchievementsService', () => {
     it('should unlock "todos_achievements" when the N-1 achievement is unlocked', () => {
       // se obtienen todos los IDs menos el de todos_achievements y uno más (ej ach1)
       const achToUnlock = ACHIEVEMENTS.find(
-        (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements'
+        (a) => a.id !== 'primer_achievement' && a.id !== 'todos_achievements',
       );
       if (!achToUnlock) {
-        fail('Se necesita otro logro además de los especiales');
-        return;
+        throw new Error('Se necesita otro logro además de los especiales');
       }
       const allButTwo = ACHIEVEMENTS.map((a) => a.id).filter(
-        (id) => id !== 'todos_achievements' && id !== achToUnlock.id
+        (id) => id !== 'todos_achievements' && id !== achToUnlock.id,
       );
 
       // forzado del estado a N-2 logros (sin disparar la lógica de check)
@@ -184,8 +194,8 @@ describe('AchievementsService', () => {
       // La condición (N-1 >= N-1) es verdadera
       // checkAchievements debería desbloquear todos_achievements
       const finalMap = (service as any).unlockedMapSnapshot();
-      expect(finalMap[achToUnlock.id]).toBeTrue();
-      expect(finalMap['todos_achievements']).toBeTrue();
+      expect(finalMap[achToUnlock.id]).toBe(true);
+      expect(finalMap['todos_achievements']).toBe(true);
       expect(service.getUnlockedCount()).toBe(ACHIEVEMENTS.length); // todos desbloqueados
     });
   });
@@ -273,12 +283,12 @@ describe('AchievementsService', () => {
       const ach0 = allWithState.find((a) => a.id === ACHIEVEMENTS[0].id);
       const ach1 = allWithState.find((a) => a.id === ACHIEVEMENTS[1].id);
 
-      expect(ach0?.unlocked).toBeTrue();
-      expect(ach1?.unlocked).toBeTrue();
+      expect(ach0?.unlocked).toBe(true);
+      expect(ach1?.unlocked).toBe(true);
 
       if (ACHIEVEMENTS.length > 2) {
         const ach2 = allWithState.find((a) => a.id === ACHIEVEMENTS[2].id);
-        expect(ach2?.unlocked).toBeFalse();
+        expect(ach2?.unlocked).toBe(false);
       }
     });
   });

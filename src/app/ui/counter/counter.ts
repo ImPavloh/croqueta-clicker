@@ -1,4 +1,4 @@
-import { Component, effect, signal, OnDestroy } from '@angular/core';
+import { Component, effect, signal, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PointsService } from '@services/points.service';
 import { SkinsService } from '@services/skins.service';
@@ -19,6 +19,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [CommonModule, ShortNumberPipe, TranslocoModule],
   templateUrl: './counter.html',
   styleUrl: './counter.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Counter implements OnDestroy {
   /** Lista de todas las skins disponibles */
@@ -33,7 +34,10 @@ export class Counter implements OnDestroy {
   /** Suscripción a eventos de clic para animaciones */
   private clickSubscription: Subscription | null = null;
 
-  constructor(public pointsService: PointsService, private skinsService: SkinsService) {
+  constructor(
+    public pointsService: PointsService,
+    private skinsService: SkinsService,
+  ) {
     this.displayPoints.set(this.pointsService.points());
 
     // actualizar sin animación (puntos automáticos)

@@ -46,10 +46,29 @@ export class FloatingService implements OnDestroy {
 
   private cleanupIntervalId?: any;
 
+  /** Número máximo de mensajes activos */
+  private readonly maxMessages = this.getMaxMessages();
+
   constructor() {
     if (typeof window !== 'undefined') {
       this.cleanupIntervalId = setInterval(() => this.cleanup(), 500);
     }
+  }
+
+  /** Calcula el número max de mensajes flotantes basado en el dispositivo */
+  private getMaxMessages(): number {
+    if (typeof window === 'undefined') return 8;
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+    const isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
+    const isVeryLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 2 : false;
+
+    if (isVeryLowEnd || (isMobile && isLowEnd)) return 4;
+    if (isMobile) return 6;
+    if (isLowEnd) return 8;
+    return 15;
   }
 
   ngOnDestroy() {
@@ -68,6 +87,11 @@ export class FloatingService implements OnDestroy {
    * @returns ID único del mensaje creado
    */
   show(text: string, options?: { duration?: number; x?: number; y?: number }) {
+    // limitar mensajes activos
+    if (this._messages().length >= this.maxMessages) {
+      return -1;
+    }
+
     const duration = options?.duration ?? 900;
     const uid = ++this.lastId;
 

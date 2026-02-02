@@ -1,29 +1,29 @@
 <main>
   @if (resolutionChanged()) {
-  <div
-    class="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center text-white p-8 text-center"
-  >
-    <h2 class="text-2xl mb-4">{{ 'resolution.message' | transloco }}</h2>
-    <button
-      (click)="reloadPage()"
-      class="px-6 py-3 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors cursor-pointer"
+    <div
+      class="fixed inset-0 z-9999 bg-black flex flex-col items-center justify-center text-white p-8 text-center"
     >
-      {{ 'resolution.button' | transloco }}
-    </button>
-  </div>
+      <h2 class="text-2xl mb-4">{{ 'resolution.message' | transloco }}</h2>
+      <button
+        (click)="reloadPage()"
+        class="px-6 py-3 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition-colors cursor-pointer"
+      >
+        {{ 'resolution.button' | transloco }}
+      </button>
+    </div>
   }
   <app-backgrounds></app-backgrounds>
   <div class="main-container" [class.croqueta-day-glow]="timeService.isCroquetaDay()">
     @if (splashVisible()) {
-    <app-splash (splashComplete)="onSplashComplete()" />
+      <app-splash (splashComplete)="onSplashComplete()" />
     }
     <app-modal />
     <app-fps-counter />
     <app-achievement-popup />
     @if (isMobile) {
-    <app-skin-unlock-popup />
-    <app-newsline />
-    <app-floating-buttons />
+      <app-skin-unlock-popup />
+      <app-newsline />
+      <app-floating-buttons />
     }
     <div class="clicker-container">
       <app-level-up-popup />
@@ -32,54 +32,60 @@
       <app-particles />
       <app-floating />
       @if (!isMobile) {
-      <app-stats variant="desktop" />
-      <app-leaderboard />
-      @if (timeService.isCroquetaDay()) {
-      <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
-        <div class="indicator-glow"></div>
-        <div class="indicator-ring"></div>
-        <img src="assets/skins/croqueta-dorada.webp" class="indicator-img" alt="Croqueta Day" />
-        <span class="indicator-badge">x3</span>
-      </div>
-      } } @if (isMobile) {
-      <div class="mobile-top">
-        <app-stats variant="mobile" />
-      </div>
-      <div class="clicker-wrapper">
-        <app-clicker />
-      </div>
-      @if (isMobile) {
-      <app-leaderboard mode="panel" class="mobile-leaderboard" />
+        <app-stats variant="desktop" />
+        <app-leaderboard />
+        @if (timeService.isCroquetaDay()) {
+          <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
+            <div class="indicator-glow"></div>
+            <div class="indicator-ring"></div>
+            <img src="assets/skins/croqueta-dorada.webp" class="indicator-img" alt="Croqueta Day" />
+            <span class="indicator-badge">x3</span>
+          </div>
+        }
       }
-      <div class="mobile-bottom">
-        <app-counter />
-      </div>
+      @if (isMobile) {
+        <div class="mobile-top">
+          <app-stats variant="mobile" />
+        </div>
+        <div class="clicker-wrapper">
+          <app-clicker />
+        </div>
+        @if (isMobile) {
+          <app-leaderboard mode="panel" class="mobile-leaderboard" />
+        }
+        <div class="mobile-bottom">
+          <app-counter />
+        </div>
       } @else {
-      <div class="desktop-content">
-        <app-clicker />
-        <app-counter />
-      </div>
-      } @if (tutorialCompleted()) {
-      <app-croquetita />
+        <div class="desktop-content">
+          <app-clicker />
+          <app-counter />
+        </div>
+      }
+      @if (tutorialCompleted()) {
+        <app-croquetita />
       }
     </div>
     @if (!isMobile) {
-    <div class="menu-container">
-      <app-navbar />
-      <div class="page-content">
-        <router-outlet />
+      <div class="menu-container">
+        <app-navbar />
+        <div class="page-content">
+          <router-outlet />
+        </div>
       </div>
-    </div>
     }
   </div>
   @if (isDebugMode) {
-  <div class="fixed bottom-5 right-5 bg-amber-950/50 text-red-200 py-2 px-4 rounded text-xs z-200">
-    {{ 'debug.alert' | transloco }}
-  </div>
+    <div
+      class="fixed bottom-5 right-5 bg-amber-950/50 text-red-200 py-2 px-4 rounded text-xs z-200"
+    >
+      {{ 'debug.alert' | transloco }}
+    </div>
   }
 </main>
 @if (tutorialVisible()) {
-<app-tutorial-overlay (completed)="onTutorialFinished()" />
-} @if (languageSelectionVisible()) {
-<app-language-selection (completed)="onLanguageSelectionFinished()" />
+  <app-tutorial-overlay (completed)="onTutorialFinished()" />
+}
+@if (languageSelectionVisible()) {
+  <app-language-selection (completed)="onLanguageSelectionFinished()" />
 }

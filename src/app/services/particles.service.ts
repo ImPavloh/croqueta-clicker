@@ -74,16 +74,18 @@ export class ParticlesService implements OnDestroy {
    * @returns Número máximo de partículas permitidas
    */
   private getMaxParticles(): number {
-    if (typeof window === 'undefined') return 50;
+    if (typeof window === 'undefined') return 25;
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
+      navigator.userAgent,
     );
     const isLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 4 : false;
+    const isVeryLowEnd = navigator.hardwareConcurrency ? navigator.hardwareConcurrency <= 2 : false;
 
-    if (isMobile) return 30;
-    if (isLowEnd) return 50;
-    return 75;
+    if (isVeryLowEnd || (isMobile && isLowEnd)) return 12;
+    if (isMobile) return 20;
+    if (isLowEnd) return 30;
+    return 40;
   }
 
   /**
@@ -99,7 +101,12 @@ export class ParticlesService implements OnDestroy {
       return;
     }
 
-    const adjustedCount = this.maxParticles <= 30 ? Math.min(count, 4) : count;
+    const adjustedCount =
+      this.maxParticles <= 20
+        ? Math.min(count, 2)
+        : this.maxParticles <= 30
+          ? Math.min(count, 3)
+          : count;
 
     const particles: Particle[] = [];
     const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FFFFE0', '#FFF8DC'];
@@ -162,7 +169,12 @@ export class ParticlesService implements OnDestroy {
       return;
     }
 
-    const adjustedCount = this.maxParticles <= 30 ? Math.min(count, 2) : count;
+    const adjustedCount =
+      this.maxParticles <= 20
+        ? Math.min(count, 1)
+        : this.maxParticles <= 30
+          ? Math.min(count, 2)
+          : count;
 
     const particles: Particle[] = [];
     const now = Date.now();

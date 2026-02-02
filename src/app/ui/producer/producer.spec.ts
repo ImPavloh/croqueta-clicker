@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Producer } from './producer';
 import { ProducerModel } from '@models/producer.model';
@@ -9,33 +10,34 @@ import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
 
 // mocks para cada servicio inyectado en Producer
-const mockPlayerStats = jasmine.createSpyObj('PlayerStats', [
-  'level$',
-  'addExp',
-  'upgradeExpPerClick',
-  'currentExp',
-  'expToNext',
-]);
-mockPlayerStats.level$ = of(0); // Simula el Observable para toSignal
-mockPlayerStats.currentExp.and.returnValue(40);
-mockPlayerStats.expToNext.and.returnValue(100);
+const mockPlayerStats = {
+  level$: of(0), // Simula el Observable para toSignal
+  addExp: vi.fn(),
+  upgradeExpPerClick: vi.fn(),
+  currentExp: vi.fn().mockReturnValue(40),
+  expToNext: vi.fn().mockReturnValue(100),
+};
 
-const mockPointsService = jasmine.createSpyObj('PointsService', [
-  'points',
-  'substractPoints',
-  'pointsPerSecond',
-  'upgradePointsPerSecond',
-  'pointsPerClick',
-]);
+const mockPointsService = {
+  points: vi.fn().mockReturnValue({ gte: () => true, lt: () => false } as any),
+  substractPoints: vi.fn(),
+  pointsPerSecond: vi.fn(),
+  upgradePointsPerSecond: vi.fn(),
+  pointsPerClick: vi.fn(),
+};
 
-// simula los métodos que devuelven Signals/Decimal. Usaremos un objeto Decimal simulado.
-mockPointsService.points.and.returnValue({ gte: () => true, lt: () => false } as any);
+const mockAudioService = {
+  playSfx: vi.fn(),
+};
 
-const mockAudioService = jasmine.createSpyObj('AudioService', ['playSfx']);
-const mockShopControlsService = jasmine.createSpyObj('ShopControlsService', ['buyAmount']);
-mockShopControlsService.buyAmount.and.returnValue(1); // Simula el signal de compra
+const mockShopControlsService = {
+  buyAmount: vi.fn().mockReturnValue(1), // Simula el signal de compra
+};
 
-const mockOptionsService = jasmine.createSpyObj('OptionsService', ['getGameItem', 'setGameItem']);
+const mockOptionsService = {
+  getGameItem: vi.fn(),
+  setGameItem: vi.fn(),
+};
 
 // Mock de configuración mínima requerida por el componente
 const mockConfig: ProducerModel = {
@@ -83,11 +85,11 @@ describe('Producer', () => {
     expect(component).toBeTruthy();
 
     // comprobar que las inicializaciones básicas ocurrieron
-    expect(component.unlocked).toBeTrue();
+    expect(component.unlocked).toBe(true);
     expect(component.price.toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
   });
 
- it('renders locked state with required level when not unlocked', () => {
+  it('renders locked state with required level when not unlocked', () => {
     fixture = TestBed.createComponent(Producer);
     component = fixture.componentInstance;
 
@@ -95,7 +97,7 @@ describe('Producer', () => {
 
     fixture.detectChanges();
 
-    expect(component.unlocked).toBeFalse();
+    expect(component.unlocked).toBe(false);
 
     const el = fixture.nativeElement as HTMLElement;
     const locked =

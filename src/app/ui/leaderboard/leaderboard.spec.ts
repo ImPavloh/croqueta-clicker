@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Leaderboard } from './leaderboard';
 import { of } from 'rxjs';
@@ -30,7 +31,7 @@ class MockPointsService {
 }
 
 class MockModalService {
-  openModal = jasmine.createSpy('openModal');
+  openModal = vi.fn();
   shouldCheckUsername = signal(false);
 }
 
@@ -73,7 +74,7 @@ describe('Leaderboard username prompt behavior', () => {
     fixture = TestBed.createComponent(Leaderboard);
     component = fixture.componentInstance;
     modalService = TestBed.inject(
-      (await import('@services/modal.service')).ModalService
+      (await import('@services/modal.service')).ModalService,
     ) as unknown as MockModalService;
   });
 

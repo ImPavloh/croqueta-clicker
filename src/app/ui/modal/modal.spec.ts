@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Modal } from './modal';
 import { ModalService } from '@services/modal.service';
@@ -14,23 +15,23 @@ describe('Modal', () => {
     const modalStub = {
       currentModal: () => null,
       confirmDialog: () => null,
-      closeModal: jasmine.createSpy('closeModal'),
-      openModal: jasmine.createSpy('openModal'),
-      isOpen: jasmine.createSpy('isOpen'),
-      showConfirm: jasmine.createSpy('showConfirm'),
-      closeConfirm: jasmine.createSpy('closeConfirm'),
-      confirm: jasmine.createSpy('confirm'),
-      cancel: jasmine.createSpy('cancel'),
+      closeModal: vi.fn(),
+      openModal: vi.fn(),
+      isOpen: vi.fn(),
+      showConfirm: vi.fn(),
+      closeConfirm: vi.fn(),
+      confirm: vi.fn(),
+      cancel: vi.fn(),
     } as any;
 
-    const audioStub = { playSfx: jasmine.createSpy('playSfx') } as any;
+    const audioStub = { playSfx: vi.fn() } as any;
     const translocoStub = { translate: (k: string) => k } as any;
     const usernameStub = {
       validate: (name: string) => ({ valid: false, reason: 'format' }),
     } as any;
     const supabaseStub = {
-      isUsernameTaken: jasmine.createSpy('isUsernameTaken').and.resolveTo(false),
-      updateUserName: jasmine.createSpy('updateUserName').and.resolveTo({ error: null }),
+      isUsernameTaken: vi.fn().mockResolvedValue(false),
+      updateUserName: vi.fn().mockResolvedValue({ error: null }),
     } as any;
 
     await TestBed.configureTestingModule({
@@ -66,9 +67,7 @@ describe('Modal', () => {
   it('rejects invalid username with message', async () => {
     const usernameSvc = TestBed.inject(UsernameService) as any;
     // force validation to return invalid
-    usernameSvc.validate = jasmine
-      .createSpy('validate')
-      .and.returnValue({ valid: false, reason: 'length' });
+    usernameSvc.validate = vi.fn().mockReturnValue({ valid: false, reason: 'length' });
 
     component.desiredName.set('toolongusernameover16');
     await component.setUsername();
@@ -77,9 +76,9 @@ describe('Modal', () => {
 
   it('rejects taken usernames', async () => {
     const usernameSvc = TestBed.inject(UsernameService) as any;
-    usernameSvc.validate = jasmine.createSpy('validate').and.returnValue({ valid: true });
+    usernameSvc.validate = vi.fn().mockReturnValue({ valid: true });
     const supSvc = TestBed.inject(SupabaseService) as any;
-    supSvc.isUsernameTaken = jasmine.createSpy('isUsernameTaken').and.resolveTo(true);
+    supSvc.isUsernameTaken = vi.fn().mockResolvedValue(true);
 
     component.desiredName.set('validname');
     await component.setUsername();
@@ -88,15 +87,15 @@ describe('Modal', () => {
 
   it('sets username successfully', async () => {
     const usernameSvc = TestBed.inject(UsernameService) as any;
-    usernameSvc.validate = jasmine.createSpy('validate').and.returnValue({ valid: true });
+    usernameSvc.validate = vi.fn().mockReturnValue({ valid: true });
     const supSvc = TestBed.inject(SupabaseService) as any;
-    supSvc.isUsernameTaken = jasmine.createSpy('isUsernameTaken').and.resolveTo(false);
-    supSvc.updateUserName = jasmine.createSpy('updateUserName').and.resolveTo({ error: null });
+    supSvc.isUsernameTaken = vi.fn().mockResolvedValue(false);
+    supSvc.updateUserName = vi.fn().mockResolvedValue({ error: null });
 
-    spyOn(component.usernameMessage, 'set').and.callThrough();
+    const setMessageSpy = vi.spyOn(component.usernameMessage, 'set');
 
     component.desiredName.set('validname');
     await component.setUsername();
-    expect(component.usernameMessage.set).toHaveBeenCalledWith('user.setUsernameSuccess');
+    expect(setMessageSpy).toHaveBeenCalledWith('user.setUsernameSuccess');
   });
 });

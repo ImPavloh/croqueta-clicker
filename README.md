@@ -1,13 +1,13 @@
 # Croqueta Clicker
 
-![Angular](https://img.shields.io/badge/Angular-20.3-dd0031?style=flat&logo=angular)
+![Angular](https://img.shields.io/badge/Angular-21.0-dd0031?style=flat&logo=angular)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.1.1-blue)
+![Version](https://img.shields.io/badge/Version-1.2.0-blue)
 
 <img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 
-**Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 20 y TypeScript.
+**Croqueta Clicker** es un juego incremental inspirado en Cookie Clicker, desarrollado con Angular 21 y TypeScript.
 
 ¡Haz click en croquetas, desbloquea mejoras, compra productores automáticos y personaliza tu experiencia con skins exclusivas!
 
@@ -60,7 +60,7 @@ Descarga el juego en Google Play:
 
 ### Patrón de diseño
 
-El proyecto sigue una **arquitectura modular basada en componentes standalone** de Angular 20.3:
+El proyecto sigue una **arquitectura modular basada en componentes standalone** de Angular 21:
 
 ```
 ┌───────────────────────────────────────────┐
@@ -122,7 +122,7 @@ Puedes consultar una documentación más detallada del proyecto [aquí](DOCS.md)
 - [NVM](https://github.com/nvm-sh/nvm) (opcional, para gestionar versiones de Node.js)
 - [Node.js](https://nodejs.org/) v20.19.0 o superior
 - [PNPM](https://pnpm.io/) v10.20.0 (gestor de paquetes)
-- [Angular CLI](https://github.com/angular/angular-cli) v20.3.9
+- [Angular CLI](https://github.com/angular/angular-cli) v21
 
 - [Java JDK](https://adoptium.net/) v11 o superior (opcional, para generar APK)
 - [Android SDK](https://developer.android.com/studio) (opcional, Gradle lo descarga si falta)

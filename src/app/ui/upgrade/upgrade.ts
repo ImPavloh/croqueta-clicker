@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input } from '@angular/core';
+import { Component, effect, inject, Input, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
@@ -25,6 +25,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './upgrade.html',
   styleUrl: './upgrade.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Upgrade {
   private playerStats = inject(PlayerStats);

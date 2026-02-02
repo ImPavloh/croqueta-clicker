@@ -66,7 +66,7 @@ export class Clicker implements OnInit, OnDestroy {
     public playerStats: PlayerStats,
     private achievementsService: AchievementsService,
     private particlesService: ParticlesService,
-    private audioService: AudioService
+    private audioService: AudioService,
   ) {
     this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
       if (id !== this.currentSkin()) this.currentSkin.set(id);
@@ -146,14 +146,14 @@ export class Clicker implements OnInit, OnDestroy {
     this.checkAchievements(); // tus achievements por puntos siguen ahí
 
     // generar partículas en la posición del click
-    if (x !== undefined && y !== undefined) this.particlesService.spawn(x, y, 6);
+    if (x !== undefined && y !== undefined) this.particlesService.spawn(x, y, 4);
 
     const skin = this.skins.find((s) => s.id === this.skinsService.skinId());
     // generar partículas de croquetas cayendo con personalización según skin
     this.particlesService.spawnFallingCroquetas(
       containerWidth,
-      3,
-      skin?.particleImage || '/assets/skins/croqueta-normal.webp'
+      2,
+      skin?.particleImage || '/assets/skins/croqueta-normal.webp',
     );
 
     const crunch = [1, 2, 3].map((n) => `/assets/sfx/crunch${n}.mp3`);
@@ -240,7 +240,7 @@ export class Clicker implements OnInit, OnDestroy {
     // desbloqueamos en orden descendente, así si llegas a 250 también se intentan desbloquear 120 y 70
     if (count >= 250) {
       ['autoclicker', 'speedrun', 'click_rapido'].forEach((id) =>
-        this.achievementsService.unlockAchievement(id)
+        this.achievementsService.unlockAchievement(id),
       );
     } else if (count >= 100) {
       ['speedrun', 'click_rapido'].forEach((id) => this.achievementsService.unlockAchievement(id));
@@ -258,7 +258,7 @@ export class Clicker implements OnInit, OnDestroy {
     // arrancar timer: si pasa 1 hora sin clicks, se desbloquea
     this.noClicksTimeout = setTimeout(
       () => this.achievementsService.unlockAchievement('no_clicks_1h'),
-      this.noClicksDelayMs
+      this.noClicksDelayMs,
     );
   }
 

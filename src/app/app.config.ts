@@ -1,7 +1,7 @@
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
   isDevMode,
 } from '@angular/core';
 import {
@@ -21,10 +21,7 @@ import { provideTransloco } from '@jsverse/transloco';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({
-      eventCoalescing: true,
-      runCoalescing: true,
-    }),
+    provideZonelessChangeDetection(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     { provide: RouteReuseStrategy, useClass: RouteReuse },
     provideServiceWorker('ngsw-worker.js', {

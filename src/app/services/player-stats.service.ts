@@ -275,15 +275,8 @@ export class PlayerStats {
     this.isTimerRunning = true;
     this.ngZone.runOutsideAngular(() => {
       this.intervalId = setInterval(() => {
-        // Volver a la zona solo para actualizar el signal y la UI
-        this.ngZone.run(() => {
-          this._timePlaying.update((current) => {
-            const newValue = current + 1;
-            // guardar usando debounce
-            this.autosaveService.requestSave();
-            return newValue;
-          });
-        });
+        this._timePlaying.update((current) => current + 1);
+        this.autosaveService.requestSave();
       }, 1000);
     });
   }

@@ -1,19 +1,19 @@
 <div class="achievement-popup">
-  @if (current) {
-  <div class="card" [class.show]="visible" role="status" aria-atomic="true">
-    <div class="content-wrapper">
-      <div class="icon">
-        <img [src]="current.icon" [alt]="current.title" />
-        <div class="icon-glow"></div>
-      </div>
-      <div class="text-content">
-        <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
-          {{'achievements.achievement_unlocked' | transloco}}
+  @if (current(); as ach) {
+    <div class="card" [class.show]="visible()" role="status" aria-atomic="true">
+      <div class="content-wrapper">
+        <div class="icon">
+          <img [src]="ach.icon" [alt]="ach.title" />
+          <div class="icon-glow"></div>
         </div>
-        <div class="achievement-title">{{ current.title | transloco}}</div>
-        <div class="achievement-description">{{ current.description | transloco }}</div>
+        <div class="text-content">
+          <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
+            {{ 'achievements.achievement_unlocked' | transloco }}
+          </div>
+          <div class="achievement-title">{{ ach.title | transloco }}</div>
+          <div class="achievement-description">{{ ach.description | transloco }}</div>
+        </div>
       </div>
     </div>
-  </div>
   }
 </div>

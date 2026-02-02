@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Producer } from '@ui/producer/producer';
 import { Upgrade } from '@ui/upgrade/upgrade';
@@ -17,6 +17,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [CommonModule, Producer, Upgrade, ShopControls, TranslocoModule, ButtonComponent],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 /**
  * Componente de la página de mejoras y productores.

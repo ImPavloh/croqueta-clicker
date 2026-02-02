@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { SKINS } from '@data/skin.data';
 import { TranslocoModule } from '@jsverse/transloco';
 import { SkinCard } from '@ui/skin-card/skin-card';
@@ -10,6 +10,7 @@ import { SkinsService } from '@services/skins.service';
   imports: [SkinCard, TranslocoModule],
   templateUrl: './skins.html',
   styleUrl: './skins.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 /**
  * Componente de la página de skins.

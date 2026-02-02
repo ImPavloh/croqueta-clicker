@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import Decimal from 'break_infinity.js';
 
+const TEN = new Decimal(10);
+const HUNDRED = new Decimal(100);
+const TEN_THOUSAND = new Decimal(10000);
+
 /**
  * Pipe para formatear números grandes en notación abreviada.
  * Convierte números como 1000000 a "1M", 1000000000 a "1B", etc.
@@ -9,6 +13,7 @@ import Decimal from 'break_infinity.js';
 @Pipe({
   name: 'short',
   standalone: true,
+  pure: true,
 })
 export class ShortNumberPipe implements PipeTransform {
   /**
@@ -32,7 +37,7 @@ export class ShortNumberPipe implements PipeTransform {
     const abs = num.abs();
 
     // Escalas con sufijos
-    const units: { value: Decimal; symbol: string }[] = [
+    const UNITS: { value: Decimal; symbol: string }[] = [
       { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
       { value: new Decimal(1e60), symbol: 'Nv' }, // novendecillón
       { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
@@ -56,14 +61,14 @@ export class ShortNumberPipe implements PipeTransform {
       { value: new Decimal(1e3), symbol: 'K' }, // mil
     ];
 
-    for (const u of units) {
+    for (const u of UNITS) {
       if (abs.gte(u.value)) {
         const normalized = abs.div(u.value);
-        const decimals = normalized.lt(10)
+        const decimals = normalized.lt(TEN)
           ? Math.min(2, maxDecimals)
-          : normalized.lt(100)
-          ? Math.min(1, maxDecimals)
-          : 0;
+          : normalized.lt(HUNDRED)
+            ? Math.min(1, maxDecimals)
+            : 0;
 
         try {
           const formatted = normalized
@@ -78,8 +83,8 @@ export class ShortNumberPipe implements PipeTransform {
       }
     }
 
-    // Mostrar número completo si es menor a 1000
-    if (abs.lt(10000)) {
+    // Mostrar número completo si es menor a 10000
+    if (abs.lt(TEN_THOUSAND)) {
       try {
         const formatted = abs
           .toFixed(maxDecimals)

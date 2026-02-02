@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LevelUpPopup } from './level-up-popup';
 
@@ -7,9 +8,8 @@ describe('LevelUpPopup', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LevelUpPopup]
-    })
-    .compileComponents();
+      imports: [LevelUpPopup],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LevelUpPopup);
     component = fixture.componentInstance;

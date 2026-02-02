@@ -6,6 +6,7 @@
   height: 100%;
   pointer-events: none;
   overflow: visible;
+  contain: layout style;
 }
 
 .floating-text {
@@ -23,28 +24,26 @@
   user-select: none;
   -moz-user-select: none;
 
-  transform: translateY(0);
-  transform: translate(-50%, 0);
-  -moz-transform: translateY(0);
-  -moz-transform: translate(-50%, 0);
-  transition: transform 900ms ease-out, opacity 900ms ease-out;
-  -moz-transition: -moz-transform 900ms ease-out, opacity 900ms ease-out;
+  transform: translate(-50%, 0) translateZ(0);
+  -moz-transform: translate(-50%, 0) translateZ(0);
+  backface-visibility: hidden;
   will-change: transform, opacity;
   -moz-will-change: transform, opacity;
+  contain: layout style;
 
   animation: parriba 900ms ease-out forwards;
 }
 
 @keyframes parriba {
   0% {
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 0) translateZ(0);
     opacity: 1;
   }
   70% {
     opacity: 0.75;
   }
   100% {
-    transform: translate(-50%, -48px);
+    transform: translate(-50%, -48px) translateZ(0);
     opacity: 0;
   }
 }

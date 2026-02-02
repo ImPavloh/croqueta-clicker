@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, computed } from '@angular/core';
+import { Component, effect, inject, Input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PointsService } from '@services/points.service';
 import { NgClass } from '@angular/common';
@@ -25,6 +25,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [CommonModule, NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Producer {
   private playerStats = inject(PlayerStats);
@@ -219,7 +220,7 @@ export class Producer {
     // guardar cantidad
     this.optionsService.setGameItem(
       'producer_' + this.config.id + '_quantity',
-      String(this.quantity)
+      String(this.quantity),
     );
   }
 }

@@ -7,8 +7,8 @@
       {{ 'navbar.achievements' | transloco }}
     </app-button>
   </div>
-  @if (!isMobile) {
-  <app-newsline />
+  @if (!isMobile()) {
+    <app-newsline />
   }
   <div class="flex gap-2">
     <app-button variant="nav" [routerLink]="'/skins'">

@@ -1,29 +1,33 @@
-@if (current) {
-<div class="skin-unlock-overlay" [class.show]="visible">
-  <div class="card" role="dialog" aria-modal="true" aria-labelledby="skin-unlock-title">
-    <div class="content-wrapper">
-      <div class="text-content">
-        <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
-          {{ 'skins.unlock.skin_unlocked' | transloco }}
+@if (current(); as skin) {
+  <div class="skin-unlock-overlay" [class.show]="visible()">
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="skin-unlock-title">
+      <div class="content-wrapper">
+        <div class="text-content">
+          <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
+            {{ 'skins.unlock.skin_unlocked' | transloco }}
+          </div>
+          <div id="skin-unlock-title" class="skin-title">{{ skin.name | transloco }}</div>
+          <div class="skin-description">{{ skin.description | transloco }}</div>
         </div>
-        <div id="skin-unlock-title" class="skin-title">{{ current.name | transloco }}</div>
-        <div class="skin-description">{{ current.description | transloco }}</div>
+        <div class="icon">
+          <img [src]="skin.image" [alt]="skin.name | transloco" />
+          <div class="icon-glow"></div>
+        </div>
+        @if (skin.rarity) {
+          <div class="skin-rarity" [class]="getRarityClass(skin.rarity)">
+            {{ skin.rarity | transloco | uppercase }}
+          </div>
+        }
       </div>
-      <div class="icon">
-        <img [src]="current.image" [alt]="current.name | transloco" />
-        <div class="icon-glow"></div>
-      </div>
-      @if (current.rarity) {
-      <div class="skin-rarity" [ngClass]="getRarityClass(current.rarity)">
-        {{ current.rarity | transloco | uppercase }}
-      </div>
-      }
-    </div>
 
-    <div class="button-group">
-      <app-button variant="success" (click)="onUse()"> {{ 'skins.unlock.use_now' | transloco }} </app-button>
-      <app-button variant="secondary" (click)="onClose()"> {{ 'skins.unlock.save_and_close' | transloco }} </app-button>
+      <div class="button-group">
+        <app-button variant="success" (click)="onUse()">
+          {{ 'skins.unlock.use_now' | transloco }}
+        </app-button>
+        <app-button variant="secondary" (click)="onClose()">
+          {{ 'skins.unlock.save_and_close' | transloco }}
+        </app-button>
+      </div>
     </div>
   </div>
-</div>
 }

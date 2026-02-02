@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { News } from './news';
 import { configureTransloco } from 'testing/test-helpers';

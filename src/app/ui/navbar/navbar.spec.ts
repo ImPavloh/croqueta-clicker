@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Navbar } from './navbar';
 // 👈 Importación CLAVE para testing de routing
@@ -12,19 +13,14 @@ import { ButtonComponent } from '@ui/button/button';
 // Si son standalone y simples, el TestBed los puede manejar directamente.
 // Pero si tienes problemas, declararlos como Stubs es una buena práctica.
 
-
 describe('Navbar', () => {
   let component: Navbar;
   let fixture: ComponentFixture<Navbar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        Navbar,
-        RouterTestingModule
-      ],
-    })
-    .compileComponents();
+      imports: [Navbar, RouterTestingModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;

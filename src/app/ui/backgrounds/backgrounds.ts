@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, take, skip } from 'rxjs';
 import { SkinsService } from '@services/skins.service';
@@ -9,6 +9,7 @@ import { SkinsService } from '@services/skins.service';
   imports: [CommonModule],
   templateUrl: './backgrounds.html',
   styleUrls: ['./backgrounds.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Backgrounds implements OnInit, OnDestroy {
   private skinsService = inject(SkinsService);
