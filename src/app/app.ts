@@ -9,6 +9,10 @@ import {
   HostListener,
   NgZone,
   Renderer2,
+  effect,
+  EffectRef,
+  Injector,
+  runInInjectionContext,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -43,6 +47,7 @@ import { EventComponent } from '@ui/event/event';
 import { EventService } from '@services/event.service';
 import { TimeService } from '@services/time.service';
 import { FpsCounterComponent } from '@ui/fps-counter/fps-counter';
+import { PerformanceService } from '@services/performance.service';
 
 @Component({
   selector: 'app-root',
@@ -84,6 +89,9 @@ export class App implements OnInit, OnDestroy {
   splashVisible = signal(false);
   firstTimeUser = signal(false);
 
+  private perfEffect?: EffectRef;
+  private injector = inject(Injector);
+
   constructor(
     private playerStats: PlayerStats,
     private audioService: AudioService,
@@ -97,7 +105,8 @@ export class App implements OnInit, OnDestroy {
     private options: OptionsService,
     protected timeService: TimeService,
     private ngZone: NgZone,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private performanceService: PerformanceService,
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
     const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';
@@ -135,12 +144,14 @@ export class App implements OnInit, OnDestroy {
 
   private levelSub?: Subscription;
   private updateCheckIntervalId?: number;
+  private mobileTapCount = 0;
+  private mobileTapTimer?: number;
+  private mobileDebugTapCount = 0;
+  private mobileDebugTapTimer?: number;
 
   public isMobile: boolean = window.innerWidth <= 1344;
   public resolutionChanged = signal(false);
   private initialIsMobile = this.isMobile;
-
-  // Listeners movidos a ngOnInit + runOutsideAngular para rendimiento
 
   reloadPage() {
     window.location.reload();
@@ -163,7 +174,27 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
+  private setupPerformanceHints(): void {
+    if (typeof document === 'undefined') return;
+
+    runInInjectionContext(this.injector, () => {
+      this.perfEffect = effect(() => {
+        const isLowEnd = this.performanceService.isLowEnd();
+        const isVeryLowEnd = this.performanceService.isVeryLowEnd();
+        const prefersReduced = this.performanceService.prefersReducedMotion();
+        const quality = this.performanceService.qualityFactor();
+
+        const body = document.body;
+        body.classList.toggle('perf-low', isLowEnd && !isVeryLowEnd);
+        body.classList.toggle('perf-very-low', isVeryLowEnd);
+        body.classList.toggle('perf-reduced', prefersReduced);
+        document.documentElement.style.setProperty('--perf-quality', String(quality));
+      });
+    });
+  }
+
   ngOnInit(): void {
+    this.setupPerformanceHints();
     this.ngZone.runOutsideAngular(() => {
       this.renderer.listen(window, 'resize', () => {
         // Solo verificamos si ha cambiado el breakpoint, no cada pixel
@@ -176,23 +207,75 @@ export class App implements OnInit, OnDestroy {
           });
         } else {
           // Si no cambia el layout, no notificamos a Angular
-          // Opción: this.resolutionChanged.set(false) requeriría entrar en la zona, 
+          // Opción: this.resolutionChanged.set(false) requeriría entrar en la zona,
           // pero si ya es false, mejor no hacer nada.
         }
       });
 
       this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
-        // Solo nos interesa Ctrl+Shift+F12
+        // Ctrl+Shift+F12
         if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
           this.ngZone.run(() => {
             this.openDebugMenu();
           });
         }
       });
+
+      // todos los voluemens = 33% + toque repetido en esquina superior izquierda = toggle fps, derecha = debug
+      this.renderer.listen(window, 'touchstart', (event: TouchEvent) => {
+        if (!this.isMobile || event.touches.length === 0) return;
+
+        const volumesOk =
+          this.options.generalVolume() === 33 &&
+          this.options.musicVolume() === 33 &&
+          this.options.sfxVolume() === 33;
+
+        if (!volumesOk) return;
+
+        const touch = event.touches[0];
+        const x = touch.clientX;
+        const y = touch.clientY;
+        const w = window.innerWidth;
+
+        // fps
+        if (x <= 80 && y <= 80) {
+          this.mobileTapCount++;
+          if (this.mobileTapCount === 1) {
+            this.mobileTapTimer = window.setTimeout(() => {
+              this.mobileTapCount = 0;
+            }, 1500);
+          }
+          if (this.mobileTapCount >= 5) {
+            if (this.mobileTapTimer) window.clearTimeout(this.mobileTapTimer);
+            this.mobileTapCount = 0;
+            const evt = new CustomEvent('cc:toggle-fps');
+            window.dispatchEvent(evt);
+          }
+          return;
+        }
+
+        // debug
+        if (x >= w - 80 && y <= 80) {
+          this.mobileDebugTapCount++;
+          if (this.mobileDebugTapCount === 1) {
+            this.mobileDebugTapTimer = window.setTimeout(() => {
+              this.mobileDebugTapCount = 0;
+            }, 2000);
+          }
+          if (this.mobileDebugTapCount >= 7) {
+            if (this.mobileDebugTapTimer) window.clearTimeout(this.mobileDebugTapTimer);
+            this.mobileDebugTapCount = 0;
+            this.ngZone.run(() => {
+              this.openDebugMenu();
+            });
+          }
+        }
+      });
     });
   }
 
   ngOnDestroy() {
+    this.perfEffect?.destroy();
     this.levelSub?.unsubscribe();
     this.playerStats.stopTimer();
     if (this.updateCheckIntervalId) {
@@ -207,7 +290,7 @@ export class App implements OnInit, OnDestroy {
 
     this.supabase.getUser().then(async (r) => {
       if (!r?.data?.user) {
-        await this.supabase.signInAnonymously().catch(() => { });
+        await this.supabase.signInAnonymously().catch(() => {});
       }
     });
 
@@ -223,7 +306,7 @@ export class App implements OnInit, OnDestroy {
     });
 
     if (navigator.onLine) {
-      this.supabase.processPendingScores().catch(() => { });
+      this.supabase.processPendingScores().catch(() => {});
     }
 
     this.setupDailyUpdateCheck();
@@ -270,7 +353,7 @@ export class App implements OnInit, OnDestroy {
         this.swUpdate
           .activateUpdate()
           .then(() => location.reload())
-          .catch(() => { });
+          .catch(() => {});
       }
     });
 
@@ -281,7 +364,7 @@ export class App implements OnInit, OnDestroy {
       this.updateCheckIntervalId = window.setInterval(() => {
         this.maybeCheckForUpdate(false);
       }, this.UPDATE_INTERVAL_MS);
-    } catch (e) { }
+    } catch (e) {}
   }
 
   private async maybeCheckForUpdate(force = false) {

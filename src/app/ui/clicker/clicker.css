@@ -11,7 +11,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -65,10 +67,11 @@
   max-height: 700px;
   pointer-events: none;
   opacity: 0.6;
-  animation: rotateLight 10s linear infinite;
+  animation: rotateLight 20s linear infinite;
   will-change: transform;
   transform: translate(-50%, -50%) translateZ(0);
   backface-visibility: hidden;
+  image-rendering: optimizeSpeed;
 }
 
 @keyframes tilt-afk {
@@ -87,10 +90,10 @@
 
 @keyframes rotateLight {
   from {
-    transform: translate(-50%, -50%) rotate(0deg) translateZ(0);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   to {
-    transform: translate(-50%, -50%) rotate(360deg) translateZ(0);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 

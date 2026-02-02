@@ -1,11 +1,19 @@
-import { Component, NgZone, OnInit, OnDestroy, signal, Renderer2, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  NgZone,
+  OnInit,
+  OnDestroy,
+  signal,
+  Renderer2,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-fps-counter',
   standalone: true,
   templateUrl: './fps-counter.html',
   styleUrl: './fps-counter.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FpsCounterComponent implements OnInit, OnDestroy {
   fps = signal(0);
@@ -16,7 +24,10 @@ export class FpsCounterComponent implements OnInit, OnDestroy {
   private animationFrameId: number | null = null;
   private cleanups: (() => void)[] = [];
 
-  constructor(private ngZone: NgZone, private renderer: Renderer2) {}
+  constructor(
+    private ngZone: NgZone,
+    private renderer: Renderer2,
+  ) {}
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
@@ -24,11 +35,18 @@ export class FpsCounterComponent implements OnInit, OnDestroy {
       const cleanupListener = this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
         if (event.ctrlKey && event.shiftKey && event.key === 'F10') {
           this.ngZone.run(() => {
-            this.isVisible.update(v => !v);
+            this.isVisible.update((v) => !v);
           });
         }
       });
       this.cleanups.push(cleanupListener);
+
+      const cleanupCustomListener = this.renderer.listen(window, 'cc:toggle-fps', () => {
+        this.ngZone.run(() => {
+          this.isVisible.update((v) => !v);
+        });
+      });
+      this.cleanups.push(cleanupCustomListener);
 
       // FPS Loop
       const loop = (time: number) => {
@@ -52,6 +70,6 @@ export class FpsCounterComponent implements OnInit, OnDestroy {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    this.cleanups.forEach(c => c());
+    this.cleanups.forEach((c) => c());
   }
 }

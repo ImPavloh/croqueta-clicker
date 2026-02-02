@@ -6,7 +6,7 @@
   height: 100%;
   pointer-events: none;
   overflow: hidden;
-  z-index: 100;
+  z-index: 200;
 
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -23,7 +23,7 @@
   transform: translateZ(0);
   backface-visibility: hidden;
   animation: particle-fly 1s ease-out forwards;
-  z-index: 150;
+  z-index: 250;
   contain: layout style;
 }
 

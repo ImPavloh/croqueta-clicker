@@ -20,7 +20,9 @@
   background-size: cover;
   opacity: 0;
   transition: opacity 250ms ease-in-out;
-  will-change: opacity, background-image;
+  will-change: opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .bg-layer.visible {
@@ -31,7 +33,6 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+  background: rgba(0, 0, 0, 0.35);
   pointer-events: none;
-  backdrop-filter: blur(2px) brightness(0.6);
 }

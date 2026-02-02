@@ -7,10 +7,11 @@
   pointer-events: none;
   overflow: visible;
   contain: layout style;
+  z-index: 200;
 }
 
 .floating-text {
-  z-index: 100;
+  z-index: 250;
   position: absolute;
 
   font-size: 2rem;

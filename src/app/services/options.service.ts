@@ -47,13 +47,13 @@ export class OptionsService {
 
   constructor(
     public achievementsService: AchievementsService,
-    private supabaseService: SupabaseService
+    private supabaseService: SupabaseService,
   ) {
     // comprueba si localStorage funciona
     this._localStorageAvailable = this.checkLocalStorageAvailability();
     if (!this._localStorageAvailable) {
       console.warn(
-        'localStorage no disponible o no persistente: los progresos no se guardarán en esta sesión'
+        'localStorage no disponible o no persistente: los progresos no se guardarán en esta sesión',
       );
     }
 
@@ -241,7 +241,9 @@ export class OptionsService {
       reader.onload = async (e) => {
         try {
           const content = e.target?.result as string;
-          const decryptedData = CryptoJS.AES.decrypt(content, CRYPTO.KEY).toString(CryptoJS.enc.Utf8);
+          const decryptedData = CryptoJS.AES.decrypt(content, CRYPTO.KEY).toString(
+            CryptoJS.enc.Utf8,
+          );
           const imported = JSON.parse(decryptedData);
 
           if (typeof localStorage === 'undefined') {
@@ -277,7 +279,6 @@ export class OptionsService {
           try {
             const session = (imported as any).supabaseSession;
             if (session && session.access_token && session.refresh_token) {
-              console.info('[Import] Intentando restaurar sesión anónima de Supabase...');
               try {
                 const client = this.supabaseService.getClient();
                 // setSession will automatically refresh if the access_token is expired
@@ -289,43 +290,30 @@ export class OptionsService {
 
                 if (result.error) {
                   console.warn('[Import] Error al restaurar sesión:', result.error.message);
-                  console.info('[Import] Se creará una nueva sesión anónima automáticamente.');
                 } else {
                   sessionRestored = true;
-                  console.info(
-                    '[Import] ✓ Sesión restaurada correctamente. User ID:',
-                    result.data.session?.user?.id
-                  );
 
                   // Validate that the restored user_id matches the exported one (if available)
                   const exportedUserId = (imported as any).userId;
                   const restoredUserId = result.data.session?.user?.id;
                   if (exportedUserId && restoredUserId && exportedUserId !== restoredUserId) {
                     console.warn(
-                      '[Import] ⚠️ ADVERTENCIA: El user_id restaurado no coincide con el exportado.'
+                      '[Import] ⚠️ ADVERTENCIA: El user_id restaurado no coincide con el exportado.',
                     );
                     console.warn(
                       '[Import] Exportado:',
                       exportedUserId,
                       '| Restaurado:',
-                      restoredUserId
+                      restoredUserId,
                     );
                   }
                 }
               } catch (e) {
                 console.warn('[Import] Excepción al restaurar sesión:', e);
               }
-            } else {
-              console.info('[Import] No se encontró sesión de Supabase en el archivo.');
             }
           } catch (e) {
             console.warn('[Import] Error procesando sesión:', e);
-          }
-
-          if (!sessionRestored) {
-            console.info(
-              '[Import] Continuando sin sesión restaurada. La app usará la sesión actual/nueva.'
-            );
           }
 
           // Restaurar cola pendiente del leaderboard si está presente (esto preserva la cola offline)
@@ -460,7 +448,6 @@ export class OptionsService {
     }
     try {
       const persisted = await (navigator as any).storage.persist();
-      if (!persisted) console.info('No se concedió persistencia');
       return persisted;
     } catch (e) {
       return false;

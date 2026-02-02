@@ -45,7 +45,10 @@ export class PointsService {
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
 
-  constructor(private floatingService: FloatingService, private timeService: TimeService) {
+  constructor(
+    private floatingService: FloatingService,
+    private timeService: TimeService,
+  ) {
     this.loadFromStorage();
 
     // Defer check to ensure app is fully initialized and avoid potential constructor race conditions
@@ -104,10 +107,10 @@ export class PointsService {
   addMultiplier(value: number, duration: number) {
     const id = this.multiplierIdCounter++;
     const newMultiplier: Multiplier = { id, value, duration };
-    this._multipliers.update(m => [...m, newMultiplier]);
+    this._multipliers.update((m) => [...m, newMultiplier]);
 
     setTimeout(() => {
-      this._multipliers.update(m => m.filter(m => m.id !== id));
+      this._multipliers.update((m) => m.filter((m) => m.id !== id));
     }, duration);
   }
 
@@ -179,27 +182,20 @@ export class PointsService {
 
   private translocoService = inject(TranslocoService);
 
-  // ... (rest of the properties)
-
   private checkOfflineProgress() {
     try {
-      console.log('Checking offline progress...', { lastSaveTime: this.lastSaveTime, now: Date.now() });
       if (!this.lastSaveTime) {
-        console.log('No last save time found.');
         return;
       }
 
       const now = Date.now();
       const diff = now - this.lastSaveTime;
-      console.log('Time diff:', diff, 'Threshold:', this.OFFLINE_THRESHOLD_MS);
 
       if (diff > this.OFFLINE_THRESHOLD_MS) {
         // Recalculate CPS to be sure
         const cps = this.calculateCpsFromProducers();
-        console.log('CPS:', cps.toString());
 
         if (cps.lte(0)) {
-          console.log('CPS is <= 0');
           return;
         }
 
@@ -209,10 +205,8 @@ export class PointsService {
         // 50% de producción (0.5x)
         const offlineFactor = 0.5;
         const earned = cps.times(seconds).times(offlineFactor);
-        console.log('Offline earned:', earned.toString());
 
         if (earned.gt(0)) {
-          console.log('Awarding points');
           this.addPoints(earned);
 
           // Formatear el mensaje
@@ -222,16 +216,16 @@ export class PointsService {
           setTimeout(() => {
             this.modalService.showConfirm({
               title: this.translocoService.translate('offline.title'),
-              message: this.translocoService.translate('offline.message', { amount: formattedEarned }),
+              message: this.translocoService.translate('offline.message', {
+                amount: formattedEarned,
+              }),
               confirmText: this.translocoService.translate('offline.confirm'),
               onConfirm: () => {
                 this.modalService.closeConfirm();
-              }
+              },
             });
           }, 1000);
         }
-      } else {
-        console.log('Diff below threshold');
       }
     } catch (error) {
       console.warn('Error checking offline progress:', error);
@@ -243,7 +237,8 @@ export class PointsService {
     try {
       let total = new Decimal(0);
       for (const p of PRODUCERS) {
-        const q = Number(this.optionsService.getGameItem('producer_' + p.id + '_quantity') || 0) || 0;
+        const q =
+          Number(this.optionsService.getGameItem('producer_' + p.id + '_quantity') || 0) || 0;
         if (q <= 0) continue;
 
         const base = new Decimal(p.pointsBase).times(q);
@@ -288,7 +283,10 @@ export class PointsService {
     this.saveToStorage();
   }
 
-  public formatPoints(value: Decimal | number | string | null | undefined, maxDecimals = 2): string {
+  public formatPoints(
+    value: Decimal | number | string | null | undefined,
+    maxDecimals = 2,
+  ): string {
     if (value == null) return '0';
 
     // Convertir a Decimal de forma segura
