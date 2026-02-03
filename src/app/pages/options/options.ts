@@ -24,7 +24,6 @@ import { DynamicControls } from '@ui/dynamic-controls/dynamic-controls';
 
 @Component({
   selector: 'app-options',
-  standalone: true,
   imports: [Card, FormsModule, ButtonComponent, Tooltip, TranslocoModule, DynamicControls],
   templateUrl: './options.html',
   styleUrl: './options.css',
@@ -154,7 +153,7 @@ export class Options {
         : this.translocoService.translate('options.saveGameModal.errorMessage'),
       confirmText: this.translocoService.translate('options.saveGameModal.confirmText'),
       cancelText: '',
-      onConfirm: () => { },
+      onConfirm: () => {},
     });
   }
 
@@ -175,7 +174,7 @@ export class Options {
         message: this.translocoService.translate('options.exportGameModal.successMessage'),
         confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
-        onConfirm: () => { },
+        onConfirm: () => {},
       });
     } catch (error) {
       this.modalService.showConfirm({
@@ -183,7 +182,7 @@ export class Options {
         message: this.translocoService.translate('options.exportGameModal.errorMessage') + error,
         confirmText: this.translocoService.translate('options.exportGameModal.confirmText'),
         cancelText: '',
-        onConfirm: () => { },
+        onConfirm: () => {},
       });
     }
   }
@@ -222,9 +221,9 @@ export class Options {
                   message:
                     this.translocoService.translate('options.importGameModal.errorMessage') + error,
                   confirmText: this.translocoService.translate(
-                    'options.importGameModal.confirmTextError'
+                    'options.importGameModal.confirmTextError',
                   ),
-                  onConfirm: () => { },
+                  onConfirm: () => {},
                 });
               });
           },
@@ -246,7 +245,7 @@ export class Options {
     const croquetas = this.shortNumberPipe.transform(this.pointsService.points(), 0);
     const croquetasPerSecond = this.shortNumberPipe.transform(
       this.pointsService.pointsPerSecond(),
-      1
+      1,
     );
 
     const shareText = this.translocoService.translate('options.shareGameModal.text', {

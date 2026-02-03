@@ -6,11 +6,13 @@ import {
   signal,
   Renderer2,
   ChangeDetectionStrategy,
+  inject,
+  effect,
 } from '@angular/core';
+import { PerformanceService } from '@services/performance.service';
 
 @Component({
   selector: 'app-fps-counter',
-  standalone: true,
   templateUrl: './fps-counter.html',
   styleUrl: './fps-counter.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +20,7 @@ import {
 export class FpsCounterComponent implements OnInit, OnDestroy {
   fps = signal(0);
   isVisible = signal(false);
+  private performanceService = inject(PerformanceService);
 
   private lastTime = performance.now();
   private frames = 0;
@@ -27,7 +30,15 @@ export class FpsCounterComponent implements OnInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     private renderer: Renderer2,
-  ) {}
+  ) {
+    effect(() => {
+      if (this.isVisible()) {
+        this.performanceService.enableFpsMonitoring();
+      } else {
+        this.performanceService.disableFpsMonitoring();
+      }
+    });
+  }
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {

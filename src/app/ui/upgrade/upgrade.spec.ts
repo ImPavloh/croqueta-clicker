@@ -65,8 +65,8 @@ describe('Upgrade', () => {
     fixture = TestBed.createComponent(Upgrade);
     component = fixture.componentInstance;
 
-    // Establece el Input config ANTES de la detección de cambios inicial
-    component.config = mockConfig;
+    // Establece el Input config usando setInput ANTES de la detección de cambios inicial
+    fixture.componentRef.setInput('config', mockConfig);
 
     // Detiene cambios para disparar ngOnInit y los effects
     fixture.detectChanges();

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslocoModule } from '@jsverse/transloco';
@@ -6,30 +6,30 @@ import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-input',
-  standalone: true,
   imports: [CommonModule, FormsModule, TranslocoModule, ButtonComponent],
   templateUrl: './input.html',
   styleUrls: ['./input.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent {
-  @Input() value: any = '';
-  @Input() loading = false;
-  @Input() message?: string | null = null;
-  @Input() placeholder?: string | null = '';
-  @Input() type: 'text' | 'number' | 'password' = 'text';
-  @Input() buttonText?: string | null = null;
+  value = input<any>('');
+  loading = input(false);
+  message = input<string | null>(null);
+  placeholder = input<string | null>('');
+  type = input<'text' | 'number' | 'password'>('text');
+  buttonText = input<string | null>(null);
   /** Optional label to render above the control */
-  @Input() label?: string | null = null;
+  label = input<string | null>(null);
   /** If true, the inline button is hidden and submit only fires on Enter */
-  @Input() hideButton: boolean = false;
+  hideButton = input(false);
   /** Numeric input constraints (only applies when type === 'number') */
-  @Input() min?: number;
-  @Input() max?: number;
-  @Input() step?: number;
-  @Input() loadingText?: string | null = null;
+  min = input<number | undefined>(undefined);
+  max = input<number | undefined>(undefined);
+  step = input<number | undefined>(undefined);
+  loadingText = input<string | null>(null);
 
-  @Output() valueChange = new EventEmitter<any>();
-  @Output() submit = new EventEmitter<void>();
+  valueChange = output<any>();
+  submit = output<void>();
 
   onKeydownEnter() {
     this.submit.emit();

@@ -3,6 +3,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  contain: layout style;
 }
 
 .lp-card {
@@ -16,7 +17,10 @@
   color: #fff;
   backdrop-filter: blur(8px);
   pointer-events: auto;
-  transition: all 0.3s ease;
+  transition:
+    width 0.3s ease,
+    opacity 0.3s ease;
+  contain: layout style paint;
 }
 
 .lp-right {
@@ -177,7 +181,9 @@
   border: 2px solid #b89c5a;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background: linear-gradient(135deg, #f5f0e1 0%, #e3d7b0 50%, #f5f0e1 100%);
@@ -301,7 +307,9 @@
   background: #fff;
   color: #6b5633;
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .lp-search-input:focus {

@@ -1,12 +1,9 @@
 import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Subscription, take, skip } from 'rxjs';
 import { SkinsService } from '@services/skins.service';
 
 @Component({
   selector: 'app-backgrounds',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './backgrounds.html',
   styleUrls: ['./backgrounds.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

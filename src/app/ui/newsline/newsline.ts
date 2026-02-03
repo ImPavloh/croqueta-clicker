@@ -8,7 +8,6 @@ import { distinctUntilChanged, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-newsline',
-  standalone: true,
   imports: [],
   templateUrl: './newsline.html',
   styleUrl: './newsline.css',
@@ -29,12 +28,12 @@ export class NewsLine {
       if (playerLevel > 30) return 2;
       return 1;
     }),
-    distinctUntilChanged() // Solo emitimos si el nivel de noticias cambia
+    distinctUntilChanged(), // Solo emitimos si el nivel de noticias cambia
   );
 
   // Usamos switchMap para cambiar al nuevo observable de noticias cuando el nivel cambia
   private news$ = this.newsLevel$.pipe(
-    switchMap((level) => this.newsService.getNewsByLevel(level))
+    switchMap((level) => this.newsService.getNewsByLevel(level)),
   );
 
   // Convertimos el resultado en una señal para el template

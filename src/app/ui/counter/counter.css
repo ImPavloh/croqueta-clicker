@@ -1,6 +1,7 @@
 :host {
   display: block;
   width: 100%;
+  contain: layout style;
 }
 
 @media (max-width: 1344px) {
@@ -11,6 +12,7 @@
 
 .counter {
   background: linear-gradient(to right, transparent, rgba(51, 25, 0, 0.5), transparent);
+  contain: content;
 }
 
 .counter p {

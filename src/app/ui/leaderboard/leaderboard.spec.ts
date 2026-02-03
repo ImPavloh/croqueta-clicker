@@ -90,7 +90,7 @@ describe('Leaderboard username prompt behavior', () => {
   }));
 
   it('full mode should check and open username modal on init if user has no name', fakeAsync(() => {
-    fixture.componentInstance.mode = 'full';
+    fixture.componentRef.setInput('mode', 'full');
     fixture.detectChanges();
 
     tick(0);

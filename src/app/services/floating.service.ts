@@ -1,4 +1,5 @@
-import { Injectable, signal, OnDestroy } from '@angular/core';
+import { Injectable, signal, OnDestroy, inject } from '@angular/core';
+import { PixiEngineService } from './pixi-engine.service';
 
 /**
  * Interfaz que define la estructura de un mensaje flotante en la UI.
@@ -27,12 +28,18 @@ export interface FloatingMessage {
 /**
  * Servicio para gestionar mensajes flotantes que aparecen en la UI.
  * Utilizado principalmente para mostrar puntos ganados al hacer clic.
+ *
+ * Soporta dos modos:
+ * - PixiJS (preferido): renderizado WebGL de alto rendimiento
+ * - DOM fallback: para cuando PixiJS no está inicializado
  */
 @Injectable({
   providedIn: 'root',
 })
 export class FloatingService implements OnDestroy {
-  /** Signal privado que contiene todos los mensajes flotantes activos */
+  private pixiEngine = inject(PixiEngineService);
+
+  /** Signal privado que contiene todos los mensajes flotantes activos (para DOM fallback) */
   private _messages = signal<FloatingMessage[]>([]);
 
   /** Signal público de solo lectura con los mensajes activos */
@@ -79,6 +86,7 @@ export class FloatingService implements OnDestroy {
 
   /**
    * Muestra un mensaje flotante en la UI.
+   * Usa PixiJS si está disponible, sino cae a DOM.
    * @param text Texto a mostrar
    * @param options Opciones de configuración del mensaje
    * @param options.duration Duración de la animación en ms (por defecto 900ms)
@@ -87,13 +95,31 @@ export class FloatingService implements OnDestroy {
    * @returns ID único del mensaje creado
    */
   show(text: string, options?: { duration?: number; x?: number; y?: number }) {
-    // limitar mensajes activos
+    const uid = ++this.lastId;
+
+    // Si PixiJS está inicializado, usar rendering WebGL
+    if (this.pixiEngine.isInitialized()) {
+      let x: number;
+      let y: number;
+
+      if (options?.x !== undefined && options?.y !== undefined) {
+        x = options.x;
+        y = options.y - 60;
+      } else {
+        x = 250 + Math.round((Math.random() - 0.5) * 80);
+        y = 250 + Math.round((Math.random() - 0.5) * 40);
+      }
+
+      this.pixiEngine.spawnFloatingText(x, y, text);
+      return uid;
+    }
+
+    // Fallback a DOM si PixiJS no está listo
     if (this._messages().length >= this.maxMessages) {
       return -1;
     }
 
     const duration = options?.duration ?? 900;
-    const uid = ++this.lastId;
 
     let rx: number;
     let ry: number;

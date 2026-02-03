@@ -1,8 +1,8 @@
 <app-button
   type="button"
   variant="golden"
-  [disabled]="!unlocked || bought || pointsService.points().lt(config.price)"
-  [hoverable]="unlocked && !bought && pointsService.points().gte(config.price)"
+  [disabled]="!unlocked || bought || pointsService.points().lt(config().price)"
+  [hoverable]="unlocked && !bought && pointsService.points().gte(config().price)"
   [clickable]="unlocked && !bought"
   [class.locked]="!unlocked"
   [class.bought]="bought"
@@ -13,25 +13,28 @@
 >
   <div class="upgrade-content">
     <div class="upgrade-image-container">
-      <img class="upgrade-image" src="{{ config.image }}" alt="{{ config.name | transloco }}" />
+      <img class="upgrade-image" src="{{ config().image }}" alt="{{ config().name | transloco }}" />
     </div>
 
     <div class="upgrade-info">
-      <p class="upgrade-title">{{ config.name | transloco }}</p>
+      <p class="upgrade-title">{{ config().name | transloco }}</p>
 
       @if (!unlocked) {
-      <p class="upgrade-requirement">
-        {{ 'upgrades.requiredLevel' | transloco }}: {{ config.level }}
-      </p>
+        <p class="upgrade-requirement">
+          {{ 'upgrades.requiredLevel' | transloco }}: {{ config().level }}
+        </p>
       } @else if (bought) {
-      <p class="upgrade-status bought-status">{{ 'upgrades.bought' | transloco }}</p>
+        <p class="upgrade-status bought-status">{{ 'upgrades.bought' | transloco }}</p>
       } @else {
-      <div class="upgrade-details">
-        <span class="upgrade-bonus">+{{ config.clicks | short }} ¢/click</span>
-        <span class="upgrade-price" [class.affordable]="pointsService.points().gte(config.price)">
-          {{ config.price | short }} ¢
-        </span>
-      </div>
+        <div class="upgrade-details">
+          <span class="upgrade-bonus">+{{ config().clicks | short }} ¢/click</span>
+          <span
+            class="upgrade-price"
+            [class.affordable]="pointsService.points().gte(config().price)"
+          >
+            {{ config().price | short }} ¢
+          </span>
+        </div>
       }
     </div>
   </div>

@@ -1,22 +1,4 @@
 <div class="relative flex justify-center items-center h-full w-full">
-  <div
-    (click)="onClick($event)"
-    (touchstart)="onTouchStart($event)"
-    (keydown)="preventKey($event)"
-    tabindex="-1"
-    class="croqueta-container"
-    [class.afk]="isAfk()"
-  >
-    @if (showPrevious()) {
-    <img
-      class="croqueta croqueta-layer croqueta-previous"
-      [src]="getSkinImage(this.previousSkin())"
-    />
-    }
-    <img
-      class="croqueta croqueta-layer croqueta-current"
-      [src]="getSkinImage(currentSkin())"
-    />
-  </div>
-  <span class="croqueta-bg-light"></span>
+  <!-- La croqueta, lights y partículas se renderizan en PixiJS -->
+  <!-- Este div solo contiene el área clickeable (manejada por el canvas) -->
 </div>

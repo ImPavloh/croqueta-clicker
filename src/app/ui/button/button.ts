@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AudioService } from '@services/audio.service';
@@ -9,20 +9,20 @@ import { AudioService } from '@services/audio.service';
  */
 @Component({
   selector: 'app-button',
-  standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './button.html',
   styleUrls: ['./button.css'],
   host: {
-    '[class]': 'customClass',
+    '[class]': 'customClass()',
     '(click)': 'onClick($event)',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
   private audioService = inject(AudioService);
 
   /** Variante visual del botón */
-  @Input() variant:
+  variant = input<
     | 'primary'
     | 'secondary'
     | 'tertiary'
@@ -32,37 +32,38 @@ export class ButtonComponent {
     | 'warning'
     | 'nav'
     | 'control'
-    | 'golden' = 'primary';
+    | 'golden'
+  >('primary');
 
   /** Indica si el botón está activo (para botones de navegación) */
-  @Input() active: boolean = false;
+  active = input(false);
 
   /** Habilita el efecto hover */
-  @Input() hoverable: boolean = true;
+  hoverable = input(true);
 
   /** Indica si el botón es clickeable (afecta al cursor) */
-  @Input() clickable: boolean = false;
+  clickable = input(false);
 
   /** Deshabilita el botón */
-  @Input() disabled: boolean = false;
+  disabled = input(false);
 
   /** Tamaño del botón */
-  @Input() size?: 'sm' | 'md' | 'lg' | 'xl';
+  size = input<'sm' | 'md' | 'lg' | 'xl' | undefined>(undefined);
 
   /** Tipo HTML del botón */
-  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+  type = input<'button' | 'submit' | 'reset'>('button');
 
   /** Ruta de Angular Router (si se usa como enlace) */
-  @Input() routerLink?: string | any[];
+  routerLink = input<string | any[] | undefined>(undefined);
 
   /** Requiere coincidencia exacta de ruta para activarse */
-  @Input() routerLinkActiveExact: boolean = false;
+  routerLinkActiveExact = input(false);
 
   /** Clases CSS personalizadas adicionales */
-  @Input() customClass: string = '';
+  customClass = input('');
 
   /** Desactiva el sonido de clic */
-  @Input() noSound: boolean = false;
+  noSound = input(false);
 
   /**
    * Maneja el evento de clic del botón.
@@ -70,7 +71,7 @@ export class ButtonComponent {
    * @param event Evento de clic
    */
   onClick(event?: Event) {
-    if (this.disabled) {
+    if (this.disabled()) {
       if (event?.preventDefault) {
         event.preventDefault();
         event.stopImmediatePropagation();
@@ -78,7 +79,7 @@ export class ButtonComponent {
       return;
     }
 
-    if (!this.noSound) {
+    if (!this.noSound()) {
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     }
   }

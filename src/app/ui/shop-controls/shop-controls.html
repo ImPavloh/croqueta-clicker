@@ -1,54 +1,54 @@
 <div class="flex flex-row items-center justify-center 2xl:justify-between gap-4 px-4 min-h-9">
   <!-- cantidad de compra  -->
   <div class="flex flex-row items-center gap-2">
-    @if (context === 'producers') {
-    <app-button
-      variant="control"
-      [active]="shopControls.buyAmount() === 1"
-      (click)="selectAmount(1)"
-      [title]="'producers.buyAmount_1' | transloco"
-    >
-      x1
-    </app-button>
-    <app-button
-      variant="control"
-      [active]="shopControls.buyAmount() === 10"
-      (click)="selectAmount(10)"
-      [title]="'producers.buyAmount_10' | transloco"
-    >
-      x10
-    </app-button>
-    <app-button
-      variant="control"
-      [active]="shopControls.buyAmount() === 25"
-      (click)="selectAmount(25)"
-      [title]="'producers.buyAmount_25' | transloco"
-    >
-      x25
-    </app-button>
+    @if (context() === 'producers') {
+      <app-button
+        variant="control"
+        [active]="shopControls.buyAmount() === 1"
+        (click)="selectAmount(1)"
+        [title]="'producers.buyAmount_1' | transloco"
+      >
+        x1
+      </app-button>
+      <app-button
+        variant="control"
+        [active]="shopControls.buyAmount() === 10"
+        (click)="selectAmount(10)"
+        [title]="'producers.buyAmount_10' | transloco"
+      >
+        x10
+      </app-button>
+      <app-button
+        variant="control"
+        [active]="shopControls.buyAmount() === 25"
+        (click)="selectAmount(25)"
+        [title]="'producers.buyAmount_25' | transloco"
+      >
+        x25
+      </app-button>
     }
   </div>
 
   <div class="hidden 2xl:flex flex-col flex-1 text-center">
-    @if (context === 'producers') {
-    <h3 class="text-amber-800 font-semibold text-lg uppercase">
-      {{ 'producers.title' | transloco }}
-    </h3>
-    } @else if (context === 'upgrades') {
-    <h3 class="text-amber-800 font-semibold text-lg uppercase">
-      {{ 'upgrades.title' | transloco }}
-    </h3>
+    @if (context() === 'producers') {
+      <h3 class="text-amber-800 font-semibold text-lg uppercase">
+        {{ 'producers.title' | transloco }}
+      </h3>
+    } @else if (context() === 'upgrades') {
+      <h3 class="text-amber-800 font-semibold text-lg uppercase">
+        {{ 'upgrades.title' | transloco }}
+      </h3>
     }
   </div>
 
   <div class="flex items-center gap-2">
     <div class="flex items-center gap-2">
-      @if (context === 'upgrades') {
-      <app-dynamic-controls
-        [control]="ShopControls"
-        (valueChange)="onHideBoughtChange($event)"
-      ></app-dynamic-controls>
-      <div class="text-sm text-amber-800">{{ 'upgrades.hideBought' | transloco }}</div>
+      @if (context() === 'upgrades') {
+        <app-dynamic-controls
+          [control]="ShopControls"
+          (valueChange)="onHideBoughtChange($event)"
+        ></app-dynamic-controls>
+        <div class="text-sm text-amber-800">{{ 'upgrades.hideBought' | transloco }}</div>
       }
     </div>
   </div>

@@ -5,7 +5,6 @@ import { ShortNumberPipe } from '@pipes/short-number.pipe';
 
 @Component({
   selector: 'app-floating',
-  standalone: true,
   imports: [ShortNumberPipe],
   templateUrl: './floating.html',
   styleUrls: ['./floating.css'],

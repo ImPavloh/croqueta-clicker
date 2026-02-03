@@ -2,9 +2,15 @@
 
 ## 1. Introducción
 
-**Croqueta Clicker** es un juego incremental (o _clicker game_) desarrollado con Angular. El objetivo es simple: generar la mayor cantidad de croquetas posible. El jugador comienza haciendo clic manualmente en una croqueta gigante y, a medida que acumula puntos (croquetas), puede comprar productores que las generan automáticamente y mejoras que aumentan la eficiencia de sus clics.
+**Croqueta Clicker** es un juego incremental (o _clicker game_) desarrollado con **Angular 21**. El objetivo es simple: generar la mayor cantidad de croquetas posible. El jugador comienza haciendo clic manualmente en una croqueta gigante y, a medida que acumula puntos (croquetas), puede comprar productores que las generan automáticamente y mejoras que aumentan la eficiencia de sus clics.
 
-El proyecto está diseñado con una arquitectura basada en servicios, desacoplando la lógica de negocio del estado de la interfaz de usuario. Utiliza características modernas de Angular como los **Signals** para una gestión de estado reactiva y eficiente.
+El proyecto está diseñado con una **arquitectura modular basada en componentes standalone** de Angular 21, desacoplando la lógica de negocio del estado de la interfaz de usuario. Utiliza características modernas de Angular como:
+
+- **Signals**: Gestión de estado reactiva y eficiente con `signal()`, `computed()`, `input()`, `output()`
+- **Zoneless Change Detection**: Mejor rendimiento eliminando Angular Zone.js
+- **ChangeDetectionStrategy.OnPush**: En todos los componentes para optimizar renders
+- **Control flow nativo**: Directivas `@if`, `@for`, `@switch` en templates en lugar de `*ngIf`, `*ngFor`
+- **Host bindings modernos**: Uso de `host` property en lugar de `@HostListener`/@HostBinding`
 
 ## 2. Conceptos fundamentales del juego
 
@@ -35,17 +41,18 @@ El estado del juego se guarda en el `localStorage` del navegador.
 A continuación se detalla la responsabilidad de cada servicio principal:
 
 - **`PointsService`**:
-
   - **Responsabilidad**: Gestiona la lógica económica central del juego.
-  - **Estado que maneja**: `points` (croquetas totales), `pointsPerClick` (croquetas por clic) y `pointsPerSecond` (croquetas por segundo).
+  - **Estado que maneja**: signals para `points` (croquetas totales), `pointsPerClick` (croquetas por clic) y `pointsPerSecond` (croquetas por segundo).
   - **Funcionalidad clave**:
     - `addPointsPerClick()`: Añade puntos por un clic manual, aplicando multiplicadores.
     - `addPointPerSecond()`: Se ejecuta a intervalos regulares para añadir los puntos generados automáticamente.
     - `upgrade...()`: Métodos para actualizar los puntos por clic/segundo al comprar mejoras o productores.
     - Utiliza `break_infinity.js` para manejar números muy grandes.
+    - Implementa `ChangeDetectionStrategy.OnPush` para renders optimizados
+    - Usa `effect()` para reaccionar a cambios de estado
+    - Manejo de inyección con `inject()` en lugar de constructor
 
 - **`PlayerStats`**:
-
   - **Responsabilidad**: Gestiona el progreso y las estadísticas del jugador.
   - **Estado que maneja**: `level`, `currentExp`, `expToNext`, `totalClicks`, `timePlaying`.
   - **Funcionalidad clave**:
@@ -53,7 +60,6 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - `checkLevelUp()`: Verifica si el jugador ha subido de nivel y, si es así, actualiza el nivel y la EXP necesaria para el siguiente, notificando a `LevelUpService`.
 
 - **`OptionsService`**:
-
   - **Responsabilidad**: Actúa como un gestor de configuración y el principal intermediario con `localStorage`.
   - **Funcionalidad clave**:
     - Gestiona opciones del juego (volumen, partículas, etc.).
@@ -61,21 +67,18 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - Implementa la lógica para exportar/importar la partida y reiniciar el juego.
 
 - **`AchievementsService`**:
-
   - **Responsabilidad**: Gestiona el desbloqueo y la persistencia de los logros.
   - **Funcionalidad clave**:
     - `unlockAchievement(id)`: Desbloquea un logro, lo guarda en `localStorage` y lo añade a una cola (`queue$`) para ser mostrado en la UI.
     - Maneja logros especiales como "desbloquea tu primer logro" y "desbloquea todos los logros".
 
 - **`SkinsService`**:
-
   - **Responsabilidad**: Gestiona las apariencias (skins) de la croqueta.
   - **Funcionalidad clave**:
     - `isSkinUnlocked(skin)`: Comprueba si una skin está desbloqueada basándose en requisitos (nivel, puntos, logros) que obtiene de otros servicios (`PlayerStats`, `PointsService`, `AchievementsService`).
     - Mantiene un `Set` de las skins usadas para desbloquear logros relacionados.
 
 - **`AudioService`**:
-
   - **Responsabilidad**: Controla toda la reproducción de audio.
   - **Funcionalidad clave**:
     - Usa la **Web Audio API** para un control avanzado del sonido.
@@ -84,7 +87,6 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - Se suscribe a los `Observables` de volumen de `OptionsService` para ajustar las ganancias en tiempo real.
 
 - **`AutosaveService`**:
-
   - **Responsabilidad**: Orquesta el guardado automático del progreso del juego.
   - **Funcionalidad clave**:
     - Inicia un `setInterval` que llama a `saveAll()` cada 60 segundos.

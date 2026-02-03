@@ -8,7 +8,6 @@ import { combineLatest, Subscription } from 'rxjs';
  */
 @Injectable({ providedIn: 'root' })
 export class AudioService implements OnDestroy {
-
   //El contexto de audio principal de la Web Audio API. Se inicializa de forma perezosa.
   private ctx: AudioContext | null = null;
   //Nodo de ganancia principal que controla el volumen general.
@@ -31,6 +30,12 @@ export class AudioService implements OnDestroy {
   //Caché para almacenar los `AudioBuffer` de los SFX decodificados y evitar recargas.
   private sfxBufferCache = new Map<string, AudioBuffer>();
 
+  // Pool de GainNodes reutilizables para SFX
+  // Evita crear/destruir nodos en cada reproducción
+  private readonly SFX_POOL_SIZE = 10;
+  private sfxGainPool: GainNode[] = [];
+  private sfxGainPoolIndex = 0;
+
   /**
    * @param options Servicio de opciones para obtener y suscribirse a los ajustes de volumen.
    */
@@ -49,7 +54,7 @@ export class AudioService implements OnDestroy {
     // Limpieza: si hay elementos de audio creados por instancias previas del servicio, los detiene y elimina.
     try {
       const old = Array.from(
-        document.querySelectorAll('audio[data-audioservice="true"]')
+        document.querySelectorAll('audio[data-audioservice="true"]'),
       ) as HTMLAudioElement[];
       for (const a of old) {
         try {
@@ -74,6 +79,15 @@ export class AudioService implements OnDestroy {
     this.sfxGain.connect(this.masterGain);
     this.musicGain.connect(this.masterGain);
     this.masterGain.connect(this.ctx.destination);
+
+    // Precrear pool de GainNodes para SFX
+    this.sfxGainPool = [];
+    for (let i = 0; i < this.SFX_POOL_SIZE; i++) {
+      const gainNode = this.ctx.createGain();
+      gainNode.connect(this.sfxGain);
+      this.sfxGainPool.push(gainNode);
+    }
+    this.sfxGainPoolIndex = 0;
 
     // Inicializa los nodos de ganancia con los valores actuales del servicio de opciones (0..1).
     const now = this.ctx.currentTime;
@@ -122,6 +136,7 @@ export class AudioService implements OnDestroy {
   /**
    * Reproduce un efecto de sonido (SFX) desde una URL.
    * El `AudioBuffer` decodificado se cachea para reproducciones futuras. Los SFX pueden superponerse.
+   * Usa un pool de GainNodes para evitar crear/destruir nodos en cada reproducción.
    * @param url La ruta al fichero de audio.
    * @param volumeMultiplier Un multiplicador de volumen local para este SFX (0 a 1).
    * @returns La `AudioBufferSourceNode` creada, para un posible control externo (ej. `stop()`).
@@ -143,23 +158,28 @@ export class AudioService implements OnDestroy {
       }
     }
 
-    // Crea una nueva fuente y un nodo de ganancia local para este SFX.
+    // Crea una nueva fuente pero reutiliza GainNode del pool
     const src = this.ctx.createBufferSource();
     src.buffer = buffer;
 
-    const localGain = this.ctx.createGain();
-    localGain.gain.setValueAtTime(this.clamp(volumeMultiplier), this.ctx.currentTime);
+    // Reutilizar GainNode del pool en lugar de crear uno nuevo
+    const localGain = this.sfxGainPool[this.sfxGainPoolIndex];
+    this.sfxGainPoolIndex = (this.sfxGainPoolIndex + 1) % this.SFX_POOL_SIZE;
 
-    // Conexión: src -> localGain -> sfxGain -> master -> destination
+    // Resetear el valor de ganancia para esta reproducción
+    const now = this.ctx.currentTime;
+    localGain.gain.cancelScheduledValues(now);
+    localGain.gain.setValueAtTime(this.clamp(volumeMultiplier), now);
+
+    // Conexión: src -> localGain (del pool, ya conectado a sfxGain)
     src.connect(localGain);
-    localGain.connect(this.sfxGain);
 
-    // Inicia la reproducción y limpia los nodos cuando termina.
+    // Inicia la reproducción y desconecta solo el source cuando termina
     src.start();
     src.onended = () => {
       try {
         src.disconnect();
-        localGain.disconnect();
+        // NO desconectar localGain - es parte del pool reutilizable
       } catch {}
     };
 
@@ -243,20 +263,23 @@ export class AudioService implements OnDestroy {
       old.trackGain.gain.linearRampToValueAtTime(0, oldNow + crossfadeSec);
 
       // Limpieza de recursos después del crossfade.
-      setTimeout(() => {
-        try {
-          old.audio.pause();
-          old.audio.currentTime = 0;
-          // eliminar del DOM si lo añadimos
-          if (old.audio.parentElement) old.audio.parentElement.removeChild(old.audio);
-        } catch {}
-        try {
-          old.srcNode.disconnect();
-        } catch {}
-        try {
-          old.trackGain.disconnect();
-        } catch {}
-      }, (crossfadeSec + 0.05) * 1000);
+      setTimeout(
+        () => {
+          try {
+            old.audio.pause();
+            old.audio.currentTime = 0;
+            // eliminar del DOM si lo añadimos
+            if (old.audio.parentElement) old.audio.parentElement.removeChild(old.audio);
+          } catch {}
+          try {
+            old.srcNode.disconnect();
+          } catch {}
+          try {
+            old.trackGain.disconnect();
+          } catch {}
+        },
+        (crossfadeSec + 0.05) * 1000,
+      );
     }
 
     // Establece la nueva pista como la actual.
@@ -288,18 +311,21 @@ export class AudioService implements OnDestroy {
     cg.gain.setValueAtTime(cg.gain.value, now);
     cg.gain.linearRampToValueAtTime(0, now + fadeOutSec);
 
-    setTimeout(() => {
-      try {
-        this.currentMusic!.audio.pause();
-        this.currentMusic!.audio.currentTime = 0;
-        if (this.currentMusic!.audio.parentElement) {
-          this.currentMusic!.audio.parentElement.removeChild(this.currentMusic!.audio);
-        }
-        this.currentMusic!.srcNode.disconnect();
-        this.currentMusic!.trackGain.disconnect();
-      } catch {}
-      this.currentMusic = null;
-    }, (fadeOutSec + 0.05) * 1000);
+    setTimeout(
+      () => {
+        try {
+          this.currentMusic!.audio.pause();
+          this.currentMusic!.audio.currentTime = 0;
+          if (this.currentMusic!.audio.parentElement) {
+            this.currentMusic!.audio.parentElement.removeChild(this.currentMusic!.audio);
+          }
+          this.currentMusic!.srcNode.disconnect();
+          this.currentMusic!.trackGain.disconnect();
+        } catch {}
+        this.currentMusic = null;
+      },
+      (fadeOutSec + 0.05) * 1000,
+    );
   }
 
   /**
@@ -340,7 +366,7 @@ export class AudioService implements OnDestroy {
     // Intenta eliminar cualquier otro elemento de audio marcado que haya podido quedar.
     try {
       const left = Array.from(
-        document.querySelectorAll('audio[data-audioservice="true"]')
+        document.querySelectorAll('audio[data-audioservice="true"]'),
       ) as HTMLAudioElement[];
       for (const a of left) {
         try {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { PlayerStats } from '@services/player-stats.service';
@@ -11,19 +11,22 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-stats',
-  standalone: true,
   imports: [CommonModule, ShortNumberPipe, TranslocoModule],
   templateUrl: './stats.html',
   styleUrl: './stats.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsComponent {
-  @Input() variant: StatsVariant = 'auto';
+  variant = input<StatsVariant>('auto');
 
   private playerStats = inject(PlayerStats);
   private eventService = inject(EventService);
 
-  activeEvents = computed(() => this.eventService.getEvents()().filter(e => e.active));
+  activeEvents = computed(() =>
+    this.eventService
+      .getEvents()()
+      .filter((e) => e.active),
+  );
 
   // nivel y experiencia
   level = toSignal(this.playerStats.level$, { initialValue: 0 });
@@ -51,8 +54,8 @@ export class StatsComponent {
   timePlaying = computed(() => this.playerStats.timePlaying());
 
   mode(): 'mobile' | 'desktop' {
-    if (this.variant === 'mobile') return 'mobile';
-    if (this.variant === 'desktop') return 'desktop';
+    if (this.variant() === 'mobile') return 'mobile';
+    if (this.variant() === 'desktop') return 'desktop';
     return typeof window !== 'undefined' && window.innerWidth <= 1344 ? 'mobile' : 'desktop';
   }
 

@@ -9,7 +9,6 @@ import { SkinModel } from '@models/skin.model';
 
 @Component({
   selector: 'app-skin-unlock-popup',
-  standalone: true,
   imports: [ButtonComponent, TranslocoModule, UpperCasePipe],
   templateUrl: './skin-unlock-popup.html',
   styleUrls: ['./skin-unlock-popup.css'],

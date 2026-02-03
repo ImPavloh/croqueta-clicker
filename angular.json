@@ -24,15 +24,24 @@
               "src/assets"
             ],
             "styles": ["src/styles.css"],
-            "allowedCommonJsDependencies": ["break_infinity.js"]
+            "allowedCommonJsDependencies": [
+              "break_infinity.js",
+              "crypto-js",
+              "pixi.js",
+              "parse-svg-path"
+            ],
+            "extractLicenses": true,
+            "define": {
+              "process.env.NODE_ENV": "\"production\""
+            }
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1600kB",
+                  "maximumError": "2000kB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -52,25 +61,32 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": true,
               "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 4200,
+            "open": false
+          },
           "configurations": {
             "production": {
-              "buildTarget": "croqueta-clicker:build:production"
+              "buildTarget": "croqueta-clicker:build:production",
+              "port": 4200
             },
             "development": {
-              "buildTarget": "croqueta-clicker:build:development"
+              "buildTarget": "croqueta-clicker:build:development",
+              "port": 4200,
+              "hmr": true
             }
           },
           "defaultConfiguration": "development"

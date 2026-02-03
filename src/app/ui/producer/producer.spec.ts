@@ -75,8 +75,8 @@ describe('Producer', () => {
     fixture = TestBed.createComponent(Producer);
     component = fixture.componentInstance;
 
-    // Establecer el @Input() config ANTES de la detección de cambios inicial
-    component.config = mockConfig;
+    // Establecer el input config usando setInput ANTES de la detección de cambios inicial
+    fixture.componentRef.setInput('config', mockConfig);
 
     // Detener cambios para disparar ngOnInit y los effects (que ahora verifican config)
     fixture.detectChanges();
@@ -93,7 +93,7 @@ describe('Producer', () => {
     fixture = TestBed.createComponent(Producer);
     component = fixture.componentInstance;
 
-    component.config = { ...mockConfig, level: 5 } as ProducerModel;
+    fixture.componentRef.setInput('config', { ...mockConfig, level: 5 } as ProducerModel);
 
     fixture.detectChanges();
 

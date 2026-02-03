@@ -29,11 +29,14 @@
       <app-level-up-popup />
 
       <app-event />
-      <app-particles />
       <app-floating />
       @if (!isMobile) {
         <app-stats variant="desktop" />
-        <app-leaderboard />
+        @defer (on idle) {
+          <app-leaderboard />
+        } @placeholder {
+          <div></div>
+        }
         @if (timeService.isCroquetaDay()) {
           <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
             <div class="indicator-glow"></div>
@@ -51,7 +54,11 @@
           <app-clicker />
         </div>
         @if (isMobile) {
-          <app-leaderboard mode="panel" class="mobile-leaderboard" />
+          @defer (on idle) {
+            <app-leaderboard mode="panel" class="mobile-leaderboard" />
+          } @placeholder {
+            <div></div>
+          }
         }
         <div class="mobile-bottom">
           <app-counter />
@@ -65,6 +72,7 @@
       @if (tutorialCompleted()) {
         <app-croquetita />
       }
+      <app-pixi-canvas />
     </div>
     @if (!isMobile) {
       <div class="menu-container">

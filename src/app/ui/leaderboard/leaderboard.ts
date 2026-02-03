@@ -4,9 +4,11 @@ import {
   inject,
   signal,
   OnInit,
-  Input,
+  input,
   effect,
   ElementRef,
+  untracked,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -24,13 +26,13 @@ import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-leaderboard',
-  standalone: true,
   imports: [CommonModule, TranslocoModule, FormsModule, ShortNumberPipe, ButtonComponent],
   templateUrl: './leaderboard.html',
   styleUrl: './leaderboard.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Leaderboard implements OnInit {
-  @Input() mode: 'panel' | 'full' = 'panel';
+  mode = input<'panel' | 'full'>('panel');
 
   private supabase = inject(SupabaseService);
   private debugService = inject(DebugService);
@@ -62,7 +64,13 @@ export class Leaderboard implements OnInit {
     return Math.ceil(t / this.pageSize);
   });
 
-  currentPoints = computed(() => this.points.points().toString());
+  private cachedPoints = '';
+  currentPoints = computed(() => {
+    if (this.expanded()) {
+      this.cachedPoints = untracked(() => this.points.points().toString());
+    }
+    return this.cachedPoints || '0';
+  });
 
   username = computed(() => {
     const u = this.user();
@@ -96,14 +104,14 @@ export class Leaderboard implements OnInit {
   private readonly elRef = inject(ElementRef<HTMLElement>);
 
   ngOnInit() {
-    if (this.mode === 'full') {
+    if (this.mode() === 'full') {
       this.searchFullImmediate();
       this.checkAndPromptUsername();
     }
   }
 
   constructor() {
-    if (this.mode === 'full') {
+    if (this.mode() === 'full') {
       return;
     }
 
@@ -184,7 +192,7 @@ export class Leaderboard implements OnInit {
     // close leaderboard when tapping outside on touch devices (mobile)
     effect(() => {
       // only relevant for the small panel mode and on touch devices
-      if (this.mode !== 'panel' || !this._isTouchDevice) return;
+      if (this.mode() !== 'panel' || !this._isTouchDevice) return;
 
       // if expanded attach a global touchstart listener that will collapse
       if (this.expanded()) {
@@ -233,7 +241,7 @@ export class Leaderboard implements OnInit {
       this.message.set(
         this.translocoService.translate('leaderboard.errorWithDetail', {
           message: res.error?.message ?? '',
-        })
+        }),
       );
     } else {
       const data = res.data ?? [];
@@ -552,7 +560,7 @@ export class Leaderboard implements OnInit {
         this.message.set(
           this.translocoService.translate('leaderboard.errorWithDetail', {
             message: res.error?.message ?? '',
-          })
+          }),
         );
         this.items.set([]);
         this.total.set(null);
@@ -565,7 +573,7 @@ export class Leaderboard implements OnInit {
     } catch (e: any) {
       if (token !== this.requestToken) return;
       this.message.set(
-        this.translocoService.translate('leaderboard.errorWithDetail', { message: String(e) })
+        this.translocoService.translate('leaderboard.errorWithDetail', { message: String(e) }),
       );
       this.items.set([]);
       this.total.set(null);

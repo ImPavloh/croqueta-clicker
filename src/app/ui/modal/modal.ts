@@ -19,7 +19,6 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
 
 @Component({
   selector: 'app-modal',
-  standalone: true,
   imports: [
     Upgrades,
     Achievements,
@@ -140,7 +139,7 @@ export class Modal {
         this.supabase.enqueuePendingScore(
           0,
           { reason: 'username-reserve' },
-          { usernameChange: name }
+          { usernameChange: name },
         );
         this.usernameMessage.set(this.translocoService.translate('user.usernameReservedOffline'));
         this.usernameLoading.set(false);
@@ -152,7 +151,7 @@ export class Modal {
       this.usernameMessage.set(
         this.translocoService.translate('user.setUsernameErrorDetail', {
           error: resp.error?.message ?? '',
-        })
+        }),
       );
       this.usernameLoading.set(false);
       return;

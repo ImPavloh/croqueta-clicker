@@ -5,7 +5,6 @@ import { AudioService } from '@services/audio.service';
 
 @Component({
   selector: 'app-level-up-popup',
-  standalone: true,
   imports: [],
   templateUrl: './level-up-popup.html',
   styleUrls: ['./level-up-popup.css'],

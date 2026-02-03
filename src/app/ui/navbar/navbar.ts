@@ -15,7 +15,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   imports: [RouterModule, RouterLink, NewsLine, ButtonComponent, TranslocoModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',

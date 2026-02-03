@@ -22,27 +22,31 @@ describe('Tooltip', () => {
   });
 
   it('should show tooltip on mouse enter', () => {
-    component.text = 'Test tooltip';
+    fixture.componentRef.setInput('text', 'Test tooltip');
+    fixture.detectChanges();
     component.onMouseEnter();
     expect(component.showTooltip).toBe(true);
   });
 
   it('should hide tooltip on mouse leave', () => {
-    component.text = 'Test tooltip';
+    fixture.componentRef.setInput('text', 'Test tooltip');
+    fixture.detectChanges();
     component.onMouseEnter();
     component.onMouseLeave();
     expect(component.showTooltip).toBe(false);
   });
 
   it('should not show tooltip when disabled', () => {
-    component.text = 'Test tooltip';
-    component.disabled = true;
+    fixture.componentRef.setInput('text', 'Test tooltip');
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
     component.onMouseEnter();
     expect(component.showTooltip).toBe(false);
   });
 
   it('should not show tooltip when text is empty', () => {
-    component.text = '';
+    fixture.componentRef.setInput('text', '');
+    fixture.detectChanges();
     component.onMouseEnter();
     expect(component.showTooltip).toBe(false);
   });

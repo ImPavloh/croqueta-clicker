@@ -1,7 +1,5 @@
-import { Component, effect, inject, Input, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, effect, inject, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
-import { NgClass } from '@angular/common';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
 import { PlayerStats } from '@services/player-stats.service';
@@ -21,8 +19,7 @@ import { TranslocoModule } from '@jsverse/transloco';
  */
 @Component({
   selector: 'app-producer',
-  standalone: true,
-  imports: [CommonModule, NgClass, ShortNumberPipe, ButtonComponent, TranslocoModule],
+  imports: [ShortNumberPipe, ButtonComponent, TranslocoModule],
   templateUrl: './producer.html',
   styleUrl: './producer.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,11 +32,12 @@ export class Producer {
   private optionsService = inject(OptionsService);
 
   /** Configuración del productor (pasada desde el componente padre) */
-  @Input() config!: ProducerModel;
+  config = input.required<ProducerModel>();
 
   // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
   inintEfect = effect(() => {
-    if (this.config) {
+    const cfg = this.config();
+    if (cfg) {
       this.updatePriceAndPoints();
     }
   });
@@ -58,8 +56,9 @@ export class Producer {
    * Calcula el progreso considerando niveles completos y fracción del nivel actual.
    */
   levelProgressPercent = computed(() => {
-    if (!this.config) return 0;
-    const target = Number(this.config.level) || 0;
+    const cfg = this.config();
+    if (!cfg) return 0;
+    const target = Number(cfg.level) || 0;
     if (target <= 0) return 100;
 
     const currentLevel = this.level();
@@ -76,7 +75,8 @@ export class Producer {
   });
 
   levelEffect = effect(() => {
-    if (this.config) {
+    const cfg = this.config();
+    if (cfg) {
       const currentLevel = this.level();
       this.checkLevel(currentLevel);
     }
@@ -108,16 +108,18 @@ export class Producer {
 
   // Comprobar si el productor está desbloqueado
   checkLevel(currentLevel: number) {
-    if (!this.config) return; // Doble seguridad
-    this.unlocked = currentLevel >= this.config.level;
+    const cfg = this.config();
+    if (!cfg) return; // Doble seguridad
+    this.unlocked = currentLevel >= cfg.level;
   }
 
   // calcular el precio de comprar N unidades (suma geométrica)
   // sum(i=0 to n-1) { priceBase * priceMult^(quantity+i) }
   // fuente: de los deseos
   calculateBulkPrice(currentQuantity: number, amount: number): Decimal {
-    const base = new Decimal(this.config.priceBase);
-    const mult = new Decimal(this.config.priceMult);
+    const cfg = this.config();
+    const base = new Decimal(cfg.priceBase);
+    const mult = new Decimal(cfg.priceMult);
 
     // si el multiplicador es 1 es lineal (no cambia nada)
     if (mult.eq(1)) {
@@ -137,8 +139,9 @@ export class Producer {
   // Método para calcular el precio actual del productor (devuelve Decimal, redondeado hacia abajo)
   calculatePrice(quantity: number): Decimal {
     // price = floor(priceBase * priceMult^quantity)
-    const base = new Decimal(this.config.priceBase);
-    const mult = new Decimal(this.config.priceMult);
+    const cfg = this.config();
+    const base = new Decimal(cfg.priceBase);
+    const mult = new Decimal(cfg.priceMult);
     // usar pow sobre mult
     const value = base.times(mult.pow(quantity));
     return value.floor();
@@ -149,8 +152,9 @@ export class Producer {
     if (quantity === 0) return new Decimal(0);
     // CPS por unidad = pointsBase + (pointsSum * (quantity - 1))
     // Cada unidad genera pointsBase, más un bonus por cada unidad YA comprada anteriormente
-    const base = new Decimal(this.config.pointsBase);
-    const bonus = new Decimal(this.config.pointsSum).times(Math.max(0, quantity - 1));
+    const cfg = this.config();
+    const base = new Decimal(cfg.pointsBase);
+    const bonus = new Decimal(cfg.pointsSum).times(Math.max(0, quantity - 1));
     return base.plus(bonus);
   }
 
@@ -159,9 +163,10 @@ export class Producer {
     if (this.quantity === 0) return new Decimal(0);
     // Total = (pointsBase * quantity) + (pointsSum * quantity * (quantity - 1) / 2)
     // Esto es la suma: pointsBase*q + pointsSum*(0+1+2+...+(q-1))
-    const base = new Decimal(this.config.pointsBase).times(this.quantity);
+    const cfg = this.config();
+    const base = new Decimal(cfg.pointsBase).times(this.quantity);
     const sumSequence = (this.quantity * (this.quantity - 1)) / 2;
-    const bonus = new Decimal(this.config.pointsSum).times(sumSequence);
+    const bonus = new Decimal(cfg.pointsSum).times(sumSequence);
     return base.plus(bonus);
   }
 
@@ -195,7 +200,7 @@ export class Producer {
       this.saveToStorage();
 
       // añadir experiencia (multiplicada por cantidad comprada)
-      this.playerStats.addExp(this.config.exp * buyAmount);
+      this.playerStats.addExp(this.config().exp * buyAmount);
 
       // SFX
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
@@ -210,7 +215,7 @@ export class Producer {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar cantidad
-    const q = this.optionsService.getGameItem('producer_' + this.config.id + '_quantity');
+    const q = this.optionsService.getGameItem('producer_' + this.config().id + '_quantity');
     if (q) this.quantity = Number(q) || 0;
   }
 
@@ -219,7 +224,7 @@ export class Producer {
     if (typeof localStorage === 'undefined') return;
     // guardar cantidad
     this.optionsService.setGameItem(
-      'producer_' + this.config.id + '_quantity',
+      'producer_' + this.config().id + '_quantity',
       String(this.quantity),
     );
   }

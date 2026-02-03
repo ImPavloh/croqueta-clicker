@@ -5,7 +5,6 @@ import { TimeService } from '@services/time.service';
 
 @Component({
   selector: 'app-floating-buttons',
-  standalone: true,
   imports: [],
   templateUrl: './floating-buttons.html',
   styleUrl: './floating-buttons.css',

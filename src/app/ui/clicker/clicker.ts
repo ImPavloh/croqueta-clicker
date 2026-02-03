@@ -1,10 +1,17 @@
 import { PlayerStats } from '@services/player-stats.service';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  signal,
+  effect,
+} from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { SkinsService } from '@services/skins.service';
 import { AchievementsService } from '@services/achievements.service';
-import { ParticlesService } from '@services/particles.service';
+import { PixiEngineService } from '@services/pixi-engine.service';
 import { AudioService } from '@services/audio.service';
 import { Subscription } from 'rxjs';
 import Decimal from 'break_infinity.js';
@@ -17,7 +24,6 @@ import { SKINS } from '@data/skin.data';
  */
 @Component({
   selector: 'app-clicker',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
@@ -60,16 +66,27 @@ export class Clicker implements OnInit, OnDestroy {
   /** Suscripción a cambios de skin */
   private skinSub?: Subscription;
 
+  /** Suscripción a clicks del canvas PixiJS */
+  private clickSub?: Subscription;
+
   constructor(
     public pointsService: PointsService,
     private skinsService: SkinsService,
     public playerStats: PlayerStats,
     private achievementsService: AchievementsService,
-    private particlesService: ParticlesService,
+    private pixiEngine: PixiEngineService,
     private audioService: AudioService,
   ) {
     this.skinSub = this.skinsService.skinChanged$.subscribe((id) => {
       if (id !== this.currentSkin()) this.currentSkin.set(id);
+    });
+
+    this.clickSub = this.pixiEngine.onClick$.subscribe((event) => {
+      this.handleCanvasClick(event.x, event.y);
+    });
+
+    effect(() => {
+      this.pixiEngine.setAfk(this.isAfk());
     });
   }
 
@@ -79,6 +96,15 @@ export class Clicker implements OnInit, OnDestroy {
    * @returns URL de la imagen o string vacío si no se encuentra
    */
   getSkinImage = (skinId: number) => this.skins.find((s) => s.id === skinId)?.image || '';
+
+  /**
+   * Maneja clicks provenientes del canvas PixiJS
+   */
+  private handleCanvasClick(x: number, y: number): void {
+    this.audioService.resumeIfNeeded();
+    const containerWidth = window.innerWidth;
+    this.processClick(x, y, containerWidth);
+  }
 
   /**
    * Maneja el evento de clic en la croqueta.
@@ -145,12 +171,17 @@ export class Clicker implements OnInit, OnDestroy {
     this.resetAfkTimer();
     this.checkAchievements(); // tus achievements por puntos siguen ahí
 
-    // generar partículas en la posición del click
-    if (x !== undefined && y !== undefined) this.particlesService.spawn(x, y, 4);
+    // Animar squish de la croqueta en PixiJS
+    this.pixiEngine.squishCroqueta();
+
+    // generar partículas en la posición del click (usando PixiJS)
+    if (x !== undefined && y !== undefined) {
+      this.pixiEngine.spawnParticles(x, y, 4);
+    }
 
     const skin = this.skins.find((s) => s.id === this.skinsService.skinId());
     // generar partículas de croquetas cayendo con personalización según skin
-    this.particlesService.spawnFallingCroquetas(
+    this.pixiEngine.spawnFallingCroquetas(
       containerWidth,
       2,
       skin?.particleImage || '/assets/skins/croqueta-normal.webp',
@@ -273,6 +304,7 @@ export class Clicker implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.skinSub?.unsubscribe();
+    this.clickSub?.unsubscribe();
     clearTimeout(this.afkTimeout);
     clearTimeout(this.noClicksTimeout);
   }

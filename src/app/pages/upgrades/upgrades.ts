@@ -13,7 +13,6 @@ import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-upgrades',
-  standalone: true,
   imports: [CommonModule, Producer, Upgrade, ShopControls, TranslocoModule, ButtonComponent],
   templateUrl: './upgrades.html',
   styleUrl: './upgrades.css',

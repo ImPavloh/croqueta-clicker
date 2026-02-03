@@ -6,7 +6,6 @@ import { SkinsService } from '@services/skins.service';
 
 @Component({
   selector: 'app-skins',
-  standalone: true,
   imports: [SkinCard, TranslocoModule],
   templateUrl: './skins.html',
   styleUrl: './skins.css',

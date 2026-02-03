@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, signal, ChangeDetectionStrategy, inject, OnDestroy, HostListener } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { PlayerStats } from '@services/player-stats.service';
 import { OptionsService } from '@services/options.service';
@@ -13,11 +12,13 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-croquetita',
-  standalone: true,
-  imports: [CommonModule, TranslocoModule],
+  imports: [TranslocoModule],
   templateUrl: './croquetita.html',
   styleUrl: './croquetita.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:click)': 'onDocumentClick($event)',
+  },
 })
 export class Croquetita implements OnDestroy {
   isOpen = signal(false);
@@ -36,44 +37,45 @@ export class Croquetita implements OnDestroy {
   private skinsService = inject(SkinsService);
   private translocoService = inject(TranslocoService);
 
-  private subs = new Subscription()
+  private subs = new Subscription();
   private currentSkinIdInDisplay: number | null = null;
   private canClickToClose = false;
 
   constructor() {
-  this.loadShownMessages();
+    this.loadShownMessages();
 
-  this.subs.add(
-    this.skinsService.queue$.subscribe((queue) => {
-      // Solo actuamos si hay cola Y si Croquetita NO está ya hablando
-      if (queue.length > 0 && !this.isOpen()) {
+    this.subs.add(
+      this.skinsService.queue$.subscribe((queue) => {
+        // Solo actuamos si hay cola Y si Croquetita NO está ya hablando
+        if (queue.length > 0 && !this.isOpen()) {
+          // FIFO: Cogemos la PRIMERA skin que entró (índice 0), no la última
+          const skin = queue[0];
+          const skinId = skin.id;
+          this.currentSkinIdInDisplay = skinId; // Guardamos ID para borrarlo al cerrar
 
-        // FIFO: Cogemos la PRIMERA skin que entró (índice 0), no la última
-        const skin = queue[0];
-        const skinId = skin.id;
-        this.currentSkinIdInDisplay = skinId; // Guardamos ID para borrarlo al cerrar
+          const messageId = `skin_unlocked_${skinId}`;
 
-        const messageId = `skin_unlocked_${skinId}`;
+          const name = this.translocoService.translate(`skins.skin.${skinId}.name`);
+          const fullMessage = this.translocoService.translate('skins.unlock_message', {
+            skinName: name,
+          });
 
-        const name = this.translocoService.translate(`skins.skin.${skinId}.name`);
-        const fullMessage = this.translocoService.translate('skins.unlock_message', { skinName: name });
+          // Verificamos si ya se mostró históricamente (localStorage)
+          if (!this.shownMessages.has(messageId)) {
+            this.currentMessage.set(fullMessage);
+            this.markMessageAsShown(messageId);
 
-        // Verificamos si ya se mostró históricamente (localStorage)
-        if (!this.shownMessages.has(messageId)) {
-          this.currentMessage.set(fullMessage);
-          this.markMessageAsShown(messageId);
-
-          // Abrimos el mensaje (false para no sobrescribir)
-          this.open(false);
-        } else {
-          // IMPORTANTE: Si por alguna razón ya estaba vista pero sigue en la cola,
-          // la borramos silenciosamente para que pase a la siguiente.
-          this.removeCurrentSkinFromQueue();
+            // Abrimos el mensaje (false para no sobrescribir)
+            this.open(false);
+          } else {
+            // IMPORTANTE: Si por alguna razón ya estaba vista pero sigue en la cola,
+            // la borramos silenciosamente para que pase a la siguiente.
+            this.removeCurrentSkinFromQueue();
+          }
         }
-      }
-    })
-  );
-}
+      }),
+    );
+  }
 
   ngOnInit() {
     this.initialTimeout = window.setTimeout(() => {
@@ -88,7 +90,6 @@ export class Croquetita implements OnDestroy {
     }, 30000);
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.isOpen() || !this.canClickToClose) return;
 
@@ -156,7 +157,6 @@ export class Croquetita implements OnDestroy {
       // Borramos la skin de la cola. Esto disparará el .subscribe del constructor
       // de nuevo automáticamente si quedan más skins.
       this.removeCurrentSkinFromQueue();
-
     }, 1000);
   }
 
@@ -220,7 +220,7 @@ export class Croquetita implements OnDestroy {
     } else {
       // Si todos los mensajes se mostraron, seleccionar un mensaje aleatorio de ayuda
       const helpMessages = this.messages.filter(
-        (msg) => msg.category === 'tips' || msg.category === 'tutorial'
+        (msg) => msg.category === 'tips' || msg.category === 'tutorial',
       );
       if (helpMessages.length > 0) {
         const randomMsg = helpMessages[Math.floor(Math.random() * helpMessages.length)];
@@ -239,7 +239,7 @@ export class Croquetita implements OnDestroy {
     const relevantMessages = this.messages
       .filter(
         (msg) =>
-          this.checkCondition(msg) && !this.shownMessages.has(msg.id) && msg.autoShow === true
+          this.checkCondition(msg) && !this.shownMessages.has(msg.id) && msg.autoShow === true,
       )
       .sort((a, b) => a.priority - b.priority);
 
@@ -255,7 +255,7 @@ export class Croquetita implements OnDestroy {
         this.checkCondition(msg) &&
         !this.shownMessages.has(msg.id) &&
         msg.autoShow === true &&
-        msg.priority <= 100 // Solo mensajes importantes
+        msg.priority <= 100, // Solo mensajes importantes
     );
 
     if (newAutoMessages.length > 0 && !this.isOpen()) {

@@ -12,7 +12,6 @@ const TEN_THOUSAND = new Decimal(10000);
  */
 @Pipe({
   name: 'short',
-  standalone: true,
   pure: true,
 })
 export class ShortNumberPipe implements PipeTransform {

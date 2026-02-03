@@ -7,7 +7,6 @@ import { AchievementModel } from '@models/achivement.model';
 
 @Component({
   selector: 'app-achievement-popup',
-  standalone: true,
   imports: [TranslocoModule],
   templateUrl: './achievement-popup.html',
   styleUrls: ['./achievement-popup.css'],

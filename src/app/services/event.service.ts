@@ -128,18 +128,32 @@ export class EventService implements OnDestroy {
 
     this.events.update((events) => [...events, event]);
 
-    setTimeout(() => {
-      this.events.update((events) =>
-        events.map((e) => (e.id === id ? { ...e, state: 'visible' } : e))
-      );
-    }, 100);
+    const updateToVisible = () => {
+      this.events.update((events) => {
+        for (let i = 0; i < events.length; i++) {
+          if (events[i].id === id) {
+            events[i] = { ...events[i], state: 'visible' };
+            break;
+          }
+        }
+        return [...events];
+      });
+    };
+
+    setTimeout(updateToVisible, 100);
 
     setTimeout(() => {
       const currentEvent = this.events().find((e) => e.id === id);
       if (currentEvent && !currentEvent.active) {
-        this.events.update((events) =>
-          events.map((e) => (e.id === id ? { ...e, state: 'fading-out' } : e))
-        );
+        this.events.update((events) => {
+          for (let i = 0; i < events.length; i++) {
+            if (events[i].id === id) {
+              events[i] = { ...events[i], state: 'fading-out' };
+              break;
+            }
+          }
+          return [...events];
+        });
         setTimeout(() => this.removeEvent(id), EVENT_FADE_OUT_MS);
       }
     }, this.getEventLifetime(type));
@@ -171,8 +185,8 @@ export class EventService implements OnDestroy {
 
     this.events.update((events) =>
       events.map((e) =>
-        e.id === eventId ? { ...e, spawned: false, active: true, state: 'fading-out' } : e
-      )
+        e.id === eventId ? { ...e, spawned: false, active: true, state: 'fading-out' } : e,
+      ),
     );
     event = this.events().find((e) => e.id === eventId)!;
 
@@ -197,14 +211,14 @@ export class EventService implements OnDestroy {
 
   private startDurationTimer(eventId: number, duration: number) {
     this.events.update((events) =>
-      events.map((e) => (e.id === eventId ? { ...e, remainingTime: duration / 1000 } : e))
+      events.map((e) => (e.id === eventId ? { ...e, remainingTime: duration / 1000 } : e)),
     );
 
     const interval = setInterval(() => {
       let event = this.events().find((e) => e.id === eventId);
       if (event && event.active) {
         this.events.update((events) =>
-          events.map((e) => (e.id === eventId ? { ...e, remainingTime: e.remainingTime! - 1 } : e))
+          events.map((e) => (e.id === eventId ? { ...e, remainingTime: e.remainingTime! - 1 } : e)),
         );
         event = this.events().find((e) => e.id === eventId);
 

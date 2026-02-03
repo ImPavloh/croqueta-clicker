@@ -13,7 +13,6 @@ import { PlayerStats } from '../../services/player-stats.service';
   selector: 'app-debug-menu',
   templateUrl: './debug-menu.html',
   styleUrls: ['./debug-menu.css'],
-  standalone: true,
   imports: [FormsModule, TranslocoModule, Card, ButtonComponent, CommonModule, InputComponent],
 })
 

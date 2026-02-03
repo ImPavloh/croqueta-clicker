@@ -15,7 +15,6 @@ import { TranslocoModule } from '@jsverse/transloco';
  */
 @Component({
   selector: 'app-counter',
-  standalone: true,
   imports: [CommonModule, ShortNumberPipe, TranslocoModule],
   templateUrl: './counter.html',
   styleUrl: './counter.css',

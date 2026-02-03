@@ -8,7 +8,6 @@ import { distinctUntilChanged, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-news',
-  standalone: true,
   imports: [CommonModule, TranslocoModule],
   templateUrl: './news.html',
   styleUrl: './news.css',
@@ -29,11 +28,11 @@ export class News {
       if (playerLevel > 30) return 2;
       return 1;
     }),
-    distinctUntilChanged()
+    distinctUntilChanged(),
   );
 
   private news$ = this.newsLevel$.pipe(
-    switchMap((level) => this.newsService.getNewsByLevel(level))
+    switchMap((level) => this.newsService.getNewsByLevel(level)),
   );
 
   protected newsItems = toSignal(this.news$, { initialValue: [] });

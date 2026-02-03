@@ -1,5 +1,4 @@
-import { Component, input } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 /**
  * Componente de tarjeta reutilizable para agrupar contenido.
@@ -7,10 +6,9 @@ import { NgClass } from '@angular/common';
  */
 @Component({
   selector: 'app-card',
-  standalone: true,
-  imports: [NgClass],
   templateUrl: './card.html',
   styleUrl: './card.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Card {
   /** Variante visual de la tarjeta */

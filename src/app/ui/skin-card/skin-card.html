@@ -1,53 +1,57 @@
-@if (config){
-<app-tooltip [text]="unlockText" [position]="'bottom'">
-  <app-button
-    type="button"
-    variant="tertiary"
-    [disabled]="!isUnlocked"
-    [hoverable]="isUnlocked"
-    [active]="isSelected"
-    (click)="onClick()"
-    [noSound]="true"
-    customClass="w-full flex flex-col items-center justify-start gap-2 p-2"
-  >
-    <div class="relative w-full h-28 sm:h-32 md:h-36 lg:h-40 flex items-center justify-center">
-      <div class="relative w-full">
-        <img
-          src="{{ config.image }}"
-          [alt]="config.name | transloco"
-          class="object-contain transition-all mx-auto max-w-[110px] max-h-[110px] w-auto h-auto"
-          width="109"
-          height="128"
-          loading="lazy"
-          decoding="async"
-          [class.opacity-30]="!isUnlocked"
-          [class.grayscale]="!isUnlocked"
-        />
-      </div>
-      @if (!isUnlocked) {
-      <div class="absolute inset-0 flex items-center justify-center">
-        <svg class="w-12 h-12 text-amber-900 opacity-80" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fill-rule="evenodd"
-            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-            clip-rule="evenodd"
+@if (config()) {
+  <app-tooltip [text]="unlockText" [position]="'bottom'">
+    <app-button
+      type="button"
+      variant="tertiary"
+      [disabled]="!isUnlocked"
+      [hoverable]="isUnlocked"
+      [active]="isSelected"
+      (click)="onClick()"
+      [noSound]="true"
+      customClass="w-full flex flex-col items-center justify-start gap-2 p-2"
+    >
+      <div class="relative w-full h-28 sm:h-32 md:h-36 lg:h-40 flex items-center justify-center">
+        <div class="relative w-full">
+          <img
+            src="{{ config().image }}"
+            [alt]="config().name | transloco"
+            class="object-contain transition-all mx-auto max-w-27.5 max-h-27.5 w-auto h-auto"
+            width="109"
+            height="128"
+            loading="lazy"
+            decoding="async"
+            [class.opacity-30]="!isUnlocked"
+            [class.grayscale]="!isUnlocked"
           />
-        </svg>
+        </div>
+        @if (!isUnlocked) {
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg
+              class="w-12 h-12 text-amber-900 opacity-80"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        }
       </div>
-      }
-    </div>
 
-    <div class="text-center h-full mt-1">
-      <h3
-        class="text-lg lg:text-xl text-amber-900 text-shadow-amber-950 text-shadow-2xs truncate"
-        [class.opacity-50]="!isUnlocked"
-      >
-        {{ config.name | transloco }}
-      </h3>
-      <p class="text-sm text-amber-700" [class.opacity-50]="!isUnlocked">
-        {{ config.rarity | transloco }}
-      </p>
-    </div>
-  </app-button>
-</app-tooltip>
+      <div class="text-center h-full mt-1">
+        <h3
+          class="text-lg lg:text-xl text-amber-900 text-shadow-amber-950 text-shadow-2xs truncate"
+          [class.opacity-50]="!isUnlocked"
+        >
+          {{ config().name | transloco }}
+        </h3>
+        <p class="text-sm text-amber-700" [class.opacity-50]="!isUnlocked">
+          {{ config().rarity | transloco }}
+        </p>
+      </div>
+    </app-button>
+  </app-tooltip>
 }

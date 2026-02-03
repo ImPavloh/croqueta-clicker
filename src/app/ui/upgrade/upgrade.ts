@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
@@ -18,7 +18,6 @@ import { TranslocoModule } from '@jsverse/transloco';
  */
 @Component({
   selector: 'app-upgrade',
-  standalone: true,
   host: {
     class: 'upgrade',
   },
@@ -34,16 +33,17 @@ export class Upgrade {
   private optionsService = inject(OptionsService);
 
   /** Configuración de la mejora (pasada desde el componente padre) */
-  @Input() config!: UpgradeModel;
+  config = input.required<UpgradeModel>();
 
   /** Índice de la tarjeta (para estilos de animación) */
-  @Input() cardIndex: number = 0;
+  cardIndex = input<number>(0);
 
   /** Nivel actual del jugador */
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
   /** Effect que comprueba el nivel para desbloqueo */ levelEffect = effect(() => {
-    if (this.config) {
+    const cfg = this.config();
+    if (cfg) {
       const currentLevel = this.level();
       this.checkLevel(currentLevel);
     }
@@ -64,8 +64,9 @@ export class Upgrade {
    * @param currentLevel Nivel actual del jugador
    */
   checkLevel(currentLevel: number) {
-    if (!this.config) return;
-    this.unlocked = currentLevel >= this.config.level;
+    const cfg = this.config();
+    if (!cfg) return;
+    this.unlocked = currentLevel >= cfg.level;
   }
 
   /**
@@ -73,15 +74,14 @@ export class Upgrade {
    * Actualiza los puntos por clic, la experiencia y marca la mejora como comprada.
    */
   buyUpgrade() {
+    const cfg = this.config();
     // pointsPerClick es Decimal (desde PointsService), sumamos clicks (number)
-    const pointsClickDecimal: Decimal = this.pointsService
-      .pointsPerClick()
-      .plus(this.config.clicks);
+    const pointsClickDecimal: Decimal = this.pointsService.pointsPerClick().plus(cfg.clicks);
 
     // newExp = floor(pointsClick^0.8 + pointsClick / 3)
     // Usamos Decimal para evitar pérdida de precisión en el cálculo intermedio
 
-    const priceDecimal = new Decimal(this.config.price);
+    const priceDecimal = new Decimal(cfg.price);
 
     // comprobar si hay suficientes puntos, si no está ya comprada y si está desbloqueada
     if (this.pointsService.points().gte(priceDecimal) && !this.bought && this.unlocked) {
@@ -95,7 +95,7 @@ export class Upgrade {
 
       this.bought = true;
       this.saveToStorage();
-      this.playerStats.addExp(this.config.exp);
+      this.playerStats.addExp(cfg.exp);
 
       // SFX compra
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
@@ -110,7 +110,7 @@ export class Upgrade {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // cargar estado de compra (guardamos 'true' / 'false' como string)
-    const bought = this.optionsService.getGameItem('upgrade_' + this.config.id + '_bought');
+    const bought = this.optionsService.getGameItem('upgrade_' + this.config().id + '_bought');
     if (bought !== null) this.bought = bought === 'true';
   }
 
@@ -118,6 +118,6 @@ export class Upgrade {
     // si no hay localStorage, no hacer nada
     if (typeof localStorage === 'undefined') return;
     // guardar estado de compra
-    this.optionsService.setGameItem('upgrade_' + this.config.id + '_bought', String(this.bought));
+    this.optionsService.setGameItem('upgrade_' + this.config().id + '_bought', String(this.bought));
   }
 }

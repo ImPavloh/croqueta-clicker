@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, Injector } from '@angular/core';
+import { Injectable, signal, inject, Injector, effect } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
@@ -8,6 +8,7 @@ import { TimeService } from './time.service';
 import { AutosaveService } from './autosave.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { ModalService } from './modal.service';
+import { GameBridgeService } from './game-bridge.service';
 
 interface Multiplier {
   value: number;
@@ -22,6 +23,7 @@ export class PointsService {
   private optionsService = inject(OptionsService);
   private injector = inject(Injector);
   private modalService = inject(ModalService);
+  private gameBridge = inject(GameBridgeService);
 
   private get autosaveService(): AutosaveService {
     return this.injector.get(AutosaveService);
@@ -44,12 +46,30 @@ export class PointsService {
   readonly points = this._points.asReadonly();
   readonly pointsPerSecond = this._pointsPerSecond.asReadonly();
   readonly pointsPerClick = this._pointsPerClick.asReadonly();
+  readonly displayPoints = this.gameBridge.displayPoints;
+  readonly displayPointsPerSecond = this.gameBridge.displayPointsPerSecond;
+  readonly displayMultiplier = this.gameBridge.displayMultiplier;
 
   constructor(
     private floatingService: FloatingService,
     private timeService: TimeService,
   ) {
     this.loadFromStorage();
+
+    effect(() => {
+      const pts = this._points();
+      this.gameBridge.updatePoints(pts.toNumber());
+    });
+
+    effect(() => {
+      const cps = this._pointsPerSecond();
+      this.gameBridge.updatePointsPerSecond(cps.toNumber());
+    });
+
+    effect(() => {
+      const mult = this.getActiveMultiplier();
+      this.gameBridge.updateMultiplier(mult);
+    });
 
     // Defer check to ensure app is fully initialized and avoid potential constructor race conditions
     setTimeout(() => {

@@ -9,7 +9,6 @@ import { AchievementModel } from '@models/achivement.model';
 
 @Component({
   selector: 'app-achievements',
-  standalone: true,
   imports: [CommonModule, Tooltip, TranslocoPipe],
   templateUrl: './achievements.html',
   styleUrl: './achievements.css',
@@ -41,7 +40,7 @@ export class Achievements implements OnDestroy {
     this.subs.add(
       this.svc.unlockedMap$.subscribe(() => {
         this.achievementsWithState = this.svc.getAllWithState();
-      })
+      }),
     );
   }
 

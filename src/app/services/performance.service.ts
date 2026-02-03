@@ -1,4 +1,4 @@
-import { Injectable, signal, NgZone, inject } from '@angular/core';
+import { Injectable, signal, NgZone, inject, isDevMode, OnDestroy } from '@angular/core';
 
 /**
  * Servicio para detectar y gestionar el rendimiento del dispositivo
@@ -8,8 +8,9 @@ import { Injectable, signal, NgZone, inject } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class PerformanceService {
+export class PerformanceService implements OnDestroy {
   private ngZone = inject(NgZone);
+  private fpsMonitoringActive = false;
 
   /** dispositivo es móvil */
   private _isMobile = signal<boolean>(false);
@@ -41,14 +42,17 @@ export class PerformanceService {
   private _measuredFps = signal<number>(60);
   readonly measuredFps = this._measuredFps.asReadonly();
 
+  private _fpsMonitoringEnabled = signal<boolean>(false);
+  readonly fpsMonitoringEnabled = this._fpsMonitoringEnabled.asReadonly();
+
   private fpsHistory: number[] = [];
   private lastFrameTime: number = 0;
   private fpsCheckIntervalId?: ReturnType<typeof setInterval>;
+  private rafId?: number;
 
   constructor() {
     this.detectDeviceCapabilities();
     this.detectMotionPreference();
-    this.startFpsMonitoring();
   }
 
   private detectDeviceCapabilities(): void {
@@ -95,41 +99,99 @@ export class PerformanceService {
     });
   }
 
+  /**
+   * Activa el monitoreo de FPS
+   * ADVERTENCIA: Consume recursos, usalo en desarrollo o cuando sea necesario (how ironic xd)
+   */
+  enableFpsMonitoring(): void {
+    if (this.fpsMonitoringActive) return;
+    this.fpsMonitoringActive = true;
+    this._fpsMonitoringEnabled.set(true);
+    this.startFpsMonitoring();
+  }
+
+  /**
+   * Desactiva el monitoreo de FPS para ahorrar recursos
+   */
+  disableFpsMonitoring(): void {
+    if (!this.fpsMonitoringActive) return;
+    this.fpsMonitoringActive = false;
+    this._fpsMonitoringEnabled.set(false);
+    this.stopFpsMonitoring();
+  }
+
+  /**
+   * Inicia el monitoreo de FPS
+   */
   private startFpsMonitoring(): void {
     if (typeof window === 'undefined' || typeof requestAnimationFrame === 'undefined') return;
 
     let frameCount = 0;
+    let sampleCounter = 0;
     this.lastFrameTime = performance.now();
 
     const measureFrame = () => {
       frameCount++;
-      requestAnimationFrame(measureFrame);
+      this.rafId = requestAnimationFrame(measureFrame);
     };
 
     this.ngZone.runOutsideAngular(() => {
-      requestAnimationFrame(measureFrame);
+      this.rafId = requestAnimationFrame(measureFrame);
 
       this.fpsCheckIntervalId = setInterval(() => {
-        const now = performance.now();
-        const elapsed = (now - this.lastFrameTime) / 1000;
-        const fps = Math.round(frameCount / elapsed);
+        if (!this.fpsMonitoringActive) return;
+        sampleCounter++;
+        if (sampleCounter % 2 !== 0) return;
 
-        this.fpsHistory.push(fps);
-        if (this.fpsHistory.length > 10) {
-          this.fpsHistory.shift();
+        const calculateFps = () => {
+          const now = performance.now();
+          const elapsed = (now - this.lastFrameTime) / 1000;
+          if (elapsed <= 0) return;
+
+          const fps = Math.round(frameCount / elapsed);
+
+          if (this.fpsHistory.length >= 5) {
+            this.fpsHistory[sampleCounter % 5] = fps;
+          } else {
+            this.fpsHistory.push(fps);
+          }
+
+          let sum = 0;
+          for (let i = 0; i < this.fpsHistory.length; i++) {
+            sum += this.fpsHistory[i];
+          }
+          const avgFps = Math.round(sum / this.fpsHistory.length);
+          this._measuredFps.set(avgFps);
+
+          this.adjustQualityBasedOnFps(avgFps);
+
+          frameCount = 0;
+          this.lastFrameTime = now;
+        };
+
+        if ('requestIdleCallback' in window) {
+          (window as any).requestIdleCallback(calculateFps, { timeout: 100 });
+        } else {
+          calculateFps();
         }
-
-        const avgFps = Math.round(
-          this.fpsHistory.reduce((a, b) => a + b, 0) / this.fpsHistory.length,
-        );
-        this._measuredFps.set(avgFps);
-
-        this.adjustQualityBasedOnFps(avgFps);
-
-        frameCount = 0;
-        this.lastFrameTime = now;
-      }, 1000);
+      }, 2000);
     });
+  }
+
+  /**
+   * Detiene el monitoreo de FPS y limpia recursos
+   */
+  private stopFpsMonitoring(): void {
+    if (this.fpsCheckIntervalId) {
+      clearInterval(this.fpsCheckIntervalId);
+      this.fpsCheckIntervalId = undefined;
+    }
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = undefined;
+    }
+    this.fpsHistory = [];
+    this._measuredFps.set(60);
   }
 
   private adjustQualityBasedOnFps(fps: number): void {
@@ -168,8 +230,6 @@ export class PerformanceService {
   }
 
   ngOnDestroy(): void {
-    if (this.fpsCheckIntervalId) {
-      clearInterval(this.fpsCheckIntervalId);
-    }
+    this.disableFpsMonitoring();
   }
 }

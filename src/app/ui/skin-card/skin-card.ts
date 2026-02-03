@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkinsService } from '@services/skins.service';
 import { ButtonComponent } from '@ui/button/button';
@@ -9,38 +9,37 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-skin-card',
-  standalone: true,
   imports: [ButtonComponent, CommonModule, Tooltip, TranslocoModule],
   templateUrl: './skin-card.html',
   styleUrl: './skin-card.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkinCard {
   private skinsService = inject(SkinsService);
   private audioService = inject(AudioService);
   private translocoService = inject(TranslocoService);
 
-  @Input() config!: SkinModel;
+  config = input.required<SkinModel>();
 
   get isSelected(): boolean {
-    return this.skinsService.skinId() === this.config.id;
+    return this.skinsService.skinId() === this.config().id;
   }
 
   get isUnlocked(): boolean {
-    return this.skinsService.isSkinUnlocked(this.config);
+    return this.skinsService.isSkinUnlocked(this.config());
   }
 
   get unlockText(): string {
-    if (this.isUnlocked || !this.config.unlockRequirement) {
-      return this.translocoService.translate(this.config.description);
+    const cfg = this.config();
+    if (this.isUnlocked || !cfg.unlockRequirement) {
+      return this.translocoService.translate(cfg.description);
     }
-    const requirementText = this.skinsService.getUnlockRequirementText(
-      this.config.unlockRequirement
-    );
+    const requirementText = this.skinsService.getUnlockRequirementText(cfg.unlockRequirement);
     const labeled = this.translocoService.translate('skins.unlock.requirement', {
       value: requirementText,
     });
 
-    return `${this.translocoService.translate(this.config.description)}\n\n${labeled}`;
+    return `${this.translocoService.translate(cfg.description)}\n\n${labeled}`;
   }
 
   onClick() {
@@ -50,7 +49,7 @@ export class SkinCard {
       return;
     }
 
-    this.skinsService.updateSkin(this.config.id);
+    this.skinsService.updateSkin(this.config().id);
     // SFX
     this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }

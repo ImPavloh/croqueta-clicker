@@ -6,7 +6,6 @@ import {
   OnDestroy,
   ChangeDetectionStrategy,
   inject,
-  HostListener,
   NgZone,
   Renderer2,
   effect,
@@ -19,7 +18,7 @@ import { RouterOutlet } from '@angular/router';
 import { Navbar } from '@ui/navbar/navbar';
 import { Clicker } from '@ui/clicker/clicker';
 import { Counter } from '@ui/counter/counter';
-import { Particles } from '@ui/particles/particles';
+import { PixiCanvasComponent } from '@ui/pixi-canvas/pixi-canvas.component';
 import { Floating } from '@ui/floating/floating';
 import { Croquetita } from '@ui/croquetita/croquetita';
 import { TutorialOverlayComponent } from '@ui/tutorial-overlay/tutorial-overlay';
@@ -51,7 +50,6 @@ import { PerformanceService } from '@services/performance.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
     Navbar,
@@ -59,7 +57,7 @@ import { PerformanceService } from '@services/performance.service';
     Counter,
     AchievementPopup,
     LevelUpPopup,
-    Particles,
+    PixiCanvasComponent,
     Floating,
     Croquetita,
     NewsLine,

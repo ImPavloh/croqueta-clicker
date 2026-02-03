@@ -3,7 +3,7 @@
 ![Angular](https://img.shields.io/badge/Angular-21.0-dd0031?style=flat&logo=angular)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.2.0-blue)
+![Version](https://img.shields.io/badge/Version-1.3.0-blue)
 
 <img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 
@@ -41,18 +41,32 @@ Descarga el juego en Google Play:
 
 ### Características técnicas
 
-- **Guardado automático y export/import**: Autoguardado cada minuto, guardado antes de unload, persistencia en localStorage y export/import cifrado (AES) a través de `OptionsService` y `AutosaveService`
-- **Sincronización online (leaderboard)**: `SupabaseService` (sesiones anónimas, leaderboard y cola offline)
-- **Persistencia y fallback**: `navigator.storage.persist` (intentamos solicitar persistencia) y gestión de fallbacks para navegadores en modo privado
-- **PWA**: Instalación como aplicación web progresiva
-- **TWA y Android**: soporte para Trusted Web Activity para publicar la experiencia como app Android
-- **Arquitectura modular**: componentes UI reutilizables + páginas
-- **Optimización de rutas**: RouteReuseStrategy personalizado
+#### Stack tecnológico
+
+- **Angular 21** con componentes standalone y mejores prácticas modernas
+- **Zoneless Change Detection** para mejor rendimiento (sin Angular Zone.js)
+- **ChangeDetectionStrategy.OnPush** en todos los componentes para renders optimizados
+- **Signals** para gestión de estado reactiva: `input()`, `output()`, `signal()`, `computed()`
+- **TypeScript 5.9** con strict mode habilitado
+- **Tailwind CSS 4.1** con PostCSS para estilos optimizados
+- **Vitest** para tests unitarios modernos
+- **Break Infinity.js** para gestionar números muy grandes
+- **Pixi.js** para efectos visuales con WebGL
+
+#### Características de la aplicación
+
+- **Guardado automático y export/import**: Autoguardado cada minuto, guardado antes de unload, persistencia en localStorage y export/import cifrado (AES)
+- **Sincronización online (leaderboard)**: Sesiones anónimas en Supabase, tabla de clasificación y sincronización offline
+- **Persistencia y fallback**: Solicitud de persistencia de datos y gestión de fallbacks para navegadores en modo privado
+- **PWA**: Instalación como aplicación web progresiva con Service Worker
+- **TWA y Android**: Soporte para Trusted Web Activity para publicar como app Android nativa
+- **Arquitectura modular**: Componentes UI reutilizables + páginas standalone
+- **Optimización de rutas**: RouteReuseStrategy personalizado con preload automático
 - **Gestión de números grandes**: Integración con break_infinity.js para números enormes
-- **Interfaz responsiva**: Diseño adaptado para moviles y ordenadores
-- **Audio dinámico**: Música y efectos de sonido
-- **Efectos visuales**: Partículas, animaciones y efectos
-- **Testing**: Tests unitarios con Karma y Jasmine
+- **Interfaz responsiva**: Diseño adaptado para móviles y ordenadores
+- **Audio dinámico**: Música y efectos de sonido con Web Audio API
+- **Efectos visuales**: Partículas con Pixi.js, animaciones suaves
+- **Testing**: Tests unitarios con Vitest
 
 ---
 
@@ -68,6 +82,8 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 │  - Control de splash screen               │
 │  - Inicialización de servicios globales   │
 │  - Gestión de audio por nivel             │
+│  - Zoneless Change Detection              │
+│  - OnPush Change Detection en todos       │
 └────────────────┬──────────────────────────┘
                  │
     ┌────────────┴───────────┐

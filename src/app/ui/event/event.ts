@@ -5,7 +5,6 @@ import { EventService } from '../../services/event.service';
   selector: 'app-event',
   templateUrl: './event.html',
   styleUrls: ['./event.css'],
-  standalone: true,
   imports: [],
 })
 export class EventComponent {

@@ -3,8 +3,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   signal,
-  Output,
-  EventEmitter,
+  output,
   inject,
   computed,
 } from '@angular/core';
@@ -16,7 +15,6 @@ import { ButtonComponent } from '@ui/button/button';
 
 @Component({
   selector: 'app-tutorial-overlay',
-  standalone: true,
   imports: [CommonModule, TranslocoModule, ButtonComponent],
   templateUrl: './tutorial-overlay.html',
   styleUrls: ['./tutorial-overlay.css'],
@@ -26,7 +24,7 @@ export class TutorialOverlayComponent {
   private options = inject(OptionsService);
   private transloco = inject(TranslocoService);
 
-  @Output() completed = new EventEmitter<void>();
+  completed = output<void>();
 
   readonly steps: TutorialOverlayStep[] = TUTORIAL_OVERLAY_STEPS;
 
