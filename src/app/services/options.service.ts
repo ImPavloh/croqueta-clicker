@@ -126,16 +126,19 @@ export class OptionsService {
 
   setShowCroquetita(value: boolean) {
     this._showCroquetita.set(value);
+    this.saveToStorage();
     this.autosaveService.requestSave();
   }
 
   setShowParticles(value: boolean) {
     this._showParticles.set(value);
+    this.saveToStorage();
     this.autosaveService.requestSave();
   }
 
   setShowFloatingText(value: boolean) {
     this._showFloatingText.set(value);
+    this.saveToStorage();
     this.autosaveService.requestSave();
   }
 

@@ -1,5 +1,6 @@
 import { Injectable, signal, OnDestroy, inject } from '@angular/core';
 import { PixiEngineService } from './pixi-engine.service';
+import { OptionsService } from './options.service';
 
 /**
  * Interfaz que define la estructura de un mensaje flotante en la UI.
@@ -38,6 +39,7 @@ export interface FloatingMessage {
 })
 export class FloatingService implements OnDestroy {
   private pixiEngine = inject(PixiEngineService);
+  private optionsService = inject(OptionsService);
 
   /** Signal privado que contiene todos los mensajes flotantes activos (para DOM fallback) */
   private _messages = signal<FloatingMessage[]>([]);
@@ -95,6 +97,10 @@ export class FloatingService implements OnDestroy {
    * @returns ID único del mensaje creado
    */
   show(text: string, options?: { duration?: number; x?: number; y?: number }) {
+    if (!this.optionsService.showFloatingText()) {
+      return -1;
+    }
+
     const uid = ++this.lastId;
 
     // Si PixiJS está inicializado, usar rendering WebGL

@@ -12,6 +12,7 @@ import {
 } from 'pixi.js';
 import { Subject } from 'rxjs';
 import { PerformanceService } from './performance.service';
+import { OptionsService } from './options.service';
 
 // TODO REPLICA EL CSS ORIGINAL
 // TODO: mejorar y optimizar animaciones ahora que usamos ticker (antes era setTimeout) y canvas en lugar de DOM
@@ -57,6 +58,7 @@ export interface PixiFloatingText {
 export class PixiEngineService implements OnDestroy {
   private ngZone = inject(NgZone);
   private performanceService = inject(PerformanceService);
+  private optionsService = inject(OptionsService);
 
   // Observable de clicks para que otros componentes se suscriban
   private clickSubject = new Subject<CanvasClickEvent>();
@@ -118,6 +120,42 @@ export class PixiEngineService implements OnDestroy {
   private readonly PARTICLE_COLORS = [0xffd700, 0xffa500, 0xff8c00, 0xffffe0, 0xfff8dc];
 
   private readonly boundUpdate = this.update.bind(this);
+
+  /**
+   * Helper para obtener la URL de imagen optimizada según la calidad del dispositivo
+   */
+  private getOptimizedImageUrl(imageUrl: string): string {
+    const quality = this.performanceService.qualityFactor();
+
+    // para muy baja gama intentar usar versión comprimida
+    if (quality <= 0.3) {
+      // si es una skin intentar usar versión lowres
+      if (imageUrl.includes('skins/')) {
+        return imageUrl.replace(/\.webp$/, '-low.webp');
+      }
+    }
+
+    // para baja gama intentar usar versión optimizada
+    if (quality <= 0.5) {
+      if (imageUrl.includes('skins/')) {
+        return imageUrl.replace(/\.webp$/, '-mid.webp');
+      }
+    }
+
+    // para dispositivos normales y altos usar la URL original
+    return imageUrl;
+  }
+
+  /**
+   * Helper para obtener el tamaño base de partículas según dispositivo
+   */
+  private getParticleSizeMultiplier(): number {
+    const quality = this.performanceService.qualityFactor();
+
+    if (quality <= 0.3) return 0.4; // 40% del tamaño
+    if (quality <= 0.5) return 0.7; // 70% del tamaño
+    return 1.0; // 100% del tamaño
+  }
 
   constructor() {}
 
@@ -497,6 +535,7 @@ export class PixiEngineService implements OnDestroy {
    */
   spawnParticles(x: number, y: number, count: number = 8): void {
     if (!this.app) return;
+    if (!this.optionsService.showParticles()) return;
 
     const quality = this.performanceService.qualityFactor();
     const adjustedCount = Math.ceil(count * quality);
@@ -540,21 +579,32 @@ export class PixiEngineService implements OnDestroy {
     imageUrl: string,
   ): Promise<void> {
     if (!this.app) return;
+    if (!this.optionsService.showParticles()) return;
+
+    // Optimizar la URL según calidad del dispositivo
+    const optimizedUrl = this.getOptimizedImageUrl(imageUrl);
 
     // Cargar textura si no existe
-    let texture = this.textures.get(imageUrl);
+    let texture = this.textures.get(optimizedUrl);
     if (!texture) {
       try {
-        texture = (await Assets.load(imageUrl)) as Texture;
-        this.textures.set(imageUrl, texture);
+        texture = (await Assets.load(optimizedUrl)) as Texture;
+        this.textures.set(optimizedUrl, texture);
       } catch {
-        texture = this.textures.get('croqueta-normal') || Texture.WHITE;
+        // si la versión optimizada no existe fallback a la original
+        try {
+          texture = (await Assets.load(imageUrl)) as Texture;
+          this.textures.set(imageUrl, texture);
+        } catch {
+          texture = this.textures.get('croqueta-normal') || Texture.WHITE;
+        }
       }
     }
 
     const quality = this.performanceService.qualityFactor();
     const adjustedCount = Math.ceil(count * quality);
     const screenWidth = this.app.screen.width;
+    const sizeMultiplier = this.getParticleSizeMultiplier();
 
     for (let i = 0; i < adjustedCount; i++) {
       const particle = this.getInactiveFallingParticle();
@@ -562,7 +612,7 @@ export class PixiEngineService implements OnDestroy {
 
       const x = Math.random() * screenWidth;
       const y = -50;
-      const baseSize = 15 + Math.random() * 10;
+      const baseSize = (15 + Math.random() * 10) * sizeMultiplier;
       const scale = baseSize / (texture?.width || 100);
 
       const sprite = particle.sprite as Sprite;
@@ -622,6 +672,7 @@ export class PixiEngineService implements OnDestroy {
    */
   spawnFloatingText(x: number, y: number, value: string, color: number = 0xfff3d8): void {
     if (!this.app) return;
+    if (!this.optionsService.showFloatingText()) return;
 
     const floatingText = this.getInactiveFloatingText();
     if (!floatingText) return;
