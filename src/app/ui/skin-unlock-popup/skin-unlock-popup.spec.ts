@@ -1,11 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { SkinUnlockPopup } from './skin-unlock-popup';
 
 describe('SkinUnlockPopup', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SkinUnlockPopup],
+      providers: [...getTestProviders()],
     }).compileComponents();
   });
 

@@ -13,6 +13,7 @@
       "@pages/*": ["app/pages/*"],
       "@pipes/*": ["app/pipes/*"],
       "@services/*": ["app/services/*"],
+      "@testing/*": ["testing/*"],
       "@ui/*": ["app/ui/*"]
     }
   },

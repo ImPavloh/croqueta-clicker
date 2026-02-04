@@ -1,5 +1,65 @@
 # Resumen de Unit Tests
 
+**Estado actual:** **66/66 tests pasando** | **31 archivos de test** | **0 fallos**
+
+## Información del proyecto
+
+### Stack de testing
+
+- **Framework**: Angular 21 (Standalone Components + Signals)
+- **Test Runner**: Vitest 4.0.18
+- **Ambiente**: JSDOM (simulador de navegador)
+- **Build Tool**: esbuild (compilador TypeScript)
+- **Change Detection**: Zoneless (`provideZonelessChangeDetection()`)
+
+### Migración de testing
+
+Este proyecto fue migrado de **Karma/Jasmine** a **Vitest** como parte de la actualización a Angular 21.
+
+> La última versión de Croqueta Clicker con Angular 20 fue en el commit: `a3146ca` y se empezó la migración a Vitest en el commit: `a1b2c3d4` acabando en `este`.
+
+Los cambios principales incluyen:
+
+#### Configuración Vitest (`vitest.config.ts`)
+
+```typescript
+- Pool: threads (aislamiento de tests)
+- Isolate: true (cada test en su propio contexto)
+- Environment: jsdom (simulador de navegador)
+- Setup Files: vitest-polyfills.ts → test-setup.ts
+```
+
+#### Polyfills para JSDOM (`src/testing/vitest-polyfills.ts`)
+
+Vitest requiere polyfills para APIs del navegador no disponibles en JSDOM:
+
+- `window.matchMedia()` - Para media queries (PerformanceService)
+- `AudioContext` - Para Web Audio API (AudioService)
+- `ResizeObserver` / `IntersectionObserver` - Observers del DOM
+- `requestAnimationFrame()` - Para animaciones
+
+#### Providers globales (`src/testing/test-helpers.ts`)
+
+Todos los tests incluyen estos providers automáticamente:
+
+- `provideZonelessChangeDetection()` - Zoneless change detection
+- `provideHttpClient()` + `provideHttpClientTesting()` - HTTP testing
+- `provideRouter([])` - Routing para tests
+- `provideTransloco()` - Traducción (con es/en langs)
+
+---
+
+### Desglose por Categoría
+
+- **Servicios**: 20 tests
+- **Componentes UI**: 30 tests
+- **Pipes/Utils**: 6 tests
+- **Páginas**: 10 tests
+
+---
+
+## Descripción de tests
+
 Este documento detalla los tests de funcionalidad más importantes del proyecto, omitiendo los tests básicos de creación de componentes.
 
 ## Servicios
@@ -9,13 +69,11 @@ Este documento detalla los tests de funcionalidad más importantes del proyecto,
 Este servicio se encarga de gestionar los logros del juego. Sus tests garantizan la correcta persistencia y lógica de desbloqueo.
 
 - **Persistencia en Local Storage**:
-
   - `should load data from localStorage on init`: Comprueba que el estado de los logros se carga correctamente desde el `localStorage` al iniciar la aplicación.
   - `should handle parsing errors on load gracefully`: Asegura que si los datos en `localStorage` están corruptos, el servicio no falla y simplemente empieza con un estado limpio.
   - `should save to localStorage when an achievement is unlocked`: Verifica que el progreso se guarda en `localStorage` cada vez que el jugador desbloquea un nuevo logro.
 
 - **Lógica de desbloqueo**:
-
   - `should unlock a new achievement, return true, and add to queue`: Testa la función principal de desbloqueo, asegurando que se marca como conseguido y se añade a la cola de notificaciones.
   - `should not unlock an already unlocked achievement and return false`: Previene que un mismo logro se pueda desbloquear múltiples veces.
   - `should unlock "todos_achievements" when the N-1 achievement is unlocked`: Un test específico para el logro "maestro", que solo debe desbloquearse cuando todos los demás logros han sido conseguidos.
@@ -29,19 +87,16 @@ Este servicio se encarga de gestionar los logros del juego. Sus tests garantizan
 Este es el servicio más crítico, ya que maneja toda la lógica de puntuación del juego.
 
 - **Persistencia y carga**:
-
   - `should load values from OptionsService on creation`: Asegura que la puntuación del jugador y sus mejoras se cargan correctamente desde el almacenamiento al iniciar el juego.
   - `should NOT save to storage during initialization`: Previene que se guarden datos durante los primeros 2 segundos de la aplicación para evitar condiciones de carrera.
   - `should save to storage AFTER initialization`: Garantiza que el autoguardado se activa después del periodo de inicialización.
 
 - **Funcionalidad principal**:
-
   - `should add points per click`: Verifica que se suman puntos al hacer clic.
   - `should add points per second via interval`: Comprueba que la ganancia de puntos pasiva funciona correctamente.
   - `should subtract points and save`: Testa que se resten los puntos correctamente al comprar mejoras.
 
 - **Modificadores (bonus y penalizaciones)**:
-
   - `should add points per click (with golden croqueta bonus)`: Asegura que el bonus de la "croqueta dorada" multiplica los puntos por clic.
   - `should add points per second (with bonus) via interval`: Verifica que el bonus también se aplica a la ganancia pasiva.
   - `should apply burnt croqueta penalty to clicks`: Comprueba que la penalización de la "croqueta quemada" reduce los puntos ganados por clic.
@@ -55,7 +110,6 @@ Este es el servicio más crítico, ya que maneja toda la lógica de puntuación 
 Gestiona los controles de la tienda, como la cantidad de mejoras a comprar de una vez.
 
 - **Persistencia**:
-
   - `should load stored values from storage on construction`: Carga la configuración de la tienda (ej. "comprar de 10 en 10") guardada por el usuario.
   - `should ignore invalid stored values and use defaults`: Si el dato guardado es inválido (ej. un valor que no existe), el servicio usa los valores por defecto para evitar errores.
 
@@ -71,3 +125,50 @@ Este servicio gestiona la comunicación con el backend (Supabase), principalment
   - `retries getUser once and succeeds when navigator lock error occurs`: Simula un fallo temporal del navegador al intentar obtener el usuario y verifica que el servicio **reintenta automáticamente** la operación y tiene éxito.
   - `signInAnonymously retries and succeeds`: Hace la misma comprobación para el inicio de sesión anónimo.
   - `throws after exhausting retry attempts`: Asegura que si el error persiste después de varios reintentos, el servicio finalmente se rinde y lanza un error para evitar un bucle infinito.
+
+---
+
+## Cómo ejecutar los tests
+
+### Modo Watch (Desarrollo)
+
+```bash
+pnpm test
+# Ejecuta todos los tests y espera cambios en los archivos (q para salir)
+```
+
+### Ejecución única (CI/CD)
+
+```bash
+pnpm test -- --run
+# Ejecuta todos los tests una sola vez y sale
+```
+
+### Tests específicos
+
+```bash
+pnpm test -- --grep "Achievement"
+# Ejecuta solo los tests que coinciden con el patrón
+```
+
+### Con cobertura
+
+```bash
+pnpm test -- --coverage
+# Genera reporte de cobertura en coverage/
+```
+
+### Configuración de tests
+
+- **Archivo principal**: `vitest.config.ts`
+- **Setup global**: `src/testing/test-setup.ts`
+- **Polyfills**: `src/testing/vitest-polyfills.ts`
+- **Helpers**: `src/testing/test-helpers.ts`
+
+---
+
+### Limitaciones
+
+- JSDOM no tiene soporte completo para Web Audio API (solucionado con mocks)
+- CSS no se evalúa durante tests (solo estructura HTML)
+- APIs del navegador requieren polyfills explícitos

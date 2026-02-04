@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideTransloco } from '@jsverse/transloco';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { Options } from './options';
 
 describe('Options', () => {
@@ -12,13 +11,7 @@ describe('Options', () => {
     await TestBed.configureTestingModule({
       imports: [Options],
       providers: [
-        provideHttpClientTesting(),
-        provideTransloco({
-          config: {
-            availableLangs: ['en', 'es'],
-            defaultLang: 'es',
-          },
-        }),
+        ...getTestProviders(),
         {
           provide: (await import('@services/debug.service')).DebugService,
           useValue: { isDebugMode: false, isDebugMode$: null, enableDebugMode: () => {} },

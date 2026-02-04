@@ -89,7 +89,7 @@ export class PerformanceService implements OnDestroy {
   }
 
   private detectMotionPreference(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
 
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     this._prefersReducedMotion.set(mediaQuery.matches);

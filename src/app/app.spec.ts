@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { App } from './app';
-import { configureTransloco } from 'testing/test-helpers';
 import { SwUpdate } from '@angular/service-worker';
 import { of } from 'rxjs';
 
@@ -12,16 +12,11 @@ const mockSwUpdate = {
   activateUpdate: () => Promise.resolve(false),
 };
 
-beforeEach(async () => {
-  configureTransloco([App]);
-  await TestBed.compileComponents();
-});
-
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [{ provide: SwUpdate, useValue: mockSwUpdate }],
+      providers: [...getTestProviders(), { provide: SwUpdate, useValue: mockSwUpdate }],
     }).compileComponents();
   });
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { ShopControls } from './shop-controls';
 
 describe('ShopControls', () => {
@@ -9,6 +10,7 @@ describe('ShopControls', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ShopControls],
+      providers: [...getTestProviders()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ShopControls);

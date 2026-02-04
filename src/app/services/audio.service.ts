@@ -68,6 +68,10 @@ export class AudioService implements OnDestroy {
     }
 
     const AC = (window as any).AudioContext || (window as any).webkitAudioContext;
+    if (!AC) {
+      console.warn('AudioContext not available in this environment');
+      return;
+    }
     this.ctx = new AC();
 
     if (this.ctx == null) return;

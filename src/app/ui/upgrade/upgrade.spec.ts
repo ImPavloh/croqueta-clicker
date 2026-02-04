@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { Upgrade } from './upgrade';
 import { UpgradeModel } from '@models/upgrade.model';
 import { of } from 'rxjs';
@@ -52,6 +53,7 @@ describe('Upgrade', () => {
     await TestBed.configureTestingModule({
       imports: [Upgrade],
       providers: [
+        ...getTestProviders(),
         // Provee los mocks para las dependencias
         { provide: PlayerStats, useValue: mockPlayerStats },
         { provide: PointsService, useValue: mockPointsService },

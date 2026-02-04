@@ -1,12 +1,14 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { News } from './news';
-import { configureTransloco } from 'testing/test-helpers';
+import { getTestProviders } from '@testing/test-helpers';
 
 describe('News', () => {
   beforeEach(async () => {
-    configureTransloco([News]);
-    await TestBed.compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [News],
+      providers: [...getTestProviders()],
+    }).compileComponents();
   });
 
   it('should create', () => {

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { Navbar } from './navbar';
 // 👈 Importación CLAVE para testing de routing
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,6 +21,7 @@ describe('Navbar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Navbar, RouterTestingModule],
+      providers: [...getTestProviders()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
@@ -34,8 +36,7 @@ describe('Navbar', () => {
     // Verificar creación
     expect(component).toBeTruthy();
 
-    // Aserción de la lógica de detección móvil (opcional pero útil)
-    // Asume que la ventana del test no es mayor a 1344px por defecto.
-    expect(component.isMobile).toBe(window.innerWidth <= 1344);
+    // isMobile es un signal por lo que hay que invocarlo
+    expect(component.isMobile()).toBe(window.innerWidth <= 1344);
   });
 });

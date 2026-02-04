@@ -1,18 +1,28 @@
 import { beforeEach, vi, expect as vitestExpect } from 'vitest';
-
-// Global test setup for Vitest + Angular 21
 import { TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideTransloco } from '@jsverse/transloco';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-// Configure TestBed to use zoneless change detection
 beforeEach(() => {
   TestBed.configureTestingModule({
-    providers: [provideZonelessChangeDetection()],
+    providers: [
+      provideZonelessChangeDetection(),
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      provideTransloco({
+        config: {
+          availableLangs: ['en', 'es'],
+          defaultLang: 'es',
+          fallbackLang: 'en',
+          reRenderOnLangChange: true,
+        },
+      }),
+    ],
   });
 });
 
-// Jasmine compatibility layer for Vitest
-// This helps migrate tests incrementally
 (globalThis as any).jasmine = {
   createSpyObj: (name: string, methods: string[]) => {
     const obj: Record<string, any> = {};

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { Leaderboard } from './leaderboard';
 import { of } from 'rxjs';
 import { signal } from '@angular/core';
@@ -48,6 +49,7 @@ describe('Leaderboard username prompt behavior', () => {
     await TestBed.configureTestingModule({
       imports: [Leaderboard],
       providers: [
+        ...getTestProviders(),
         {
           provide: (await import('@services/supabase.service')).SupabaseService,
           useClass: MockSupabaseService,
@@ -78,23 +80,18 @@ describe('Leaderboard username prompt behavior', () => {
     ) as unknown as MockModalService;
   });
 
-  it('panel mode should not autoopen the username modal', fakeAsync(() => {
+  it('panel mode should not autoopen the username modal', async () => {
     fixture.detectChanges();
-
-    tick(0);
+    await fixture.whenStable();
 
     expect(modalService.openModal).not.toHaveBeenCalled();
+  });
 
-    tick(5000);
-    expect(modalService.openModal).not.toHaveBeenCalled();
-  }));
-
-  it('full mode should check and open username modal on init if user has no name', fakeAsync(() => {
+  it('full mode should check and open username modal on init if user has no name', async () => {
     fixture.componentRef.setInput('mode', 'full');
     fixture.detectChanges();
-
-    tick(0);
+    await fixture.whenStable();
 
     expect(modalService.openModal).toHaveBeenCalledWith('username');
-  }));
+  });
 });

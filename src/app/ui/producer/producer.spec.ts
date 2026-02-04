@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTestProviders } from '@testing/test-helpers';
 import { Producer } from './producer';
 import { ProducerModel } from '@models/producer.model';
 import { of } from 'rxjs';
@@ -62,6 +63,7 @@ describe('Producer', () => {
       imports: [Producer], // Componente Standalone
       // Proveer todos los servicios inyectados en el constructor
       providers: [
+        ...getTestProviders(),
         { provide: PlayerStats, useValue: mockPlayerStats },
         { provide: PointsService, useValue: mockPointsService },
         { provide: AudioService, useValue: mockAudioService },
