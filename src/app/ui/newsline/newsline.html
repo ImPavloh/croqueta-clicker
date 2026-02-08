@@ -1,17 +1,17 @@
 <div
   class="newsline-container"
-  aria-hidden="true"
   (click)="openNewsModal()"
   role="button"
   tabindex="0"
+  aria-label="Noticias"
   (keydown.enter)="openNewsModal()"
   (keydown.space)="openNewsModal()"
 >
   <div class="opacity-overlay">
     <div class="newsline-content">
       @for (item of displayItems(); track $index) {
-      <span>{{ item }}</span>
-      <span class="separator"> • </span>
+        <span>{{ item }}</span>
+        <span class="separator"> • </span>
       }
     </div>
   </div>

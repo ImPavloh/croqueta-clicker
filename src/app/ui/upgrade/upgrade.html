@@ -13,7 +13,13 @@
 >
   <div class="upgrade-content">
     <div class="upgrade-image-container">
-      <img class="upgrade-image" src="{{ config().image }}" alt="{{ config().name | transloco }}" />
+      <img
+        class="upgrade-image"
+        src="{{ config().image }}"
+        alt="{{ config().name | transloco }}"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
 
     <div class="upgrade-info">

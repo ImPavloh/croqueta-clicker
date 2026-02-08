@@ -11,7 +11,15 @@
   >
     @if (unlocked) {
       <div class="producer-grid-content">
-        <img class="producer-grid-image" src="{{ cfg.image }}" alt="{{ cfg.name | transloco }}" />
+        <img
+          class="producer-grid-image"
+          src="{{ cfg.image }}"
+          alt="{{ cfg.name | transloco }}"
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
         <p class="producer-grid-name">{{ cfg.name | transloco }}</p>
 
         @if (quantity > 0) {

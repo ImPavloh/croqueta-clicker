@@ -16,6 +16,7 @@
     [attr.min]="type() === 'number' ? min() : null"
     [attr.max]="type() === 'number' ? max() : null"
     [attr.step]="type() === 'number' ? step() : null"
+    [attr.aria-label]="label() || placeholder() || 'input'"
   />
 
   @if (!hideButton()) {

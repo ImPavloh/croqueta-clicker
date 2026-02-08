@@ -26,11 +26,19 @@
       @if (getToggleControl().label) {
         <span class="text-xl min-w-40">{{ getToggleControl().label | transloco }}</span>
       }
-      <label class="toggle-switch">
+      <label
+        class="toggle-switch"
+        [attr.aria-label]="
+          getToggleControl().label ? (getToggleControl().label | transloco) : 'toggle'
+        "
+      >
         <input
           type="checkbox"
           [ngModel]="getToggleControl().checked"
           (ngModelChange)="onToggleChange($event)"
+          [attr.aria-label]="
+            getToggleControl().label ? (getToggleControl().label | transloco) : 'toggle'
+          "
         />
         <span class="toggle-slider"></span>
       </label>

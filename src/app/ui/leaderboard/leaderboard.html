@@ -4,7 +4,13 @@
     <div class="lp-card lp-right" [class.lp-collapsed]="!expanded()">
       <div class="lp-header" (click)="togglePanel()">
         <div class="lp-title">
-          <img src="assets/icons/trophy.webp" alt="Leaderboard" class="lp-icon" />
+          <img
+            src="assets/icons/trophy.webp"
+            alt="Leaderboard"
+            class="lp-icon"
+            loading="lazy"
+            decoding="async"
+          />
           <span>{{ 'leaderboard.title' | transloco }}</span>
         </div>
         <div class="lp-toggle">

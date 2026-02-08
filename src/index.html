@@ -9,9 +9,8 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
     />
 
-    <!-- Preconnect para optimización -->
-    <link rel="preconnect" href="https://croquetaclicker.whiteroot.studio" />
-    <link rel="dns-prefetch" href="https://croquetaclicker.whiteroot.studio" />
+    <!-- DNS prefetch para Supabase -->
+    <link rel="dns-prefetch" href="https://cosvywlgllqpnqdrphtt.supabase.co" />
 
     <!-- Precargar fuentes críticas para evitar FOUC -->
     <link rel="preload" href="/assets/fonts/chewy.woff2" as="font" type="font/woff2" crossorigin />
@@ -273,6 +272,44 @@
           }
         ]
       }
+    </script>
+
+    <script>
+      (function () {
+        if (typeof window === 'undefined') return;
+
+        // prevenir pinch to zoom
+        window.addEventListener(
+          'gesturestart',
+          function (e) {
+            e.preventDefault();
+          },
+          { passive: false },
+        );
+
+        // evitar zoom con Ctrl+wheel (portátiles/tablets con trackpad)
+        window.addEventListener(
+          'wheel',
+          function (e) {
+            if (e.ctrlKey) e.preventDefault();
+          },
+          { passive: false },
+        );
+
+        // evitar dobletap
+        let lastTouch = 0;
+        window.addEventListener(
+          'touchend',
+          function (e) {
+            const now = Date.now();
+            if (now - lastTouch <= 300) {
+              e.preventDefault();
+            }
+            lastTouch = now;
+          },
+          { passive: false },
+        );
+      })();
     </script>
 
     <style>

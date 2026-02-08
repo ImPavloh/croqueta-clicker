@@ -26,6 +26,8 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
 }
 
 body {
@@ -167,6 +169,6 @@ body.perf-very-low .croqueta-container:active {
   h3,
   h2,
   h1 {
-    touch-action: auto;
+    touch-action: manipulation;
   }
 }
