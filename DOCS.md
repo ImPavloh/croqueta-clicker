@@ -99,6 +99,25 @@ A continuación se detalla la responsabilidad de cada servicio principal:
   - `ModalService`: Controla qué modal (Stats, Skins, etc.) está visible.
   - `LevelUpService` y `NewsService`: Gestionan colas de notificaciones para la UI.
 
+- **`ReportService`**:
+  - **Responsabilidad**: Genera los datos para el panel de informes y estadísticas.
+  - **Funcionalidad clave**:
+    - `getGameSummary()`: Resumen del jugador (nivel, croquetas, CPS, tiempo jugado).
+    - `getProducersData()`, `getUpgradesData()`, `getAchievementsData()`, `getSkinsTableData()`: Datos para tablas.
+    - `getProducerDistribution()`, `getCpsDistribution()`, `getProducerROIData()`, `getSkinUnlockByRarityDonut()`: Datos para gráficos.
+    - `getEfficiencyData()`: Campos calculados (clicks/min, croquetas/min, ROI, eficiencia de upgrades).
+    - `getDebugInfo()`: Información técnica (localStorage, idioma, versiones).
+
+- **`ReportPdfService`**:
+  - **Responsabilidad**: Exporta el informe a PDF.
+  - **Funcionalidad clave**:
+    - `exportReport(payload)`: Genera un PDF con jsPDF + AutoTable incluyendo tablas, gráficos y estadísticas.
+    - Convierte los gráficos del DOM a imagen con `html2canvas` y `canvg`.
+
+- **Internacionalización (i18n) con Transloco**:
+  - `SmartMissingHandler` en `app.config.ts`: Silencia warnings de traducción durante los primeros 3 segundos (antes de que el JSON cargue), pero loguea claves genuinamente faltantes después.
+  - El componente `Report` usa `selectTranslation()` en lugar de `langChanges$` para asegurar que `refreshData()` solo se ejecuta cuando las traducciones están disponibles.
+
 ### 3.3. Datos del juego (`src/app/data/`)
 
 Esta carpeta contiene los "blueprints" de todos los elementos del juego, lo que facilita el balance y la adición de nuevo contenido sin tocar la lógica de los servicios.

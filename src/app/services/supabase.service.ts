@@ -4,6 +4,7 @@ import { SUPABASE } from '../../environments/supabase.config';
 import { DebugService } from '@services/debug.service';
 import { UsernameService } from './username.service';
 import type { LeaderboardEntry, LeaderboardRow } from '@models/leaderboard.model';
+import type { LeaderboardStats, LeaderboardStatsBucket } from '@models/report.model';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -15,7 +16,10 @@ export class SupabaseService {
       auth: {
         persistSession: true,
         storageKey: 'sb-cosvywlgllqpnqdrphtt-auth-token',
-        storage: this._createNonBlockingStorage(),
+        // Desactiva navigator lock para evitar el error
+        // "Acquiring an exclusive Navigator LockManager lock immediately failed"
+        // https://github.com/supabase/supabase-js/issues/936
+        lock: (_name: string, _timeout: number, fn: () => Promise<any>) => fn(),
       },
     });
   }
@@ -33,66 +37,6 @@ export class SupabaseService {
     return this._usernameService;
   }
 
-  // temp fix aunque no lo arregla igualmente
-  // https://github.com/supabase/supabase-js/issues/936
-  // TODO: arreglar esto como sea
-  private _createNonBlockingStorage() {
-    const cache = new Map<string, string>();
-
-    return {
-      getItem: async (key: string): Promise<string | null> => {
-        try {
-          return localStorage.getItem(key) ?? cache.get(key) ?? null;
-        } catch {
-          return cache.get(key) ?? null;
-        }
-      },
-      setItem: async (key: string, value: string): Promise<void> => {
-        cache.set(key, value);
-        try {
-          localStorage.setItem(key, value);
-        } catch {
-          // error silencioso
-        }
-      },
-      removeItem: async (key: string): Promise<void> => {
-        cache.delete(key);
-        try {
-          localStorage.removeItem(key);
-        } catch {
-          // error silencioso
-        }
-      },
-    };
-  }
-
-  // helper para reintentar llamadas que fallen por errores de navigator lock (timeout o lock busy)
-  private async _withNavigatorLockRetry<T>(
-    fn: () => Promise<T>,
-    attempts = 3,
-    baseDelay = 250
-  ): Promise<T> {
-    let lastErr: any = null;
-    for (let i = 0; i < attempts; i++) {
-      try {
-        return await fn();
-      } catch (e: any) {
-        lastErr = e;
-        const m = String(e?.message ?? '').toLowerCase();
-        if (!m.includes('navigatorlockacquiretimeouterror') && !m.includes('lockmanager')) {
-          throw e;
-        }
-
-        if (i === attempts - 1) break;
-
-        const wait = baseDelay * Math.pow(2, i);
-        await new Promise((r) => setTimeout(r, wait));
-      }
-    }
-
-    throw lastErr;
-  }
-
   private get debugService(): DebugService | null {
     if (this._debugService === null) {
       try {
@@ -106,19 +50,19 @@ export class SupabaseService {
 
   // Crea una sesión anónima
   async signInAnonymously() {
-    return this._withNavigatorLockRetry(() => this.supabase.auth.signInAnonymously());
+    return this.supabase.auth.signInAnonymously();
   }
 
   async signOut() {
-    return this._withNavigatorLockRetry(() => this.supabase.auth.signOut());
+    return this.supabase.auth.signOut();
   }
 
   getUser() {
-    return this._withNavigatorLockRetry(() => this.supabase.auth.getUser());
+    return this.supabase.auth.getUser();
   }
 
   getSession() {
-    return this._withNavigatorLockRetry(() => this.supabase.auth.getSession());
+    return this.supabase.auth.getSession();
   }
 
   // Actualiza el nombre del usuario autenticado
@@ -133,7 +77,7 @@ export class SupabaseService {
         return { error: new Error('Invalid username'), data: null } as any;
     } catch {}
 
-    return this._withNavigatorLockRetry(() => this.supabase.auth.updateUser({ data: { name } }));
+    return this.supabase.auth.updateUser({ data: { name } });
   }
 
   // Verifica si un nombre de usuario ya existe en la tabla de clasificacion
@@ -300,7 +244,7 @@ export class SupabaseService {
 
   // Obtiene las n mejores puntuaciones ordenadas descendentemente
   async getTopScores(
-    limit = 10
+    limit = 10,
   ): Promise<{ error: PostgrestError | null; data: LeaderboardEntry[] | null }> {
     const { data, error } = await this.supabase
       .from('leaderboard')
@@ -314,11 +258,94 @@ export class SupabaseService {
     };
   }
 
+  // Obtiene estadisticas agregadas del leaderboard
+  async getLeaderboardStats(): Promise<{
+    error: PostgrestError | null;
+    data: LeaderboardStats | null;
+  }> {
+    const totalResp = await this.supabase
+      .from('leaderboard')
+      .select('id', { count: 'exact', head: true });
+
+    if (totalResp.error) {
+      return { error: totalResp.error as PostgrestError, data: null };
+    }
+
+    const aggResp = await this.supabase
+      .from('leaderboard')
+      .select('avg:score, max:score, min:score');
+
+    if (aggResp.error) {
+      return { error: aggResp.error as PostgrestError, data: null };
+    }
+
+    const row = (aggResp.data ?? [])[0] as any;
+    const avgLevel = Number(row?.avg ?? 0) || 0;
+    const maxLevel = Number(row?.max ?? 0) || 0;
+    const minLevel = Number(row?.min ?? 0) || 0;
+
+    const lastUpdateResp = await this.supabase
+      .from('leaderboard')
+      .select('updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(1);
+
+    const lastUpdated = (lastUpdateResp.data ?? [])[0]?.updated_at ?? null;
+
+    const buckets = await this._getLeaderboardBuckets();
+
+    return {
+      error: null,
+      data: {
+        totalPlayers: totalResp.count ?? 0,
+        avgLevel: Math.round(avgLevel * 10) / 10,
+        maxLevel,
+        minLevel,
+        lastUpdated,
+        buckets,
+      },
+    };
+  }
+
+  private async _countLeaderboardRange(min: number, max?: number): Promise<number> {
+    let query = this.supabase
+      .from('leaderboard')
+      .select('id', { count: 'exact', head: true })
+      .gte('score', min);
+
+    if (typeof max === 'number') {
+      query = query.lt('score', max);
+    }
+
+    const resp = await query;
+    if (resp.error) return 0;
+    return resp.count ?? 0;
+  }
+
+  private async _getLeaderboardBuckets(): Promise<LeaderboardStatsBucket[]> {
+    const ranges = [
+      { label: '0-9', min: 0, max: 10 },
+      { label: '10-24', min: 10, max: 25 },
+      { label: '25-49', min: 25, max: 50 },
+      { label: '50-99', min: 50, max: 100 },
+      { label: '100-199', min: 100, max: 200 },
+      { label: '200+', min: 200 },
+    ];
+
+    const buckets: LeaderboardStatsBucket[] = [];
+    for (const r of ranges) {
+      const count = await this._countLeaderboardRange(r.min, r.max);
+      buckets.push({ label: r.label, count });
+    }
+
+    return buckets;
+  }
+
   // Busca en el leaderboard con paginación (por username)
   async searchLeaderboard(
     query = '',
     page = 0,
-    pageSize = 20
+    pageSize = 20,
   ): Promise<{
     error: PostgrestError | null;
     data: LeaderboardEntry[] | null;
@@ -345,7 +372,7 @@ export class SupabaseService {
 
   // Envía una nueva puntuacion (requiere usuario autenticado, en este caso anonimo)
   async submitScore(score: number, meta?: any) {
-    //  bloquear en modo debug
+    // bloquear en modo debug
     try {
       if (this.debugService?.isDebugMode)
         return { error: new Error('Operación deshabilitada en modo DEBUG'), data: null } as any;
@@ -361,45 +388,25 @@ export class SupabaseService {
       meta: meta ?? null,
     };
 
-    try {
-      const { data, error } = await this.supabase
-        .from('leaderboard')
-        .upsert(payload, { onConflict: 'user_id' })
-        .select();
+    const { data, error } = await this.supabase
+      .from('leaderboard')
+      .upsert(payload, { onConflict: 'user_id' })
+      .select();
 
-      // If Postgrest returned an error (e.g. RLS / policy rejection) forward it
-      if (error) {
-        // Provide a bit more context for 403s
-        if ((error as any).status === 403) {
-          (error as any).message = (error as any).message
-            ? `${(error as any).message} (rejected by RLS/policies)`
-            : 'Request rejected by RLS/policies';
-        }
-
-        return {
-          error: error as PostgrestError | null,
-          data: data as unknown as LeaderboardRow[] | null,
-        };
+    if (error) {
+      if ((error as any).status === 403) {
+        (error as any).message = (error as any).message
+          ? `${(error as any).message} (rejected by RLS/policies)`
+          : 'Request rejected by RLS/policies';
       }
 
-      return { error: null, data: data as unknown as LeaderboardRow[] | null };
-    } catch (e: any) {
-      // Handle navigator lock / internal supabase-js thrown errors gracefully
-      const m = String(e?.message || '').toLowerCase();
-      if (m.includes('navigatorlockacquiretimeouterror') || m.includes('lockmanager')) {
-        // Return a recoverable error object so callers can enqueue/reschedule
-        return {
-          error: {
-            message: 'Navigator lock acquisition failed (temporary)',
-            details: String(e),
-          } as any,
-          data: null,
-        } as any;
-      }
-
-      // Unknown exception: rethrow to surface in dev
-      throw e;
+      return {
+        error: error as PostgrestError | null,
+        data: data as unknown as LeaderboardRow[] | null,
+      };
     }
+
+    return { error: null, data: data as unknown as LeaderboardRow[] | null };
   }
 
   // Devuelve el cliente supabase

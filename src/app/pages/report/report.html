@@ -1,0 +1,686 @@
+﻿<div class="report-page" id="report-content">
+  @if (!isDebug()) {
+    <app-card>
+      <div class="section debug-locked">
+        <p class="section-title">{{ 'report.debugOnlyTitle' | transloco }}</p>
+        <p class="debug-message">{{ 'report.debugOnlyBody' | transloco }}</p>
+      </div>
+    </app-card>
+  } @else {
+    <!-- HEADER -->
+    <div class="report-header no-print">
+      <div class="report-header-inner">
+        <h1 class="report-main-title">{{ 'report.title' | transloco }}</h1>
+        <div class="report-actions">
+          <app-button variant="primary" (click)="refreshData()">
+            {{ 'report.refresh' | transloco }}
+          </app-button>
+          <app-button variant="success" (click)="exportPdf()">
+            {{ 'report.exportPdf' | transloco }}
+          </app-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRINT HEADER -->
+    <div class="print-only print-header">
+      <h1>Croqueta Clicker - {{ 'report.title' | transloco }}</h1>
+      <p class="print-date">{{ summary()?.generatedAt }}</p>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs no-print">
+      <button class="tab-btn" [class.active]="activeTab() === 'player'" (click)="setTab('player')">
+        {{ 'report.tabPlayer' | transloco }}
+      </button>
+      <button class="tab-btn" [class.active]="activeTab() === 'debug'" (click)="setTab('debug')">
+        {{ 'report.tabDebug' | transloco }}
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'multiplayer'"
+        (click)="setTab('multiplayer')"
+      >
+        {{ 'report.tabMultiplayer' | transloco }}
+      </button>
+    </div>
+
+    @if (summary(); as s) {
+      <!-- TAB: JUGADOR -->
+      <div
+        class="tab-content"
+        [class.visible]="activeTab() === 'player'"
+        [class.print-section]="true"
+      >
+        <!-- RESUMEN DEL JUGADOR -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.player.title' | transloco }}</p>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'report.metric' | transloco }}</th>
+                    <th>{{ 'report.value' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of playerRows(); track row.label) {
+                    <tr>
+                      <td>{{ row.label }}</td>
+                      <td class="val">{{ row.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- PROGRESO DE EXPERIENCIA -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.expProgress' | transloco }}</p>
+            <div class="exp-bar-wrapper">
+              <div class="exp-info">
+                <span>{{ 'report.level' | transloco }} {{ s.level }}</span>
+                <span>{{ s.currentExp | short }} / {{ s.expToNext | short }} XP</span>
+              </div>
+              <div class="exp-track">
+                <div class="exp-fill" [style.width.%]="s.expProgress"></div>
+              </div>
+              <span class="exp-pct">{{ s.expProgress }}%</span>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- PROGRESO GENERAL -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.progressTitle' | transloco }}</p>
+            <app-progress-bars [data]="progressData()" />
+          </div>
+        </app-card>
+
+        <!-- EFICIENCIA -->
+        @if (efficiency(); as eff) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.efficiencyTitle' | transloco }}</p>
+              <div class="efficiency-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'report.metric' | transloco }}</th>
+                      <th>{{ 'report.value' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ 'report.clicksPerMinute' | transloco }}</td>
+                      <td class="val">{{ eff.clicksPerMinute }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.croquetasPerMinute' | transloco }}</td>
+                      <td class="val">{{ eff.croquetasPerMinute }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.avgCpsPerProducer' | transloco }}</td>
+                      <td class="val">{{ eff.avgCpsPerProducer }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.topProducer' | transloco }}</td>
+                      <td class="val">{{ eff.topProducer }} ({{ eff.topProducerCps }}/s)</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.upgradeEfficiency' | transloco }}</td>
+                      <td class="val">{{ eff.upgradeEfficiency }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.skinsCompletion' | transloco }}</td>
+                      <td class="val">{{ eff.skinsCompletionRate }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'report.totalUpgradeCost' | transloco }}</td>
+                      <td class="val">{{ eff.totalUpgradeCost }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+        }
+
+        <!-- TABLA DE PRODUCTORES -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.producersTable' | transloco }}</p>
+            <div class="filter-bar no-print">
+              <label class="filter-toggle">
+                <input type="checkbox" [ngModel]="filterProducerHideEmpty()" (ngModelChange)="filterProducerHideEmpty.set($event)" />
+                <span>{{ 'report.filterHideEmpty' | transloco }}</span>
+              </label>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'report.producerName' | transloco }}</th>
+                    <th>{{ 'report.quantity' | transloco }}</th>
+                    <th>{{ 'report.cpsContribution' | transloco }}</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (p of filteredProducers(); track p.id) {
+                    <tr [class.inactive]="p.quantity === 0">
+                      <td>{{ p.id }}</td>
+                      <td>{{ p.name | transloco }}</td>
+                      <td class="val">{{ p.quantity }}</td>
+                      <td class="val">{{ p.cpsContribution | short }}/s</td>
+                      <td class="val">{{ p.cpsPercentage }}%</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- GRAFICOS DE PRODUCTORES -->
+        @if (producerBarData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-bar-chart
+                [data]="producerBarData()"
+                [title]="'report.producerDistribution' | transloco"
+                [formatValue]="formatNumber"
+              />
+            </div>
+          </app-card>
+        }
+
+        @if (cpsDonutData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-donut-chart
+                [data]="cpsDonutData()"
+                [title]="'report.cpsDistribution' | transloco"
+                [centerLabel]="s.croquetasPerSecond"
+                [centerSub]="'CpS'"
+              />
+            </div>
+          </app-card>
+        }
+
+        <!-- ROI DE PRODUCTORES -->
+        @if (producerROIData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-bar-chart
+                [data]="producerROIData()"
+                [title]="'report.producerROI' | transloco"
+                [formatValue]="formatNumber"
+              />
+            </div>
+          </app-card>
+        }
+
+        <!-- MEJORAS -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.upgradesTable' | transloco }}</p>
+            <div class="upgrades-summary">
+              <span class="badge bought"
+                >{{ s.upgradesBought }} {{ 'report.bought' | transloco }}</span
+              >
+              <span class="badge remaining"
+                >{{ s.upgradesTotal - s.upgradesBought }} {{ 'report.remaining' | transloco }}</span
+              >
+            </div>
+            <div class="filter-bar no-print">
+              <select [ngModel]="filterUpgradeStatus()" (ngModelChange)="filterUpgradeStatus.set($event)">
+                <option value="all">{{ 'report.filterAll' | transloco }}</option>
+                <option value="bought">{{ 'report.stateBought' | transloco }}</option>
+                <option value="locked">{{ 'report.stateLocked' | transloco }}</option>
+              </select>
+              <input
+                type="text"
+                class="filter-input"
+                [placeholder]="'report.filterSearch' | transloco"
+                [ngModel]="filterUpgradeSearch()"
+                (ngModelChange)="filterUpgradeSearch.set($event)"
+              />
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'report.upgradeName' | transloco }}</th>
+                    <th>{{ 'report.clickBonus' | transloco }}</th>
+                    <th>{{ 'report.requiredLevel' | transloco }}</th>
+                    <th>{{ 'report.status' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (u of filteredUpgrades(); track u.id) {
+                    <tr [class.bought-row]="u.bought">
+                      <td>{{ u.id }}</td>
+                      <td>{{ u.name | transloco }}</td>
+                      <td class="val">+{{ u.clicks }}</td>
+                      <td class="val">{{ u.level }}</td>
+                      <td class="val">
+                        @if (u.bought) {
+                          <span class="status-bought">✓</span>
+                        } @else {
+                          <span class="status-locked">✗</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- DISTRIBUCION DE MEJORAS POR NIVEL -->
+        <app-card>
+          <div class="section">
+            <app-bar-chart
+              [data]="upgradesByLevelData()"
+              [title]="'report.upgradeLevelDistribution' | transloco"
+              [formatValue]="formatNumber"
+            />
+          </div>
+        </app-card>
+
+        <!-- LOGROS -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.achievementsTable' | transloco }}</p>
+            <div class="upgrades-summary">
+              <span class="badge bought"
+                >{{ s.achievementsUnlocked }} {{ 'report.unlocked' | transloco }}</span
+              >
+              <span class="badge remaining"
+                >{{ s.achievementsTotal - s.achievementsUnlocked }}
+                {{ 'report.remaining' | transloco }}</span
+              >
+            </div>
+            <div class="filter-bar no-print">
+              <select [ngModel]="filterAchievementStatus()" (ngModelChange)="filterAchievementStatus.set($event)">
+                <option value="all">{{ 'report.filterAll' | transloco }}</option>
+                <option value="unlocked">{{ 'report.stateUnlocked' | transloco }}</option>
+                <option value="locked">{{ 'report.stateLocked' | transloco }}</option>
+              </select>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'report.achievementName' | transloco }}</th>
+                    <th>{{ 'report.status' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (a of filteredAchievements(); let i = $index; track a.id) {
+                    <tr [class.bought-row]="a.unlocked">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ a.title | transloco }}</td>
+                      <td class="val">
+                        @if (a.unlocked) {
+                          <span class="status-bought">✓</span>
+                        } @else {
+                          <span class="status-locked">✗</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <app-card>
+          <div class="section">
+            <app-donut-chart
+              [data]="achievementStatusData()"
+              [title]="'report.achievementStatus' | transloco"
+              [centerLabel]="s.achievementsUnlocked + '/' + s.achievementsTotal"
+              [centerSub]="'report.achievements' | transloco"
+            />
+          </div>
+        </app-card>
+
+        <!-- SKINS TABLE -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.skinsTable' | transloco }}</p>
+            <div class="upgrades-summary">
+              <span class="badge bought"
+                >{{ s.skinsUnlocked }} {{ 'report.unlocked' | transloco }}</span
+              >
+              <span class="badge remaining"
+                >{{ s.skinsTotal - s.skinsUnlocked }}
+                {{ 'report.remaining' | transloco }}</span
+              >
+            </div>
+            <div class="filter-bar no-print">
+              <select [ngModel]="filterSkinRarity()" (ngModelChange)="filterSkinRarity.set($event)">
+                <option value="all">{{ 'report.filterAll' | transloco }}</option>
+                @for (r of skinRarities(); track r) {
+                  <option [value]="r">{{ r }}</option>
+                }
+              </select>
+              <select [ngModel]="filterSkinStatus()" (ngModelChange)="filterSkinStatus.set($event)">
+                <option value="all">{{ 'report.filterAll' | transloco }}</option>
+                <option value="unlocked">{{ 'report.stateUnlocked' | transloco }}</option>
+                <option value="locked">{{ 'report.stateLocked' | transloco }}</option>
+              </select>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{ 'report.skinName' | transloco }}</th>
+                    <th>{{ 'report.rarityLabel' | transloco }}</th>
+                    <th>{{ 'report.requirementLabel' | transloco }}</th>
+                    <th>{{ 'report.status' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (sk of filteredSkins(); track sk.id) {
+                    <tr [class.bought-row]="sk.unlocked">
+                      <td>{{ sk.id }}</td>
+                      <td>{{ sk.name }}</td>
+                      <td>{{ sk.rarity }}</td>
+                      <td class="val">{{ sk.requirement }}</td>
+                      <td class="val">
+                        @if (sk.unlocked) {
+                          <span class="status-bought">✓</span>
+                        } @else {
+                          <span class="status-locked">✗</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- SKIN UNLOCK DONUT -->
+        @if (skinUnlockDonutData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-donut-chart
+                [data]="skinUnlockDonutData()"
+                [title]="'report.skinUnlockByRarity' | transloco"
+                [centerLabel]="s.skinsUnlocked + '/' + s.skinsTotal"
+                [centerSub]="'report.skins' | transloco"
+              />
+            </div>
+          </app-card>
+        }
+
+        <!-- DISTRIBUCION DE RAREZA DE SKINS -->
+        <app-card>
+          <div class="section">
+            <app-bar-chart
+              [data]="skinRarityData()"
+              [title]="'report.skinRarityDistribution' | transloco"
+              [formatValue]="formatNumber"
+            />
+          </div>
+        </app-card>
+      </div>
+
+      <!-- TAB: DEBUG -->
+      <div
+        class="tab-content"
+        [class.visible]="activeTab() === 'debug'"
+        [class.print-section]="true"
+      >
+        <!-- INFO DEBUG DEL JUEGO -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.debug.title' | transloco }}</p>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'report.metric' | transloco }}</th>
+                    <th>{{ 'report.value' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of debugRows(); track row.label) {
+                    <tr>
+                      <td>{{ row.label }}</td>
+                      <td class="val">{{ row.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- RESUMEN GENERAL -->
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.generalSummary' | transloco }}</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-icon">🥐</span>
+                <span class="stat-value">{{ s.totalCroquetas }}</span>
+                <span class="stat-label">{{ 'report.totalCroquetas' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">⚡</span>
+                <span class="stat-value">{{ s.croquetasPerSecond }}</span>
+                <span class="stat-label">{{ 'report.cps' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">🖱️</span>
+                <span class="stat-value">{{ s.croquetasPerClick }}</span>
+                <span class="stat-label">{{ 'report.cpc' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">👆</span>
+                <span class="stat-value">{{ s.totalClicks | short }}</span>
+                <span class="stat-label">{{ 'report.totalClicks' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <span class="stat-value">{{ s.level }}</span>
+                <span class="stat-label">{{ 'report.level' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">⏱️</span>
+                <span class="stat-value">{{ s.timePlayingFormatted }}</span>
+                <span class="stat-label">{{ 'report.timePlaying' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">✖️</span>
+                <span class="stat-value">x{{ s.multiplier }}</span>
+                <span class="stat-label">{{ 'report.multiplier' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">🏭</span>
+                <span class="stat-value">{{ s.totalProducers }}</span>
+                <span class="stat-label">{{ 'report.totalProducers' | transloco }}</span>
+              </div>
+            </div>
+          </div>
+        </app-card>
+
+        <!-- STORAGE STATS -->
+        @if (debugInfo(); as dbg) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.debug.storageTitle' | transloco }}</p>
+              <div class="stats-grid stats-grid-sm">
+                <div class="stat-card">
+                  <span class="stat-icon">🔑</span>
+                  <span class="stat-value">{{ dbg.storageKeys }}</span>
+                  <span class="stat-label">{{ 'report.debug.storageKeys' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">💾</span>
+                  <span class="stat-value">{{ dbg.storageSizeKb }} KB</span>
+                  <span class="stat-label">{{ 'report.debug.storageSize' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">🕐</span>
+                  <span class="stat-value stat-value-sm">{{ dbg.lastSaveTime }}</span>
+                  <span class="stat-label">{{ 'report.debug.lastSave' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">📦</span>
+                  <span class="stat-value">v{{ dbg.gameItemsVersion }}</span>
+                  <span class="stat-label">{{ 'report.debug.itemsVersion' | transloco }}</span>
+                </div>
+              </div>
+            </div>
+          </app-card>
+        }
+      </div>
+
+      <!-- TAB: MULTIJUGADOR -->
+      <div
+        class="tab-content"
+        [class.visible]="activeTab() === 'multiplayer'"
+        [class.print-section]="true"
+      >
+        @if (leaderboardLoading()) {
+          <app-card>
+            <div class="section loading-section">
+              <p>{{ 'report.multiplayer.loading' | transloco }}</p>
+            </div>
+          </app-card>
+        }
+
+        @if (leaderboardStats(); as lb) {
+          <!-- STATS GLOBALES -->
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.multiplayer.title' | transloco }}</p>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <span class="stat-icon">👥</span>
+                  <span class="stat-value">{{ lb.totalPlayers }}</span>
+                  <span class="stat-label">{{ 'report.multiplayer.players' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">📊</span>
+                  <span class="stat-value">{{ lb.avgLevel }}</span>
+                  <span class="stat-label">{{ 'report.multiplayer.avg' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">🏆</span>
+                  <span class="stat-value">{{ lb.maxLevel }}</span>
+                  <span class="stat-label">{{ 'report.multiplayer.max' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">📉</span>
+                  <span class="stat-value">{{ lb.minLevel }}</span>
+                  <span class="stat-label">{{ 'report.multiplayer.min' | transloco }}</span>
+                </div>
+              </div>
+            </div>
+          </app-card>
+
+          <!-- DETALLE TABLA -->
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.multiplayer.detailTitle' | transloco }}</p>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'report.metric' | transloco }}</th>
+                      <th>{{ 'report.value' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (row of multiplayerRows(); track row.label) {
+                      <tr>
+                        <td>{{ row.label }}</td>
+                        <td class="val">{{ row.value }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+
+          <!-- DISTRIBUCION POR NIVELES -->
+          @if (leaderboardBuckets().length > 0) {
+            <app-card>
+              <div class="section">
+                <app-bar-chart
+                  [data]="leaderboardBuckets()"
+                  [title]="'report.lbDistribution' | transloco"
+                  [formatValue]="formatNumber"
+                />
+              </div>
+            </app-card>
+          }
+        }
+
+        <!-- TOP JUGADORES -->
+        @if (leaderboardTop().length > 0) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.lbTop' | transloco }}</p>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>{{ 'report.lbUser' | transloco }}</th>
+                      <th>{{ 'report.lbLevel' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (t of leaderboardTop(); let i = $index; track i) {
+                      <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ t.username }}</td>
+                        <td class="val">{{ t.score | short }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+        }
+
+        @if (!leaderboardLoading() && !leaderboardStats()) {
+          <app-card>
+            <div class="section">
+              <p class="debug-message">{{ 'report.multiplayer.noData' | transloco }}</p>
+            </div>
+          </app-card>
+        }
+      </div>
+    }
+
+    <!-- FOOTER -->
+    <div class="report-footer print-only">
+      <p>
+        Croqueta Clicker - {{ 'report.generatedWith' | transloco }} - {{ summary()?.generatedAt }}
+      </p>
+    </div>
+  }
+</div>

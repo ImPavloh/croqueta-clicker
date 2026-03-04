@@ -1,6 +1,6 @@
 {
   "name": "croqueta-clicker",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Croqueta Clicker, un juego incremental inspirado en Cookie Clicker, desarrollado por Pablo, Victor y Roberto.",
   "author": {
     "name": "Pablo Casado, Roberto Cichón, Víctor Rodríguez",
@@ -57,6 +57,8 @@
     "autoprefixer": "^10.4.21",
     "break_infinity.js": "^2.2.0",
     "crypto-js": "^4.2.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.4",
     "pixi.js": "^8",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",

@@ -3,7 +3,7 @@
 ![Angular](https://img.shields.io/badge/Angular-21.0-dd0031?style=flat&logo=angular)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.3.0-blue)
+![Version](https://img.shields.io/badge/Version-1.4.0-blue)
 
 <img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 
@@ -33,6 +33,7 @@ Descarga el juego en Google Play:
 - **Skins personalizables**: 33 skins desbloqueables para personalizar tu croqueta (comunes, raras, épicas y legendarias)
 - **Música y efectos de sonido**: Audio dinámico que mejora la experiencia de juego
 - **Opciones de configuración**: Ajustes de audio, gráficos y rendimiento
+- **Informes y estadísticas**: Panel avanzado con 8+ tablas, 8+ gráficos, 6 filtros interactivos, campos calculados y exportación a PDF
 - **Estadísticas detalladas**: Panel con estadísticas de juego y progreso
 - **Multilenguaje**: Soporte para español e inglés
 - **Modo offline**: Juega sin conexión y sincroniza al volver online
@@ -52,6 +53,8 @@ Descarga el juego en Google Play:
 - **Vitest** para tests unitarios modernos
 - **Break Infinity.js** para gestionar números muy grandes
 - **Pixi.js** para efectos visuales con WebGL
+- **Transloco** para internacionalización reactiva (i18n)
+- **jsPDF + AutoTable** para generación de informes PDF
 
 #### Características de la aplicación
 
