@@ -6,7 +6,7 @@
     <base href="/" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content"
     />
 
     <!-- DNS prefetch para Supabase -->
@@ -46,8 +46,8 @@
       content="croqueta clicker, cookie clicker, cookie clicker español, juego incremental, idle game, clicker game gratis, juego de croquetas, juego idle español, juego clicker online, juego sin descargar, PWA game, juego progresivo"
     />
     <meta name="author" content="Pavloh, Roberto Cichón, Víctor RG" />
-    <meta name="creator" content="WhiteRoot Studios" />
-    <meta name="publisher" content="WhiteRoot Studios" />
+    <meta name="creator" content="WhiteRoot Studio" />
+    <meta name="publisher" content="WhiteRoot Studio" />
     <meta
       name="robots"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
@@ -278,11 +278,34 @@
       (function () {
         if (typeof window === 'undefined') return;
 
-        // prevenir pinch to zoom
+        // prevenir pinch to zoom (Safari)
         window.addEventListener(
           'gesturestart',
           function (e) {
             e.preventDefault();
+          },
+          { passive: false },
+        );
+        window.addEventListener(
+          'gesturechange',
+          function (e) {
+            e.preventDefault();
+          },
+          { passive: false },
+        );
+        window.addEventListener(
+          'gestureend',
+          function (e) {
+            e.preventDefault();
+          },
+          { passive: false },
+        );
+
+        // prevenir pinch to zoom (Chrome/Android)
+        window.addEventListener(
+          'touchmove',
+          function (e) {
+            if (e.touches.length > 1) e.preventDefault();
           },
           { passive: false },
         );

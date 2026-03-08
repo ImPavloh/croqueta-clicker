@@ -6,13 +6,13 @@
         {{ 'options.volumeTitle' | transloco }}
       </p>
       <div class="max-w-md w-full mx-auto flex flex-col gap-4">
-        @for (control of volumenControls; track $index){
-        <app-tooltip [text]="'options.generalVolumeTooltip' | transloco">
-          <app-dynamic-controls
-            [control]="control"
-            (valueChange)="onControlChange(control, $event)"
-          ></app-dynamic-controls>
-        </app-tooltip>
+        @for (control of volumenControls; track $index) {
+          <app-tooltip [text]="'options.generalVolumeTooltip' | transloco">
+            <app-dynamic-controls
+              [control]="control"
+              (valueChange)="onControlChange(control, $event)"
+            ></app-dynamic-controls>
+          </app-tooltip>
         }
       </div>
     </div>
@@ -25,13 +25,13 @@
         {{ 'options.interfaceTitle' | transloco }}
       </p>
       <div class="max-w-2xs w-full mx-auto flex flex-col gap-4">
-        @for (control of interfaceControls; track $index){
-        <app-tooltip [text]="'options.showMascotTooltip' | transloco">
-          <app-dynamic-controls
-            [control]="control"
-            (valueChange)="onControlChange(control, $event)"
-          ></app-dynamic-controls>
-        </app-tooltip>
+        @for (control of interfaceControls; track $index) {
+          <app-tooltip [text]="'options.showMascotTooltip' | transloco">
+            <app-dynamic-controls
+              [control]="control"
+              (valueChange)="onControlChange(control, $event)"
+            ></app-dynamic-controls>
+          </app-tooltip>
         }
       </div>
     </div>
@@ -213,7 +213,7 @@
             rel="noopener noreferrer"
             class="text-sm text-amber-800/50 hover:underline cursor-pointer"
           >
-            WhiteRoot Studios © 2025
+            WhiteRoot Studio © 2025
           </a>
 
           <a

@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Subscription, take, skip } from 'rxjs';
 import { SkinsService } from '@services/skins.service';
 
@@ -10,6 +17,7 @@ import { SkinsService } from '@services/skins.service';
 })
 export class Backgrounds implements OnInit, OnDestroy {
   private skinsService = inject(SkinsService);
+  private cdr = inject(ChangeDetectorRef);
   private subs: Subscription | null = null;
 
   bg1: string | null = null;
@@ -46,6 +54,7 @@ export class Backgrounds implements OnInit, OnDestroy {
       this.bg1 = url;
       this.visibleLayer = 1;
     }
+    this.cdr.markForCheck();
 
     setTimeout(() => {
       if (this.visibleLayer === 1) {

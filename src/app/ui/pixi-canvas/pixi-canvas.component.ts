@@ -37,7 +37,7 @@ import { SKINS } from '@data/skin.data';
         inset: 0;
         pointer-events: auto;
         z-index: 10;
-        touch-action: manipulation;
+        touch-action: pan-x pan-y;
         cursor: pointer;
       }
     `,
