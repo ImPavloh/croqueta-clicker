@@ -5,6 +5,8 @@ import { OptionsService } from './options.service';
 import { LevelUpService } from './level-up.service';
 import { AchievementsService } from './achievements.service';
 import { AutosaveService } from './autosave.service';
+import { PrestigeService } from './prestige.service';
+import { calculateExpReductionFactor } from '@models/prestige.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,10 @@ export class PlayerStats {
 
   private get autosaveService(): AutosaveService {
     return this.injector.get(AutosaveService);
+  }
+
+  private get prestigeService(): PrestigeService {
+    return this.injector.get(PrestigeService);
   }
 
   // state (signals)
@@ -147,7 +153,8 @@ export class PlayerStats {
   private calculateExpToNext(): void {
     const n = this._level.value;
     if (n === 0) {
-      this._expToNext.set(150);
+      const prestigeFactor = calculateExpReductionFactor(this.prestigeService.prestigeLevel());
+      this._expToNext.set(Math.max(100, Math.floor(150 * prestigeFactor)));
       return;
     }
 
@@ -185,7 +192,8 @@ export class PlayerStats {
       expNeeded = Math.floor(lateGameExp * Math.pow(1.08, endGameLevels));
     }
 
-    this._expToNext.set(Math.max(150, expNeeded));
+    const prestigeFactor = calculateExpReductionFactor(this.prestigeService.prestigeLevel());
+    this._expToNext.set(Math.max(100, Math.floor(expNeeded * prestigeFactor)));
   }
 
   /**

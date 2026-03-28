@@ -14,8 +14,8 @@ export interface LeaderboardRow {
   /** Puntuación del usuario */
   score: number;
 
-  /** Metadatos adicionales */
-  meta?: any;
+  /** Metadatos adicionales (incluye nivel de prestigio) */
+  meta?: { prestige?: number } | null;
 
   /** Fecha de creación de la entrada */
   created_at?: string | null;

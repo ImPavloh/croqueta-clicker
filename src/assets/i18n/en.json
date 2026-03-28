@@ -167,6 +167,22 @@
     "certified_obsession": {
       "title": "Certified Obsession",
       "description": "Click on the studio name 10 times. We're a bit scared..."
+    },
+    "primer_prestigio": {
+      "title": "The Golden Rebirth",
+      "description": "Prestige for the first time."
+    },
+    "prestigio_5": {
+      "title": "Master of Sacrifice",
+      "description": "Reach prestige level 5."
+    },
+    "prestigio_10": {
+      "title": "Golden Legend",
+      "description": "Reach prestige level 10."
+    },
+    "prestigio_25": {
+      "title": "Eternally Crispy",
+      "description": "Reach prestige level 25."
     }
   },
   "options": {
@@ -244,7 +260,7 @@
     },
     "shareGameModal": {
       "title": "My progress in Croqueta Clicker",
-      "text": "Look at my progress in Croqueta Clicker!\n\n🖱️ Total clicks: {totalClicks}\n⏱️ Time played: {timePlaying}\n⭐ Level: {level}\n🥐 Croquettes: {croquetas}\n⚡ Croquettes/sec: {croquetasPerSecond}",
+      "text": "Look at my progress in Croqueta Clicker!\n\n🖱️ Total clicks: {totalClicks}\n⏱️ Time played: {timePlaying}\n⭐ Level: {level}\n🤐 Croquettes: {croquetas}\n⚡ Croquettes/sec: {croquetasPerSecond}\n🥇 Prestige: {prestige}",
       "clipboardMessage": "Statistics copied to clipboard!"
     }
   },
@@ -272,7 +288,24 @@
     "disabledDebug": "Disabled while in DEBUG mode",
     "offline": "Offline",
     "levelSynced": "Level synced for this interval.",
-    "errorWithDetail": "Error: {{message}}"
+    "errorWithDetail": "Error: {{message}}",
+    "prestige": "Prestige"
+  },
+  "prestige": {
+    "title": "Prestige",
+    "level": "Prestige level",
+    "goldenCroquetas": "Golden Croquetas",
+    "goldenCroqueta": "Golden Croqueta",
+    "multiplier": "Multiplier",
+    "button": "Prestige",
+    "tooltip": "Reset your progress in exchange for Golden Croquetas and a permanent multiplier.",
+    "tooltipLocked": "You need level 50 to prestige.",
+    "confirmTitle": "🥇 Prestige",
+    "confirmMessage": "You'll earn {{earned}} {{goldenLabel}} and your multiplier will be +{{newMultiplier}}%. Your croquetas, level, producers, and upgrades will be reset.",
+    "confirmButton": "Prestige",
+    "cancelButton": "Cancel",
+    "badge": "Prestige",
+    "badgePlural": "Prestiges"
   },
   "user": {
     "setUsername": "Set your username",
@@ -738,7 +771,9 @@
       "cps": "Croquettes per second",
       "cpc": "Croquettes per click",
       "time": "Time played",
-      "multiplier": "Multiplier"
+      "multiplier": "Multiplier",
+      "prestige": "Prestige",
+      "goldenCroquetas": "Golden Croquetas"
     },
     "debug": {
       "title": "Debug game info",

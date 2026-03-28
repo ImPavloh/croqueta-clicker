@@ -147,12 +147,14 @@ export class Report implements OnInit {
     return Array.from(set);
   });
 
-
   ngOnInit() {
-    this.transloco.selectTranslation().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.refreshData();
-      this.refreshLeaderboardStats();
-    });
+    this.transloco
+      .selectTranslation()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.refreshData();
+        this.refreshLeaderboardStats();
+      });
   }
 
   refreshData() {
@@ -281,6 +283,14 @@ export class Report implements OnInit {
       {
         label: this.transloco.translate('report.player.multiplier'),
         value: `x${summary.multiplier}`,
+      },
+      {
+        label: this.transloco.translate('report.player.prestige'),
+        value: String(summary.prestigeLevel),
+      },
+      {
+        label: this.transloco.translate('report.player.goldenCroquetas'),
+        value: String(summary.goldenCroquetas),
       },
     ];
   }

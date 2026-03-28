@@ -44,4 +44,24 @@ export const STATS: StatModel[] = [
     format: 'percentage',
     description: 'Porcentaje de progreso hacia el próximo nivel.',
   },
+
+  // ============================================================
+  // 🥇 PRESTIGIO - Sistema de prestigio
+  // ============================================================
+  {
+    id: 'prestige_level',
+    title: 'Nivel de prestigio',
+    key: 'prestigeLevel',
+    icon: 'level-up',
+    format: 'number',
+    description: 'Cantidad de veces que has hecho prestigio.',
+  },
+  {
+    id: 'prestige_multiplier',
+    title: 'Multiplicador de prestigio',
+    key: 'prestigeMultiplier',
+    icon: 'progress',
+    format: 'percentage',
+    description: 'Bonus de producción por Croquetas Doradas acumuladas.',
+  },
 ];

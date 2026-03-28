@@ -21,6 +21,7 @@ import { PlayerStats } from '@services/player-stats.service';
 import { ModalService } from '@services/modal.service';
 import { TimeService } from '@services/time.service';
 import { AudioService } from '@services/audio.service';
+import { PrestigeService } from '@services/prestige.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
 
@@ -41,6 +42,7 @@ export class Leaderboard implements OnInit {
   private playerStats = inject(PlayerStats);
   private translocoService = inject(TranslocoService);
   private audioService = inject(AudioService);
+  private prestigeService = inject(PrestigeService);
   protected timeService = inject(TimeService);
 
   top = signal<Array<any>>([]);
@@ -51,6 +53,7 @@ export class Leaderboard implements OnInit {
   user = signal<any | null>(null);
   pendingCount = signal<number>(0);
   currentLevel = toSignal(this.playerStats.level$, { initialValue: 0 });
+  currentPrestige = computed(() => this.prestigeService.prestigeLevel());
 
   query = signal('');
   page = signal(0);
@@ -325,8 +328,9 @@ export class Leaderboard implements OnInit {
 
     this.loading.set(true);
     const current = Number(this.currentLevel());
+    const prestige = this.prestigeService.prestigeLevel();
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      this.supabase.enqueuePendingScore(current, { source: 'auto' });
+      this.supabase.enqueuePendingScore(current, { source: 'auto', prestige });
       this.message.set(this.translocoService.translate('leaderboard.offline'));
       this._refreshPendingCount();
       this.loading.set(false);
@@ -339,7 +343,7 @@ export class Leaderboard implements OnInit {
       return;
     }
 
-    const res = await this.supabase.submitScore(current);
+    const res = await this.supabase.submitScore(current, prestige > 0 ? { prestige } : null);
     if (!res.error) {
       this._markSubmittedNow(uid);
       this.message.set(this.translocoService.translate('leaderboard.levelSynced'));
@@ -347,7 +351,11 @@ export class Leaderboard implements OnInit {
       this.panelCache = null;
       await this.refresh(true);
     } else {
-      this.supabase.enqueuePendingScore(current, { source: 'auto', error: res.error?.message });
+      this.supabase.enqueuePendingScore(current, {
+        source: 'auto',
+        prestige,
+        error: res.error?.message,
+      });
       this.message.set(this.translocoService.translate('leaderboard.offline'));
       this._refreshPendingCount();
     }

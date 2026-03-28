@@ -5,6 +5,8 @@ import { OptionsService } from './options.service';
 import { PRODUCERS } from '@data/producer.data';
 import { UPGRADES } from '@data/upgrade.data';
 import { Subject, debounceTime, Subscription } from 'rxjs';
+import { Injector } from '@angular/core';
+import { PrestigeService } from './prestige.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,11 @@ export class AutosaveService implements OnDestroy {
   private pointsService = inject(PointsService);
   private playerStats = inject(PlayerStats);
   private optionsService = inject(OptionsService);
+  private injectorRef = inject(Injector);
+
+  private get prestigeService(): PrestigeService {
+    return this.injectorRef.get(PrestigeService);
+  }
 
   private intervalId?: any;
   private readonly AUTOSAVE_INTERVAL = 60000; // 1min
@@ -26,11 +33,9 @@ export class AutosaveService implements OnDestroy {
     this.startAutosave();
 
     // Debounce save requests to happen at most once every 5 seconds
-    this.saveSubscription = this.saveRequestSubject
-      .pipe(debounceTime(5000))
-      .subscribe(() => {
-        this.saveAll();
-      });
+    this.saveSubscription = this.saveRequestSubject.pipe(debounceTime(5000)).subscribe(() => {
+      this.saveAll();
+    });
   }
 
   /**
@@ -77,6 +82,8 @@ export class AutosaveService implements OnDestroy {
       // Options save
       this.optionsService.saveToStorage();
 
+      // Prestige save
+      this.prestigeService.saveToStorage();
     } catch (error) {
       console.error('Error al guardar automáticamente:', error);
     }

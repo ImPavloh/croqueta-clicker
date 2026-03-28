@@ -16,6 +16,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
 import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
+import { PrestigeService } from '@services/prestige.service';
 
 import PackageJson from '../../../../package.json';
 import { RangeSliderControlModel, UiControlModel } from '@models/ui-controls.model';
@@ -41,6 +42,8 @@ export class Options {
   volumenControls = VOLUMEN_CONTROL;
   interfaceControls = INTERFACE_CONTROL;
 
+  showPrestigeEffect = false;
+
   //Servicio para gestionar las opciones del juego.
   public optionsService = inject(OptionsService);
   //Servicio para mostrar modales de confirmación.
@@ -63,6 +66,8 @@ export class Options {
   private supabase = inject(SupabaseService);
   //Servicio para gestionar el modo debug.
   private debugService = inject(DebugService);
+  //Servicio para gestionar el prestigio.
+  private prestigeService = inject(PrestigeService);
 
   /**
    * Método del ciclo de vida de Angular. Se ejecuta al iniciar el componente.
@@ -97,6 +102,47 @@ export class Options {
     });
   }
 
+  get canPrestige(): boolean {
+    return this.prestigeService.canPrestige();
+  }
+
+  get prestigeLevel(): number {
+    return this.prestigeService.prestigeLevel();
+  }
+
+  get goldenCroquetas(): number {
+    return this.prestigeService.goldenCroquetas();
+  }
+
+  get prestigeMultiplier(): number {
+    return this.prestigeService.prestigeMultiplier();
+  }
+
+  prestige() {
+    if (!this.canPrestige) return;
+
+    const preview = this.prestigeService.getPrestigePreview();
+    const goldenLabel =
+      preview.goldenCroquetas === 1
+        ? this.translocoService.translate('prestige.goldenCroqueta')
+        : this.translocoService.translate('prestige.goldenCroquetas');
+    this.modalService.showConfirm({
+      title: this.translocoService.translate('prestige.confirmTitle'),
+      message: this.translocoService.translate('prestige.confirmMessage', {
+        earned: preview.goldenCroquetas,
+        goldenLabel,
+        newMultiplier: (preview.newMultiplier * 100 - 100).toFixed(0),
+      }),
+      confirmText: this.translocoService.translate('prestige.confirmButton'),
+      cancelText: this.translocoService.translate('prestige.cancelButton'),
+      onConfirm: () => {
+        this.prestigeService.performPrestige();
+        this.showPrestigeEffect = true;
+        setTimeout(() => (this.showPrestigeEffect = false), 1500);
+      },
+    });
+  }
+
   /**
    * Muestra un modal de confirmación para reiniciar el juego. Si se confirma,
    * borra los datos locales y remotos (leaderboard) y reinicia el estado del juego.
@@ -123,6 +169,7 @@ export class Options {
         this.playerStats.reset();
         this.skinsService.reset();
         this.shopControlsService.reset();
+        this.prestigeService.reset();
         this.optionsService.resetOptions();
         this.optionsService.restartGame();
 
@@ -247,6 +294,7 @@ export class Options {
       this.pointsService.pointsPerSecond(),
       1,
     );
+    const prestige = this.prestigeService.prestigeLevel();
 
     const shareText = this.translocoService.translate('options.shareGameModal.text', {
       totalClicks,
@@ -254,6 +302,7 @@ export class Options {
       level,
       croquetas,
       croquetasPerSecond,
+      prestige,
     });
 
     if (navigator.share) {

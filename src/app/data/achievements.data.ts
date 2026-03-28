@@ -1,5 +1,4 @@
-import { AchievementModel } from "@models/achivement.model";
-
+import { AchievementModel } from '@models/achivement.model';
 
 export const ACHIEVEMENTS: AchievementModel[] = [
   // ------------------------------------------------------------
@@ -321,5 +320,33 @@ export const ACHIEVEMENTS: AchievementModel[] = [
     description: 'achievements.certified_obsession.description',
     icon: '/assets/achievements/xd/certified_obsession.webp',
     secret: true,
+  },
+
+  // ------------------------------------------------------------
+  // 🥇 PRESTIGIO
+  // ------------------------------------------------------------
+  {
+    id: 'primer_prestigio',
+    title: 'achievements.primer_prestigio.title',
+    description: 'achievements.primer_prestigio.description',
+    icon: '/assets/achievements/level/7.webp',
+  },
+  {
+    id: 'prestigio_5',
+    title: 'achievements.prestigio_5.title',
+    description: 'achievements.prestigio_5.description',
+    icon: '/assets/achievements/level/8.webp',
+  },
+  {
+    id: 'prestigio_10',
+    title: 'achievements.prestigio_10.title',
+    description: 'achievements.prestigio_10.description',
+    icon: '/assets/achievements/level/9.webp',
+  },
+  {
+    id: 'prestigio_25',
+    title: 'achievements.prestigio_25.title',
+    description: 'achievements.prestigio_25.description',
+    icon: '/assets/achievements/level/10.webp',
   },
 ];

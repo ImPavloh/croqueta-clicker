@@ -248,7 +248,7 @@ export class SupabaseService {
   ): Promise<{ error: PostgrestError | null; data: LeaderboardEntry[] | null }> {
     const { data, error } = await this.supabase
       .from('leaderboard')
-      .select('user_id, username, score, created_at')
+      .select('user_id, username, score, meta, created_at')
       .order('score', { ascending: false })
       .limit(limit);
 
@@ -356,7 +356,7 @@ export class SupabaseService {
 
     let request = this.supabase
       .from('leaderboard')
-      .select('user_id, username, score, created_at', { count: 'exact' })
+      .select('user_id, username, score, meta, created_at', { count: 'exact' })
       .order('score', { ascending: false })
       .range(start, end);
 

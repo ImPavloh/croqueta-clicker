@@ -1,3 +1,57 @@
 a {
   will-change: transform;
 }
+
+.prestige-flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: prestige-flash 1.5s ease-out forwards;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(124, 58, 237, 0.6) 0%,
+    rgba(168, 85, 247, 0.3) 40%,
+    transparent 70%
+  );
+}
+
+.prestige-flash-icon {
+  font-size: 120px;
+  animation: prestige-icon-pop 1.5s ease-out forwards;
+  filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.8));
+}
+
+@keyframes prestige-flash {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes prestige-icon-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}

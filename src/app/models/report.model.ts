@@ -59,6 +59,9 @@ export interface GameSummary {
   readonly upgradesTotal: number;
   readonly upgradesPercentage: number;
   readonly totalProducers: number;
+  readonly prestigeLevel: number;
+  readonly goldenCroquetas: number;
+  readonly prestigeMultiplier: number;
   readonly generatedAt: string;
 }
 

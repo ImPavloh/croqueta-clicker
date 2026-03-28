@@ -167,6 +167,22 @@
     "certified_obsession": {
       "title": "Obsesión certificada",
       "description": "Haz click en el nombre del estudio 10 veces. Estamos un poco asustados..."
+    },
+    "primer_prestigio": {
+      "title": "El renacer dorado",
+      "description": "Haz tu primer prestigio."
+    },
+    "prestigio_5": {
+      "title": "Maestro del sacrificio",
+      "description": "Alcanza nivel de prestigio 5."
+    },
+    "prestigio_10": {
+      "title": "Leyenda dorada",
+      "description": "Alcanza nivel de prestigio 10."
+    },
+    "prestigio_25": {
+      "title": "Eternamente crujiente",
+      "description": "Alcanza nivel de prestigio 25."
     }
   },
   "options": {
@@ -244,7 +260,7 @@
     },
     "shareGameModal": {
       "title": "Mi progreso en Croqueta Clicker",
-      "text": "¡Mira mi progreso en Croqueta Clicker!\n\n🖱️ Clicks totales: {totalClicks}\n⏱️ Tiempo jugado: {timePlaying}\n⭐ Nivel: {level}\n🥐 Croquetas: {croquetas}\n⚡ Croquetas/seg: {croquetasPerSecond}",
+      "text": "¡Mira mi progreso en Croqueta Clicker!\n\n🖱️ Clicks totales: {totalClicks}\n⏱️ Tiempo jugado: {timePlaying}\n⭐ Nivel: {level}\n🤐 Croquetas: {croquetas}\n⚡ Croquetas/seg: {croquetasPerSecond}\n🥇 Prestigio: {prestige}",
       "clipboardMessage": "¡Estadísticas copiadas al portapapeles!"
     }
   },
@@ -272,7 +288,24 @@
     "disabledDebug": "Deshabilitado en modo DEBUG",
     "offline": "Sin conexión",
     "levelSynced": "Nivel sincronizado para este intervalo.",
-    "errorWithDetail": "Error: {{message}}"
+    "errorWithDetail": "Error: {{message}}",
+    "prestige": "Prestigio"
+  },
+  "prestige": {
+    "title": "Prestigio",
+    "level": "Nivel de prestigio",
+    "goldenCroquetas": "Croquetas Doradas",
+    "goldenCroqueta": "Croqueta Dorada",
+    "multiplier": "Multiplicador",
+    "button": "Hacer Prestigio",
+    "tooltip": "Reinicia tu progreso a cambio de Croquetas Doradas y un multiplicador permanente.",
+    "tooltipLocked": "Necesitas nivel 50 para hacer prestigio.",
+    "confirmTitle": "🥇 Hacer Prestigio",
+    "confirmMessage": "Ganarás {{earned}} {{goldenLabel}} y tu multiplicador será +{{newMultiplier}}%. Se reiniciarán tus croquetas, nivel, productores y mejoras.",
+    "confirmButton": "Prestigiar",
+    "cancelButton": "Cancelar",
+    "badge": "Prestigio",
+    "badgePlural": "Prestigios"
   },
   "user": {
     "setUsername": "Establecer usuario",
@@ -738,7 +771,9 @@
       "cps": "Croquetas por segundo",
       "cpc": "Croquetas por click",
       "time": "Tiempo jugado",
-      "multiplier": "Multiplicador"
+      "multiplier": "Multiplicador",
+      "prestige": "Prestigio",
+      "goldenCroquetas": "Croquetas Doradas"
     },
     "debug": {
       "title": "Info debug del juego",

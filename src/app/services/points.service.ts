@@ -9,6 +9,7 @@ import { AutosaveService } from './autosave.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { ModalService } from './modal.service';
 import { GameBridgeService } from './game-bridge.service';
+import { PrestigeService } from './prestige.service';
 
 interface Multiplier {
   value: number;
@@ -27,6 +28,10 @@ export class PointsService {
 
   private get autosaveService(): AutosaveService {
     return this.injector.get(AutosaveService);
+  }
+
+  private get prestigeService(): PrestigeService {
+    return this.injector.get(PrestigeService);
   }
 
   private _points = signal<Decimal>(new Decimal(0));
@@ -87,7 +92,8 @@ export class PointsService {
 
   addPointsPerClick(x?: number, y?: number) {
     const multiplier = this.getActiveMultiplier();
-    const amount = this.pointsPerClick().times(multiplier);
+    const prestigeMult = this.prestigeService.prestigeMultiplier();
+    const amount = this.pointsPerClick().times(multiplier).times(prestigeMult);
     this._points.update((v) => v.plus(amount));
     this.clickEvent$.next(amount);
 
@@ -99,7 +105,8 @@ export class PointsService {
 
   addPointPerSecond() {
     const multiplier = this.getActiveMultiplier();
-    const amount = this.pointsPerSecond().times(multiplier);
+    const prestigeMult = this.prestigeService.prestigeMultiplier();
+    const amount = this.pointsPerSecond().times(multiplier).times(prestigeMult);
     this._points.update((v) => v.plus(amount));
     if (typeof window !== 'undefined' && amount.gt(0)) {
       this.floatingService.show('+' + amount.toString());

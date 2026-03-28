@@ -3,6 +3,7 @@ import { PointsService } from './points.service';
 import { PlayerStats } from './player-stats.service';
 import { SkinsService } from './skins.service';
 import { AchievementsService } from './achievements.service';
+import { PrestigeService } from './prestige.service';
 
 /**
  * Servicio de alto nivel para operaciones de debug y testing del juego.
@@ -22,7 +23,8 @@ export class GameService {
     private pointsService: PointsService,
     private playerStats: PlayerStats,
     private skinsService: SkinsService,
-    private achievementsService: AchievementsService
+    private achievementsService: AchievementsService,
+    private prestigeService: PrestigeService,
   ) {}
 
   /**
@@ -63,5 +65,6 @@ export class GameService {
     this.playerStats.reset();
     this.skinsService.reset();
     this.achievementsService.resetAll();
+    this.prestigeService.reset();
   }
 }

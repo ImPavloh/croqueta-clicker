@@ -10,6 +10,7 @@ import { SKINS } from '@data/skin.data';
 import { TranslocoService } from '@jsverse/transloco';
 import { GAME_PREFIX } from '@app/config/constants';
 import { DebugService } from '@services/debug.service';
+import { PrestigeService } from '@services/prestige.service';
 import {
   ProducerReportData,
   UpgradeReportData,
@@ -36,6 +37,7 @@ export class ReportService {
   private optionsService = inject(OptionsService);
   private transloco = inject(TranslocoService);
   private debugService = inject(DebugService);
+  private prestigeService = inject(PrestigeService);
 
   /** Recopila el resumen general del juego */
   getGameSummary(): GameSummary {
@@ -73,6 +75,9 @@ export class ReportService {
       upgradesPercentage:
         upgradesTotal > 0 ? Math.round((upgradesBought / upgradesTotal) * 100) : 0,
       totalProducers: this.getTotalProducersCount(),
+      prestigeLevel: this.prestigeService.prestigeLevel(),
+      goldenCroquetas: this.prestigeService.goldenCroquetas(),
+      prestigeMultiplier: this.prestigeService.prestigeMultiplier(),
       generatedAt: new Date().toLocaleString(),
     };
   }
@@ -160,13 +165,11 @@ export class ReportService {
     // campos calculados nuevos
     const upgradesBought = this.getBoughtUpgradesCount();
     const playerLevel = this.playerStats._level.value;
-    const upgradeEfficiency = playerLevel > 0
-      ? Math.round((upgradesBought / playerLevel) * 1000) / 10
-      : 0;
+    const upgradeEfficiency =
+      playerLevel > 0 ? Math.round((upgradesBought / playerLevel) * 1000) / 10 : 0;
     const skinsUnlocked = this.getUnlockedSkinsCount();
-    const skinsCompletion = SKINS.length > 0
-      ? Math.round((skinsUnlocked / SKINS.length) * 1000) / 10
-      : 0;
+    const skinsCompletion =
+      SKINS.length > 0 ? Math.round((skinsUnlocked / SKINS.length) * 1000) / 10 : 0;
     let totalUpgradeCostNum = 0;
     for (const u of UPGRADES) {
       if (this.optionsService.getGameItem('upgrade_' + u.id + '_bought') === 'true') {
@@ -281,8 +284,16 @@ export class ReportService {
       map.set(key, (map.get(key) ?? 0) + 1);
     }
 
-    const order = ['skins.rarity.common', 'skins.rarity.rare', 'skins.rarity.epic', 'skins.rarity.legendary', 'skins.rarity.mythic'];
-    const sorted = Array.from(map.entries()).sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+    const order = [
+      'skins.rarity.common',
+      'skins.rarity.rare',
+      'skins.rarity.epic',
+      'skins.rarity.legendary',
+      'skins.rarity.mythic',
+    ];
+    const sorted = Array.from(map.entries()).sort(
+      (a, b) => order.indexOf(a[0]) - order.indexOf(b[0]),
+    );
     return sorted.map(([key, value]) => ({
       name: this.transloco.translate(key),
       value,
@@ -343,7 +354,13 @@ export class ReportService {
 
   /** Donut de skins desbloqueadas por rareza */
   getSkinUnlockByRarityDonut(): DonutChartItem[] {
-    const rarityOrder = ['skins.rarity.common', 'skins.rarity.rare', 'skins.rarity.epic', 'skins.rarity.legendary', 'skins.rarity.mythic'];
+    const rarityOrder = [
+      'skins.rarity.common',
+      'skins.rarity.rare',
+      'skins.rarity.epic',
+      'skins.rarity.legendary',
+      'skins.rarity.mythic',
+    ];
     const map = new Map<string, { unlocked: number; total: number }>();
     for (const skin of SKINS) {
       const key = skin.rarity ?? 'skins.rarity.common';

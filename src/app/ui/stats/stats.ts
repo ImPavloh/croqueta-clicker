@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { PlayerStats } from '@services/player-stats.service';
 import { EventService } from '@services/event.service';
+import { PrestigeService } from '@services/prestige.service';
 
 type StatsVariant = 'mobile' | 'desktop' | 'auto';
 
@@ -21,6 +22,9 @@ export class StatsComponent {
 
   private playerStats = inject(PlayerStats);
   private eventService = inject(EventService);
+  private prestigeService = inject(PrestigeService);
+
+  prestigeLevel = computed(() => this.prestigeService.prestigeLevel());
 
   activeEvents = computed(() =>
     this.eventService

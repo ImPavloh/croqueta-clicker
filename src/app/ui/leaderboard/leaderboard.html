@@ -54,7 +54,12 @@
           @if (username()) {
             <div class="lp-user-info">
               <div class="lp-username">{{ username() }}</div>
-              <div class="lp-score">Lvl {{ currentLevel() }}</div>
+              <div class="lp-score-group">
+                <div class="lp-score">Lvl {{ currentLevel() }}</div>
+                @if (currentPrestige() > 0) {
+                  <div class="lp-prestige-badge">🥇 {{ currentPrestige() }}</div>
+                }
+              </div>
             </div>
           } @else {
             <div class="lp-no-user">
@@ -84,7 +89,12 @@
             <div class="lp-row">
               <span class="lp-rank">{{ i + 1 }}</span>
               <span class="lp-name">{{ r.username ?? (r.user_id | slice: 0 : 6) }}</span>
-              <span class="lp-points">{{ r.score }}</span>
+              <span class="lp-score-group">
+                <span class="lp-points">{{ r.score }}</span>
+                @if (r.meta?.prestige) {
+                  <span class="lp-prestige-small">🥇{{ r.meta.prestige }}</span>
+                }
+              </span>
             </div>
           }
         </div>
@@ -138,6 +148,7 @@
                 <th>#</th>
                 <th>{{ 'leaderboard.name' | transloco }}</th>
                 <th>{{ 'leaderboard.level' | transloco }}</th>
+                <th>{{ 'leaderboard.prestige' | transloco }}</th>
                 <th>{{ 'leaderboard.when' | transloco }}</th>
               </tr>
             </thead>
@@ -147,6 +158,7 @@
                   <td>{{ page() * pageSize + i + 1 }}</td>
                   <td>{{ r.username ?? (r.user_id | slice: 0 : 8) }}</td>
                   <td>{{ r.score | short }}</td>
+                  <td>{{ r.meta?.prestige || '—' }}</td>
                   <td>{{ r.created_at | date: 'short' }}</td>
                 </tr>
               }

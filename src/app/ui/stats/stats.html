@@ -2,6 +2,17 @@
   <div class="w-full max-w-125 mx-auto p-2 relative z-155">
     <div class="flex flex-col gap-4 p-4">
       <div class="flex flex-col gap-3">
+        @if (prestigeLevel() > 0) {
+          <div class="prestige-badge">
+            <span class="prestige-icon">🥇</span>
+            <span class="prestige-value">{{ prestigeLevel() }}</span>
+            <span class="prestige-label">{{
+              prestigeLevel() === 1
+                ? ('prestige.badge' | transloco)
+                : ('prestige.badgePlural' | transloco)
+            }}</span>
+          </div>
+        }
         <div class="level-badge flex items-center justify-center gap-3 px-5 py-3">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-white/90 uppercase tracking-widest">{{
@@ -100,7 +111,18 @@
   </div>
 } @else {
   <div class="ds-overlay">
-    <div class="ds-card ds-left">
+    @if (prestigeLevel() > 0) {
+      <div class="ds-card ds-prestige">
+        <span class="prestige-icon">🥇</span>
+        <span class="ds-prestige-value">{{ prestigeLevel() }}</span>
+        <span class="ds-prestige-label">{{
+          prestigeLevel() === 1
+            ? ('prestige.badge' | transloco)
+            : ('prestige.badgePlural' | transloco)
+        }}</span>
+      </div>
+    }
+    <div class="ds-card ds-left" [class.ds-left-shifted]="prestigeLevel() > 0">
       <div class="ds-circle">
         <svg class="ds-ring" width="150" height="150">
           <circle
@@ -143,7 +165,7 @@
       </div>
     </div>
 
-    <div class="ds-card ds-left-bottom">
+    <div class="ds-card ds-left-bottom" [class.ds-left-bottom-shifted]="prestigeLevel() > 0">
       <div class="ds-right-inner">
         <div class="ds-stat">
           <div class="ds-icon">
