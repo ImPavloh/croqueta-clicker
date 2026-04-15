@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ACHIEVEMENTS } from '@data/achievements.data';
 import { GAME_PREFIX } from '@app/config/constants';
-import { AchievementModel } from '@models/achivement.model';
+import { AchievementModel } from '@models/achievement.model';
 
 /**
  * Servicio para gestionar la lógica de los logros, incluyendo su estado de desbloqueo,

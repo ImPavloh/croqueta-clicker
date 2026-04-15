@@ -1,4 +1,4 @@
-import { AchievementModel } from '@models/achivement.model';
+import { AchievementModel } from '@models/achievement.model';
 
 export const ACHIEVEMENTS: AchievementModel[] = [
   // ------------------------------------------------------------

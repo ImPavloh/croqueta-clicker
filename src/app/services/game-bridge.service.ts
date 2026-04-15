@@ -105,15 +105,32 @@ export class GameBridgeService {
   }
 
   /**
-   * Formatea números grandes para mostrar en UI
-   * Reutiliza lógica común sin crear objetos
+   * Formatea números grandes para mostrar en UI.
+   * Escalas alineadas con PointsService.formatPoints() para consistencia.
    */
+  private static readonly UNITS: [number, string][] = [
+    [1e63, 'Vg'], [1e60, 'Nv'], [1e57, 'Od'], [1e54, 'Sd'],
+    [1e51, 'Sxd'], [1e48, 'Qnd'], [1e45, 'Qtd'], [1e42, 'Trd'],
+    [1e39, 'Dod'], [1e36, 'Und'], [1e33, 'Dc'], [1e30, 'No'],
+    [1e27, 'Oc'], [1e24, 'Sp'], [1e21, 'Sx'], [1e18, 'Qi'],
+    [1e15, 'Qa'], [1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K'],
+  ];
+
   private formatNumber(value: number): string {
     if (value < 1000) return Math.floor(value).toString();
-    if (value < 1000000) return (value / 1000).toFixed(1) + 'K';
-    if (value < 1000000000) return (value / 1000000).toFixed(2) + 'M';
-    if (value < 1000000000000) return (value / 1000000000).toFixed(2) + 'B';
-    return (value / 1000000000000).toFixed(2) + 'T';
+
+    const abs = Math.abs(value);
+    const sign = value < 0 ? '-' : '';
+
+    for (const [threshold, suffix] of GameBridgeService.UNITS) {
+      if (abs >= threshold) {
+        const normalized = abs / threshold;
+        const decimals = normalized < 10 ? 2 : normalized < 100 ? 1 : 0;
+        return `${sign}${normalized.toFixed(decimals)}${suffix}`;
+      }
+    }
+
+    return Math.floor(value).toString();
   }
 
   /**

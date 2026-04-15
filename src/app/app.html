@@ -58,12 +58,10 @@
         <div class="clicker-wrapper">
           <app-clicker />
         </div>
-        @if (isMobile) {
-          @defer (on idle) {
-            <app-leaderboard mode="panel" class="mobile-leaderboard" />
-          } @placeholder {
-            <div></div>
-          }
+        @defer (on idle) {
+          <app-leaderboard mode="panel" class="mobile-leaderboard" />
+        } @placeholder {
+          <div></div>
         }
         <div class="mobile-bottom">
           <app-counter />

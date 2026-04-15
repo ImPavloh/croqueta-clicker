@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { AchievementsService } from './achievements.service';
 import { GAME_PREFIX } from '@app/config/constants';
 import { ACHIEVEMENTS } from '@data/achievements.data';
-import { AchievementModel as Achievement } from '@models/achivement.model';
+import { AchievementModel as Achievement } from '@models/achievement.model';
 import { firstValueFrom } from 'rxjs';
 
 describe('AchievementsService', () => {

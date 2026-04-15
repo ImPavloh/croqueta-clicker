@@ -60,9 +60,6 @@ export class PlayerStats {
 
     // inicializar expToNext en base al nivel inicial
     this.calculateExpToNext();
-
-    // Iniciar el timer automáticamente
-    this.startTimer();
   }
 
   // métodos
@@ -228,14 +225,12 @@ export class PlayerStats {
     // Guardar progreso al subir de nivel
     this.saveToStorage();
 
-    // Verificar si con la exp sobrante se puede subir de nivel
-    this.checkLevelUp();
-
+    // No llamamos a checkLevelUp() aquí: el while() del método público ya gestiona subidas múltiples
     this.checkAchievements();
   }
 
   private checkAchievements() {
-    var level = this._level.value;
+    const level = this._level.value;
 
     switch (level) {
       case 5:

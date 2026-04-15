@@ -134,11 +134,6 @@ export class SupabaseService {
     } catch {}
     const current = this._readPending();
 
-    // creo que esto es innecesario pero bueno, lo dejo de momento
-    try {
-      const u = this.getUser();
-    } catch {}
-
     const entry = {
       score,
       meta: meta ?? null,

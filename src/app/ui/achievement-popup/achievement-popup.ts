@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { AchievementsService } from '@services/achievements.service';
 import { AudioService } from '@services/audio.service';
 import { TranslocoModule } from '@jsverse/transloco';
-import { AchievementModel } from '@models/achivement.model';
+import { AchievementModel } from '@models/achievement.model';
 
 @Component({
   selector: 'app-achievement-popup',

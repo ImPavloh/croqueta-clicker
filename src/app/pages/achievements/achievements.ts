@@ -5,7 +5,7 @@ import { TranslocoService, TranslocoPipe } from '@jsverse/transloco';
 import { AchievementsService } from '@services/achievements.service';
 import { Tooltip } from '@ui/tooltip/tooltip';
 import { Subscription } from 'rxjs';
-import { AchievementModel } from '@models/achivement.model';
+import { AchievementModel } from '@models/achievement.model';
 
 @Component({
   selector: 'app-achievements',
