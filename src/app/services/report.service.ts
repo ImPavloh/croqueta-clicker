@@ -213,6 +213,31 @@ export class ReportService {
     }));
   }
 
+  /** Curva de bonus de click según el nivel requerido de cada mejora */
+  getUpgradeClickCurveData(): ChartItem[] {
+    return [...UPGRADES]
+      .sort((left, right) => left.level - right.level)
+      .map((upgrade) => ({
+        name: `L${upgrade.level}`,
+        value: upgrade.clicks,
+      }));
+  }
+
+  /** Evolución acumulada del bonus de click conforme se desbloquean mejoras */
+  getUpgradeCumulativeCurveData(): ChartItem[] {
+    let accumulated = 0;
+
+    return [...UPGRADES]
+      .sort((left, right) => left.level - right.level)
+      .map((upgrade) => {
+        accumulated += upgrade.clicks;
+        return {
+          name: `L${upgrade.level}`,
+          value: accumulated,
+        };
+      });
+  }
+
   /** datos para gráfico de progreso (resumidos) */
   getProgressData(): ProgressBarItem[] {
     const summary = this.getGameSummary();

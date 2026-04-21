@@ -123,6 +123,8 @@ export interface ReportPdfPayload {
   readonly achievements: AchievementReportData[];
   readonly efficiency: EfficiencyData;
   readonly upgradesByLevel: ChartItem[];
+  readonly upgradeClickCurve: ChartItem[];
+  readonly cumulativeUpgradeCurve: ChartItem[];
   readonly achievementsStatus: DonutChartItem[];
   readonly skinRarity: ChartItem[];
   readonly leaderboardStats?: LeaderboardStats | null;

@@ -25,7 +25,7 @@ export interface ProgressBarItem {
             <div class="progress-track">
               <div
                 class="progress-fill"
-                [style.width.%]="item.percentage"
+                [style.width.%]="clampPercentage(item.percentage)"
                 [style.background]="getGradient(item.percentage)"
               ></div>
             </div>
@@ -57,6 +57,9 @@ export interface ProgressBarItem {
       .progress-header {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
         margin-bottom: 4px;
       }
       .progress-label {
@@ -79,7 +82,6 @@ export interface ProgressBarItem {
         height: 100%;
         border-radius: 10px;
         transition: width 0.5s ease;
-        min-width: 2px;
       }
       .progress-pct {
         display: block;
@@ -95,6 +97,10 @@ export interface ProgressBarItem {
 export class ProgressBarsComponent {
   data = input.required<ProgressBarItem[]>();
   title = input<string>('');
+
+  clampPercentage(value: number): number {
+    return Math.max(0, Math.min(value, 100));
+  }
 
   getGradient(pct: number): string {
     if (pct >= 100) return 'linear-gradient(90deg, #6b8e23, #8fbc8f)';

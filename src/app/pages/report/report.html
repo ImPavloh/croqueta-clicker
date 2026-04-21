@@ -12,10 +12,10 @@
       <div class="report-header-inner">
         <h1 class="report-main-title">{{ 'report.title' | transloco }}</h1>
         <div class="report-actions">
-          <app-button variant="primary" (click)="refreshData()">
+          <app-button variant="primary" size="sm" (click)="refreshData()">
             {{ 'report.refresh' | transloco }}
           </app-button>
-          <app-button variant="success" (click)="exportPdf()">
+          <app-button variant="success" size="sm" (click)="exportPdf()">
             {{ 'report.exportPdf' | transloco }}
           </app-button>
         </div>
@@ -29,20 +29,31 @@
     </div>
 
     <!-- TAB NAVIGATION -->
-    <div class="tabs no-print">
-      <button class="tab-btn" [class.active]="activeTab() === 'player'" (click)="setTab('player')">
+    <div class="tabs no-print" role="tablist">
+      <app-button
+        variant="nav"
+        size="sm"
+        [active]="activeTab() === 'player'"
+        (click)="setTab('player')"
+      >
         {{ 'report.tabPlayer' | transloco }}
-      </button>
-      <button class="tab-btn" [class.active]="activeTab() === 'debug'" (click)="setTab('debug')">
+      </app-button>
+      <app-button
+        variant="nav"
+        size="sm"
+        [active]="activeTab() === 'debug'"
+        (click)="setTab('debug')"
+      >
         {{ 'report.tabDebug' | transloco }}
-      </button>
-      <button
-        class="tab-btn"
-        [class.active]="activeTab() === 'multiplayer'"
+      </app-button>
+      <app-button
+        variant="nav"
+        size="sm"
+        [active]="activeTab() === 'multiplayer'"
         (click)="setTab('multiplayer')"
       >
         {{ 'report.tabMultiplayer' | transloco }}
-      </button>
+      </app-button>
     </div>
 
     @if (summary(); as s) {
@@ -57,7 +68,7 @@
           <div class="section">
             <p class="section-title">{{ 'report.player.title' | transloco }}</p>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table compact-table">
                 <thead>
                   <tr>
                     <th>{{ 'report.metric' | transloco }}</th>
@@ -108,7 +119,7 @@
             <div class="section">
               <p class="section-title">{{ 'report.efficiencyTitle' | transloco }}</p>
               <div class="efficiency-table-wrapper">
-                <table class="data-table">
+                <table class="data-table compact-table">
                   <thead>
                     <tr>
                       <th>{{ 'report.metric' | transloco }}</th>
@@ -157,29 +168,41 @@
             <p class="section-title">{{ 'report.producersTable' | transloco }}</p>
             <div class="filter-bar no-print">
               <label class="filter-toggle">
-                <input type="checkbox" [ngModel]="filterProducerHideEmpty()" (ngModelChange)="filterProducerHideEmpty.set($event)" />
+                <input
+                  type="checkbox"
+                  [ngModel]="filterProducerHideEmpty()"
+                  (ngModelChange)="filterProducerHideEmpty.set($event)"
+                />
                 <span>{{ 'report.filterHideEmpty' | transloco }}</span>
               </label>
             </div>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table wide-table">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>{{ 'report.producerName' | transloco }}</th>
                     <th>{{ 'report.quantity' | transloco }}</th>
                     <th>{{ 'report.cpsContribution' | transloco }}</th>
-                    <th>%</th>
+                    <th>{{ 'report.share' | transloco }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   @for (p of filteredProducers(); track p.id) {
-                    <tr [class.inactive]="p.quantity === 0">
+                    <tr
+                      [class.inactive]="p.quantity === 0"
+                      [class.top-row]="p.id === topProducerId()"
+                    >
                       <td>{{ p.id }}</td>
                       <td>{{ p.name | transloco }}</td>
                       <td class="val">{{ p.quantity }}</td>
                       <td class="val">{{ p.cpsContribution | short }}/s</td>
-                      <td class="val">{{ p.cpsPercentage }}%</td>
+                      <td class="insight-cell">
+                        <div class="table-meter">
+                          <div class="table-meter-fill" [style.width.%]="p.cpsPercentage"></div>
+                          <span class="table-meter-text">{{ p.cpsPercentage }}%</span>
+                        </div>
+                      </td>
                     </tr>
                   }
                 </tbody>
@@ -196,19 +219,6 @@
                 [data]="producerBarData()"
                 [title]="'report.producerDistribution' | transloco"
                 [formatValue]="formatNumber"
-              />
-            </div>
-          </app-card>
-        }
-
-        @if (cpsDonutData().length > 0) {
-          <app-card>
-            <div class="section">
-              <app-donut-chart
-                [data]="cpsDonutData()"
-                [title]="'report.cpsDistribution' | transloco"
-                [centerLabel]="s.croquetasPerSecond"
-                [centerSub]="'CpS'"
               />
             </div>
           </app-card>
@@ -240,7 +250,10 @@
               >
             </div>
             <div class="filter-bar no-print">
-              <select [ngModel]="filterUpgradeStatus()" (ngModelChange)="filterUpgradeStatus.set($event)">
+              <select
+                [ngModel]="filterUpgradeStatus()"
+                (ngModelChange)="filterUpgradeStatus.set($event)"
+              >
                 <option value="all">{{ 'report.filterAll' | transloco }}</option>
                 <option value="bought">{{ 'report.stateBought' | transloco }}</option>
                 <option value="locked">{{ 'report.stateLocked' | transloco }}</option>
@@ -254,7 +267,7 @@
               />
             </div>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table wide-table">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -272,11 +285,13 @@
                       <td class="val">+{{ u.clicks }}</td>
                       <td class="val">{{ u.level }}</td>
                       <td class="val">
-                        @if (u.bought) {
-                          <span class="status-bought">✓</span>
-                        } @else {
-                          <span class="status-locked">✗</span>
-                        }
+                        <span
+                          class="status-pill"
+                          [class.is-positive]="u.bought"
+                          [class.is-muted]="!u.bought"
+                        >
+                          {{ (u.bought ? 'report.stateBought' : 'report.stateLocked') | transloco }}
+                        </span>
                       </td>
                     </tr>
                   }
@@ -297,6 +312,36 @@
           </div>
         </app-card>
 
+        @if (upgradeClickCurveData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-trend-chart
+                [data]="upgradeClickCurveData()"
+                [title]="'report.upgradeClickCurve' | transloco"
+                [subtitle]="'report.upgradeClickCurveHint' | transloco"
+                [variant]="'line'"
+                [scale]="'log'"
+                [formatValue]="formatWholeNumber"
+              />
+            </div>
+          </app-card>
+        }
+
+        @if (cumulativeUpgradeCurveData().length > 0) {
+          <app-card>
+            <div class="section">
+              <app-trend-chart
+                [data]="cumulativeUpgradeCurveData()"
+                [title]="'report.upgradeCumulativeCurve' | transloco"
+                [subtitle]="'report.upgradeCumulativeCurveHint' | transloco"
+                [variant]="'area'"
+                [scale]="'log'"
+                [formatValue]="formatWholeNumber"
+              />
+            </div>
+          </app-card>
+        }
+
         <!-- LOGROS -->
         <app-card>
           <div class="section">
@@ -311,14 +356,17 @@
               >
             </div>
             <div class="filter-bar no-print">
-              <select [ngModel]="filterAchievementStatus()" (ngModelChange)="filterAchievementStatus.set($event)">
+              <select
+                [ngModel]="filterAchievementStatus()"
+                (ngModelChange)="filterAchievementStatus.set($event)"
+              >
                 <option value="all">{{ 'report.filterAll' | transloco }}</option>
                 <option value="unlocked">{{ 'report.stateUnlocked' | transloco }}</option>
                 <option value="locked">{{ 'report.stateLocked' | transloco }}</option>
               </select>
             </div>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table wide-table">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -332,11 +380,15 @@
                       <td>{{ i + 1 }}</td>
                       <td>{{ a.title | transloco }}</td>
                       <td class="val">
-                        @if (a.unlocked) {
-                          <span class="status-bought">✓</span>
-                        } @else {
-                          <span class="status-locked">✗</span>
-                        }
+                        <span
+                          class="status-pill"
+                          [class.is-positive]="a.unlocked"
+                          [class.is-muted]="!a.unlocked"
+                        >
+                          {{
+                            (a.unlocked ? 'report.stateUnlocked' : 'report.stateLocked') | transloco
+                          }}
+                        </span>
                       </td>
                     </tr>
                   }
@@ -366,8 +418,7 @@
                 >{{ s.skinsUnlocked }} {{ 'report.unlocked' | transloco }}</span
               >
               <span class="badge remaining"
-                >{{ s.skinsTotal - s.skinsUnlocked }}
-                {{ 'report.remaining' | transloco }}</span
+                >{{ s.skinsTotal - s.skinsUnlocked }} {{ 'report.remaining' | transloco }}</span
               >
             </div>
             <div class="filter-bar no-print">
@@ -384,7 +435,7 @@
               </select>
             </div>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table wide-table">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -400,13 +451,18 @@
                       <td>{{ sk.id }}</td>
                       <td>{{ sk.name }}</td>
                       <td>{{ sk.rarity }}</td>
-                      <td class="val">{{ sk.requirement }}</td>
+                      <td>{{ sk.requirement }}</td>
                       <td class="val">
-                        @if (sk.unlocked) {
-                          <span class="status-bought">✓</span>
-                        } @else {
-                          <span class="status-locked">✗</span>
-                        }
+                        <span
+                          class="status-pill"
+                          [class.is-positive]="sk.unlocked"
+                          [class.is-muted]="!sk.unlocked"
+                        >
+                          {{
+                            (sk.unlocked ? 'report.stateUnlocked' : 'report.stateLocked')
+                              | transloco
+                          }}
+                        </span>
                       </td>
                     </tr>
                   }
@@ -453,7 +509,7 @@
           <div class="section">
             <p class="section-title">{{ 'report.debug.title' | transloco }}</p>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table compact-table">
                 <thead>
                   <tr>
                     <th>{{ 'report.metric' | transloco }}</th>
@@ -603,7 +659,7 @@
             <div class="section">
               <p class="section-title">{{ 'report.multiplayer.detailTitle' | transloco }}</p>
               <div class="table-wrapper">
-                <table class="data-table">
+                <table class="data-table compact-table">
                   <thead>
                     <tr>
                       <th>{{ 'report.metric' | transloco }}</th>
@@ -648,7 +704,7 @@
                     <tr>
                       <th>#</th>
                       <th>{{ 'report.lbUser' | transloco }}</th>
-                      <th>{{ 'report.lbLevel' | transloco }}</th>
+                      <th>{{ 'report.lbScore' | transloco }}</th>
                     </tr>
                   </thead>
                   <tbody>

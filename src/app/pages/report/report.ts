@@ -28,6 +28,7 @@ import { SupabaseService } from '@services/supabase.service';
 import { BarChartComponent, BarChartItem } from '@ui/charts/bar-chart';
 import { DonutChartComponent, DonutChartItem } from '@ui/charts/donut-chart';
 import { ProgressBarsComponent, ProgressBarItem } from '@ui/charts/progress-bars';
+import { TrendChartComponent, TrendChartItem } from '@ui/charts/trend-chart';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import type { LeaderboardStats } from '@models/report.model';
 
@@ -45,6 +46,7 @@ import type { LeaderboardStats } from '@models/report.model';
     BarChartComponent,
     DonutChartComponent,
     ProgressBarsComponent,
+    TrendChartComponent,
     ShortNumberPipe,
   ],
   templateUrl: './report.html',
@@ -73,13 +75,14 @@ export class Report implements OnInit {
   debugInfo = signal<DebugInfoData | null>(null);
 
   producerBarData = signal<BarChartItem[]>([]);
-  cpsDonutData = signal<DonutChartItem[]>([]);
   progressData = signal<ProgressBarItem[]>([]);
   upgradesByLevelData = signal<BarChartItem[]>([]);
   achievementStatusData = signal<DonutChartItem[]>([]);
   skinRarityData = signal<BarChartItem[]>([]);
   skinUnlockDonutData = signal<DonutChartItem[]>([]);
   producerROIData = signal<BarChartItem[]>([]);
+  upgradeClickCurveData = signal<TrendChartItem[]>([]);
+  cumulativeUpgradeCurveData = signal<TrendChartItem[]>([]);
 
   leaderboardStats = signal<LeaderboardStats | null>(null);
   leaderboardTop = signal<Array<{ username: string; score: number }>>([]);
@@ -147,6 +150,15 @@ export class Report implements OnInit {
     return Array.from(set);
   });
 
+  topProducerId = computed(() => {
+    const producer = this.filteredProducers().reduce<ProducerReportData | null>((best, current) => {
+      if (!best || current.cpsContribution > best.cpsContribution) return current;
+      return best;
+    }, null);
+
+    return producer?.id ?? null;
+  });
+
   ngOnInit() {
     this.transloco
       .selectTranslation()
@@ -168,13 +180,14 @@ export class Report implements OnInit {
     this.debugInfo.set(this.reportService.getDebugInfo());
 
     this.producerBarData.set(this.reportService.getProducerDistribution());
-    this.cpsDonutData.set(this.reportService.getCpsDistribution());
     this.progressData.set(this.reportService.getProgressData());
     this.upgradesByLevelData.set(this.reportService.getUpgradeLevelDistribution());
     this.achievementStatusData.set(this.reportService.getAchievementStatusDistribution());
     this.skinRarityData.set(this.reportService.getSkinRarityDistribution());
     this.skinUnlockDonutData.set(this.reportService.getSkinUnlockByRarityDonut());
     this.producerROIData.set(this.reportService.getProducerROIData());
+    this.upgradeClickCurveData.set(this.reportService.getUpgradeClickCurveData());
+    this.cumulativeUpgradeCurveData.set(this.reportService.getUpgradeCumulativeCurveData());
 
     this.playerRows.set(this.buildPlayerRows(summary));
     this.debugRows.set(this.buildDebugRows());
@@ -216,6 +229,10 @@ export class Report implements OnInit {
     return this.shortNumber.transform(v, 1);
   };
 
+  formatWholeNumber = (v: number): string => {
+    return this.shortNumber.transform(v, 0);
+  };
+
   /** Exportar a PDF con window.print */
   exportPdf() {
     const summary = this.summary();
@@ -244,6 +261,8 @@ export class Report implements OnInit {
       skins: this.skins(),
       efficiency: eff,
       upgradesByLevel: this.upgradesByLevelData(),
+      upgradeClickCurve: this.upgradeClickCurveData(),
+      cumulativeUpgradeCurve: this.cumulativeUpgradeCurveData(),
       achievementsStatus: this.achievementStatusData(),
       skinRarity: this.skinRarityData(),
       leaderboardStats: this.leaderboardStats(),
@@ -352,6 +371,8 @@ export class Report implements OnInit {
       achievementsTitle: t('report.achievementsTable'),
       skinsTitle: t('report.skinsTable'),
       upgradeDistributionTitle: t('report.upgradeLevelDistribution'),
+      upgradeClickCurveTitle: t('report.upgradeClickCurve'),
+      cumulativeUpgradeCurveTitle: t('report.upgradeCumulativeCurve'),
       achievementStatusTitle: t('report.achievementStatus'),
       skinRarityTitle: t('report.skinRarityDistribution'),
       leaderboardTitle: t('report.leaderboardStatsTitle'),
@@ -373,6 +394,7 @@ export class Report implements OnInit {
       achievementLabel: t('report.achievements'),
       stateLabel: t('report.status'),
       userLabel: t('report.lbUser'),
+      scoreLabel: t('report.lbScore'),
       levelLabel: t('report.level'),
       timeLabel: t('report.timePlaying'),
       multiplierLabel: t('report.multiplier'),

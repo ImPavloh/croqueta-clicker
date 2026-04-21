@@ -25,65 +25,74 @@
       <app-newsline />
       <app-floating-buttons />
     }
-    <div class="clicker-container">
-      <app-level-up-popup />
-
-      <app-event />
-      <app-floating />
-      @if (!isMobile) {
-        <app-stats variant="desktop" />
-        @defer (on idle) {
-          <app-leaderboard />
-        } @placeholder {
-          <div></div>
-        }
-        @if (timeService.isCroquetaDay()) {
-          <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
-            <div class="indicator-glow"></div>
-            <div class="indicator-ring"></div>
-            <img
-              src="assets/skins/croqueta-dorada.webp"
-              class="indicator-img"
-              alt="Croqueta Day"
-              decoding="async"
-            />
-            <span class="indicator-badge">x3</span>
-          </div>
-        }
-      }
-      @if (isMobile) {
-        <div class="mobile-top">
-          <app-stats variant="mobile" />
-        </div>
-        <div class="clicker-wrapper">
-          <app-clicker />
-        </div>
-        @defer (on idle) {
-          <app-leaderboard mode="panel" class="mobile-leaderboard" />
-        } @placeholder {
-          <div></div>
-        }
-        <div class="mobile-bottom">
-          <app-counter />
-        </div>
-      } @else {
-        <div class="desktop-content">
-          <app-clicker />
-          <app-counter />
-        </div>
-      }
-      @if (tutorialCompleted()) {
-        <app-croquetita />
-      }
-      <app-pixi-canvas />
-    </div>
-    @if (!isMobile) {
-      <div class="menu-container">
+    @if (showMobileRoutePanel()) {
+      <div class="menu-container mobile-route-panel">
         <app-navbar />
         <div class="page-content">
           <router-outlet />
         </div>
       </div>
+    } @else {
+      <div class="clicker-container">
+        <app-level-up-popup />
+
+        <app-event />
+        <app-floating />
+        @if (!isMobile) {
+          <app-stats variant="desktop" />
+          @defer (on idle) {
+            <app-leaderboard />
+          } @placeholder {
+            <div></div>
+          }
+          @if (timeService.isCroquetaDay()) {
+            <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
+              <div class="indicator-glow"></div>
+              <div class="indicator-ring"></div>
+              <img
+                src="assets/skins/croqueta-dorada.webp"
+                class="indicator-img"
+                alt="Croqueta Day"
+                decoding="async"
+              />
+              <span class="indicator-badge">x3</span>
+            </div>
+          }
+        }
+        @if (isMobile) {
+          <div class="mobile-top">
+            <app-stats variant="mobile" />
+          </div>
+          <div class="clicker-wrapper">
+            <app-clicker />
+          </div>
+          @defer (on idle) {
+            <app-leaderboard mode="panel" class="mobile-leaderboard" />
+          } @placeholder {
+            <div></div>
+          }
+          <div class="mobile-bottom">
+            <app-counter />
+          </div>
+        } @else {
+          <div class="desktop-content">
+            <app-clicker />
+            <app-counter />
+          </div>
+        }
+        @if (tutorialCompleted()) {
+          <app-croquetita />
+        }
+        <app-pixi-canvas />
+      </div>
+      @if (!isMobile) {
+        <div class="menu-container">
+          <app-navbar />
+          <div class="page-content">
+            <router-outlet />
+          </div>
+        </div>
+      }
     }
   </div>
   @if (isDebugMode) {

@@ -2,6 +2,7 @@ import { AchievementsService } from '@services/achievements.service';
 import {
   Component,
   signal,
+  computed,
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
@@ -13,7 +14,7 @@ import {
   Injector,
   runInInjectionContext,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import { Navbar } from '@ui/navbar/navbar';
 import { Clicker } from '@ui/clicker/clicker';
@@ -47,6 +48,7 @@ import { EventService } from '@services/event.service';
 import { TimeService } from '@services/time.service';
 import { FpsCounterComponent } from '@ui/fps-counter/fps-counter';
 import { PerformanceService } from '@services/performance.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -86,9 +88,12 @@ export class App implements OnInit, OnDestroy {
   tutorialCompleted = signal(false);
   splashVisible = signal(false);
   firstTimeUser = signal(false);
+  currentRoute = signal('/');
+  showMobileRoutePanel = computed(() => this.isMobile && this.currentRoute() !== '/');
 
   private perfEffect?: EffectRef;
   private injector = inject(Injector);
+  private routerSub?: Subscription;
 
   constructor(
     private playerStats: PlayerStats,
@@ -102,11 +107,14 @@ export class App implements OnInit, OnDestroy {
     private eventService: EventService,
     private options: OptionsService,
     protected timeService: TimeService,
+    private router: Router,
     private ngZone: NgZone,
     private renderer: Renderer2,
     private performanceService: PerformanceService,
   ) {
     this.debugService.isDebugMode$.subscribe((is) => (this.isDebugMode = is));
+    this.currentRoute.set(this.normalizeRoute(this.router.url));
+
     const tutorialDone = this.options.getGameItem('tutorial_completed') === 'true';
     const splashShown = this.options.getGameItem('splash_shown') === 'true';
 
@@ -193,6 +201,13 @@ export class App implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setupPerformanceHints();
+
+    this.routerSub = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.currentRoute.set(this.normalizeRoute(event.urlAfterRedirects));
+      });
+
     this.ngZone.runOutsideAngular(() => {
       this.renderer.listen(window, 'resize', () => {
         // Solo verificamos si ha cambiado el breakpoint, no cada pixel
@@ -275,6 +290,7 @@ export class App implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.perfEffect?.destroy();
     this.levelSub?.unsubscribe();
+    this.routerSub?.unsubscribe();
     this.playerStats.stopTimer();
     if (this.updateCheckIntervalId) {
       clearInterval(this.updateCheckIntervalId);
@@ -394,5 +410,9 @@ export class App implements OnInit, OnDestroy {
   onLanguageSelectionFinished() {
     this.languageSelectionVisible.set(false);
     this.tutorialVisible.set(true);
+  }
+
+  private normalizeRoute(url: string): string {
+    return url.split('?')[0]?.split('#')[0] || '/';
   }
 }

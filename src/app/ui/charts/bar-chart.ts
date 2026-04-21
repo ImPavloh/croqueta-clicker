@@ -16,14 +16,16 @@ export interface BarChartItem {
       <div class="bars-wrapper">
         @for (item of chartData(); track item.name) {
           <div class="bar-row">
-            <span class="bar-label" [title]="item.name">{{ item.name }}</span>
-            <div class="bar-track">
+            <div class="bar-meta">
+              <span class="bar-label" [title]="item.name">{{ item.name }}</span>
+              <span class="bar-value">{{ item.displayValue }}</span>
+            </div>
+            <div class="bar-track" [attr.aria-label]="item.name + ': ' + item.displayValue">
               <div
                 class="bar-fill"
                 [style.width.%]="item.widthPct"
                 [style.background]="getColor($index)"
               ></div>
-              <span class="bar-value">{{ item.displayValue }}</span>
             </div>
           </div>
         }
@@ -45,46 +47,61 @@ export interface BarChartItem {
       .bars-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
       }
       .bar-row {
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .bar-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
       }
       .bar-label {
-        min-width: 100px;
-        max-width: 120px;
         font-size: 0.82rem;
         color: #5c4a2a;
-        text-align: right;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-weight: 600;
+        flex: 1;
+        min-width: 0;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
       }
       .bar-track {
-        flex: 1;
-        height: 24px;
+        width: 100%;
+        height: 18px;
         background: #f5e6c8;
-        border-radius: 12px;
+        border-radius: 999px;
         position: relative;
         overflow: hidden;
         border: 1px solid #d4b896;
+        box-shadow: inset 0 1px 2px rgba(75, 59, 27, 0.08);
       }
       .bar-fill {
         height: 100%;
-        border-radius: 12px;
+        border-radius: inherit;
         transition: width 0.5s ease;
-        min-width: 2px;
       }
       .bar-value {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
         font-size: 0.75rem;
         font-weight: 600;
         color: #4b3b1b;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 640px) {
+        .bar-meta {
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .bar-value {
+          align-self: flex-end;
+        }
       }
     `,
   ],
@@ -118,7 +135,7 @@ export class BarChartComponent {
     const fmt = this.formatValue();
     return items.map((item) => ({
       name: item.name,
-      widthPct: (item.value / max) * 100,
+      widthPct: max > 0 ? Math.max(0, Math.min((item.value / max) * 100, 100)) : 0,
       displayValue: fmt(item.value),
     }));
   });
