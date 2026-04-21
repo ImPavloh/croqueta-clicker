@@ -41,9 +41,6 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.16
         version: 4.1.18
-      '@types/crypto-js':
-        specifier: ^4.2.2
-        version: 4.2.2
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.24(postcss@8.5.6)
@@ -87,6 +84,9 @@ importers:
       '@angular/compiler-cli':
         specifier: ^21.0.0
         version: 21.1.2(@angular/compiler@21.1.2)(typescript@5.9.3)
+      '@types/crypto-js':
+        specifier: ^4.2.2
+        version: 4.2.2
       '@types/node':
         specifier: ^22.0.0
         version: 22.19.7

@@ -18,6 +18,7 @@ El proyecto está diseñado con una **arquitectura modular basada en componentes
 - **Experiencia (EXP) y nivel**: El jugador gana EXP al realizar acciones (clics, compras). Al acumular suficiente EXP, sube de nivel, lo que desbloquea nuevas mejoras, productores y contenido.
 - **Productores**: Son "edificios" o entidades que el jugador puede comprar para generar croquetas automáticamente (puntos por segundo). Su coste aumenta exponencialmente con cada compra.
 - **Mejoras (Upgrades)**: Aumentan la cantidad de croquetas obtenidas por cada clic manual. Suelen tener un requisito de nivel para ser desbloqueadas.
+- **Prestigio**: Al alcanzar el nivel mínimo, el jugador puede reiniciar el progreso económico para obtener **croquetas doradas**, que aumentan de forma permanente el multiplicador global y aceleran futuras partidas.
 - **Skins**: Elementos cosméticos que cambian la apariencia de la croqueta principal. Se desbloquean al cumplir ciertos requisitos (nivel, total de croquetas, logros, etc.).
 - **Logros (Achievements)**: Metas que el jugador puede cumplir para marcar su progreso. Desbloquear logros es persistente.
 - **Eventos especiales**: Como la "Croqueta Dorada", que aparece aleatoriamente y otorga un bonus temporal si se le hace clic.
@@ -72,6 +73,16 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - `unlockAchievement(id)`: Desbloquea un logro, lo guarda en `localStorage` y lo añade a una cola (`queue$`) para ser mostrado en la UI.
     - Maneja logros especiales como "desbloquea tu primer logro" y "desbloquea todos los logros".
 
+- **`PrestigeService`**:
+  - **Responsabilidad**: Gestiona la capa de progresión meta del juego.
+  - **Estado que maneja**: `prestigeLevel`, `goldenCroquetas` y `prestigeMultiplier`.
+  - **Funcionalidad clave**:
+    - `canPrestige()`: Comprueba si el jugador puede prestigiar, con nivel mínimo actual de `50`.
+    - `getPrestigePreview()`: Calcula cuántas croquetas doradas ganará el jugador y el multiplicador resultante antes de confirmar la acción.
+    - `performPrestige()`: Aumenta el nivel de prestigio, suma croquetas doradas, recalcula el multiplicador global y reinicia el progreso económico normal.
+    - Resetea productores, mejoras, puntos y estadísticas base, pero conserva el progreso de meta-progresión y desbloquea logros específicos de prestigio.
+    - Aplica un multiplicador permanente basado en croquetas doradas y un factor de reducción de XP por nivel de prestigio.
+
 - **`SkinsService`**:
   - **Responsabilidad**: Gestiona las apariencias (skins) de la croqueta.
   - **Funcionalidad clave**:
@@ -104,7 +115,8 @@ A continuación se detalla la responsabilidad de cada servicio principal:
   - **Funcionalidad clave**:
     - `getGameSummary()`: Resumen del jugador (nivel, croquetas, CPS, tiempo jugado).
     - `getProducersData()`, `getUpgradesData()`, `getAchievementsData()`, `getSkinsTableData()`: Datos para tablas.
-    - `getProducerDistribution()`, `getCpsDistribution()`, `getProducerROIData()`, `getSkinUnlockByRarityDonut()`: Datos para gráficos.
+    - `getProducerDistribution()`, `getProducerROIData()`, `getSkinUnlockByRarityDonut()`, `getAchievementStatusDistribution()`, `getSkinRarityDistribution()`: Datos para gráficos de barras y donuts.
+    - `getUpgradeClickCurveData()` y `getUpgradeCumulativeCurveData()`: Datos para las nuevas curvas de línea y área del informe.
     - `getEfficiencyData()`: Campos calculados (clicks/min, croquetas/min, ROI, eficiencia de upgrades).
     - `getDebugInfo()`: Información técnica (localStorage, idioma, versiones).
 
@@ -112,7 +124,8 @@ A continuación se detalla la responsabilidad de cada servicio principal:
   - **Responsabilidad**: Exporta el informe a PDF.
   - **Funcionalidad clave**:
     - `exportReport(payload)`: Genera un PDF con jsPDF + AutoTable incluyendo tablas, gráficos y estadísticas.
-    - Convierte los gráficos del DOM a imagen con `html2canvas` y `canvg`.
+    - Dibuja directamente en el PDF tablas, barras y curvas del dashboard, evitando depender del DOM para la exportación principal.
+    - Representa las curvas de mejoras con escala logarítmica para que datos muy exponenciales sigan siendo legibles.
 
 - **Internacionalización (i18n) con Transloco**:
   - `SmartMissingHandler` en `app.config.ts`: Silencia warnings de traducción durante los primeros 3 segundos (antes de que el JSON cargue), pero loguea claves genuinamente faltantes después.
@@ -128,6 +141,39 @@ Esta carpeta contiene los "blueprints" de todos los elementos del juego, lo que 
 - `achievements.data.ts`: Define todos los logros disponibles.
 - `news.data.ts`: Contiene los mensajes de noticias.
 - `tutorial.data.ts`: Define los mensajes del tutorial y sus condiciones de aparición.
+
+### 3.4. Sistema de prestigio
+
+El prestigio actúa como el bucle de meta-progresión principal del juego y está accesible desde la página de opciones.
+
+- **Requisitos y recompensa**:
+  - El prestigio se desbloquea a partir del nivel `50`.
+  - La recompensa son `croquetas doradas`, calculadas a partir del nivel actual y del número de prestigios previos.
+  - Cada croqueta dorada aumenta el multiplicador global del jugador en `+0.05`.
+
+- **Qué reinicia**:
+  - Puntos actuales, progreso económico, productores comprados, mejoras adquiridas, estadísticas base del jugador y controles de compra.
+
+- **Qué se conserva**:
+  - Nivel de prestigio, croquetas doradas acumuladas, multiplicador permanente, logros ya desbloqueados y el resto de meta-progresión persistente.
+
+- **Efectos secundarios de diseño**:
+  - El prestigio acelera futuras partidas con un multiplicador global acumulativo.
+  - También reduce la XP requerida por nivel en un `2%` por prestigio, con un tope del `30%`.
+
+### 3.5. Panel de informes y exportación PDF
+
+El panel de informes (`src/app/pages/report/`) funciona como una página analítica completa dentro del juego y está disponible tanto en escritorio como en móvil.
+
+- **Vista del dashboard**:
+  - Usa tarjetas reutilizables, tablas con filtros, badges de estado y gráficos SVG standalone.
+  - Incluye gráficos de barras, donuts y componentes de tendencia (`trend-chart`) para representar progresiones y acumulados.
+  - En móvil se renderiza dentro de un panel de ruta específico del layout principal, en lugar de quedar oculto por la interfaz del clicker.
+
+- **Exportación PDF**:
+  - Reutiliza el mismo conjunto de datos calculados por `ReportService`, pero no depende de capturas de pantalla del dashboard.
+  - Genera tablas con `jspdf-autotable` y dibuja gráficos simplificados nativos en el canvas del PDF.
+  - Esto hace que la exportación sea más estable, más ligera y más predecible que una captura rasterizada del informe.
 
 ## 4. Flujo de interacción típico (Ejemplo: Comprar una mejora)
 

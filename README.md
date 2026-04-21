@@ -28,12 +28,13 @@ Descarga el juego en Google Play:
 - **Productores automáticos**: 15 tipos de productores que generan croquetas por segundo (early, mid, late y endgame)
 - **Mejoras (Upgrades)**: 33 mejoras, diseñadas para mantener los clicks competitivos frente a los productores
 - **Sistema de niveles**: Gana experiencia y sube de nivel desbloqueando contenido
+- **Sistema de prestigio**: Reinicia el progreso económico al alcanzar el nivel mínimo para ganar croquetas doradas y un multiplicador global permanente
 - **Logros (Achievements)**: 30+ logros por desbloquear con diferentes categorías
 - **Croqueta dorada**: Evento especial aleatorio con bonificación x2
 - **Skins personalizables**: 33 skins desbloqueables para personalizar tu croqueta (comunes, raras, épicas y legendarias)
 - **Música y efectos de sonido**: Audio dinámico que mejora la experiencia de juego
 - **Opciones de configuración**: Ajustes de audio, gráficos y rendimiento
-- **Informes y estadísticas**: Panel avanzado con 8+ tablas, 8+ gráficos, 6 filtros interactivos, campos calculados y exportación a PDF
+- **Informes y estadísticas**: Panel avanzado con tablas, donuts refinados, gráficos de barras, curvas de progreso, filtros interactivos, campos calculados y exportación a PDF
 - **Estadísticas detalladas**: Panel con estadísticas de juego y progreso
 - **Multilenguaje**: Soporte para español e inglés
 - **Modo offline**: Juega sin conexión y sincroniza al volver online
@@ -69,6 +70,7 @@ Descarga el juego en Google Play:
 - **Interfaz responsiva**: Diseño adaptado para móviles y ordenadores
 - **Audio dinámico**: Música y efectos de sonido con Web Audio API
 - **Efectos visuales**: Partículas con Pixi.js, animaciones suaves
+- **Progresión meta**: Prestigio persistente con bonus acumulativos y reducción de XP requerida según el nivel de prestigio
 - **Testing**: Tests unitarios con Vitest
 
 ---
@@ -104,7 +106,7 @@ El proyecto sigue una **arquitectura modular basada en componentes standalone** 
 
 ### Layout y comportamiento (Home / Clicker)
 
-La aplicación usa un layout persistente con el componente principal de juego (`app-clicker`) visible en la parte izquierda del diseño (o en toda la pantalla en móviles), mientras que el área de contenido (`router-outlet`) en la derecha muestra las páginas: `Upgrades`, `Achievements`, `Skins`, `Options`, etc. El `app-clicker` actúa como el componente Home y las páginas del menú son los componentes adicionales accesibles mediante `app-navbar`.
+La aplicación usa un layout persistente con el componente principal de juego (`app-clicker`) visible en la parte izquierda del diseño, mientras que el área de contenido (`router-outlet`) en la derecha muestra las páginas: `Upgrades`, `Achievements`, `Skins`, `Options`, `Report`, etc. En móvil, las rutas directas se renderizan dentro de un panel específico de navegación para que vistas como informes funcionen a pantalla completa. El `app-clicker` actúa como el componente Home y las páginas del menú son los componentes adicionales accesibles mediante `app-navbar`.
 
 ### Flujo de datos
 
@@ -204,13 +206,14 @@ Si quieres probar el juego descargado sin compilarlo, descarga el APK debug desd
 
 ## Scripts disponibles (Angular CLI)
 
-| Comando                                | Descripción                                            |
-| -------------------------------------- | ------------------------------------------------------ |
-| `ng serve`                             | Inicia servidor de desarrollo en http://localhost:4200 |
-| `ng build`                             | Compila el proyecto para producción en `/dist`         |
-| `ng build --configuration development` | Compila en modo desarrollo (con source maps)           |
-| `ng test`                              | Ejecuta tests unitarios con Karma + Jasmine            |
-| `ng serve --open`                      | Inicia servidor y abre navegador automáticamente       |
+| Comando                                | Descripción                                                    |
+| -------------------------------------- | -------------------------------------------------------------- |
+| `ng serve`                             | Inicia servidor de desarrollo en http://localhost:4200         |
+| `ng build`                             | Compila el proyecto para producción en `/dist`                 |
+| `ng build --configuration development` | Compila en modo desarrollo (con source maps)                   |
+| `ng test`                              | Ejecuta la suite de tests configurada para Angular 21 / Vitest |
+| `pnpm serve:prod`                      | Sirve el build generado localmente en `http://localhost:8080`  |
+| `ng serve --open`                      | Inicia servidor y abre navegador automáticamente               |
 
 ---
 
