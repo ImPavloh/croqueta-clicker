@@ -11,7 +11,10 @@ import { TranslocoService } from '@jsverse/transloco';
 import { GAME_PREFIX } from '@app/config/constants';
 import { DebugService } from '@services/debug.service';
 import { PrestigeService } from '@services/prestige.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
 import {
+  DailyContractReportData,
+  DailyContractSummaryData,
   ProducerReportData,
   UpgradeReportData,
   AchievementReportData,
@@ -38,6 +41,7 @@ export class ReportService {
   private transloco = inject(TranslocoService);
   private debugService = inject(DebugService);
   private prestigeService = inject(PrestigeService);
+  private dailyContracts = inject(DailyContractsService);
 
   /** Recopila el resumen general del juego */
   getGameSummary(): GameSummary {
@@ -263,6 +267,75 @@ export class ReportService {
     ];
   }
 
+  getDailyContractSummaryData(): DailyContractSummaryData {
+    const state = this.dailyContracts.getSnapshot();
+    const completed = state.contracts.filter(
+      (contract) => contract.progress >= contract.target,
+    ).length;
+    const claimed = state.contracts.filter((contract) => contract.claimed).length;
+    const total = state.contracts.length;
+
+    return {
+      total,
+      completed,
+      claimed,
+      claimable: state.contracts.filter(
+        (contract) => contract.progress >= contract.target && !contract.claimed,
+      ).length,
+      completionPercentage: total > 0 ? Math.round((claimed / total) * 100) : 0,
+      resetTimeLabel: this.dailyContracts.resetTimeLabel(),
+      currentStreak: state.stats.currentStreak,
+      bestStreak: state.stats.bestStreak,
+      weeklyCompletedDays: state.stats.weeklyCompletedDays,
+      lifetimeClaimedContracts: state.stats.lifetimeClaimedContracts,
+      lifetimeCompletedDays: state.stats.lifetimeCompletedDays,
+      lifetimeBonusClaims: state.stats.lifetimeBonusClaims,
+      bonusRewardLabel: state.bonus.reward
+        ? this.formatDailyContractReward(state.bonus.reward)
+        : '-',
+      bonusClaimed: state.bonus.claimed,
+      bonusAvailable:
+        state.contracts.length > 0 &&
+        state.contracts.every((contract) => contract.progress >= contract.target) &&
+        !state.bonus.claimed,
+      manualClicks: state.metrics.manual_clicks,
+      levelsGained: state.metrics.levels_gained,
+      producerPurchases: state.metrics.producer_purchases,
+      upgradePurchases: state.metrics.upgrade_purchases,
+      eventCaptures: state.metrics.event_captures,
+      prestiges: state.metrics.prestiges,
+    };
+  }
+
+  getDailyContractsData(): DailyContractReportData[] {
+    const state = this.dailyContracts.getSnapshot();
+
+    return state.contracts.map((contract) => ({
+      id: contract.id,
+      icon: contract.icon,
+      title: this.transloco.translate(contract.titleKey, { target: contract.target }),
+      description: this.transloco.translate(contract.descriptionKey),
+      progress: contract.progress,
+      target: contract.target,
+      percentage:
+        contract.target > 0
+          ? Math.max(0, Math.min(100, Math.round((contract.progress / contract.target) * 100)))
+          : 0,
+      rewardLabel: this.formatDailyContractReward(contract.reward),
+      claimed: contract.claimed,
+      completed: contract.progress >= contract.target,
+    }));
+  }
+
+  getDailyContractProgressData(): ProgressBarItem[] {
+    return this.getDailyContractsData().map((contract) => ({
+      label: `${contract.icon} ${contract.title}`,
+      current: contract.progress,
+      total: contract.target,
+      percentage: contract.percentage,
+    }));
+  }
+
   getUpgradeLevelDistribution(): ChartItem[] {
     const buckets = [
       { key: 'report.levelRange.0_10', min: 0, max: 11 },
@@ -323,6 +396,28 @@ export class ReportService {
       name: this.transloco.translate(key),
       value,
     }));
+  }
+
+  private formatDailyContractReward(reward: {
+    type: 'points' | 'multiplier' | 'golden_croquetas';
+    value: number;
+    durationSeconds?: number;
+  }): string {
+    switch (reward.type) {
+      case 'points':
+        return this.transloco.translate('contracts.rewards.points', {
+          minutes: Math.max(1, Math.round(reward.value / 60)),
+        });
+      case 'multiplier':
+        return this.transloco.translate('contracts.rewards.multiplier', {
+          value: reward.value.toFixed(1),
+          minutes: Math.max(1, Math.round((reward.durationSeconds ?? 0) / 60)),
+        });
+      case 'golden_croquetas':
+        return this.transloco.translate('contracts.rewards.golden', {
+          value: reward.value,
+        });
+    }
   }
 
   /** Datos de skins para la tabla */

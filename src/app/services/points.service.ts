@@ -98,7 +98,7 @@ export class PointsService {
     this.clickEvent$.next(amount);
 
     if (typeof window !== 'undefined' && amount.gt(0)) {
-      this.floatingService.show('+' + amount.toString(), { x, y });
+      this.floatingService.show(`+${this.formatPoints(amount)}`, { x, y });
     }
     this.autosaveService.requestSave();
   }
@@ -109,7 +109,7 @@ export class PointsService {
     const amount = this.pointsPerSecond().times(multiplier).times(prestigeMult);
     this._points.update((v) => v.plus(amount));
     if (typeof window !== 'undefined' && amount.gt(0)) {
-      this.floatingService.show('+' + amount.toString());
+      this.floatingService.show(`+${this.formatPoints(amount)}`);
     }
 
     this.autosaveService.requestSave();

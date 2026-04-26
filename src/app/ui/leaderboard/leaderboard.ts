@@ -22,8 +22,10 @@ import { ModalService } from '@services/modal.service';
 import { TimeService } from '@services/time.service';
 import { AudioService } from '@services/audio.service';
 import { PrestigeService } from '@services/prestige.service';
+import { HudPanelsService } from '@services/hud-panels.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
+import type { LeaderboardMode } from '@models/leaderboard.model';
 
 @Component({
   selector: 'app-leaderboard',
@@ -43,6 +45,7 @@ export class Leaderboard implements OnInit {
   private translocoService = inject(TranslocoService);
   private audioService = inject(AudioService);
   private prestigeService = inject(PrestigeService);
+  private hudPanels = inject(HudPanelsService);
   protected timeService = inject(TimeService);
 
   top = signal<Array<any>>([]);
@@ -60,12 +63,15 @@ export class Leaderboard implements OnInit {
   pageSize = 5;
   items = signal<Array<any>>([]);
   total = signal<number | null>(null);
+  leaderboardMode = signal<LeaderboardMode>('level');
 
   totalPages = computed(() => {
     const t = this.total();
     if (!t) return 0;
     return Math.ceil(t / this.pageSize);
   });
+
+  isContractsMode = computed(() => this.leaderboardMode() === 'contracts');
 
   private cachedPoints = '';
   currentPoints = computed(() => {
@@ -117,6 +123,14 @@ export class Leaderboard implements OnInit {
     if (this.mode() === 'full') {
       return;
     }
+
+    effect(() => {
+      if (this.mode() !== 'panel') {
+        return;
+      }
+
+      this.expanded.set(this.hudPanels.activePanel() === 'leaderboard');
+    });
 
     this.refresh();
 
@@ -210,7 +224,7 @@ export class Leaderboard implements OnInit {
             if (el.contains(ev.target as Node)) return;
 
             // otherwise collapse
-            this.expanded.set(false);
+            this.hudPanels.close('leaderboard');
           } catch {}
         };
 
@@ -500,10 +514,13 @@ export class Leaderboard implements OnInit {
         this._outsideTouchHandler = undefined;
       }
     } catch {}
+    if (this.mode() === 'panel') {
+      this.hudPanels.close('leaderboard');
+    }
   }
 
   togglePanel() {
-    this.expanded.update((v) => !v);
+    this.hudPanels.toggle('leaderboard');
     try {
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     } catch {}
@@ -540,12 +557,13 @@ export class Leaderboard implements OnInit {
 
   async searchFullImmediate() {
     const q = (this.query() ?? '').trim();
+    const currentMode = this.leaderboardMode();
     try {
       this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
     } catch {}
     const p = this.page();
 
-    const key = `${q}:${p}`;
+    const key = `${currentMode}:${q}:${p}`;
     const cached = this.cache.get(key);
     const now = Date.now();
     if (cached && now - cached.ts < this.CACHE_TTL_MS) {
@@ -560,7 +578,7 @@ export class Leaderboard implements OnInit {
     this.loading.set(true);
     this.message.set('');
     try {
-      const res = await this.supabase.searchLeaderboard(q, p, this.pageSize);
+      const res = await this.supabase.searchLeaderboard(q, p, this.pageSize, currentMode);
 
       if (token !== this.requestToken) return;
 
@@ -588,6 +606,17 @@ export class Leaderboard implements OnInit {
     } finally {
       if (token === this.requestToken) this.loading.set(false);
     }
+  }
+
+  setLeaderboardMode(mode: LeaderboardMode) {
+    if (this.leaderboardMode() === mode) return;
+
+    this.leaderboardMode.set(mode);
+    this.page.set(0);
+    this.message.set('');
+    this.items.set([]);
+    this.total.set(null);
+    this.searchFullImmediate();
   }
 
   prevPage() {

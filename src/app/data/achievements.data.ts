@@ -349,4 +349,38 @@ export const ACHIEVEMENTS: AchievementModel[] = [
     description: 'achievements.prestigio_25.description',
     icon: '/assets/achievements/level/10.webp',
   },
+
+  // ------------------------------------------------------------
+  // 📜 CONTRATOS DIARIOS
+  // ------------------------------------------------------------
+  {
+    id: 'contracts_first_claim',
+    title: 'achievements.contracts_first_claim.title',
+    description: 'achievements.contracts_first_claim.description',
+    icon: '/assets/achievements/achievements/first.webp',
+  },
+  {
+    id: 'contracts_first_day',
+    title: 'achievements.contracts_first_day.title',
+    description: 'achievements.contracts_first_day.description',
+    icon: '/assets/achievements/achievements/all.webp',
+  },
+  {
+    id: 'contracts_bonus_claimed',
+    title: 'achievements.contracts_bonus_claimed.title',
+    description: 'achievements.contracts_bonus_claimed.description',
+    icon: '/assets/achievements/gameplay/autoclicker.webp',
+  },
+  {
+    id: 'contracts_streak_3',
+    title: 'achievements.contracts_streak_3.title',
+    description: 'achievements.contracts_streak_3.description',
+    icon: '/assets/achievements/level/6.webp',
+  },
+  {
+    id: 'contracts_streak_7',
+    title: 'achievements.contracts_streak_7.title',
+    description: 'achievements.contracts_streak_7.description',
+    icon: '/assets/achievements/level/8.webp',
+  },
 ];

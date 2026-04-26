@@ -183,6 +183,26 @@
     "prestigio_25": {
       "title": "Eternally Crispy",
       "description": "Reach prestige level 25."
+    },
+    "contracts_first_claim": {
+      "title": "First assignment",
+      "description": "Claim your first daily contract."
+    },
+    "contracts_first_day": {
+      "title": "Day closed",
+      "description": "Complete all three contracts in a single day."
+    },
+    "contracts_bonus_claimed": {
+      "title": "Extra shift",
+      "description": "Claim the daily bonus for clearing all three contracts."
+    },
+    "contracts_streak_3": {
+      "title": "Weekly rhythm",
+      "description": "Keep a 3-day streak by completing daily contracts."
+    },
+    "contracts_streak_7": {
+      "title": "Locked-in contractor",
+      "description": "Reach a 7-day streak of completed daily contracts."
     }
   },
   "options": {
@@ -266,6 +286,8 @@
   },
   "leaderboard": {
     "title": "Leaderboard",
+    "modeLevel": "Level",
+    "modeContracts": "Contracts",
     "statsTitle": "Statistics",
     "players": "Players",
     "avgLevel": "Average level",
@@ -275,9 +297,13 @@
     "viewAll": "View full leaderboard",
     "nextSync": "Next sync in",
     "searchPlaceholder": "Search username...",
+    "searchPlaceholderContracts": "Search contract runners...",
     "search": "Search",
     "name": "Name",
     "level": "Level",
+    "contracts": "Contracts",
+    "streak": "Streak",
+    "bonus": "Bonus",
     "when": "When",
     "page": "Page",
     "previous": "Previous",
@@ -718,9 +744,144 @@
   "navbar": {
     "upgrades": "Upgrades",
     "achievements": "Achievements",
+    "contracts": "Contracts",
     "skins": "Skins",
     "report": "Reports",
     "options": "Options"
+  },
+  "contracts": {
+    "eyebrow": "Daily retention",
+    "title": "Daily contracts",
+    "subtitle": "Three rotating goals that push a different session every day and give the current run a sharper payoff.",
+    "streakLabel": "Streak",
+    "weeklyLabel": "Week",
+    "metricsTitle": "Daily activity",
+    "contractLabel": "Contract",
+    "progressLabel": "Progress",
+    "summaryLabel": "Claimed",
+    "resetLabel": "Reset",
+    "summary": "{{completed}} / {{total}} completed",
+    "claimable": "{{count}} ready to claim",
+    "resetIn": "Reset in {{time}}",
+    "rewardLabel": "Reward",
+    "bonusEyebrow": "Daily bonus",
+    "bonusTitle": "Bonus for closing the day",
+    "bonusSubtitle": "When you complete all three daily contracts you unlock an extra reward and extend your weekly streak.",
+    "bonusRewardLabel": "Bonus",
+    "bonusClaimButton": "Claim bonus",
+    "bonusClaimedButton": "Bonus claimed",
+    "bonusLockedButton": "Finish all 3 first",
+    "claimButton": "Claim",
+    "claimedButton": "Claimed",
+    "open": "Open contracts",
+    "widgetEyebrow": "Today's contracts",
+    "widgetStreak": "Streak: {{count}}",
+    "widgetWeek": "Week: {{count}}/7",
+    "widgetBonusReady": "Daily bonus ready to claim",
+    "metrics": {
+      "completed": "Completed",
+      "claimed": "Claimed",
+      "claimable": "Claimable",
+      "resetTime": "Time until reset",
+      "currentStreak": "Current streak",
+      "bestStreak": "Best streak",
+      "weeklyCompletedDays": "Days completed this week",
+      "lifetimeClaimedContracts": "Lifetime claimed contracts",
+      "completedDays": "Lifetime completed days",
+      "bonusClaims": "Bonus claims",
+      "bonusReward": "Today's bonus",
+      "bonusStatus": "Bonus status",
+      "manualClicks": "Manual clicks",
+      "levelsGained": "Levels gained",
+      "producerPurchases": "Producers bought",
+      "upgradePurchases": "Upgrades bought",
+      "eventCaptures": "Events captured",
+      "prestiges": "Prestiges"
+    },
+    "status": {
+      "inProgress": "In progress",
+      "completed": "Ready",
+      "claimed": "Claimed"
+    },
+    "rewards": {
+      "points": "{{minutes}} min of production",
+      "multiplier": "x{{value}} for {{minutes}} min",
+      "golden": "+{{value}} golden croquette"
+    },
+    "definitions": {
+      "clickWarmup": {
+        "title": "Do {{target}} clicks to kick off the run",
+        "description": "Give the early game momentum so the session does not start flat."
+      },
+      "clickSprint": {
+        "title": "Do {{target}} manual clicks",
+        "description": "Push the active session harder before the next bottleneck hits."
+      },
+      "clickMarathon": {
+        "title": "Keep a {{target}} click marathon going",
+        "description": "Lean into a longer active session once your economy can support it."
+      },
+      "clickOverdrive": {
+        "title": "Hit overdrive with {{target}} clicks",
+        "description": "Turn an advanced run into a heavy manual burst to close the day harder."
+      },
+      "levelSpark": {
+        "title": "Gain {{target}} momentum levels",
+        "description": "Secure quick unlocks and make the start of the day feel productive."
+      },
+      "levelPush": {
+        "title": "Gain {{target}} levels today",
+        "description": "Force a cleaner run and move toward unlocks and prestige."
+      },
+      "levelBreakthrough": {
+        "title": "Break through with {{target}} extra levels",
+        "description": "Calls for a tighter production run to punch through the next wall."
+      },
+      "producerBootstrap": {
+        "title": "Build the base with {{target}} producers",
+        "description": "Forces an early solid economy instead of drifting on manual clicks."
+      },
+      "producerSpree": {
+        "title": "Buy {{target}} producers",
+        "description": "Grow your CPS base and stop leaning only on manual clicking."
+      },
+      "producerFleet": {
+        "title": "Expand the line with {{target}} producers",
+        "description": "Pushes the midgame into a more industrial, stable CPS climb."
+      },
+      "producerEmpire": {
+        "title": "Raise a {{target}} producer empire",
+        "description": "Scale a late economy that can sustain costly upgrades and prestiges."
+      },
+      "upgradeHunt": {
+        "title": "Buy {{target}} upgrades",
+        "description": "Turn build progression into a real daily target."
+      },
+      "upgradeSweep": {
+        "title": "Sweep the shop with {{target}} upgrades",
+        "description": "Rewards you for not leaving obvious build value on the board."
+      },
+      "upgradeForge": {
+        "title": "Forge the build with {{target}} upgrades",
+        "description": "Sharpens the late-day run by tightening the build before the next spike."
+      },
+      "eventHunter": {
+        "title": "Capture {{target}} special event",
+        "description": "Reuse the event system as an active session objective."
+      },
+      "eventRush": {
+        "title": "Chain {{target}} special events",
+        "description": "Stay alert and turn event spawns into a real advantage source."
+      },
+      "eventStorm": {
+        "title": "Control the storm with {{target}} events",
+        "description": "Designed for long runs where every special spawn matters."
+      },
+      "prestigeReady": {
+        "title": "Perform {{target}} prestige today",
+        "description": "Activate the meta loop and give the day a clean run-ending goal."
+      }
+    }
   },
   "debug": {
     "title": "Debug Menu",
@@ -793,6 +954,11 @@
       "avg": "Average level",
       "max": "Max level",
       "min": "Min level",
+      "contractsTitle": "Contracts leaderboard",
+      "contractsDetailTitle": "Contracts leaderboard details",
+      "avgContracts": "Average contracts",
+      "maxContracts": "Max contracts",
+      "minContracts": "Min contracts",
       "lastUpdate": "Last update",
       "loading": "Loading multiplayer stats...",
       "detailTitle": "Leaderboard details",
@@ -851,10 +1017,12 @@
     "lbMaxLevel": "Max level",
     "lbMinLevel": "Min level",
     "lbDistribution": "Level distribution",
+    "lbDistributionContracts": "Completed contracts distribution",
     "lbUser": "User",
     "lbLevel": "Level",
     "lbScore": "Score",
     "lbTop": "Top leaderboard",
+    "lbTopContracts": "Top contract runners",
     "stateBought": "Bought",
     "stateLocked": "Locked",
     "stateUnlocked": "Unlocked",

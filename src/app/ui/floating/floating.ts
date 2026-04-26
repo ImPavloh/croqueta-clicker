@@ -1,11 +1,9 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FloatingService, FloatingMessage } from '@services/floating.service';
 import { OptionsService } from '@services/options.service';
-import { ShortNumberPipe } from '@pipes/short-number.pipe';
 
 @Component({
   selector: 'app-floating',
-  imports: [ShortNumberPipe],
   templateUrl: './floating.html',
   styleUrls: ['./floating.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -106,6 +106,14 @@ export class PrestigeService {
     if (level >= 25) this.achievementsService.unlockAchievement('prestigio_25');
   }
 
+  grantGoldenCroquetas(amount: number): void {
+    if (amount <= 0) return;
+
+    this._goldenCroquetas.update((value) => value + amount);
+    this._prestigeMultiplier.set(calculatePrestigeMultiplier(this._goldenCroquetas()));
+    this.saveToStorage();
+  }
+
   /** Reset total (borrar TODO, incluyendo prestigio para reiniciar partida) */
   reset(): void {
     this._prestigeLevel.set(0);

@@ -1,0 +1,188 @@
+<div class="contracts-page">
+  <div class="contracts-header">
+    <div class="contracts-header__copy">
+      <span class="contracts-header__eyebrow">{{ 'contracts.eyebrow' | transloco }}</span>
+      <h2 class="contracts-header__title">{{ 'contracts.title' | transloco }}</h2>
+      <p class="contracts-header__subtitle">{{ 'contracts.subtitle' | transloco }}</p>
+    </div>
+
+    <div class="contracts-header__meta">
+      <div class="contracts-header__meta-card">
+        <span class="contracts-header__meta-label">{{ 'contracts.summaryLabel' | transloco }}</span>
+        <strong class="contracts-header__meta-value"
+          >{{ claimedCount() }} / {{ totalCount() }}</strong
+        >
+      </div>
+      <div class="contracts-header__meta-card contracts-header__meta-card--highlight">
+        <span class="contracts-header__meta-label">{{ 'contracts.resetLabel' | transloco }}</span>
+        <strong class="contracts-header__meta-value contracts-header__meta-value--mono">{{
+          resetTimeLabel()
+        }}</strong>
+      </div>
+      <div class="contracts-header__meta-card">
+        <span class="contracts-header__meta-label">{{ 'contracts.streakLabel' | transloco }}</span>
+        <strong class="contracts-header__meta-value"
+          >{{ currentStreak() }} / {{ bestStreak() }}</strong
+        >
+      </div>
+      <div class="contracts-header__meta-card">
+        <span class="contracts-header__meta-label">{{ 'contracts.weeklyLabel' | transloco }}</span>
+        <strong class="contracts-header__meta-value">{{ weeklyCompletedDays() }} / 7</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="contracts-progress-shell">
+    <div class="contracts-progress-track">
+      <div class="contracts-progress-fill" [style.width.%]="completionRatio()"></div>
+    </div>
+    <div class="contracts-progress-caption">
+      <span>{{
+        'contracts.summary' | transloco: { completed: completedCount(), total: totalCount() }
+      }}</span>
+      <span>{{ 'contracts.claimable' | transloco: { count: claimableCount() } }}</span>
+    </div>
+  </div>
+
+  <div class="contracts-overview-grid">
+    <section class="contracts-bonus-shell">
+      <div class="contracts-bonus" [class.contracts-bonus--claimed]="bonusClaimed()">
+        <div class="contracts-bonus__copy">
+          <span class="contracts-bonus__eyebrow">{{ 'contracts.bonusEyebrow' | transloco }}</span>
+          <h3 class="contracts-bonus__title">{{ 'contracts.bonusTitle' | transloco }}</h3>
+          <p class="contracts-bonus__subtitle">{{ 'contracts.bonusSubtitle' | transloco }}</p>
+        </div>
+
+        <div class="contracts-bonus__stats">
+          <div class="contracts-bonus__stat">
+            <span>{{ 'contracts.bonusRewardLabel' | transloco }}</span>
+            <strong>{{ bonusRewardLabel() }}</strong>
+          </div>
+          <div class="contracts-bonus__stat">
+            <span>{{ 'contracts.metrics.completedDays' | transloco }}</span>
+            <strong>{{ lifetimeCompletedDays() }}</strong>
+          </div>
+          <div class="contracts-bonus__stat">
+            <span>{{ 'contracts.metrics.bonusClaims' | transloco }}</span>
+            <strong>{{ lifetimeBonusClaims() }}</strong>
+          </div>
+        </div>
+
+        <div class="contracts-bonus__actions">
+          <app-button
+            [variant]="bonusAvailable() && !bonusClaimed() ? 'success' : 'primary'"
+            size="sm"
+            [disabled]="bonusClaimed() || !bonusAvailable()"
+            (click)="claimBonus()"
+          >
+            @if (bonusClaimed()) {
+              {{ 'contracts.bonusClaimedButton' | transloco }}
+            } @else if (bonusAvailable()) {
+              {{ 'contracts.bonusClaimButton' | transloco }}
+            } @else {
+              {{ 'contracts.bonusLockedButton' | transloco }}
+            }
+          </app-button>
+        </div>
+      </div>
+    </section>
+
+    <section class="contracts-focus-shell">
+      <div class="contracts-focus__header">
+        <span class="contracts-focus__eyebrow">{{ 'contracts.metricsTitle' | transloco }}</span>
+        <strong class="contracts-focus__progress">{{ completionRatio() }}%</strong>
+      </div>
+
+      <div class="contracts-focus__grid">
+        <div class="contracts-focus__item">
+          <span>{{ 'contracts.metrics.claimable' | transloco }}</span>
+          <strong>{{ claimableCount() }}</strong>
+        </div>
+        <div class="contracts-focus__item">
+          <span>{{ 'contracts.metrics.currentStreak' | transloco }}</span>
+          <strong>{{ currentStreak() }}</strong>
+        </div>
+        <div class="contracts-focus__item">
+          <span>{{ 'contracts.metrics.weeklyCompletedDays' | transloco }}</span>
+          <strong>{{ weeklyCompletedDays() }} / 7</strong>
+        </div>
+        <div class="contracts-focus__item contracts-focus__item--wide">
+          <span>{{ 'contracts.metrics.bonusStatus' | transloco }}</span>
+          <strong>{{ bonusStatusLabel() }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="contracts-grid">
+    @for (contract of sortedContracts(); track contract.id) {
+      <app-card>
+        <div class="contract-card" [class.contract-card--claimed]="contract.claimed">
+          <div class="contract-card__header">
+            <div class="contract-card__icon">{{ contract.icon }}</div>
+
+            <div class="contract-card__copy">
+              <h3 class="contract-card__title">
+                {{ contract.titleKey | transloco: { target: contract.target } }}
+              </h3>
+              <p class="contract-card__description">
+                {{ contract.descriptionKey | transloco }}
+              </p>
+            </div>
+
+            @if (contract.claimed) {
+              <span class="contract-card__status contract-card__status--claimed">
+                {{ 'contracts.status.claimed' | transloco }}
+              </span>
+            } @else if (isCompleted(contract)) {
+              <span class="contract-card__status contract-card__status--completed">
+                {{ 'contracts.status.completed' | transloco }}
+              </span>
+            } @else {
+              <span class="contract-card__status contract-card__status--progress">
+                {{ 'contracts.status.inProgress' | transloco }}
+              </span>
+            }
+          </div>
+
+          <div class="contract-card__body">
+            <div class="contract-card__reward">
+              <span class="contract-card__reward-label">{{
+                'contracts.rewardLabel' | transloco
+              }}</span>
+              <strong class="contract-card__reward-value">{{ rewardLabel(contract) }}</strong>
+            </div>
+
+            <div class="contract-card__progress">
+              <div class="contract-card__progress-topline">
+                <span>{{ contract.progress }} / {{ contract.target }}</span>
+                <span>{{ progressPercent(contract) }}%</span>
+              </div>
+              <div class="contract-card__progress-track">
+                <div
+                  class="contract-card__progress-fill"
+                  [style.width.%]="progressPercent(contract)"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contract-card__actions">
+            <app-button
+              [variant]="isCompleted(contract) && !contract.claimed ? 'success' : 'primary'"
+              size="sm"
+              [disabled]="contract.claimed || !isCompleted(contract)"
+              (click)="claim(contract.id)"
+            >
+              @if (contract.claimed) {
+                {{ 'contracts.claimedButton' | transloco }}
+              } @else {
+                {{ 'contracts.claimButton' | transloco }}
+              }
+            </app-button>
+          </div>
+        </div>
+      </app-card>
+    }
+  </div>
+</div>

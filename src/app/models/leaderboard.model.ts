@@ -1,3 +1,14 @@
+export type LeaderboardMode = 'level' | 'contracts';
+
+export interface LeaderboardMeta {
+  prestige?: number;
+  currentStreak?: number;
+  bestStreak?: number;
+  completedDays?: number;
+  bonusClaims?: number;
+  weeklyCompletedDays?: number;
+}
+
 /**
  * Interfaz base para una entrada en la tabla de clasificación.
  */
@@ -15,7 +26,7 @@ export interface LeaderboardRow {
   score: number;
 
   /** Metadatos adicionales (incluye nivel de prestigio) */
-  meta?: { prestige?: number } | null;
+  meta?: LeaderboardMeta | null;
 
   /** Fecha de creación de la entrada */
   created_at?: string | null;

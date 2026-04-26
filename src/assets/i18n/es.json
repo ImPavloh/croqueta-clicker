@@ -183,6 +183,26 @@
     "prestigio_25": {
       "title": "Eternamente crujiente",
       "description": "Alcanza nivel de prestigio 25."
+    },
+    "contracts_first_claim": {
+      "title": "Primer encargo",
+      "description": "Reclama tu primer contrato diario."
+    },
+    "contracts_first_day": {
+      "title": "Jornada cerrada",
+      "description": "Completa los tres contratos de un mismo día."
+    },
+    "contracts_bonus_claimed": {
+      "title": "Turno extra",
+      "description": "Reclama el bonus diario por cerrar los tres contratos."
+    },
+    "contracts_streak_3": {
+      "title": "Ritmo semanal",
+      "description": "Mantén una racha de 3 días completando contratos."
+    },
+    "contracts_streak_7": {
+      "title": "Contrato blindado",
+      "description": "Llega a una racha de 7 días completando contratos diarios."
     }
   },
   "options": {
@@ -266,6 +286,8 @@
   },
   "leaderboard": {
     "title": "Clasificación",
+    "modeLevel": "Nivel",
+    "modeContracts": "Contratos",
     "statsTitle": "Estadísticas",
     "players": "Jugadores",
     "avgLevel": "Nivel medio",
@@ -275,9 +297,13 @@
     "viewAll": "Ver tabla completa",
     "nextSync": "Siguiente sincronización",
     "searchPlaceholder": "Buscar usuario...",
+    "searchPlaceholderContracts": "Buscar por contratos...",
     "search": "Buscar",
     "name": "Nombre",
     "level": "Nivel",
+    "contracts": "Contratos",
+    "streak": "Racha",
+    "bonus": "Bonus",
     "when": "Cuándo",
     "page": "Página",
     "previous": "Anterior",
@@ -718,9 +744,144 @@
   "navbar": {
     "upgrades": "Mejoras",
     "achievements": "Logros",
+    "contracts": "Contratos",
     "skins": "Skins",
     "report": "Informes",
     "options": "Opciones"
+  },
+  "contracts": {
+    "eyebrow": "Retención diaria",
+    "title": "Contratos diarios",
+    "subtitle": "Tres objetivos rotativos para empujarte a una sesión distinta cada día y cerrar mejor la run actual.",
+    "streakLabel": "Racha",
+    "weeklyLabel": "Semana",
+    "metricsTitle": "Actividad del día",
+    "contractLabel": "Contrato",
+    "progressLabel": "Progreso",
+    "summaryLabel": "Reclamados",
+    "resetLabel": "Reinicio",
+    "summary": "{{completed}} / {{total}} completados",
+    "claimable": "{{count}} listos para reclamar",
+    "resetIn": "Se reinician en {{time}}",
+    "rewardLabel": "Recompensa",
+    "bonusEyebrow": "Bonus diario",
+    "bonusTitle": "Bonus por cerrar el día",
+    "bonusSubtitle": "Cuando completas los tres contratos del día desbloqueas una recompensa extra y alimentas la racha semanal.",
+    "bonusRewardLabel": "Bonus",
+    "bonusClaimButton": "Reclamar bonus",
+    "bonusClaimedButton": "Bonus cobrado",
+    "bonusLockedButton": "Completa los 3 primero",
+    "claimButton": "Reclamar",
+    "claimedButton": "Reclamado",
+    "open": "Ver contratos",
+    "widgetEyebrow": "Contratos de hoy",
+    "widgetStreak": "Racha: {{count}}",
+    "widgetWeek": "Semana: {{count}}/7",
+    "widgetBonusReady": "Bonus diario listo para reclamar",
+    "metrics": {
+      "completed": "Completados",
+      "claimed": "Reclamados",
+      "claimable": "Por reclamar",
+      "resetTime": "Tiempo hasta reinicio",
+      "currentStreak": "Racha actual",
+      "bestStreak": "Mejor racha",
+      "weeklyCompletedDays": "Días completados esta semana",
+      "lifetimeClaimedContracts": "Contratos reclamados total",
+      "completedDays": "Días completados total",
+      "bonusClaims": "Bonus cobrados",
+      "bonusReward": "Bonus de hoy",
+      "bonusStatus": "Estado del bonus",
+      "manualClicks": "Clicks manuales",
+      "levelsGained": "Niveles ganados",
+      "producerPurchases": "Productores comprados",
+      "upgradePurchases": "Upgrades comprados",
+      "eventCaptures": "Eventos capturados",
+      "prestiges": "Prestigios"
+    },
+    "status": {
+      "inProgress": "En curso",
+      "completed": "Listo",
+      "claimed": "Cobrado"
+    },
+    "rewards": {
+      "points": "{{minutes}} min de producción",
+      "multiplier": "x{{value}} durante {{minutes}} min",
+      "golden": "+{{value}} croqueta dorada"
+    },
+    "definitions": {
+      "clickWarmup": {
+        "title": "Haz {{target}} clicks para arrancar la run",
+        "description": "Da impulso al early game y evita que la sesión se quede fría al principio."
+      },
+      "clickSprint": {
+        "title": "Haz {{target}} clicks manuales",
+        "description": "Acelera el juego activo y empuja la sesión antes del siguiente cuello de botella."
+      },
+      "clickMarathon": {
+        "title": "Mantén un maratón de {{target}} clicks",
+        "description": "Exprime una sesión larga de click activo cuando tu economía ya acompaña."
+      },
+      "clickOverdrive": {
+        "title": "Entra en overdrive con {{target}} clicks",
+        "description": "Convierte una run avanzada en una ráfaga manual intensa para cerrar mejor el día."
+      },
+      "levelSpark": {
+        "title": "Gana {{target}} niveles de impulso",
+        "description": "Asegura desbloqueos rápidos y una sensación clara de progreso al arrancar."
+      },
+      "levelPush": {
+        "title": "Sube {{target}} niveles hoy",
+        "description": "Fuerza una run más eficiente y te acerca a desbloqueos y prestigio."
+      },
+      "levelBreakthrough": {
+        "title": "Rompe la run con {{target}} niveles extra",
+        "description": "Pide una sesión más fina de producción y timing para atravesar el siguiente muro."
+      },
+      "producerBootstrap": {
+        "title": "Monta la base con {{target}} productores",
+        "description": "Te obliga a construir una economía mínima sólida cuanto antes."
+      },
+      "producerSpree": {
+        "title": "Compra {{target}} productores",
+        "description": "Infla tu base de CPS y evita depender solo del click manual."
+      },
+      "producerFleet": {
+        "title": "Amplía la cadena con {{target}} productores",
+        "description": "Empuja una fase media más industrial y estabiliza la subida de CPS."
+      },
+      "producerEmpire": {
+        "title": "Levanta un imperio de {{target}} productores",
+        "description": "Haz crecer una economía tardía que sostenga prestigios y upgrades caros."
+      },
+      "upgradeHunt": {
+        "title": "Compra {{target}} upgrades",
+        "description": "Convierte la mejora de build en un objetivo diario real."
+      },
+      "upgradeSweep": {
+        "title": "Limpia la tienda con {{target}} upgrades",
+        "description": "Te premia por no dejar valor muerto en el tablero de mejoras."
+      },
+      "upgradeForge": {
+        "title": "Forja la build con {{target}} upgrades",
+        "description": "Aprieta el tramo avanzado del día afinando la build antes del siguiente pico."
+      },
+      "eventHunter": {
+        "title": "Captura {{target}} evento especial",
+        "description": "Reutiliza el sistema de eventos como objetivo activo de sesión."
+      },
+      "eventRush": {
+        "title": "Encadena {{target}} eventos especiales",
+        "description": "Mantente atento al mapa y convierte los eventos en una fuente real de ventaja."
+      },
+      "eventStorm": {
+        "title": "Domina la tormenta con {{target}} eventos",
+        "description": "Pensado para runs largas donde cada aparición especial cuenta."
+      },
+      "prestigeReady": {
+        "title": "Haz {{target}} prestigio hoy",
+        "description": "Activa el meta-loop y da al día un cierre claro de run."
+      }
+    }
   },
   "debug": {
     "title": "Menú Debug",
@@ -793,6 +954,11 @@
       "avg": "Nivel medio",
       "max": "Nivel maximo",
       "min": "Nivel minimo",
+      "contractsTitle": "Clasificacion de contratos",
+      "contractsDetailTitle": "Detalle de la clasificacion de contratos",
+      "avgContracts": "Contratos medios",
+      "maxContracts": "Maximo de contratos",
+      "minContracts": "Minimo de contratos",
       "lastUpdate": "Ultima actualizacion",
       "loading": "Cargando estadisticas multijugador...",
       "detailTitle": "Detalle de la clasificacion",
@@ -851,10 +1017,12 @@
     "lbMaxLevel": "Nivel maximo",
     "lbMinLevel": "Nivel minimo",
     "lbDistribution": "Distribucion de niveles",
+    "lbDistributionContracts": "Distribucion de contratos completados",
     "lbUser": "Usuario",
     "lbLevel": "Nivel",
     "lbScore": "Puntuación",
     "lbTop": "Top leaderboard",
+    "lbTopContracts": "Top de contratos",
     "stateBought": "Comprada",
     "stateLocked": "Bloqueada",
     "stateUnlocked": "Desbloqueado",

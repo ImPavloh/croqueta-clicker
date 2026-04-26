@@ -6,6 +6,15 @@
     <app-button variant="nav" [routerLink]="'/achievements'">
       {{ 'navbar.achievements' | transloco }}
     </app-button>
+    @if (isMobile()) {
+      <app-button variant="nav" (click)="openContractsModal()">
+        {{ 'navbar.contracts' | transloco }}
+      </app-button>
+    } @else {
+      <app-button variant="nav" [routerLink]="'/contracts'">
+        {{ 'navbar.contracts' | transloco }}
+      </app-button>
+    }
   </div>
   @if (!isMobile()) {
     <app-newsline />

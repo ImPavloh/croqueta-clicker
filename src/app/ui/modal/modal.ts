@@ -8,6 +8,7 @@ import { DebugService } from '@services/debug.service';
 import { UsernameService } from '@services/username.service';
 import { Upgrades } from '@pages/upgrades/upgrades';
 import { Achievements } from '@pages/achievements/achievements';
+import { Contracts } from '@pages/contracts/contracts';
 import { Skins } from '@pages/skins/skins';
 import { Options } from '@pages/options/options';
 import { News } from '@pages/news/news';
@@ -22,6 +23,7 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
   imports: [
     Upgrades,
     Achievements,
+    Contracts,
     Skins,
     Options,
     News,
@@ -62,6 +64,8 @@ export class Modal {
         return this.translocoService.translate('upgrades.title');
       case 'achievements':
         return this.translocoService.translate('achievements.title');
+      case 'contracts':
+        return this.translocoService.translate('contracts.title');
       case 'skins':
         return this.translocoService.translate('skins.title');
       case 'options':

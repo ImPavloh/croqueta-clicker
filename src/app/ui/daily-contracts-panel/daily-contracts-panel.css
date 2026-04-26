@@ -1,0 +1,240 @@
+:host {
+  display: block;
+}
+
+.cp-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  contain: layout style;
+}
+
+.cp-overlay.cp-overlay-active {
+  z-index: 170;
+}
+
+.cp-overlay.cp-overlay-inactive {
+  z-index: 160;
+}
+
+.cp-card {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(31, 41, 55, 0.75) 0%, rgba(17, 24, 39, 0.9) 100%);
+  border: 2px solid rgba(251, 191, 36, 0.35);
+  border-radius: 16px;
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+  transition:
+    width 0.3s ease,
+    opacity 0.3s ease,
+    top 0.2s ease;
+  contain: layout style paint;
+}
+
+.cp-right {
+  top: 96px;
+  right: 16px;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-right.cp-collapsed {
+  width: 90px;
+}
+
+.cp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s ease;
+}
+
+.cp-header:hover {
+  background: rgba(251, 191, 36, 0.04);
+}
+
+.cp-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: rgba(251, 191, 36, 0.95);
+  text-transform: uppercase;
+}
+
+.cp-glyph,
+.cp-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.cp-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.cp-title span:last-child {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 1s ease,
+    visibility 1s ease;
+}
+
+.cp-collapsed .cp-title span:last-child,
+.cp-collapsed .cp-badge {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  width: 0;
+}
+
+.cp-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cp-badge {
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b, #fb923c);
+  color: #2f1800;
+  font-size: 0.76rem;
+  font-weight: 900;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.cp-toggle {
+  font-size: 24px;
+  color: rgba(251, 191, 36, 0.8);
+  line-height: 1;
+}
+
+.cp-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  flex: 1;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 160ms ease 220ms,
+    visibility 0s linear 0s;
+}
+
+.cp-body.cp-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 90ms ease 0ms,
+    visibility 0s linear 90ms;
+  pointer-events: none;
+  display: none;
+}
+
+:host(.contracts-panel-shifted) .cp-right {
+  top: 196px;
+}
+
+@media (max-width: 1344px) {
+  .cp-overlay {
+    display: none;
+  }
+
+  :host(.mobile-contracts-panel) .cp-overlay {
+    display: block;
+    pointer-events: none;
+    z-index: 900;
+  }
+
+  :host(.mobile-contracts-panel) .cp-overlay.cp-overlay-active {
+    z-index: 910;
+  }
+
+  :host(.mobile-contracts-panel) .cp-overlay.cp-overlay-inactive {
+    z-index: 900;
+  }
+
+  :host(.mobile-contracts-panel) .cp-right {
+    top: calc(50% + 86px);
+    right: 12px;
+    transform: translateY(-50%);
+    width: 72px;
+    transition:
+      top 220ms ease,
+      width 220ms ease,
+      right 220ms ease,
+      transform 220ms ease;
+  }
+
+  :host(.mobile-contracts-panel) .cp-overlay.cp-overlay-active .cp-right {
+    top: 50%;
+  }
+
+  :host(.mobile-contracts-panel) .cp-overlay.cp-overlay-inactive .cp-right {
+    top: calc(50% + 86px);
+  }
+
+  :host(.mobile-contracts-panel) .cp-right.cp-collapsed {
+    width: 56px;
+    height: 56px;
+  }
+
+  :host(.mobile-contracts-panel) .cp-right:not(.cp-collapsed) {
+    width: 240px;
+  }
+
+  :host(.mobile-contracts-panel) .cp-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 10px;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.32);
+    justify-content: center;
+  }
+
+  :host(.mobile-contracts-panel) .cp-header-meta {
+    gap: 0;
+  }
+
+  :host(.mobile-contracts-panel) .cp-collapsed .cp-toggle {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+  }
+
+  :host(.mobile-contracts-panel) .cp-body {
+    max-height: min(55vh, 420px);
+    overflow-y: auto;
+  }
+}

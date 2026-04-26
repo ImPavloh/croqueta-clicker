@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 export type ModalType =
   | 'upgrades'
   | 'achievements'
+  | 'contracts'
   | 'skins'
   | 'options'
   | 'debug'

@@ -14,6 +14,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { NewsLine } from '@ui/newsline/newsline';
 import { ButtonComponent } from '@ui/button/button';
 import { TranslocoModule } from '@jsverse/transloco';
+import { ModalService } from '@services/modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -26,6 +27,7 @@ export class Navbar implements OnInit, OnDestroy {
   private ngZone = inject(NgZone);
   private renderer = inject(Renderer2);
   private debugService = inject(DebugService);
+  private modalService = inject(ModalService);
   private resizeListener?: () => void;
 
   public isMobile = signal<boolean>(
@@ -53,5 +55,9 @@ export class Navbar implements OnInit, OnDestroy {
     if (this.resizeListener) {
       this.resizeListener();
     }
+  }
+
+  protected openContractsModal(): void {
+    this.modalService.openModal('contracts');
   }
 }

@@ -1,7 +1,16 @@
 @if (mode() === 'panel') {
   <!-- la tabla de clasificacion como componente en la zona del clicker -->
-  <div class="lp-overlay">
-    <div class="lp-card lp-right" [class.lp-collapsed]="!expanded()">
+  <div
+    class="lp-overlay"
+    [class.lp-overlay-active]="expanded()"
+    [class.lp-overlay-inactive]="!expanded()"
+  >
+    <div
+      class="lp-card lp-right"
+      [class.lp-collapsed]="!expanded()"
+      [class.lp-active]="expanded()"
+      [class.lp-inactive]="!expanded()"
+    >
       <div class="lp-header" (click)="togglePanel()">
         <div class="lp-title">
           <img
@@ -111,12 +120,36 @@
   <!-- la tabla de clasificacion para el modal -->
   <div class="lp-full-container">
     <div class="gap-4 flex flex-col">
+      <div class="lp-mode-switch">
+        <app-button
+          size="sm"
+          variant="nav"
+          [active]="leaderboardMode() === 'level'"
+          (click)="setLeaderboardMode('level')"
+        >
+          {{ 'leaderboard.modeLevel' | transloco }}
+        </app-button>
+        <app-button
+          size="sm"
+          variant="nav"
+          [active]="leaderboardMode() === 'contracts'"
+          (click)="setLeaderboardMode('contracts')"
+        >
+          {{ 'leaderboard.modeContracts' | transloco }}
+        </app-button>
+      </div>
+
       <div class="lp-search-toolbar">
         <input
           type="text"
           [(ngModel)]="query"
           (ngModelChange)="scheduleSearchFull()"
-          placeholder="{{ 'leaderboard.searchPlaceholder' | transloco }}"
+          placeholder="{{
+            (leaderboardMode() === 'contracts'
+              ? 'leaderboard.searchPlaceholderContracts'
+              : 'leaderboard.searchPlaceholder'
+            ) | transloco
+          }}"
           (keydown.enter)="searchFullImmediate()"
           class="lp-search-input"
           [disabled]="loading()"
@@ -147,9 +180,22 @@
               <tr>
                 <th>#</th>
                 <th>{{ 'leaderboard.name' | transloco }}</th>
-                <th>{{ 'leaderboard.level' | transloco }}</th>
-                <th>{{ 'leaderboard.prestige' | transloco }}</th>
-                <th>{{ 'leaderboard.when' | transloco }}</th>
+                <th>
+                  {{
+                    (isContractsMode() ? 'leaderboard.contracts' : 'leaderboard.level') | transloco
+                  }}
+                </th>
+                <th>
+                  {{
+                    (isContractsMode() ? 'leaderboard.streak' : 'leaderboard.prestige') | transloco
+                  }}
+                </th>
+                <th>
+                  {{ (isContractsMode() ? 'leaderboard.bonus' : 'leaderboard.when') | transloco }}
+                </th>
+                @if (isContractsMode()) {
+                  <th>{{ 'leaderboard.when' | transloco }}</th>
+                }
               </tr>
             </thead>
             <tbody>
@@ -158,8 +204,23 @@
                   <td>{{ page() * pageSize + i + 1 }}</td>
                   <td>{{ r.username ?? (r.user_id | slice: 0 : 8) }}</td>
                   <td>{{ r.score | short }}</td>
-                  <td>{{ r.meta?.prestige || '—' }}</td>
-                  <td>{{ r.created_at | date: 'short' }}</td>
+                  <td>
+                    @if (isContractsMode()) {
+                      {{ r.meta?.bestStreak || r.meta?.currentStreak || '—' }}
+                    } @else {
+                      {{ r.meta?.prestige || '—' }}
+                    }
+                  </td>
+                  <td>
+                    @if (isContractsMode()) {
+                      {{ r.meta?.bonusClaims || '—' }}
+                    } @else {
+                      {{ r.created_at | date: 'short' }}
+                    }
+                  </td>
+                  @if (isContractsMode()) {
+                    <td>{{ r.created_at | date: 'short' }}</td>
+                  }
                 </tr>
               }
             </tbody>

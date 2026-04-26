@@ -43,6 +43,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { SupabaseService } from '@services/supabase.service';
 import { SwUpdate } from '@angular/service-worker';
 import { Leaderboard } from '@ui/leaderboard/leaderboard';
+import { DailyContractsPanel } from '@ui/daily-contracts-panel/daily-contracts-panel';
 import { EventComponent } from '@ui/event/event';
 import { EventService } from '@services/event.service';
 import { TimeService } from '@services/time.service';
@@ -71,6 +72,7 @@ import { filter } from 'rxjs/operators';
     SkinUnlockPopup,
     Backgrounds,
     Leaderboard,
+    DailyContractsPanel,
     EventComponent,
     TutorialOverlayComponent,
     LanguageSelectionComponent,
@@ -202,10 +204,14 @@ export class App implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setupPerformanceHints();
 
+    this.handleMobileContractsRoute(this.currentRoute());
+
     this.routerSub = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
-        this.currentRoute.set(this.normalizeRoute(event.urlAfterRedirects));
+        const normalizedRoute = this.normalizeRoute(event.urlAfterRedirects);
+        this.currentRoute.set(normalizedRoute);
+        this.handleMobileContractsRoute(normalizedRoute);
       });
 
     this.ngZone.runOutsideAngular(() => {
@@ -414,5 +420,15 @@ export class App implements OnInit, OnDestroy {
 
   private normalizeRoute(url: string): string {
     return url.split('?')[0]?.split('#')[0] || '/';
+  }
+
+  private handleMobileContractsRoute(route: string): void {
+    if (!this.isMobile || route !== '/contracts') {
+      return;
+    }
+
+    this.modalService.openModal('contracts');
+    this.currentRoute.set('/');
+    void this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }

@@ -14,8 +14,10 @@
   z-index: 250;
   position: absolute;
 
-  font-size: 2rem;
+  font-family: 'Chewy', system-ui;
+  font-size: 1.85rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   white-space: nowrap;
 
   color: rgb(255, 243, 216);

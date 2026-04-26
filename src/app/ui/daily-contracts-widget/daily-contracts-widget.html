@@ -1,0 +1,60 @@
+<div class="contracts-widget" [class.contracts-widget--panel]="mode() === 'panel'">
+  @if (mode() === 'embedded') {
+    <div class="contracts-widget__header">
+      <div class="contracts-widget__copy">
+        <span class="contracts-widget__eyebrow">{{ 'contracts.widgetEyebrow' | transloco }}</span>
+        <strong class="contracts-widget__title">{{
+          'contracts.summary'
+            | transloco
+              : { completed: contractsService.claimedCount(), total: contractsService.totalCount() }
+        }}</strong>
+      </div>
+
+      @if (contractsService.claimableCount() > 0) {
+        <span class="contracts-widget__badge">{{ contractsService.claimableCount() }}</span>
+      }
+    </div>
+  }
+
+  <div class="contracts-widget__timer">
+    {{ 'contracts.resetIn' | transloco: { time: contractsService.resetTimeLabel() } }}
+  </div>
+
+  <div class="contracts-widget__stats">
+    <span>{{
+      'contracts.widgetStreak' | transloco: { count: contractsService.currentStreak() }
+    }}</span>
+    <span>{{
+      'contracts.widgetWeek' | transloco: { count: contractsService.weeklyCompletedDays() }
+    }}</span>
+  </div>
+
+  @if (contractsService.bonusAvailable() && !contractsService.bonusClaimed()) {
+    <div class="contracts-widget__bonus-ready">
+      {{ 'contracts.widgetBonusReady' | transloco }}
+    </div>
+  }
+
+  <div class="contracts-widget__list">
+    @for (contract of previewContracts(); track contract.id) {
+      <div
+        class="contracts-widget__item"
+        [class.contracts-widget__item--claimed]="contract.claimed"
+      >
+        <div class="contracts-widget__item-headline">
+          <span class="contracts-widget__item-icon">{{ contract.icon }}</span>
+          <span class="contracts-widget__item-label">{{
+            contract.titleKey | transloco: { target: contract.target }
+          }}</span>
+        </div>
+        <div class="contracts-widget__bar">
+          <div class="contracts-widget__bar-fill" [style.width.%]="progressPercent(contract)"></div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <app-button variant="nav" size="sm" [routerLink]="'/contracts'">
+    {{ 'contracts.open' | transloco }}
+  </app-button>
+</div>

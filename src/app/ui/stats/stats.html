@@ -51,6 +51,20 @@
       </div>
 
       <div class="grid grid-cols-2 gap-3">
+        @if (prestigeLevel() > 0) {
+          <div class="stat-card group stat-card--prestige col-span-2">
+            <div class="stat-icon-wrapper stat-icon-wrapper--prestige">
+              <span class="stat-prestige-icon">🥇</span>
+            </div>
+            <div class="flex flex-col gap-1 flex-1 min-w-0">
+              <span class="stat-label">{{ 'prestige.badge' | transloco }}</span>
+              <span class="stat-value stat-value--prestige font-mono tabular-nums">{{
+                prestigeLevel()
+              }}</span>
+            </div>
+          </div>
+        }
+
         <div class="stat-card group">
           <div class="stat-icon-wrapper">
             <img
@@ -111,115 +125,135 @@
   </div>
 } @else {
   <div class="ds-overlay">
-    @if (prestigeLevel() > 0) {
-      <div class="ds-card ds-prestige">
-        <span class="prestige-icon">🥇</span>
-        <span class="ds-prestige-value">{{ prestigeLevel() }}</span>
-        <span class="ds-prestige-label">{{
-          prestigeLevel() === 1
-            ? ('prestige.badge' | transloco)
-            : ('prestige.badgePlural' | transloco)
-        }}</span>
-      </div>
-    }
-    <div class="ds-card ds-left" [class.ds-left-shifted]="prestigeLevel() > 0">
-      <div class="ds-circle">
-        <svg class="ds-ring" width="150" height="150">
-          <circle
-            class="ds-ring-bg"
-            stroke="#e5e7eb50"
-            stroke-width="10"
-            fill="#0F101550"
-            [attr.r]="radius"
-            [attr.cx]="75"
-            [attr.cy]="75"
-          />
-          <circle
-            class="ds-ring-fg"
-            [attr.stroke-dasharray]="circumference + ' ' + circumference"
-            [style.stroke-dashoffset]="strokeDashoffset()"
-            stroke="url(#dsGradient)"
-            stroke-width="10"
-            fill="transparent"
-            stroke-linecap="round"
-            [attr.r]="radius"
-            [attr.cx]="75"
-            [attr.cy]="75"
-          />
-          <defs>
-            <linearGradient id="dsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color: #f59e0b; stop-opacity: 1" />
-              <stop offset="100%" style="stop-color: #f97316; stop-opacity: 1" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div class="ds-level">
-          <div class="ds-level-number font-mono tabular-nums inline-block min-w-[4ch] text-center">
-            {{ level() | short }}
-          </div>
-          <div class="ds-level-label">{{ 'clicker.level' | transloco }}</div>
-          <div class="ds-exp font-mono tabular-nums">
-            {{ currentExp() | short }} / {{ expToNext() | short }} XP
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ds-card ds-left-bottom" [class.ds-left-bottom-shifted]="prestigeLevel() > 0">
-      <div class="ds-right-inner">
-        <div class="ds-stat">
-          <div class="ds-icon">
-            <img
-              src="assets/stats/clock.webp"
-              [alt]="'clicker.time' | transloco"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <div class="ds-text">
-            <div class="ds-label">{{ 'clicker.time' | transloco }}</div>
-            <div class="ds-value font-mono tabular-nums inline-block min-w-[10ch]">
-              {{ formatTime(timePlaying()) }}
-            </div>
-          </div>
-        </div>
-
-        <div class="ds-stat">
-          <div class="ds-icon">
-            <img
-              src="assets/stats/mouse.webp"
-              [alt]="'clicker.clicks' | transloco"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <div class="ds-text">
-            <div class="ds-label">{{ 'clicker.clicks' | transloco }}</div>
-            <div class="ds-value font-mono tabular-nums inline-block min-w-[8ch]">
-              {{ totalClicks() | short }}
-            </div>
-          </div>
-        </div>
-      </div>
-      @for (event of activeEvents(); track event.id) {
-        @if (event.type === 'golden') {
-          <div class="bonus-inline ds-bonus">
-            <div class="bonus-content">
-              <span class="bonus-text">{{ 'clicker.bonus' | transloco }} x{{ event.effect }}</span>
-              <span class="bonus-time">{{ event.remainingTime }}s</span>
-            </div>
-          </div>
-        } @else if (event.type === 'burnt') {
-          <div class="penalty-inline ds-bonus">
-            <div class="bonus-content">
-              <span class="penalty-text"
-                >{{ 'clicker.penalty' | transloco }} x{{ event.effect }}</span
-              >
-              <span class="bonus-time">{{ event.remainingTime }}s</span>
+    <div class="ds-top-strip" [class.ds-top-strip--prestige]="prestigeLevel() > 0">
+      <div class="ds-top-stats">
+        @if (prestigeLevel() > 0) {
+          <div class="ds-card ds-top-stat-card ds-top-stat-card--prestige">
+            <div class="ds-stat ds-top-stat">
+              <div class="ds-icon ds-icon--prestige">
+                <span class="ds-prestige-icon">🥇</span>
+              </div>
+              <div class="ds-text">
+                <div class="ds-label">{{ 'prestige.badge' | transloco }}</div>
+                <div class="ds-value ds-value--prestige font-mono tabular-nums">
+                  {{ prestigeLevel() }}
+                </div>
+              </div>
             </div>
           </div>
         }
+
+        <div class="ds-card ds-top-stat-card">
+          <div class="ds-stat ds-top-stat">
+            <div class="ds-icon">
+              <img
+                src="assets/stats/clock.webp"
+                [alt]="'clicker.time' | transloco"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="ds-text">
+              <div class="ds-label">{{ 'clicker.time' | transloco }}</div>
+              <div class="ds-value font-mono tabular-nums inline-block min-w-[8ch]">
+                {{ formatTime(timePlaying()) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-card ds-top-stat-card">
+          <div class="ds-stat ds-top-stat">
+            <div class="ds-icon">
+              <img
+                src="assets/stats/mouse.webp"
+                [alt]="'clicker.clicks' | transloco"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="ds-text">
+              <div class="ds-label">{{ 'clicker.clicks' | transloco }}</div>
+              <div class="ds-value font-mono tabular-nums inline-block min-w-[8ch]">
+                {{ totalClicks() | short }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      @if (activeEvents().length > 0) {
+        <div class="ds-top-events">
+          @for (event of activeEvents(); track event.id) {
+            @if (event.type === 'golden') {
+              <div class="bonus-inline ds-top-event">
+                <div class="bonus-content">
+                  <span class="bonus-text"
+                    >{{ 'clicker.bonus' | transloco }} x{{ event.effect }}</span
+                  >
+                  <span class="bonus-time">{{ event.remainingTime }}s</span>
+                </div>
+              </div>
+            } @else if (event.type === 'burnt') {
+              <div class="penalty-inline ds-top-event">
+                <div class="bonus-content">
+                  <span class="penalty-text"
+                    >{{ 'clicker.penalty' | transloco }} x{{ event.effect }}</span
+                  >
+                  <span class="bonus-time">{{ event.remainingTime }}s</span>
+                </div>
+              </div>
+            }
+          }
+        </div>
       }
+    </div>
+
+    <div class="ds-left-stack">
+      <div class="ds-card ds-left">
+        <div class="ds-circle">
+          <svg class="ds-ring" width="150" height="150">
+            <circle
+              class="ds-ring-bg"
+              stroke="#e5e7eb50"
+              stroke-width="10"
+              fill="#0F101550"
+              [attr.r]="radius"
+              [attr.cx]="75"
+              [attr.cy]="75"
+            />
+            <circle
+              class="ds-ring-fg"
+              [attr.stroke-dasharray]="circumference + ' ' + circumference"
+              [style.stroke-dashoffset]="strokeDashoffset()"
+              stroke="url(#dsGradient)"
+              stroke-width="10"
+              fill="transparent"
+              stroke-linecap="round"
+              [attr.r]="radius"
+              [attr.cx]="75"
+              [attr.cy]="75"
+            />
+            <defs>
+              <linearGradient id="dsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color: #f59e0b; stop-opacity: 1" />
+                <stop offset="100%" style="stop-color: #f97316; stop-opacity: 1" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ds-level">
+            <div
+              class="ds-level-number font-mono tabular-nums inline-block min-w-[4ch] text-center"
+            >
+              {{ level() | short }}
+            </div>
+            <div class="ds-level-label">{{ 'clicker.level' | transloco }}</div>
+            <div class="ds-exp font-mono tabular-nums">
+              {{ currentExp() | short }} / {{ expToNext() | short }} XP
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 }

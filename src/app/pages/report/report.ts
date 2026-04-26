@@ -13,6 +13,8 @@ import { Card } from '@ui/card/card';
 import { ButtonComponent } from '@ui/button/button';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import type {
+  DailyContractReportData,
+  DailyContractSummaryData,
   GameSummary,
   ProducerReportData,
   UpgradeReportData,
@@ -67,6 +69,8 @@ export class Report implements OnInit {
   });
 
   summary = signal<GameSummary | null>(null);
+  dailyContractSummary = signal<DailyContractSummaryData | null>(null);
+  dailyContracts = signal<DailyContractReportData[]>([]);
   producers = signal<ProducerReportData[]>([]);
   upgrades = signal<UpgradeReportData[]>([]);
   achievements = signal<AchievementReportData[]>([]);
@@ -76,6 +80,7 @@ export class Report implements OnInit {
 
   producerBarData = signal<BarChartItem[]>([]);
   progressData = signal<ProgressBarItem[]>([]);
+  dailyContractProgressData = signal<ProgressBarItem[]>([]);
   upgradesByLevelData = signal<BarChartItem[]>([]);
   achievementStatusData = signal<DonutChartItem[]>([]);
   skinRarityData = signal<BarChartItem[]>([]);
@@ -87,11 +92,15 @@ export class Report implements OnInit {
   leaderboardStats = signal<LeaderboardStats | null>(null);
   leaderboardTop = signal<Array<{ username: string; score: number }>>([]);
   leaderboardBuckets = signal<BarChartItem[]>([]);
+  contractLeaderboardStats = signal<LeaderboardStats | null>(null);
+  contractLeaderboardTop = signal<Array<{ username: string; score: number }>>([]);
+  contractLeaderboardBuckets = signal<BarChartItem[]>([]);
   leaderboardLoading = signal(false);
 
   playerRows = signal<Array<{ label: string; value: string }>>([]);
   debugRows = signal<Array<{ label: string; value: string }>>([]);
   multiplayerRows = signal<Array<{ label: string; value: string }>>([]);
+  contractMultiplayerRows = signal<Array<{ label: string; value: string }>>([]);
 
   activeTab = signal<'player' | 'debug' | 'multiplayer'>('player');
 
@@ -172,6 +181,8 @@ export class Report implements OnInit {
   refreshData() {
     const summary = this.reportService.getGameSummary();
     this.summary.set(summary);
+    this.dailyContractSummary.set(this.reportService.getDailyContractSummaryData());
+    this.dailyContracts.set(this.reportService.getDailyContractsData());
     this.producers.set(this.reportService.getProducersData());
     this.upgrades.set(this.reportService.getUpgradesData());
     this.achievements.set(this.reportService.getAchievementsData());
@@ -181,6 +192,7 @@ export class Report implements OnInit {
 
     this.producerBarData.set(this.reportService.getProducerDistribution());
     this.progressData.set(this.reportService.getProgressData());
+    this.dailyContractProgressData.set(this.reportService.getDailyContractProgressData());
     this.upgradesByLevelData.set(this.reportService.getUpgradeLevelDistribution());
     this.achievementStatusData.set(this.reportService.getAchievementStatusDistribution());
     this.skinRarityData.set(this.reportService.getSkinRarityDistribution());
@@ -197,30 +209,65 @@ export class Report implements OnInit {
     if (!this.isDebug()) return;
 
     this.leaderboardLoading.set(true);
-    const stats = await this.supabase.getLeaderboardStats();
-    if (!stats.error && stats.data) {
-      this.leaderboardStats.set(stats.data);
+    const [levelStats, levelTop, contractStats, contractTop] = await Promise.all([
+      this.supabase.getLeaderboardStats('level'),
+      this.supabase.getTopScores(5, 'level'),
+      this.supabase.getLeaderboardStats('contracts'),
+      this.supabase.getTopScores(5, 'contracts'),
+    ]);
+
+    if (!levelStats.error && levelStats.data) {
+      this.leaderboardStats.set(levelStats.data);
       this.leaderboardBuckets.set(
-        stats.data.buckets.map((b) => ({ name: b.label, value: b.count })),
+        levelStats.data.buckets.map((bucket) => ({ name: bucket.label, value: bucket.count })),
       );
+      this.multiplayerRows.set(this.buildMultiplayerRows(levelStats.data, 'level'));
+    } else {
+      this.leaderboardStats.set(null);
+      this.leaderboardBuckets.set([]);
+      this.multiplayerRows.set([]);
     }
 
-    const top = await this.supabase.getTopScores(5);
-    if (!top.error && top.data) {
+    if (!contractStats.error && contractStats.data) {
+      this.contractLeaderboardStats.set(contractStats.data);
+      this.contractLeaderboardBuckets.set(
+        contractStats.data.buckets.map((bucket) => ({ name: bucket.label, value: bucket.count })),
+      );
+      this.contractMultiplayerRows.set(this.buildMultiplayerRows(contractStats.data, 'contracts'));
+    } else {
+      this.contractLeaderboardStats.set(null);
+      this.contractLeaderboardBuckets.set([]);
+      this.contractMultiplayerRows.set([]);
+    }
+
+    if (!levelTop.error && levelTop.data) {
       this.leaderboardTop.set(
-        top.data.map((t) => ({
-          username: t.username ?? (t.user_id ? t.user_id.slice(0, 6) : 'anon'),
-          score: t.score,
+        levelTop.data.map((entry) => ({
+          username: entry.username ?? (entry.user_id ? entry.user_id.slice(0, 6) : 'anon'),
+          score: entry.score,
         })),
       );
+    } else {
+      this.leaderboardTop.set([]);
     }
+
+    if (!contractTop.error && contractTop.data) {
+      this.contractLeaderboardTop.set(
+        contractTop.data.map((entry) => ({
+          username: entry.username ?? (entry.user_id ? entry.user_id.slice(0, 6) : 'anon'),
+          score: entry.score,
+        })),
+      );
+    } else {
+      this.contractLeaderboardTop.set([]);
+    }
+
     this.leaderboardLoading.set(false);
-    this.multiplayerRows.set(this.buildMultiplayerRows());
   }
 
   setTab(tab: 'player' | 'debug' | 'multiplayer') {
     this.activeTab.set(tab);
-    if (tab === 'multiplayer' && !this.leaderboardStats()) {
+    if (tab === 'multiplayer' && (!this.leaderboardStats() || !this.contractLeaderboardStats())) {
       this.refreshLeaderboardStats();
     }
   }
@@ -255,6 +302,8 @@ export class Report implements OnInit {
 
     this.pdfService.exportReport({
       summary,
+      dailyContractSummary: this.dailyContractSummary(),
+      dailyContracts: this.dailyContracts(),
       producers,
       upgrades,
       achievements,
@@ -267,12 +316,15 @@ export class Report implements OnInit {
       skinRarity: this.skinRarityData(),
       leaderboardStats: this.leaderboardStats(),
       leaderboardTop: this.leaderboardTop(),
+      contractLeaderboardStats: this.contractLeaderboardStats(),
+      contractLeaderboardTop: this.contractLeaderboardTop(),
       localeTitle: this.transloco.translate('report.pdfTitle'),
       labels: this.buildPdfLabels(),
       debugInfo: {
         playerRows: this.playerRows().map((r) => [r.label, r.value]),
         debugRows: this.debugRows().map((r) => [r.label, r.value]),
         multiplayerRows: this.multiplayerRows().map((r) => [r.label, r.value]),
+        contractMultiplayerRows: this.contractMultiplayerRows().map((r) => [r.label, r.value]),
       },
     });
   }
@@ -342,18 +394,33 @@ export class Report implements OnInit {
     ];
   }
 
-  private buildMultiplayerRows(): Array<{ label: string; value: string }> {
-    const stats = this.leaderboardStats();
+  private buildMultiplayerRows(
+    stats: LeaderboardStats | null,
+    mode: 'level' | 'contracts',
+  ): Array<{ label: string; value: string }> {
     if (!stats) return [];
+
+    const avgLabel =
+      mode === 'contracts'
+        ? this.transloco.translate('report.multiplayer.avgContracts')
+        : this.transloco.translate('report.multiplayer.avg');
+    const maxLabel =
+      mode === 'contracts'
+        ? this.transloco.translate('report.multiplayer.maxContracts')
+        : this.transloco.translate('report.multiplayer.max');
+    const minLabel =
+      mode === 'contracts'
+        ? this.transloco.translate('report.multiplayer.minContracts')
+        : this.transloco.translate('report.multiplayer.min');
 
     return [
       {
         label: this.transloco.translate('report.multiplayer.players'),
         value: String(stats.totalPlayers),
       },
-      { label: this.transloco.translate('report.multiplayer.avg'), value: String(stats.avgLevel) },
-      { label: this.transloco.translate('report.multiplayer.max'), value: String(stats.maxLevel) },
-      { label: this.transloco.translate('report.multiplayer.min'), value: String(stats.minLevel) },
+      { label: avgLabel, value: String(stats.avgLevel) },
+      { label: maxLabel, value: String(stats.maxLevel) },
+      { label: minLabel, value: String(stats.minLevel) },
       {
         label: this.transloco.translate('report.multiplayer.lastUpdate'),
         value: stats.lastUpdated ?? '-',
@@ -378,11 +445,21 @@ export class Report implements OnInit {
       leaderboardTitle: t('report.leaderboardStatsTitle'),
       leaderboardDistributionTitle: t('report.lbDistribution'),
       leaderboardTopTitle: t('report.lbTop'),
+      contractsLeaderboardTitle: t('report.multiplayer.contractsTitle'),
+      contractsLeaderboardDetailTitle: t('report.multiplayer.contractsDetailTitle'),
+      contractsLeaderboardDistributionTitle: t('report.lbDistributionContracts'),
+      contractsLeaderboardTopTitle: t('report.lbTopContracts'),
+      contractsScoreLabel: t('leaderboard.contracts'),
+      contractsTitle: t('contracts.title'),
+      contractsMetricsTitle: t('contracts.metricsTitle'),
       playerTitle: t('report.tabPlayer'),
       debugTitle: t('report.tabDebug'),
       multiplayerTitle: t('report.tabMultiplayer'),
+      contractLabel: t('contracts.contractLabel'),
       metricLabel: t('report.metric'),
+      progressLabel: t('contracts.progressLabel'),
       valueLabel: t('report.value'),
+      rewardLabel: t('contracts.rewardLabel'),
       producerNameLabel: t('report.producerName'),
       quantityLabel: t('report.quantity'),
       cpsLabel: t('report.cpsContribution'),
@@ -412,6 +489,29 @@ export class Report implements OnInit {
       upgradeEfficiencyLabel: t('report.upgradeEfficiency'),
       skinsCompletionLabel: t('report.skinsCompletion'),
       totalUpgradeCostLabel: t('report.totalUpgradeCost'),
+      resetTimeMetricLabel: t('contracts.metrics.resetTime'),
+      completedContractsMetricLabel: t('contracts.metrics.completed'),
+      claimedContractsMetricLabel: t('contracts.metrics.claimed'),
+      claimableContractsMetricLabel: t('contracts.metrics.claimable'),
+      currentStreakMetricLabel: t('contracts.metrics.currentStreak'),
+      bestStreakMetricLabel: t('contracts.metrics.bestStreak'),
+      weeklyCompletedDaysMetricLabel: t('contracts.metrics.weeklyCompletedDays'),
+      lifetimeClaimedContractsMetricLabel: t('contracts.metrics.lifetimeClaimedContracts'),
+      completedDaysMetricLabel: t('contracts.metrics.completedDays'),
+      bonusClaimsMetricLabel: t('contracts.metrics.bonusClaims'),
+      bonusRewardMetricLabel: t('contracts.metrics.bonusReward'),
+      bonusStatusMetricLabel: t('contracts.metrics.bonusStatus'),
+      manualClicksMetricLabel: t('contracts.metrics.manualClicks'),
+      levelsGainedMetricLabel: t('contracts.metrics.levelsGained'),
+      producerPurchasesMetricLabel: t('contracts.metrics.producerPurchases'),
+      upgradePurchasesMetricLabel: t('contracts.metrics.upgradePurchases'),
+      eventCapturesMetricLabel: t('contracts.metrics.eventCaptures'),
+      prestigesMetricLabel: t('contracts.metrics.prestiges'),
+      bonusReadyLabel: t('contracts.bonusClaimButton'),
+      bonusLockedLabel: t('contracts.bonusLockedButton'),
+      stateClaimedLabel: t('contracts.status.claimed'),
+      stateCompletedLabel: t('contracts.status.completed'),
+      stateInProgressLabel: t('contracts.status.inProgress'),
     };
   }
 }

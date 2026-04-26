@@ -36,6 +36,45 @@ export interface SkinReportData {
   readonly requirement: string;
 }
 
+/** Resumen agregado de contratos diarios para informe */
+export interface DailyContractSummaryData {
+  readonly total: number;
+  readonly completed: number;
+  readonly claimed: number;
+  readonly claimable: number;
+  readonly completionPercentage: number;
+  readonly resetTimeLabel: string;
+  readonly currentStreak: number;
+  readonly bestStreak: number;
+  readonly weeklyCompletedDays: number;
+  readonly lifetimeClaimedContracts: number;
+  readonly lifetimeCompletedDays: number;
+  readonly lifetimeBonusClaims: number;
+  readonly bonusRewardLabel: string;
+  readonly bonusClaimed: boolean;
+  readonly bonusAvailable: boolean;
+  readonly manualClicks: number;
+  readonly levelsGained: number;
+  readonly producerPurchases: number;
+  readonly upgradePurchases: number;
+  readonly eventCaptures: number;
+  readonly prestiges: number;
+}
+
+/** Estado de cada contrato diario para informe */
+export interface DailyContractReportData {
+  readonly id: string;
+  readonly icon: string;
+  readonly title: string;
+  readonly description: string;
+  readonly progress: number;
+  readonly target: number;
+  readonly percentage: number;
+  readonly rewardLabel: string;
+  readonly claimed: boolean;
+  readonly completed: boolean;
+}
+
 /** Resumen del jugador que contiene todas las estadísticas agregadas del juego */
 export interface GameSummary {
   readonly totalCroquetas: string;
@@ -118,6 +157,8 @@ export interface TableRow {
 /** Payload de exportación PDF con todos los datos del informe y etiquetas localizadas */
 export interface ReportPdfPayload {
   readonly summary: GameSummary;
+  readonly dailyContractSummary?: DailyContractSummaryData | null;
+  readonly dailyContracts?: DailyContractReportData[];
   readonly producers: ProducerReportData[];
   readonly upgrades: UpgradeReportData[];
   readonly achievements: AchievementReportData[];
@@ -129,12 +170,15 @@ export interface ReportPdfPayload {
   readonly skinRarity: ChartItem[];
   readonly leaderboardStats?: LeaderboardStats | null;
   readonly leaderboardTop?: LeaderboardTopEntry[] | null;
+  readonly contractLeaderboardStats?: LeaderboardStats | null;
+  readonly contractLeaderboardTop?: LeaderboardTopEntry[] | null;
   readonly localeTitle: string;
   readonly labels: Readonly<Record<string, string>>;
   readonly debugInfo?: {
     readonly playerRows: string[][];
     readonly debugRows: string[][];
     readonly multiplayerRows: string[][];
+    readonly contractMultiplayerRows?: string[][];
   };
 }
 

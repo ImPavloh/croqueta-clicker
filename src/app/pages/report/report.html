@@ -113,6 +113,161 @@
           </div>
         </app-card>
 
+        @if (dailyContractSummary(); as contractSummary) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'contracts.title' | transloco }}</p>
+              <div class="upgrades-summary">
+                <span class="badge bought"
+                  >{{ contractSummary.claimed }} {{ 'contracts.metrics.claimed' | transloco }}</span
+                >
+                <span class="badge remaining"
+                  >{{ contractSummary.claimable }}
+                  {{ 'contracts.metrics.claimable' | transloco }}</span
+                >
+                <span class="badge bought"
+                  >{{ contractSummary.currentStreak }}
+                  {{ 'contracts.metrics.currentStreak' | transloco }}</span
+                >
+                <span class="badge remaining"
+                  >{{ contractSummary.resetTimeLabel }}
+                  {{ 'contracts.metrics.resetTime' | transloco }}</span
+                >
+              </div>
+              <app-progress-bars [data]="dailyContractProgressData()" />
+            </div>
+          </app-card>
+
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'contracts.metricsTitle' | transloco }}</p>
+              <div class="efficiency-table-wrapper">
+                <table class="data-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'report.metric' | transloco }}</th>
+                      <th>{{ 'report.value' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ 'contracts.metrics.completed' | transloco }}</td>
+                      <td class="val">
+                        {{ contractSummary.completed }} / {{ contractSummary.total }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.claimed' | transloco }}</td>
+                      <td class="val">{{ contractSummary.claimed }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.currentStreak' | transloco }}</td>
+                      <td class="val">{{ contractSummary.currentStreak }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.bestStreak' | transloco }}</td>
+                      <td class="val">{{ contractSummary.bestStreak }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.weeklyCompletedDays' | transloco }}</td>
+                      <td class="val">{{ contractSummary.weeklyCompletedDays }} / 7</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.lifetimeClaimedContracts' | transloco }}</td>
+                      <td class="val">{{ contractSummary.lifetimeClaimedContracts }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.completedDays' | transloco }}</td>
+                      <td class="val">{{ contractSummary.lifetimeCompletedDays }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.bonusClaims' | transloco }}</td>
+                      <td class="val">{{ contractSummary.lifetimeBonusClaims }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.bonusReward' | transloco }}</td>
+                      <td class="val">{{ contractSummary.bonusRewardLabel }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.bonusStatus' | transloco }}</td>
+                      <td class="val">
+                        @if (contractSummary.bonusClaimed) {
+                          {{ 'contracts.status.claimed' | transloco }}
+                        } @else if (contractSummary.bonusAvailable) {
+                          {{ 'contracts.bonusClaimButton' | transloco }}
+                        } @else {
+                          {{ 'contracts.bonusLockedButton' | transloco }}
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.manualClicks' | transloco }}</td>
+                      <td class="val">{{ contractSummary.manualClicks }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.levelsGained' | transloco }}</td>
+                      <td class="val">{{ contractSummary.levelsGained }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.producerPurchases' | transloco }}</td>
+                      <td class="val">{{ contractSummary.producerPurchases }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.upgradePurchases' | transloco }}</td>
+                      <td class="val">{{ contractSummary.upgradePurchases }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.eventCaptures' | transloco }}</td>
+                      <td class="val">{{ contractSummary.eventCaptures }}</td>
+                    </tr>
+                    <tr>
+                      <td>{{ 'contracts.metrics.prestiges' | transloco }}</td>
+                      <td class="val">{{ contractSummary.prestiges }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="data-table wide-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'contracts.contractLabel' | transloco }}</th>
+                      <th>{{ 'contracts.rewardLabel' | transloco }}</th>
+                      <th>{{ 'contracts.progressLabel' | transloco }}</th>
+                      <th>{{ 'report.status' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (contract of dailyContracts(); track contract.id) {
+                      <tr [class.bought-row]="contract.claimed">
+                        <td>{{ contract.icon }} {{ contract.title }}</td>
+                        <td class="val">{{ contract.rewardLabel }}</td>
+                        <td class="val">{{ contract.progress }} / {{ contract.target }}</td>
+                        <td class="val">
+                          <span
+                            class="status-pill"
+                            [class.is-positive]="contract.claimed || contract.completed"
+                            [class.is-muted]="!contract.claimed && !contract.completed"
+                          >
+                            @if (contract.claimed) {
+                              {{ 'contracts.status.claimed' | transloco }}
+                            } @else if (contract.completed) {
+                              {{ 'contracts.status.completed' | transloco }}
+                            } @else {
+                              {{ 'contracts.status.inProgress' | transloco }}
+                            }
+                          </span>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+        }
+
         <!-- EFICIENCIA -->
         @if (efficiency(); as eff) {
           <app-card>
@@ -722,7 +877,109 @@
           </app-card>
         }
 
-        @if (!leaderboardLoading() && !leaderboardStats()) {
+        @if (contractLeaderboardStats(); as contractsLb) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.multiplayer.contractsTitle' | transloco }}</p>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <span class="stat-icon">📜</span>
+                  <span class="stat-value">{{ contractsLb.totalPlayers }}</span>
+                  <span class="stat-label">{{ 'report.multiplayer.players' | transloco }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">📊</span>
+                  <span class="stat-value">{{ contractsLb.avgLevel }}</span>
+                  <span class="stat-label">{{
+                    'report.multiplayer.avgContracts' | transloco
+                  }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">🏁</span>
+                  <span class="stat-value">{{ contractsLb.maxLevel }}</span>
+                  <span class="stat-label">{{
+                    'report.multiplayer.maxContracts' | transloco
+                  }}</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-icon">🧾</span>
+                  <span class="stat-value">{{ contractsLb.minLevel }}</span>
+                  <span class="stat-label">{{
+                    'report.multiplayer.minContracts' | transloco
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </app-card>
+
+          <app-card>
+            <div class="section">
+              <p class="section-title">
+                {{ 'report.multiplayer.contractsDetailTitle' | transloco }}
+              </p>
+              <div class="table-wrapper">
+                <table class="data-table compact-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'report.metric' | transloco }}</th>
+                      <th>{{ 'report.value' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (row of contractMultiplayerRows(); track row.label) {
+                      <tr>
+                        <td>{{ row.label }}</td>
+                        <td class="val">{{ row.value }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+
+          @if (contractLeaderboardBuckets().length > 0) {
+            <app-card>
+              <div class="section">
+                <app-bar-chart
+                  [data]="contractLeaderboardBuckets()"
+                  [title]="'report.lbDistributionContracts' | transloco"
+                  [formatValue]="formatNumber"
+                />
+              </div>
+            </app-card>
+          }
+        }
+
+        @if (contractLeaderboardTop().length > 0) {
+          <app-card>
+            <div class="section">
+              <p class="section-title">{{ 'report.lbTopContracts' | transloco }}</p>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>{{ 'report.lbUser' | transloco }}</th>
+                      <th>{{ 'leaderboard.contracts' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (t of contractLeaderboardTop(); let i = $index; track i) {
+                      <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ t.username }}</td>
+                        <td class="val">{{ t.score | short }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </app-card>
+        }
+
+        @if (!leaderboardLoading() && !leaderboardStats() && !contractLeaderboardStats()) {
           <app-card>
             <div class="section">
               <p class="debug-message">{{ 'report.multiplayer.noData' | transloco }}</p>

@@ -1,9 +1,16 @@
 .lp-overlay {
-  z-index: 155;
   position: absolute;
   inset: 0;
   pointer-events: none;
   contain: layout style;
+}
+
+.lp-overlay.lp-overlay-active {
+  z-index: 170;
+}
+
+.lp-overlay.lp-overlay-inactive {
+  z-index: 160;
 }
 
 .lp-card {
@@ -149,7 +156,6 @@
 .lp-score {
   font-size: 14px;
   font-weight: 900;
-  font-family: monospace;
   color: rgba(251, 191, 36, 0.95);
 }
 
@@ -171,7 +177,6 @@
 
 .lp-countdown strong {
   color: rgba(251, 191, 36, 0.95);
-  font-family: monospace;
 }
 
 .lp-btn-small {
@@ -253,7 +258,7 @@
 
 .lp-rank {
   font-weight: 900;
-  font-family: monospace;
+
   color: rgba(251, 191, 36, 0.8);
   text-align: center;
 }
@@ -268,7 +273,7 @@
 
 .lp-points {
   font-weight: 700;
-  font-family: monospace;
+
   color: rgba(251, 191, 36, 0.95);
   text-align: right;
 }
@@ -297,6 +302,12 @@
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.lp-mode-switch {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .lp-search-input {
@@ -447,13 +458,12 @@
 .lp-full-table td:first-child {
   width: 60px;
   text-align: center;
-  font-family: monospace;
+
   font-weight: 900;
   color: #b89c5a;
 }
 
 .lp-full-table td:nth-child(3) {
-  font-family: monospace;
   font-weight: 700;
   color: #8b7343;
 }
@@ -477,7 +487,7 @@
 .lp-page-info {
   font-size: 13px;
   color: #6b5633;
-  font-family: monospace;
+
   font-weight: 600;
 }
 
@@ -509,15 +519,32 @@
     z-index: 900;
   }
 
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-active {
+    z-index: 910;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-inactive {
+    z-index: 900;
+  }
+
   :host(.mobile-leaderboard) .lp-right {
-    top: 50%;
+    top: calc(50% - 86px);
     right: 12px;
     transform: translateY(-50%);
     width: 72px;
     transition:
+      top 220ms ease,
       width 220ms ease,
       right 220ms ease,
       transform 220ms ease;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-active .lp-right {
+    top: 50%;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-inactive .lp-right {
+    top: calc(50% - 86px);
   }
 
   :host(.mobile-leaderboard) .lp-right.lp-collapsed {
@@ -648,13 +675,12 @@
 .lp-full-table td:first-child {
   width: 60px;
   text-align: center;
-  font-family: monospace;
+
   font-weight: 900;
   color: #b89c5a;
 }
 
 .lp-full-table td:nth-child(3) {
-  font-family: monospace;
   font-weight: 700;
   color: #8b7343;
 }
@@ -678,7 +704,7 @@
 .lp-page-info {
   font-size: 13px;
   color: #6b5633;
-  font-family: monospace;
+
   font-weight: 600;
 }
 
@@ -707,6 +733,14 @@
   :host(.mobile-leaderboard) .lp-overlay {
     display: block;
     pointer-events: none;
+    z-index: 900;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-active {
+    z-index: 910;
+  }
+
+  :host(.mobile-leaderboard) .lp-overlay.lp-overlay-inactive {
     z-index: 900;
   }
 

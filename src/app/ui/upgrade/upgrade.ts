@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
@@ -6,6 +6,7 @@ import { PlayerStats } from '@services/player-stats.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { OptionsService } from '@services/options.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
@@ -31,6 +32,7 @@ export class Upgrade {
   public pointsService = inject(PointsService);
   private audioService = inject(AudioService);
   private optionsService = inject(OptionsService);
+  private dailyContracts = inject(DailyContractsService);
 
   /** Configuración de la mejora (pasada desde el componente padre) */
   config = input.required<UpgradeModel>();
@@ -41,33 +43,14 @@ export class Upgrade {
   /** Nivel actual del jugador */
   private level = toSignal(this.playerStats.level$, { initialValue: 0 });
 
-  /** Effect que comprueba el nivel para desbloqueo */ levelEffect = effect(() => {
-    const cfg = this.config();
-    if (cfg) {
-      const currentLevel = this.level();
-      this.checkLevel(currentLevel);
-    }
-  });
-
   /** Indica si la mejora está desbloqueada (según nivel del jugador) */
-  unlocked: boolean = true;
+  unlocked = computed(() => this.level() >= this.config().level);
 
   /** Indica si la mejora ya ha sido comprada */
-  bought: boolean = false;
-
-  ngOnInit() {
-    this.loadFromStorage();
-  }
-
-  /**
-   * Comprueba si la mejora debe estar desbloqueada según el nivel actual.
-   * @param currentLevel Nivel actual del jugador
-   */
-  checkLevel(currentLevel: number) {
-    const cfg = this.config();
-    if (!cfg) return;
-    this.unlocked = currentLevel >= cfg.level;
-  }
+  bought = computed(() => {
+    this.optionsService.gameItemsVersion();
+    return this.optionsService.getGameItem('upgrade_' + this.config().id + '_bought') === 'true';
+  });
 
   /**
    * Compra la mejora si el jugador tiene suficientes croquetas.
@@ -84,7 +67,7 @@ export class Upgrade {
     const priceDecimal = new Decimal(cfg.price);
 
     // comprobar si hay suficientes puntos, si no está ya comprada y si está desbloqueada
-    if (this.pointsService.points().gte(priceDecimal) && !this.bought && this.unlocked) {
+    if (this.pointsService.points().gte(priceDecimal) && !this.bought() && this.unlocked()) {
       // restar puntos usando Decimal
       this.pointsService.substractPoints(priceDecimal);
 
@@ -93,8 +76,8 @@ export class Upgrade {
 
       this.playerStats.upgradeExpPerClick(pointsClickDecimal);
 
-      this.bought = true;
-      this.saveToStorage();
+      this.optionsService.setGameItem('upgrade_' + cfg.id + '_bought', 'true');
+      this.dailyContracts.trackUpgradePurchase();
       this.playerStats.addExp(cfg.exp);
 
       // SFX compra
@@ -103,21 +86,5 @@ export class Upgrade {
       // SFX error
       this.audioService.playSfx('/assets/sfx/error.mp3', 1);
     }
-  }
-
-  // persistencia simple en localStorage
-  public loadFromStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // cargar estado de compra (guardamos 'true' / 'false' como string)
-    const bought = this.optionsService.getGameItem('upgrade_' + this.config().id + '_bought');
-    if (bought !== null) this.bought = bought === 'true';
-  }
-
-  public saveToStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // guardar estado de compra
-    this.optionsService.setGameItem('upgrade_' + this.config().id + '_bought', String(this.bought));
   }
 }

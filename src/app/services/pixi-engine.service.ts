@@ -392,7 +392,7 @@ export class PixiEngineService implements OnDestroy {
    */
   private initializeFloatingTextPool(): void {
     const style = new TextStyle({
-      fontFamily: 'Fredoka, sans-serif',
+      fontFamily: 'Chewy, system-ui',
       fontSize: 32,
       fontWeight: '700',
       fill: 0xfff3d8,

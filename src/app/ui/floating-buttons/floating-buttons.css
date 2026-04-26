@@ -15,8 +15,11 @@
   border-radius: 50%;
   border: 3px solid #f59e0b;
   background: linear-gradient(135deg, #423001 0%, #2b1b01 100%);
-  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(251, 191, 36, 0.3);
+  box-shadow:
+    0 6px 12px rgba(245, 158, 11, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15),
+    0 0 0 2px rgba(251, 191, 36, 0.3);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -52,10 +55,21 @@
   z-index: 1;
 }
 
+.btn-icon-text {
+  position: relative;
+  z-index: 1;
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.45));
+}
+
 .floating-btn:hover {
   transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), 0 0 35px rgba(184, 156, 90, 0.7),
-    inset 0 2px 5px rgba(255, 255, 255, 0.4), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 6px 25px rgba(0, 0, 0, 0.4),
+    0 0 35px rgba(184, 156, 90, 0.7),
+    inset 0 2px 5px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.3);
   border-color: #fff;
 }
 
@@ -65,19 +79,27 @@
 
 .floating-btn:active {
   transform: scale(0.95);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(184, 156, 90, 0.3),
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(184, 156, 90, 0.3),
     inset 0 3px 8px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 20px rgba(184, 156, 90, 0.4),
-      inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(184, 156, 90, 0.4),
+      inset 0 2px 5px rgba(255, 255, 255, 0.3),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.2);
   }
   50% {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 30px rgba(184, 156, 90, 0.6),
-      inset 0 2px 5px rgba(255, 255, 255, 0.4), inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 4px 15px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(184, 156, 90, 0.6),
+      inset 0 2px 5px rgba(255, 255, 255, 0.4),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -91,19 +113,33 @@
 }
 
 .upgrades-btn {
-  animation: pulse 2s ease-in-out infinite, slideIn 0.5s ease-out 0.1s backwards;
+  animation:
+    pulse 2s ease-in-out infinite,
+    slideIn 0.5s ease-out 0.1s backwards;
 }
 
 .achievements-btn {
-  animation: pulse 2s ease-in-out infinite 0.5s, slideIn 0.5s ease-out 0.2s backwards;
+  animation:
+    pulse 2s ease-in-out infinite 0.5s,
+    slideIn 0.5s ease-out 0.2s backwards;
 }
 
 .skins-btn {
-  animation: pulse 2s ease-in-out infinite 1s, slideIn 0.5s ease-out 0.3s backwards;
+  animation:
+    pulse 2s ease-in-out infinite 1s,
+    slideIn 0.5s ease-out 0.3s backwards;
 }
 
 .options-btn {
-  animation: pulse 2s ease-in-out infinite 1.5s, slideIn 0.5s ease-out 0.4s backwards;
+  animation:
+    pulse 2s ease-in-out infinite 1.5s,
+    slideIn 0.5s ease-out 0.4s backwards;
+}
+
+.contracts-btn {
+  animation:
+    pulse 2s ease-in-out infinite 1.8s,
+    slideIn 0.5s ease-out 0.5s backwards;
 }
 
 .croqueta-day-btn {
@@ -184,15 +220,16 @@
 }
 
 /* moviles */
-@media (max-width: 768px) {
+@media (max-width: 1344px) {
   .floating-buttons {
     pointer-events: none;
+    top: auto;
     bottom: 20px;
     right: 20px;
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
-    transform: translateY(0);
+    transform: none;
   }
 
   .floating-buttons button {

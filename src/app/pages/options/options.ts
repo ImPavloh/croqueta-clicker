@@ -17,6 +17,7 @@ import { AchievementsService } from '@services/achievements.service';
 import { SupabaseService } from '@services/supabase.service';
 import { DebugService } from '@services/debug.service';
 import { PrestigeService } from '@services/prestige.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
 
 import PackageJson from '../../../../package.json';
 import { RangeSliderControlModel, UiControlModel } from '@models/ui-controls.model';
@@ -68,6 +69,7 @@ export class Options {
   private debugService = inject(DebugService);
   //Servicio para gestionar el prestigio.
   private prestigeService = inject(PrestigeService);
+  private dailyContracts = inject(DailyContractsService);
 
   /**
    * Método del ciclo de vida de Angular. Se ejecuta al iniciar el componente.
@@ -137,6 +139,7 @@ export class Options {
       cancelText: this.translocoService.translate('prestige.cancelButton'),
       onConfirm: () => {
         this.prestigeService.performPrestige();
+        this.dailyContracts.trackPrestige();
         this.showPrestigeEffect = true;
         setTimeout(() => (this.showPrestigeEffect = false), 1500);
       },

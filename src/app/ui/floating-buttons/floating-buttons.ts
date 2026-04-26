@@ -33,4 +33,9 @@ export class FloatingButtons {
     this.modalService.openModal('options');
     this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
   }
+
+  openContracts() {
+    this.modalService.openModal('contracts');
+    this.audioService.playSfx('/assets/sfx/click02.mp3', 1);
+  }
 }

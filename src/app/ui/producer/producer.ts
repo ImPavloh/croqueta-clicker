@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { PointsService } from '@services/points.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
@@ -7,6 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
 import { ProducerModel } from '@models/producer.model';
 import Decimal from 'break_infinity.js';
 
@@ -30,17 +31,10 @@ export class Producer {
   private audioService = inject(AudioService);
   public shopControls = inject(ShopControlsService);
   private optionsService = inject(OptionsService);
+  private dailyContracts = inject(DailyContractsService);
 
   /** Configuración del productor (pasada desde el componente padre) */
   config = input.required<ProducerModel>();
-
-  // actualizar el precio cuando cambie buyAmount (se basa en la cantidad)
-  inintEfect = effect(() => {
-    const cfg = this.config();
-    if (cfg) {
-      this.updatePriceAndPoints();
-    }
-  });
 
   /** Nivel actual del jugador */
   public level = toSignal(this.playerStats.level$, { initialValue: 0 });
@@ -74,44 +68,21 @@ export class Producer {
     return Math.max(0, Math.min(100, percent));
   });
 
-  levelEffect = effect(() => {
-    const cfg = this.config();
-    if (cfg) {
-      const currentLevel = this.level();
-      this.checkLevel(currentLevel);
-    }
+  /** Cantidad de este productor que posee el jugador */
+  quantity = computed(() => {
+    this.optionsService.gameItemsVersion();
+    const q = this.optionsService.getGameItem('producer_' + this.config().id + '_quantity');
+    return Number(q) || 0;
   });
 
-  /** Cantidad de este productor que posee el jugador */
-  quantity: number = 0;
-
   /** Precio actual del productor (Decimal para manejar números grandes) */
-  price: Decimal = new Decimal(0);
-
-  /** Croquetas por segundo que genera este productor */
-  points: Decimal = new Decimal(0);
+  price = computed(() => this.calculateBulkPrice(this.quantity(), this.shopControls.buyAmount()));
 
   /** Indica si el productor está desbloqueado (según nivel del jugador) */
-  unlocked: boolean = true;
+  unlocked = computed(() => this.level() >= this.config().level);
 
-  ngOnInit() {
-    this.loadFromStorage();
-    this.updatePriceAndPoints();
-  }
-
-  // Actualizar precio y puntos cuando cambia la cantidad de compra
-  updatePriceAndPoints() {
-    const buyAmount = this.shopControls.buyAmount();
-    this.price = this.calculateBulkPrice(this.quantity, buyAmount);
-    this.points = this.calculatePoints(this.quantity);
-  }
-
-  // Comprobar si el productor está desbloqueado
-  checkLevel(currentLevel: number) {
-    const cfg = this.config();
-    if (!cfg) return; // Doble seguridad
-    this.unlocked = currentLevel >= cfg.level;
-  }
+  /** Croquetas por segundo que genera este productor */
+  totalPoints = computed(() => this.calculateTotalPoints(this.quantity()));
 
   // calcular el precio de comprar N unidades (suma geométrica)
   // sum(i=0 to n-1) { priceBase * priceMult^(quantity+i) }
@@ -159,13 +130,13 @@ export class Producer {
   }
 
   // Método para calcular el total de puntos generados por TODAS las unidades
-  calculateTotalPoints(): Decimal {
-    if (this.quantity === 0) return new Decimal(0);
+  calculateTotalPoints(quantity = this.quantity()): Decimal {
+    if (quantity === 0) return new Decimal(0);
     // Total = (pointsBase * quantity) + (pointsSum * quantity * (quantity - 1) / 2)
     // Esto es la suma: pointsBase*q + pointsSum*(0+1+2+...+(q-1))
     const cfg = this.config();
-    const base = new Decimal(cfg.pointsBase).times(this.quantity);
-    const sumSequence = (this.quantity * (this.quantity - 1)) / 2;
+    const base = new Decimal(cfg.pointsBase).times(quantity);
+    const sumSequence = (quantity * (quantity - 1)) / 2;
     const bonus = new Decimal(cfg.pointsSum).times(sumSequence);
     return base.plus(bonus);
   }
@@ -173,31 +144,32 @@ export class Producer {
   // Método para comprar el productor
   buyProducer() {
     const buyAmount = this.shopControls.buyAmount();
-    const cost = this.calculateBulkPrice(this.quantity, buyAmount);
+    const currentQuantity = this.quantity();
+    const cost = this.calculateBulkPrice(currentQuantity, buyAmount);
 
     // comparar Decimal con Decimal y verificar que esté desbloqueado
-    if (this.pointsService.points().gte(cost) && this.unlocked) {
+    if (this.pointsService.points().gte(cost) && this.unlocked()) {
       // restar usando Decimal
       this.pointsService.substractPoints(cost);
 
       // calcular el cps anterior
       const oldCps = this.pointsService.pointsPerSecond();
-      const oldProduction = this.calculateTotalPoints();
-
-      this.quantity += buyAmount;
+      const oldProduction = this.calculateTotalPoints(currentQuantity);
+      const nextQuantity = currentQuantity + buyAmount;
 
       // calcular nueva producción de este productor
-      const newProduction = this.calculateTotalPoints();
+      const newProduction = this.calculateTotalPoints(nextQuantity);
       const addedProduction = newProduction.minus(oldProduction);
 
       // actualizar cps global
       const newCps = oldCps.plus(addedProduction);
       this.pointsService.upgradePointsPerSecond(newCps);
 
-      // recalcular precio y puntos mostrados
-      this.updatePriceAndPoints();
-
-      this.saveToStorage();
+      this.optionsService.setGameItem(
+        'producer_' + this.config().id + '_quantity',
+        String(nextQuantity),
+      );
+      this.dailyContracts.trackProducerPurchase(buyAmount);
 
       // añadir experiencia (multiplicada por cantidad comprada)
       this.playerStats.addExp(this.config().exp * buyAmount);
@@ -208,24 +180,5 @@ export class Producer {
       // SFX error
       this.audioService.playSfx('/assets/sfx/error.mp3', 1);
     }
-  }
-
-  // persistencia simple en localStorage (quantity sigue siendo number)
-  public loadFromStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // cargar cantidad
-    const q = this.optionsService.getGameItem('producer_' + this.config().id + '_quantity');
-    if (q) this.quantity = Number(q) || 0;
-  }
-
-  public saveToStorage() {
-    // si no hay localStorage, no hacer nada
-    if (typeof localStorage === 'undefined') return;
-    // guardar cantidad
-    this.optionsService.setGameItem(
-      'producer_' + this.config().id + '_quantity',
-      String(this.quantity),
-    );
   }
 }

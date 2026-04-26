@@ -3,7 +3,8 @@ import { createClient, SupabaseClient, PostgrestError } from '@supabase/supabase
 import { SUPABASE } from '../../environments/supabase.config';
 import { DebugService } from '@services/debug.service';
 import { UsernameService } from './username.service';
-import type { LeaderboardEntry, LeaderboardRow } from '@models/leaderboard.model';
+import type { LeaderboardEntry, LeaderboardMode, LeaderboardRow } from '@models/leaderboard.model';
+import type { DailyContractsState } from '@models/daily-contract.model';
 import type { LeaderboardStats, LeaderboardStatsBucket } from '@models/report.model';
 
 @Injectable({ providedIn: 'root' })
@@ -82,13 +83,43 @@ export class SupabaseService {
 
   // Verifica si un nombre de usuario ya existe en la tabla de clasificacion
   async isUsernameTaken(name: string): Promise<boolean> {
-    const { data, error } = await this.supabase
-      .from('leaderboard')
-      .select('user_id')
-      .eq('username', name)
-      .limit(1);
-    if (error) return false; // evitar falsos positivos
-    return Array.isArray(data) && data.length > 0;
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      return false;
+    }
+
+    const sessionResp = await this.getUser();
+    const currentUserId = sessionResp.data.user?.id ?? null;
+
+    const [levelResult, contractsResult] = await Promise.all([
+      this.supabase.from('leaderboard').select('user_id').eq('username', trimmedName).limit(1),
+      this.supabase
+        .from('daily_contract_profiles')
+        .select('user_id')
+        .eq('username', trimmedName)
+        .limit(1),
+    ]);
+
+    const matchesOtherUser = (
+      data: Array<{
+        user_id: string;
+      }> | null,
+    ): boolean => {
+      if (!Array.isArray(data) || data.length === 0) {
+        return false;
+      }
+
+      return data.some((entry) => entry.user_id !== currentUserId);
+    };
+
+    if (levelResult.error && contractsResult.error) {
+      return false;
+    }
+
+    return (
+      matchesOtherUser(levelResult.data as Array<{ user_id: string }> | null) ||
+      matchesOtherUser(contractsResult.data as Array<{ user_id: string }> | null)
+    );
   }
 
   // Elimina la fila de la tabla de clasificacion del usuario actual
@@ -240,9 +271,11 @@ export class SupabaseService {
   // Obtiene las n mejores puntuaciones ordenadas descendentemente
   async getTopScores(
     limit = 10,
+    mode: LeaderboardMode = 'level',
   ): Promise<{ error: PostgrestError | null; data: LeaderboardEntry[] | null }> {
+    const table = this.getLeaderboardTable(mode);
     const { data, error } = await this.supabase
-      .from('leaderboard')
+      .from(table)
       .select('user_id, username, score, meta, created_at')
       .order('score', { ascending: false })
       .limit(limit);
@@ -254,21 +287,20 @@ export class SupabaseService {
   }
 
   // Obtiene estadisticas agregadas del leaderboard
-  async getLeaderboardStats(): Promise<{
+  async getLeaderboardStats(mode: LeaderboardMode = 'level'): Promise<{
     error: PostgrestError | null;
     data: LeaderboardStats | null;
   }> {
+    const table = this.getLeaderboardTable(mode);
     const totalResp = await this.supabase
-      .from('leaderboard')
-      .select('id', { count: 'exact', head: true });
+      .from(table)
+      .select('user_id', { count: 'exact', head: true });
 
     if (totalResp.error) {
       return { error: totalResp.error as PostgrestError, data: null };
     }
 
-    const aggResp = await this.supabase
-      .from('leaderboard')
-      .select('avg:score, max:score, min:score');
+    const aggResp = await this.supabase.from(table).select('avg:score, max:score, min:score');
 
     if (aggResp.error) {
       return { error: aggResp.error as PostgrestError, data: null };
@@ -279,15 +311,36 @@ export class SupabaseService {
     const maxLevel = Number(row?.max ?? 0) || 0;
     const minLevel = Number(row?.min ?? 0) || 0;
 
-    const lastUpdateResp = await this.supabase
-      .from('leaderboard')
-      .select('updated_at')
-      .order('updated_at', { ascending: false })
-      .limit(1);
+    let lastUpdated: string | null = null;
 
-    const lastUpdated = (lastUpdateResp.data ?? [])[0]?.updated_at ?? null;
+    if (mode === 'contracts') {
+      const lastUpdateResp = await this.supabase
+        .from(table)
+        .select('current_state_date_key, created_at')
+        .order('current_state_date_key', { ascending: false })
+        .limit(1);
 
-    const buckets = await this._getLeaderboardBuckets();
+      const latestRow = (lastUpdateResp.data ?? [])[0] as
+        | {
+            current_state_date_key?: string | null;
+            created_at?: string | null;
+          }
+        | undefined;
+
+      lastUpdated = latestRow?.current_state_date_key ?? latestRow?.created_at ?? null;
+    } else {
+      const lastUpdateResp = await this.supabase
+        .from(table)
+        .select('updated_at')
+        .order('updated_at', { ascending: false })
+        .limit(1);
+
+      lastUpdated =
+        ((lastUpdateResp.data ?? [])[0] as { updated_at?: string | null } | undefined)
+          ?.updated_at ?? null;
+    }
+
+    const buckets = await this._getLeaderboardBuckets(mode);
 
     return {
       error: null,
@@ -302,10 +355,14 @@ export class SupabaseService {
     };
   }
 
-  private async _countLeaderboardRange(min: number, max?: number): Promise<number> {
+  private async _countLeaderboardRange(
+    mode: LeaderboardMode,
+    min: number,
+    max?: number,
+  ): Promise<number> {
     let query = this.supabase
-      .from('leaderboard')
-      .select('id', { count: 'exact', head: true })
+      .from(this.getLeaderboardTable(mode))
+      .select('user_id', { count: 'exact', head: true })
       .gte('score', min);
 
     if (typeof max === 'number') {
@@ -317,19 +374,29 @@ export class SupabaseService {
     return resp.count ?? 0;
   }
 
-  private async _getLeaderboardBuckets(): Promise<LeaderboardStatsBucket[]> {
-    const ranges = [
-      { label: '0-9', min: 0, max: 10 },
-      { label: '10-24', min: 10, max: 25 },
-      { label: '25-49', min: 25, max: 50 },
-      { label: '50-99', min: 50, max: 100 },
-      { label: '100-199', min: 100, max: 200 },
-      { label: '200+', min: 200 },
-    ];
+  private async _getLeaderboardBuckets(mode: LeaderboardMode): Promise<LeaderboardStatsBucket[]> {
+    const ranges =
+      mode === 'contracts'
+        ? [
+            { label: '0-4', min: 0, max: 5 },
+            { label: '5-9', min: 5, max: 10 },
+            { label: '10-24', min: 10, max: 25 },
+            { label: '25-49', min: 25, max: 50 },
+            { label: '50-99', min: 50, max: 100 },
+            { label: '100+', min: 100 },
+          ]
+        : [
+            { label: '0-9', min: 0, max: 10 },
+            { label: '10-24', min: 10, max: 25 },
+            { label: '25-49', min: 25, max: 50 },
+            { label: '50-99', min: 50, max: 100 },
+            { label: '100-199', min: 100, max: 200 },
+            { label: '200+', min: 200 },
+          ];
 
     const buckets: LeaderboardStatsBucket[] = [];
     for (const r of ranges) {
-      const count = await this._countLeaderboardRange(r.min, r.max);
+      const count = await this._countLeaderboardRange(mode, r.min, r.max);
       buckets.push({ label: r.label, count });
     }
 
@@ -341,6 +408,7 @@ export class SupabaseService {
     query = '',
     page = 0,
     pageSize = 20,
+    mode: LeaderboardMode = 'level',
   ): Promise<{
     error: PostgrestError | null;
     data: LeaderboardEntry[] | null;
@@ -348,9 +416,10 @@ export class SupabaseService {
   }> {
     const start = page * pageSize;
     const end = start + pageSize - 1;
+    const table = this.getLeaderboardTable(mode);
 
     let request = this.supabase
-      .from('leaderboard')
+      .from(table)
       .select('user_id, username, score, meta, created_at', { count: 'exact' })
       .order('score', { ascending: false })
       .range(start, end);
@@ -402,6 +471,85 @@ export class SupabaseService {
     }
 
     return { error: null, data: data as unknown as LeaderboardRow[] | null };
+  }
+
+  async getDailyContractsState(): Promise<{
+    error: PostgrestError | Error | null;
+    data: DailyContractsState | null;
+  }> {
+    const sessionResp = await this.getUser();
+    const user = sessionResp.data.user;
+    if (!user) return { error: new Error('Usuario no autenticado'), data: null };
+
+    const { data, error } = await this.supabase
+      .from('daily_contract_profiles')
+      .select('current_state')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      return { error: error as PostgrestError, data: null };
+    }
+
+    return {
+      error: null,
+      data: (data?.current_state ?? null) as DailyContractsState | null,
+    };
+  }
+
+  async upsertDailyContractsState(state: DailyContractsState): Promise<{
+    error: PostgrestError | Error | null;
+    data: LeaderboardRow[] | null;
+  }> {
+    try {
+      if (this.debugService?.isDebugMode)
+        return { error: new Error('Operación deshabilitada en modo DEBUG'), data: null } as any;
+    } catch {}
+
+    const sessionResp = await this.getUser();
+    const user = sessionResp.data.user;
+    if (!user) return { error: new Error('Usuario no autenticado'), data: null };
+
+    const payload = {
+      user_id: user.id,
+      username: user.user_metadata?.['name'] ?? undefined,
+      score: state.stats.lifetimeClaimedContracts,
+      current_streak: state.stats.currentStreak,
+      best_streak: state.stats.bestStreak,
+      weekly_completed_days: state.stats.weeklyCompletedDays,
+      week_key: state.stats.weekKey,
+      last_completed_date_key: state.stats.lastCompletedDateKey,
+      lifetime_claimed_contracts: state.stats.lifetimeClaimedContracts,
+      lifetime_completed_days: state.stats.lifetimeCompletedDays,
+      lifetime_bonus_claims: state.stats.lifetimeBonusClaims,
+      current_state: state,
+      current_state_date_key: state.dateKey,
+      meta: {
+        currentStreak: state.stats.currentStreak,
+        bestStreak: state.stats.bestStreak,
+        completedDays: state.stats.lifetimeCompletedDays,
+        bonusClaims: state.stats.lifetimeBonusClaims,
+        weeklyCompletedDays: state.stats.weeklyCompletedDays,
+      },
+    };
+
+    const { data, error } = await this.supabase
+      .from('daily_contract_profiles')
+      .upsert(payload, { onConflict: 'user_id' })
+      .select('user_id, username, score, meta, created_at');
+
+    if (error) {
+      return {
+        error: error as PostgrestError,
+        data: null,
+      };
+    }
+
+    return { error: null, data: data as unknown as LeaderboardRow[] | null };
+  }
+
+  private getLeaderboardTable(mode: LeaderboardMode): string {
+    return mode === 'contracts' ? 'daily_contract_profiles' : 'leaderboard';
   }
 
   // Devuelve el cliente supabase

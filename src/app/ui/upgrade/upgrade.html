@@ -1,12 +1,12 @@
 <app-button
   type="button"
   variant="golden"
-  [disabled]="!unlocked || bought || pointsService.points().lt(config().price)"
-  [hoverable]="unlocked && !bought && pointsService.points().gte(config().price)"
-  [clickable]="unlocked && !bought"
-  [class.locked]="!unlocked"
-  [class.bought]="bought"
-  [class.available]="unlocked && !bought"
+  [disabled]="!unlocked() || bought() || pointsService.points().lt(config().price)"
+  [hoverable]="unlocked() && !bought() && pointsService.points().gte(config().price)"
+  [clickable]="unlocked() && !bought()"
+  [class.locked]="!unlocked()"
+  [class.bought]="bought()"
+  [class.available]="unlocked() && !bought()"
   (click)="buyUpgrade()"
   [noSound]="true"
   class="upgrade-button"
@@ -25,11 +25,11 @@
     <div class="upgrade-info">
       <p class="upgrade-title">{{ config().name | transloco }}</p>
 
-      @if (!unlocked) {
+      @if (!unlocked()) {
         <p class="upgrade-requirement">
           {{ 'upgrades.requiredLevel' | transloco }}: {{ config().level }}
         </p>
-      } @else if (bought) {
+      } @else if (bought()) {
         <p class="upgrade-status bought-status">{{ 'upgrades.bought' | transloco }}</p>
       } @else {
         <div class="upgrade-details">

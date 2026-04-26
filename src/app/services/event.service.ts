@@ -19,6 +19,7 @@ import { AudioService } from './audio.service';
 import { AchievementsService } from './achievements.service';
 import { PointsService } from './points.service';
 import { FloatingService } from './floating.service';
+import { DailyContractsService } from './daily-contracts.service';
 
 /**
  * Servicio para gestionar eventos especiales del juego (croqueta dorada, quemada, bonus).
@@ -32,6 +33,7 @@ export class EventService implements OnDestroy {
   private achievementsService = inject(AchievementsService);
   private pointsService = inject(PointsService);
   private floatingService = inject(FloatingService);
+  private dailyContracts = inject(DailyContractsService);
 
   /** Signal que contiene todos los eventos activos */
   private events = signal<GameEvent[]>([]);
@@ -177,11 +179,13 @@ export class EventService implements OnDestroy {
     if (event.type === 'bonus') {
       const bonus = this.pointsService.getPointsPerSecond().times(event.effect);
       this.pointsService.addPoints(bonus);
-      this.floatingService.show(`+${bonus.toString()}`, {
+      this.floatingService.show(`+${this.pointsService.formatPoints(bonus)}`, {
         x: mouseEvent.clientX,
         y: mouseEvent.clientY,
       });
     }
+
+    this.dailyContracts.trackEventCapture();
 
     this.events.update((events) =>
       events.map((e) =>

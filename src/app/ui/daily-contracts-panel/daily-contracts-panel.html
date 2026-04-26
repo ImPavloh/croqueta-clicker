@@ -1,0 +1,74 @@
+<div
+  class="cp-overlay"
+  [class.cp-overlay-active]="expanded()"
+  [class.cp-overlay-inactive]="!expanded()"
+>
+  <div
+    class="cp-card cp-right"
+    [class.cp-collapsed]="!expanded()"
+    [class.cp-active]="expanded()"
+    [class.cp-inactive]="!expanded()"
+  >
+    <div
+      class="cp-header"
+      (click)="togglePanel()"
+      [attr.aria-expanded]="expanded()"
+      aria-controls="daily-contracts-panel-body"
+    >
+      <div class="cp-title">
+        <span class="cp-glyph" aria-hidden="true">📋</span>
+        <span>{{ 'contracts.title' | transloco }}</span>
+      </div>
+
+      <div class="cp-header-meta">
+        @if (contractsService.claimableCount() > 0) {
+          <span class="cp-badge">{{ contractsService.claimableCount() }}</span>
+        }
+
+        <div class="cp-toggle" aria-hidden="true">
+          @if (expanded()) {
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="cp-icon"
+            >
+              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+              <path d="M4 4l16 16" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          } @else {
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="cp-icon"
+            >
+              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="daily-contracts-panel-body"
+      class="cp-body"
+      [attr.aria-hidden]="!expanded()"
+      [class.cp-hidden]="!expanded()"
+    >
+      <app-daily-contracts-widget mode="panel" />
+    </div>
+  </div>
+</div>

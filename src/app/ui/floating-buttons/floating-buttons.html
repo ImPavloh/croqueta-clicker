@@ -35,6 +35,9 @@
       decoding="async"
     />
   </button>
+  <button class="floating-btn contracts-btn" (click)="openContracts()" title="Contratos diarios">
+    <span class="btn-icon-text">📜</span>
+  </button>
   @if (timeService.isCroquetaDay()) {
     <button
       class="floating-btn croqueta-day-btn"

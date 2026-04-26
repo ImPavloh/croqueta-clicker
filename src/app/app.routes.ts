@@ -10,6 +10,10 @@ export const routes: Routes = [
   { path: '', component: Upgrades },
   { path: 'upgrades', component: Upgrades },
   { path: 'achievements', component: Achievements },
+  {
+    path: 'contracts',
+    loadComponent: () => import('./pages/contracts/contracts').then((module) => module.Contracts),
+  },
   { path: 'options', component: Options },
   { path: 'skins', component: Skins },
   { path: 'report', component: Report },

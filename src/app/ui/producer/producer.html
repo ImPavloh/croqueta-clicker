@@ -2,14 +2,14 @@
   <app-button
     type="button"
     variant="quaternary"
-    [disabled]="pointsService.points().lt(price) || !unlocked"
-    [hoverable]="pointsService.points().gte(price) && unlocked"
+    [disabled]="pointsService.points().lt(price()) || !unlocked()"
+    [hoverable]="pointsService.points().gte(price()) && unlocked()"
     [active]="false"
-    [clickable]="!(pointsService.points().lt(price) || !unlocked)"
+    [clickable]="!(pointsService.points().lt(price()) || !unlocked())"
     (click)="buyProducer()"
     [noSound]="true"
   >
-    @if (unlocked) {
+    @if (unlocked()) {
       <div class="producer-grid-content">
         <img
           class="producer-grid-image"
@@ -22,21 +22,21 @@
         />
         <p class="producer-grid-name">{{ cfg.name | transloco }}</p>
 
-        @if (quantity > 0) {
+        @if (quantity() > 0) {
           <div class="flex flex-col items-center gap-1 mt-auto">
-            <p class="producer-grid-quantity">x{{ quantity }}</p>
+            <p class="producer-grid-quantity">x{{ quantity() }}</p>
             <p class="producer-grid-production">
-              {{ calculateTotalPoints() | short }} {{ 'producers.cps' | transloco }}
+              {{ totalPoints() | short }} {{ 'producers.cps' | transloco }}
             </p>
           </div>
         }
 
         <p
           class="producer-grid-price"
-          [class.text-green-700]="pointsService.points().gte(price)"
-          [class.text-red-600]="pointsService.points().lt(price)"
+          [class.text-green-700]="pointsService.points().gte(price())"
+          [class.text-red-600]="pointsService.points().lt(price())"
         >
-          {{ price | short }} ¢
+          {{ price() | short }} ¢
         </p>
       </div>
     } @else {

@@ -1,113 +1,124 @@
 @if (modalService.currentModal()) {
-<div
-  class="modal-overlay"
-  (click)="closeModal()"
-  [class.open]="!isClosing()"
-  [class.closing]="isClosing()"
->
   <div
-    class="modal-content"
-    (click)="$event.stopPropagation()"
+    class="modal-overlay"
+    (click)="closeModal()"
     [class.open]="!isClosing()"
     [class.closing]="isClosing()"
   >
-    <div class="modal-header">
-      <h2>{{ getModalTitle() }}</h2>
-      <button class="close-btn" (click)="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      @switch (modalService.currentModal()) {
-      <!-- Modals (pages) -->
-      @case ('upgrades') {
-      <app-upgrades />
-      } @case ('achievements') {
-      <app-achievements />
-      } @case ('skins') {
-      <app-skins />
-      } @case ('options') {
-      <app-options />
-      } @case ('debug') {
-      <app-debug-menu />
-      } @case ('news') {
-      <app-news />
-      } @case ('event-info') {
-      <div class="event-modal-container">
-        <div class="event-header">
-          <div class="croqueta-golden-wrapper">
-            <div class="golden-ring"></div>
-            <div class="golden-ring delay"></div>
-            <img
-              src="assets/skins/croqueta-dorada.webp"
-              class="croqueta-golden-img"
-              alt="Croqueta Dorada"
-            />
-          </div>
-        </div>
-
-        <h3 class="event-title">
-          <span class="title-text">{{ 'event.croquetaDay.title' | transloco }}</span>
-        </h3>
-
-        <div class="event-date-badge">
-          <span class="date-text">16 {{ 'event.croquetaDay.month' | transloco }}</span>
-        </div>
-
-        <p class="event-description">
-          {{ 'event.croquetaDay.description' | transloco }}
-        </p>
-
-        <div class="bonus-card">
-          <div class="bonus-content">
-            <p class="bonus-title">x3 {{ 'event.multiplier' | transloco }}</p>
-            <p class="bonus-desc">{{ 'event.multiplier.desc' | transloco }}</p>
-          </div>
-          <div class="bonus-glow"></div>
-        </div>
+    <div
+      class="modal-content"
+      (click)="$event.stopPropagation()"
+      [class.open]="!isClosing()"
+      [class.closing]="isClosing()"
+    >
+      <div class="modal-header">
+        <h2>{{ getModalTitle() }}</h2>
+        <button class="close-btn" (click)="closeModal()">✕</button>
       </div>
-      }
+      <div class="modal-body">
+        @switch (modalService.currentModal()) {
+          <!-- Modals (pages) -->
+          @case ('upgrades') {
+            <app-upgrades />
+          }
+          @case ('achievements') {
+            <app-achievements />
+          }
+          @case ('contracts') {
+            <app-contracts />
+          }
+          @case ('skins') {
+            <app-skins />
+          }
+          @case ('options') {
+            <app-options />
+          }
+          @case ('debug') {
+            <app-debug-menu />
+          }
+          @case ('news') {
+            <app-news />
+          }
+          @case ('event-info') {
+            <div class="event-modal-container">
+              <div class="event-header">
+                <div class="croqueta-golden-wrapper">
+                  <div class="golden-ring"></div>
+                  <div class="golden-ring delay"></div>
+                  <img
+                    src="assets/skins/croqueta-dorada.webp"
+                    class="croqueta-golden-img"
+                    alt="Croqueta Dorada"
+                  />
+                </div>
+              </div>
 
-      <!-- Modals reales (componentes) -->
-      @case ('username') {
-      <div class="flex flex-col items-center p-6 space-y-4">
-        <p class="text-center text-balance text-lg text-amber-950">
-          {{ 'user.usernamePrompt' | transloco }}
-        </p>
+              <h3 class="event-title">
+                <span class="title-text">{{ 'event.croquetaDay.title' | transloco }}</span>
+              </h3>
 
-        <app-input
-          [value]="desiredName()"
-          (valueChange)="desiredName.set($event)"
-          [loading]="usernameLoading()"
-          [message]="usernameMessage()"
-          (submit)="setUsername()"
-          [buttonText]="'user.confirm' | transloco"
-          [loadingText]="'user.checking' | transloco"
-          [type]="'text'"
-        ></app-input>
-      </div>
+              <div class="event-date-badge">
+                <span class="date-text">16 {{ 'event.croquetaDay.month' | transloco }}</span>
+              </div>
 
-      } @case ('leaderboard') {
-      <app-leaderboard [mode]="'full'" />
-      } @case ('confirm-dialog') {
-      <div class="confirm-body">
-        <p>{{ modalService.confirmDialog()?.message }}</p>
-      </div>
+              <p class="event-description">
+                {{ 'event.croquetaDay.description' | transloco }}
+              </p>
 
-      <div
-        class="confirm-actions"
-        [class.single-button]="!modalService.confirmDialog()?.cancelText"
-      >
-        @if (modalService.confirmDialog()?.cancelText) {
-        <app-button variant="primary" (click)="cancelAction()">
-          {{ modalService.confirmDialog()?.cancelText }}
-        </app-button>
+              <div class="bonus-card">
+                <div class="bonus-content">
+                  <p class="bonus-title">x3 {{ 'event.multiplier' | transloco }}</p>
+                  <p class="bonus-desc">{{ 'event.multiplier.desc' | transloco }}</p>
+                </div>
+                <div class="bonus-glow"></div>
+              </div>
+            </div>
+          }
+
+          <!-- Modals reales (componentes) -->
+          @case ('username') {
+            <div class="flex flex-col items-center p-6 space-y-4">
+              <p class="text-center text-balance text-lg text-amber-950">
+                {{ 'user.usernamePrompt' | transloco }}
+              </p>
+
+              <app-input
+                [value]="desiredName()"
+                (valueChange)="desiredName.set($event)"
+                [loading]="usernameLoading()"
+                [message]="usernameMessage()"
+                (submit)="setUsername()"
+                [buttonText]="'user.confirm' | transloco"
+                [loadingText]="'user.checking' | transloco"
+                [type]="'text'"
+              ></app-input>
+            </div>
+          }
+          @case ('leaderboard') {
+            <app-leaderboard [mode]="'full'" />
+          }
+          @case ('confirm-dialog') {
+            <div class="confirm-body">
+              <p>{{ modalService.confirmDialog()?.message }}</p>
+            </div>
+
+            <div
+              class="confirm-actions"
+              [class.single-button]="!modalService.confirmDialog()?.cancelText"
+            >
+              @if (modalService.confirmDialog()?.cancelText) {
+                <app-button variant="primary" (click)="cancelAction()">
+                  {{ modalService.confirmDialog()?.cancelText }}
+                </app-button>
+              }
+
+              <app-button variant="primary" (click)="confirmAction()">
+                {{ modalService.confirmDialog()?.confirmText }}
+              </app-button>
+            </div>
+          }
         }
-
-        <app-button variant="primary" (click)="confirmAction()">
-          {{ modalService.confirmDialog()?.confirmText }}
-        </app-button>
       </div>
-      } }
     </div>
   </div>
-</div>
 }

@@ -2,6 +2,8 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type {
+  DailyContractReportData,
+  DailyContractSummaryData,
   GameSummary,
   ProducerReportData,
   UpgradeReportData,
@@ -9,10 +11,13 @@ import type {
   SkinReportData,
   EfficiencyData,
   LeaderboardStats,
+  LeaderboardTopEntry,
 } from '@models/report.model';
 
 export interface ReportPdfPayload {
   summary: GameSummary;
+  dailyContractSummary?: DailyContractSummaryData | null;
+  dailyContracts?: DailyContractReportData[];
   producers: ProducerReportData[];
   upgrades: UpgradeReportData[];
   achievements: AchievementReportData[];
@@ -24,13 +29,16 @@ export interface ReportPdfPayload {
   skinRarity: { name: string; value: number }[];
   skins?: SkinReportData[];
   leaderboardStats?: LeaderboardStats | null;
-  leaderboardTop?: Array<{ username: string; score: number }> | null;
+  leaderboardTop?: LeaderboardTopEntry[] | null;
+  contractLeaderboardStats?: LeaderboardStats | null;
+  contractLeaderboardTop?: LeaderboardTopEntry[] | null;
   localeTitle: string;
   labels: Record<string, string>;
   debugInfo?: {
     playerRows: string[][];
     debugRows: string[][];
     multiplayerRows: string[][];
+    contractMultiplayerRows?: string[][];
   };
 }
 
@@ -79,6 +87,81 @@ export class ReportPdfService {
       theme: 'grid',
     });
     cursorY = (doc as any).lastAutoTable.finalY + 12;
+
+    if (payload.dailyContractSummary) {
+      cursorY = this.sectionTitle(doc, l['contractsTitle'], cursorY, margin);
+      autoTable(doc, {
+        ...baseTableOptions,
+        startY: cursorY,
+        head: [[l['metricLabel'], l['valueLabel']]],
+        body: [
+          [
+            l['completedContractsMetricLabel'],
+            `${payload.dailyContractSummary.completed} / ${payload.dailyContractSummary.total}`,
+          ],
+          [l['claimedContractsMetricLabel'], String(payload.dailyContractSummary.claimed)],
+          [l['claimableContractsMetricLabel'], String(payload.dailyContractSummary.claimable)],
+          [l['currentStreakMetricLabel'], String(payload.dailyContractSummary.currentStreak)],
+          [l['bestStreakMetricLabel'], String(payload.dailyContractSummary.bestStreak)],
+          [
+            l['weeklyCompletedDaysMetricLabel'],
+            `${payload.dailyContractSummary.weeklyCompletedDays} / 7`,
+          ],
+          [
+            l['lifetimeClaimedContractsMetricLabel'],
+            String(payload.dailyContractSummary.lifetimeClaimedContracts),
+          ],
+          [
+            l['completedDaysMetricLabel'],
+            String(payload.dailyContractSummary.lifetimeCompletedDays),
+          ],
+          [l['bonusClaimsMetricLabel'], String(payload.dailyContractSummary.lifetimeBonusClaims)],
+          [l['bonusRewardMetricLabel'], payload.dailyContractSummary.bonusRewardLabel],
+          [
+            l['bonusStatusMetricLabel'],
+            payload.dailyContractSummary.bonusClaimed
+              ? l['stateClaimedLabel']
+              : payload.dailyContractSummary.bonusAvailable
+                ? l['bonusReadyLabel']
+                : l['bonusLockedLabel'],
+          ],
+          [l['resetTimeMetricLabel'], payload.dailyContractSummary.resetTimeLabel],
+          [l['manualClicksMetricLabel'], String(payload.dailyContractSummary.manualClicks)],
+          [l['levelsGainedMetricLabel'], String(payload.dailyContractSummary.levelsGained)],
+          [
+            l['producerPurchasesMetricLabel'],
+            String(payload.dailyContractSummary.producerPurchases),
+          ],
+          [l['upgradePurchasesMetricLabel'], String(payload.dailyContractSummary.upgradePurchases)],
+          [l['eventCapturesMetricLabel'], String(payload.dailyContractSummary.eventCaptures)],
+          [l['prestigesMetricLabel'], String(payload.dailyContractSummary.prestiges)],
+        ],
+        theme: 'grid',
+      });
+      cursorY = (doc as any).lastAutoTable.finalY + 12;
+
+      if ((payload.dailyContracts?.length ?? 0) > 0) {
+        cursorY = this.sectionTitle(doc, l['contractsMetricsTitle'], cursorY, margin);
+        autoTable(doc, {
+          ...baseTableOptions,
+          startY: cursorY,
+          head: [[l['contractLabel'], l['rewardLabel'], l['progressLabel'], l['statusLabel']]],
+          body: (payload.dailyContracts ?? []).map((contract) => [
+            `${contract.icon} ${contract.title}`,
+            contract.rewardLabel,
+            `${contract.progress} / ${contract.target}`,
+            contract.claimed
+              ? l['stateClaimedLabel']
+              : contract.completed
+                ? l['stateCompletedLabel']
+                : l['stateInProgressLabel'],
+          ]),
+          styles: { ...baseTableOptions.styles, fontSize: 8 },
+          theme: 'striped',
+        });
+        cursorY = (doc as any).lastAutoTable.finalY + 12;
+      }
+    }
 
     cursorY = this.sectionTitle(doc, l['efficiencyTitle'], cursorY, margin);
     autoTable(doc, {
@@ -275,7 +358,12 @@ export class ReportPdfService {
     }
 
     //  multijugador
-    if (payload.leaderboardStats || (payload.debugInfo?.multiplayerRows?.length ?? 0) > 0) {
+    if (
+      payload.leaderboardStats ||
+      (payload.debugInfo?.multiplayerRows?.length ?? 0) > 0 ||
+      payload.contractLeaderboardStats ||
+      (payload.debugInfo?.contractMultiplayerRows?.length ?? 0) > 0
+    ) {
       cursorY = this.sectionTitle(doc, `3. ${l['multiplayerTitle']}`, cursorY, margin);
 
       if (payload.debugInfo?.multiplayerRows?.length) {
@@ -311,6 +399,68 @@ export class ReportPdfService {
             ]),
             theme: 'grid',
           });
+        }
+      }
+
+      if (
+        payload.contractLeaderboardStats ||
+        (payload.debugInfo?.contractMultiplayerRows?.length ?? 0) > 0
+      ) {
+        cursorY = this.sectionTitle(doc, l['contractsLeaderboardTitle'], cursorY + 8, margin);
+
+        if (payload.debugInfo?.contractMultiplayerRows?.length) {
+          autoTable(doc, {
+            ...baseTableOptions,
+            startY: cursorY,
+            head: [[l['metricLabel'], l['valueLabel']]],
+            body: payload.debugInfo.contractMultiplayerRows,
+            theme: 'grid',
+          });
+          cursorY = (doc as any).lastAutoTable.finalY + 12;
+        }
+
+        if (payload.contractLeaderboardStats) {
+          cursorY = this.sectionTitle(
+            doc,
+            l['contractsLeaderboardDistributionTitle'],
+            cursorY,
+            margin,
+          );
+          cursorY = this.drawBarChart(
+            doc,
+            payload.contractLeaderboardStats.buckets.map((bucket) => ({
+              name: bucket.label,
+              value: bucket.count,
+            })),
+            cursorY + 4,
+            margin,
+          );
+
+          if (payload.contractLeaderboardTop && payload.contractLeaderboardTop.length > 0) {
+            cursorY = this.sectionTitle(
+              doc,
+              l['contractsLeaderboardTopTitle'],
+              cursorY + 8,
+              margin,
+            );
+            autoTable(doc, {
+              ...baseTableOptions,
+              startY: cursorY,
+              head: [
+                [
+                  '#',
+                  l['userLabel'],
+                  l['contractsScoreLabel'] ?? l['scoreLabel'] ?? l['valueLabel'],
+                ],
+              ],
+              body: payload.contractLeaderboardTop.map((entry, index) => [
+                String(index + 1),
+                entry.username,
+                String(entry.score),
+              ]),
+              theme: 'grid',
+            });
+          }
         }
       }
     }

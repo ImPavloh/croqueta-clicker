@@ -45,6 +45,13 @@
           } @placeholder {
             <div></div>
           }
+          @defer (on idle) {
+            <app-daily-contracts-panel
+              [class.contracts-panel-shifted]="timeService.isCroquetaDay()"
+            />
+          } @placeholder {
+            <div></div>
+          }
           @if (timeService.isCroquetaDay()) {
             <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
               <div class="indicator-glow"></div>
@@ -68,6 +75,11 @@
           </div>
           @defer (on idle) {
             <app-leaderboard mode="panel" class="mobile-leaderboard" />
+          } @placeholder {
+            <div></div>
+          }
+          @defer (on idle) {
+            <app-daily-contracts-panel class="mobile-contracts-panel" />
           } @placeholder {
             <div></div>
           }
