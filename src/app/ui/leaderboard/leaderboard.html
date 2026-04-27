@@ -97,7 +97,7 @@
           @for (r of top(); let i = $index; track $index) {
             <div class="lp-row">
               <span class="lp-rank">{{ i + 1 }}</span>
-              <span class="lp-name">{{ r.username ?? (r.user_id | slice: 0 : 6) }}</span>
+              <span class="lp-name">{{ displayUsername(r) }}</span>
               <span class="lp-score-group">
                 <span class="lp-points">{{ r.score }}</span>
                 @if (r.meta?.prestige) {
@@ -202,7 +202,7 @@
               @for (r of items(); let i = $index; track $index) {
                 <tr>
                   <td>{{ page() * pageSize + i + 1 }}</td>
-                  <td>{{ r.username ?? (r.user_id | slice: 0 : 8) }}</td>
+                  <td>{{ displayUsername(r) }}</td>
                   <td>{{ r.score | short }}</td>
                   <td>
                     @if (isContractsMode()) {

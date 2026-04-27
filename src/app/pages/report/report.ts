@@ -101,6 +101,7 @@ export class Report implements OnInit {
   debugRows = signal<Array<{ label: string; value: string }>>([]);
   multiplayerRows = signal<Array<{ label: string; value: string }>>([]);
   contractMultiplayerRows = signal<Array<{ label: string; value: string }>>([]);
+  assessmentRows = signal<Array<{ label: string; value: string }>>([]);
 
   activeTab = signal<'player' | 'debug' | 'multiplayer'>('player');
 
@@ -203,6 +204,7 @@ export class Report implements OnInit {
 
     this.playerRows.set(this.buildPlayerRows(summary));
     this.debugRows.set(this.buildDebugRows());
+    this.assessmentRows.set(this.buildAssessmentRows());
   }
 
   async refreshLeaderboardStats() {
@@ -243,7 +245,7 @@ export class Report implements OnInit {
     if (!levelTop.error && levelTop.data) {
       this.leaderboardTop.set(
         levelTop.data.map((entry) => ({
-          username: entry.username ?? (entry.user_id ? entry.user_id.slice(0, 6) : 'anon'),
+          username: this.getLeaderboardDisplayName(entry.username),
           score: entry.score,
         })),
       );
@@ -254,7 +256,7 @@ export class Report implements OnInit {
     if (!contractTop.error && contractTop.data) {
       this.contractLeaderboardTop.set(
         contractTop.data.map((entry) => ({
-          username: entry.username ?? (entry.user_id ? entry.user_id.slice(0, 6) : 'anon'),
+          username: this.getLeaderboardDisplayName(entry.username),
           score: entry.score,
         })),
       );
@@ -394,6 +396,39 @@ export class Report implements OnInit {
     ];
   }
 
+  private buildAssessmentRows(): Array<{ label: string; value: string }> {
+    return [
+      {
+        label: this.transloco.translate('report.assessment.reportStructure'),
+        value: this.transloco.translate('report.assessment.reportStructureValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.tableUtility'),
+        value: this.transloco.translate('report.assessment.tableUtilityValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.chartUtility'),
+        value: this.transloco.translate('report.assessment.chartUtilityValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.filterCoverage'),
+        value: this.transloco.translate('report.assessment.filterCoverageValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.calculatedFields'),
+        value: this.transloco.translate('report.assessment.calculatedFieldsValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.pdfStructure'),
+        value: this.transloco.translate('report.assessment.pdfStructureValue'),
+      },
+      {
+        label: this.transloco.translate('report.assessment.multiplayerCoverage'),
+        value: this.transloco.translate('report.assessment.multiplayerCoverageValue'),
+      },
+    ];
+  }
+
   private buildMultiplayerRows(
     stats: LeaderboardStats | null,
     mode: 'level' | 'contracts',
@@ -428,6 +463,13 @@ export class Report implements OnInit {
     ];
   }
 
+  private getLeaderboardDisplayName(username: string | null | undefined): string {
+    const normalized = username?.trim();
+    return normalized && normalized.length > 0
+      ? normalized
+      : this.transloco.translate('leaderboard.anonymous');
+  }
+
   private buildPdfLabels(): Record<string, string> {
     const t = (key: string) => this.transloco.translate(key);
     return {
@@ -437,6 +479,7 @@ export class Report implements OnInit {
       upgradesTitle: t('report.upgradesTable'),
       achievementsTitle: t('report.achievementsTable'),
       skinsTitle: t('report.skinsTable'),
+      pageLabel: t('report.pageLabel'),
       upgradeDistributionTitle: t('report.upgradeLevelDistribution'),
       upgradeClickCurveTitle: t('report.upgradeClickCurve'),
       cumulativeUpgradeCurveTitle: t('report.upgradeCumulativeCurve'),

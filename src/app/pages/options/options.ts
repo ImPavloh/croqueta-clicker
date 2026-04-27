@@ -95,11 +95,11 @@ export class Options {
     // Sincronizar toggles de interfaz
     this.interfaceControls.forEach((control) => {
       if (control.label === 'options.showMascotLabel') {
-        control.value = this.optionsService.showCroquetita();
+        control.checked = this.optionsService.showCroquetita();
       } else if (control.label === 'options.showParticlesLabel') {
-        control.value = this.optionsService.showParticles();
+        control.checked = this.optionsService.showParticles();
       } else if (control.label === 'options.showFloatingPointsLabel') {
-        control.value = this.optionsService.showFloatingText();
+        control.checked = this.optionsService.showFloatingText();
       }
     });
   }
@@ -434,6 +434,8 @@ export class Options {
   }
 
   private handleToggleChange(control: ToggleSwitchControlModel, checked: boolean) {
+    control.checked = checked;
+
     const label = control.label;
     if (label === 'options.showMascotLabel') {
       this.optionsService.setShowCroquetita(checked);

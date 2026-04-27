@@ -87,6 +87,13 @@ export class Leaderboard implements OnInit {
     return u.user_metadata?.['name'] || null;
   });
 
+  protected displayUsername(entry: { username?: string | null }): string {
+    const normalized = entry.username?.trim();
+    return normalized && normalized.length > 0
+      ? normalized
+      : this.translocoService.translate('leaderboard.anonymous');
+  }
+
   private nextRunMs: number | null = null;
   private countdownTimerHandle?: any;
   private scheduleTimerHandle?: any;

@@ -230,6 +230,8 @@
     "importGameButton": "Load game",
     "shareProgressTooltip": "Share your stats or copy them to the clipboard.",
     "shareProgressButton": "Share progress",
+    "prestigeSectionTitle": "Prestige reset",
+    "prestigeSectionBody": "This resets your current run, but gives you Golden Croquetas and a permanent multiplier in return.",
     "resetGameTooltip": "Reset your progress. This action cannot be undone.",
     "resetGameButton": "Reset game",
     "creditsTitle": "Credits",
@@ -315,6 +317,7 @@
     "offline": "Offline",
     "levelSynced": "Level synced for this interval.",
     "errorWithDetail": "Error: {{message}}",
+    "anonymous": "Unnamed player",
     "prestige": "Prestige"
   },
   "prestige": {
@@ -810,76 +813,76 @@
     },
     "definitions": {
       "clickWarmup": {
-        "title": "Do {{target}} clicks to kick off the run",
-        "description": "Give the early game momentum so the session does not start flat."
+        "title": "Do {{target}} clicks to get started",
+        "description": "A quick push to get the session moving."
       },
       "clickSprint": {
         "title": "Do {{target}} manual clicks",
-        "description": "Push the active session harder before the next bottleneck hits."
+        "description": "Great if you want to progress through active play."
       },
       "clickMarathon": {
-        "title": "Keep a {{target}} click marathon going",
-        "description": "Lean into a longer active session once your economy can support it."
+        "title": "Do {{target}} clicks in one session",
+        "description": "Made for longer sessions where you keep clicking a lot."
       },
       "clickOverdrive": {
-        "title": "Hit overdrive with {{target}} clicks",
-        "description": "Turn an advanced run into a heavy manual burst to close the day harder."
+        "title": "Push your manual clicks to {{target}}",
+        "description": "An advanced challenge for finishing a strong session with active play."
       },
       "levelSpark": {
-        "title": "Gain {{target}} momentum levels",
-        "description": "Secure quick unlocks and make the start of the day feel productive."
+        "title": "Gain {{target}} levels",
+        "description": "Helps you unlock content quickly and get up to speed early."
       },
       "levelPush": {
         "title": "Gain {{target}} levels today",
-        "description": "Force a cleaner run and move toward unlocks and prestige."
+        "description": "Push the run forward and get closer to fresh unlocks."
       },
       "levelBreakthrough": {
-        "title": "Break through with {{target}} extra levels",
-        "description": "Calls for a tighter production run to punch through the next wall."
+        "title": "Gain {{target}} extra levels",
+        "description": "For the moment when you need one big push through the next wall."
       },
       "producerBootstrap": {
-        "title": "Build the base with {{target}} producers",
-        "description": "Forces an early solid economy instead of drifting on manual clicks."
+        "title": "Buy {{target}} producers",
+        "description": "Set up an automatic base so you do not rely only on clicking."
       },
       "producerSpree": {
-        "title": "Buy {{target}} producers",
-        "description": "Grow your CPS base and stop leaning only on manual clicking."
+        "title": "Buy {{target}} more producers",
+        "description": "Grow your steady production during the session."
       },
       "producerFleet": {
-        "title": "Expand the line with {{target}} producers",
-        "description": "Pushes the midgame into a more industrial, stable CPS climb."
+        "title": "Expand production with {{target}} producers",
+        "description": "A good midgame target to stabilize your CpS growth."
       },
       "producerEmpire": {
-        "title": "Raise a {{target}} producer empire",
-        "description": "Scale a late economy that can sustain costly upgrades and prestiges."
+        "title": "Reach {{target}} producer purchases",
+        "description": "A late challenge for building a large, stable economy."
       },
       "upgradeHunt": {
         "title": "Buy {{target}} upgrades",
-        "description": "Turn build progression into a real daily target."
+        "description": "Strengthen your run by picking up useful upgrades early."
       },
       "upgradeSweep": {
-        "title": "Sweep the shop with {{target}} upgrades",
-        "description": "Rewards you for not leaving obvious build value on the board."
+        "title": "Buy {{target}} upgrades",
+        "description": "Make better use of the shop and do not leave key upgrades behind."
       },
       "upgradeForge": {
-        "title": "Forge the build with {{target}} upgrades",
-        "description": "Sharpens the late-day run by tightening the build before the next spike."
+        "title": "Buy {{target}} advanced upgrades",
+        "description": "Made for polishing the run once your production is already strong."
       },
       "eventHunter": {
         "title": "Capture {{target}} special event",
-        "description": "Reuse the event system as an active session objective."
+        "description": "Stay alert for special spawns."
       },
       "eventRush": {
-        "title": "Chain {{target}} special events",
-        "description": "Stay alert and turn event spawns into a real advantage source."
+        "title": "Capture {{target}} special events",
+        "description": "Turn special events into a real source of advantage."
       },
       "eventStorm": {
-        "title": "Control the storm with {{target}} events",
-        "description": "Designed for long runs where every special spawn matters."
+        "title": "Capture {{target}} special events",
+        "description": "A long-session challenge where you do not want to miss any spawn."
       },
       "prestigeReady": {
         "title": "Perform {{target}} prestige today",
-        "description": "Activate the meta loop and give the day a clean run-ending goal."
+        "description": "End the day by resetting the run in exchange for a permanent upgrade."
       }
     }
   },
@@ -947,6 +950,28 @@
       "lastSave": "Last save",
       "itemsVersion": "Items version",
       "storageTitle": "Game storage"
+    },
+    "assessment": {
+      "title": "Report coverage",
+      "subtitle": "Quick summary of the report elements and their usefulness for understanding the game state and progression.",
+      "tables": "Visible tables",
+      "charts": "Visible charts",
+      "filters": "Useful filters",
+      "calculations": "Calculated fields",
+      "reportStructure": "Report structure",
+      "reportStructureValue": "3 tabs, separated cards, headed tables, and PDF export.",
+      "tableUtility": "Table usefulness",
+      "tableUtilityValue": "13 tables across player data, contracts, progress, skins, and multiplayer rankings.",
+      "chartUtility": "Chart usefulness",
+      "chartUtilityValue": "12 charts covering distribution, progress, ROI, curves, and game comparisons.",
+      "filterCoverage": "Filter coverage",
+      "filterCoverageValue": "6 working filters for producers, upgrades, achievements, and skins.",
+      "calculatedFields": "Calculated fields",
+      "calculatedFieldsValue": "10+ derived metrics such as ROI, percentages, per-minute pace, efficiency, and progress.",
+      "pdfStructure": "PDF structure",
+      "pdfStructureValue": "Title, numbered sections, tables, charts, footer, and page numbering.",
+      "multiplayerCoverage": "Multiplayer coverage",
+      "multiplayerCoverageValue": "Includes both level and contracts leaderboards with detail, distribution, and top players."
     },
     "multiplayer": {
       "title": "Multiplayer",
@@ -1036,6 +1061,7 @@
     "unlocked": "unlocked",
     "achievementsTable": "Achievements table",
     "generatedWith": "Report generated automatically",
+    "pageLabel": "Page",
     "filterHideEmpty": "Hide empty",
     "filterAll": "All",
     "filterSearch": "Search...",

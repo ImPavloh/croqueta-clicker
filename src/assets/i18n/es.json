@@ -230,6 +230,8 @@
     "importGameButton": "Cargar partida",
     "shareProgressTooltip": "Comparte tus estadísticas o cópialas al portapapeles.",
     "shareProgressButton": "Compartir progreso",
+    "prestigeSectionTitle": "Prestigio y reinicio",
+    "prestigeSectionBody": "Esto reinicia tu partida actual, pero a cambio te da Croquetas Doradas y un multiplicador permanente.",
     "resetGameTooltip": "Reinicia tu progreso. Esta acción no se puede deshacer.",
     "resetGameButton": "Reiniciar partida",
     "creditsTitle": "Créditos",
@@ -315,18 +317,19 @@
     "offline": "Sin conexión",
     "levelSynced": "Nivel sincronizado para este intervalo.",
     "errorWithDetail": "Error: {{message}}",
+    "anonymous": "Jugador sin nombre",
     "prestige": "Prestigio"
   },
   "prestige": {
     "title": "Prestigio",
     "level": "Nivel de prestigio",
-    "goldenCroquetas": "Croquetas Doradas",
-    "goldenCroqueta": "Croqueta Dorada",
+    "goldenCroquetas": "Croquetas doradas",
+    "goldenCroqueta": "Croqueta dorada",
     "multiplier": "Multiplicador",
-    "button": "Hacer Prestigio",
-    "tooltip": "Reinicia tu progreso a cambio de Croquetas Doradas y un multiplicador permanente.",
+    "button": "Hacer prestigio",
+    "tooltip": "Reinicia tu progreso a cambio de Croquetas doradas y un multiplicador permanente.",
     "tooltipLocked": "Necesitas nivel 50 para hacer prestigio.",
-    "confirmTitle": "🥇 Hacer Prestigio",
+    "confirmTitle": "🥇 Hacer prestigio",
     "confirmMessage": "Ganarás {{earned}} {{goldenLabel}} y tu multiplicador será +{{newMultiplier}}%. Se reiniciarán tus croquetas, nivel, productores y mejoras.",
     "confirmButton": "Prestigiar",
     "cancelButton": "Cancelar",
@@ -810,76 +813,76 @@
     },
     "definitions": {
       "clickWarmup": {
-        "title": "Haz {{target}} clicks para arrancar la run",
-        "description": "Da impulso al early game y evita que la sesión se quede fría al principio."
+        "title": "Haz {{target}} clicks para empezar",
+        "description": "Un empujón rápido para poner la sesión en marcha."
       },
       "clickSprint": {
         "title": "Haz {{target}} clicks manuales",
-        "description": "Acelera el juego activo y empuja la sesión antes del siguiente cuello de botella."
+        "description": "Ideal si quieres avanzar jugando de forma activa."
       },
       "clickMarathon": {
-        "title": "Mantén un maratón de {{target}} clicks",
-        "description": "Exprime una sesión larga de click activo cuando tu economía ya acompaña."
+        "title": "Haz {{target}} clicks en una sesión",
+        "description": "Pensado para partidas largas en las que sigues clicando bastante."
       },
       "clickOverdrive": {
-        "title": "Entra en overdrive con {{target}} clicks",
-        "description": "Convierte una run avanzada en una ráfaga manual intensa para cerrar mejor el día."
+        "title": "Lleva tus clicks manuales hasta {{target}}",
+        "description": "Reto avanzado para rematar una buena sesión a base de click."
       },
       "levelSpark": {
-        "title": "Gana {{target}} niveles de impulso",
-        "description": "Asegura desbloqueos rápidos y una sensación clara de progreso al arrancar."
+        "title": "Sube {{target}} niveles",
+        "description": "Te ayuda a desbloquear contenido y coger ritmo pronto."
       },
       "levelPush": {
         "title": "Sube {{target}} niveles hoy",
-        "description": "Fuerza una run más eficiente y te acerca a desbloqueos y prestigio."
+        "description": "Aprieta la partida y acércate a nuevas mejoras y desbloqueos."
       },
       "levelBreakthrough": {
-        "title": "Rompe la run con {{target}} niveles extra",
-        "description": "Pide una sesión más fina de producción y timing para atravesar el siguiente muro."
+        "title": "Sube {{target}} niveles extra",
+        "description": "Para cuando necesitas un empujón fuerte y cruzar el siguiente muro."
       },
       "producerBootstrap": {
-        "title": "Monta la base con {{target}} productores",
-        "description": "Te obliga a construir una economía mínima sólida cuanto antes."
+        "title": "Compra {{target}} productores",
+        "description": "Monta una base automática para no depender solo del click."
       },
       "producerSpree": {
-        "title": "Compra {{target}} productores",
-        "description": "Infla tu base de CPS y evita depender solo del click manual."
+        "title": "Compra {{target}} productores más",
+        "description": "Haz crecer tu producción constante durante la sesión."
       },
       "producerFleet": {
-        "title": "Amplía la cadena con {{target}} productores",
-        "description": "Empuja una fase media más industrial y estabiliza la subida de CPS."
+        "title": "Amplía la producción con {{target}} productores",
+        "description": "Buen objetivo para estabilizar el CpS en mitad de la partida."
       },
       "producerEmpire": {
-        "title": "Levanta un imperio de {{target}} productores",
-        "description": "Haz crecer una economía tardía que sostenga prestigios y upgrades caros."
+        "title": "Llega a {{target}} compras de productores",
+        "description": "Reto tardío para levantar una economía grande y estable."
       },
       "upgradeHunt": {
         "title": "Compra {{target}} upgrades",
-        "description": "Convierte la mejora de build en un objetivo diario real."
+        "description": "Refuerza tu partida comprando mejoras útiles cuanto antes."
       },
       "upgradeSweep": {
-        "title": "Limpia la tienda con {{target}} upgrades",
-        "description": "Te premia por no dejar valor muerto en el tablero de mejoras."
+        "title": "Compra {{target}} mejoras",
+        "description": "Aprovecha mejor la tienda y no dejes mejoras importantes atrás."
       },
       "upgradeForge": {
-        "title": "Forja la build con {{target}} upgrades",
-        "description": "Aprieta el tramo avanzado del día afinando la build antes del siguiente pico."
+        "title": "Compra {{target}} mejoras avanzadas",
+        "description": "Pensado para afinar la partida cuando ya vas fuerte de producción."
       },
       "eventHunter": {
         "title": "Captura {{target}} evento especial",
-        "description": "Reutiliza el sistema de eventos como objetivo activo de sesión."
+        "description": "Mantente atento a las croquetas especiales."
       },
       "eventRush": {
-        "title": "Encadena {{target}} eventos especiales",
-        "description": "Mantente atento al mapa y convierte los eventos en una fuente real de ventaja."
+        "title": "Captura {{target}} eventos especiales",
+        "description": "Convierte los eventos en una fuente real de ventaja."
       },
       "eventStorm": {
-        "title": "Domina la tormenta con {{target}} eventos",
-        "description": "Pensado para runs largas donde cada aparición especial cuenta."
+        "title": "Captura {{target}} eventos especiales",
+        "description": "Reto para sesiones largas en las que no quieres dejar pasar ninguno."
       },
       "prestigeReady": {
         "title": "Haz {{target}} prestigio hoy",
-        "description": "Activa el meta-loop y da al día un cierre claro de run."
+        "description": "Cierra el día reiniciando la partida a cambio de una mejora permanente."
       }
     }
   },
@@ -947,6 +950,28 @@
       "lastSave": "Ultimo guardado",
       "itemsVersion": "Version de items",
       "storageTitle": "Almacenamiento del juego"
+    },
+    "assessment": {
+      "title": "Cobertura de reportes",
+      "subtitle": "Resumen rápido de los elementos del informe y su utilidad para analizar la partida.",
+      "tables": "Tablas visibles",
+      "charts": "Gráficos visibles",
+      "filters": "Filtros útiles",
+      "calculations": "Campos calculados",
+      "reportStructure": "Estructura del informe",
+      "reportStructureValue": "3 pestañas, tarjetas separadas, tablas con encabezados y exportación a PDF.",
+      "tableUtility": "Utilidad de las tablas",
+      "tableUtilityValue": "13 tablas entre jugador, contratos, progreso, skins y clasificaciones multijugador.",
+      "chartUtility": "Utilidad de los gráficos",
+      "chartUtilityValue": "12 gráficos con distribución, progreso, ROI, curvas y comparativas del juego.",
+      "filterCoverage": "Cobertura de filtros",
+      "filterCoverageValue": "6 filtros funcionales para productores, mejoras, logros y skins.",
+      "calculatedFields": "Campos calculados",
+      "calculatedFieldsValue": "10+ métricas derivadas como ROI, porcentajes, ritmo por minuto, eficiencia y progreso.",
+      "pdfStructure": "Estructura del PDF",
+      "pdfStructureValue": "Título, secciones numeradas, tablas, gráficos, pie y paginación por página.",
+      "multiplayerCoverage": "Cobertura multijugador",
+      "multiplayerCoverageValue": "Incluye leaderboard por nivel y por contratos con detalle, distribución y top global."
     },
     "multiplayer": {
       "title": "Multijugador",
@@ -1036,6 +1061,7 @@
     "unlocked": "desbloqueados",
     "achievementsTable": "Tabla de logros",
     "generatedWith": "Informe generado automáticamente",
+    "pageLabel": "Página",
     "filterHideEmpty": "Ocultar sin cantidad",
     "filterAll": "Todos",
     "filterSearch": "Buscar...",

@@ -229,7 +229,7 @@
               </div>
 
               <div class="table-wrapper">
-                <table class="data-table wide-table">
+                <table class="data-table wide-table contracts-report-table">
                   <thead>
                     <tr>
                       <th>{{ 'contracts.contractLabel' | transloco }}</th>
@@ -241,7 +241,16 @@
                   <tbody>
                     @for (contract of dailyContracts(); track contract.id) {
                       <tr [class.bought-row]="contract.claimed">
-                        <td>{{ contract.icon }} {{ contract.title }}</td>
+                        <td>
+                          <div class="contract-report-cell">
+                            <strong class="contract-report-cell__title"
+                              >{{ contract.icon }} {{ contract.title }}</strong
+                            >
+                            <p class="contract-report-cell__description">
+                              {{ contract.description }}
+                            </p>
+                          </div>
+                        </td>
                         <td class="val">{{ contract.rewardLabel }}</td>
                         <td class="val">{{ contract.progress }} / {{ contract.target }}</td>
                         <td class="val">
@@ -659,6 +668,54 @@
         [class.visible]="activeTab() === 'debug'"
         [class.print-section]="true"
       >
+        <app-card>
+          <div class="section">
+            <p class="section-title">{{ 'report.assessment.title' | transloco }}</p>
+            <p class="debug-message">{{ 'report.assessment.subtitle' | transloco }}</p>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-icon">📋</span>
+                <span class="stat-value">13</span>
+                <span class="stat-label">{{ 'report.assessment.tables' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">📈</span>
+                <span class="stat-value">12</span>
+                <span class="stat-label">{{ 'report.assessment.charts' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">🔎</span>
+                <span class="stat-value">6</span>
+                <span class="stat-label">{{ 'report.assessment.filters' | transloco }}</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-icon">🧮</span>
+                <span class="stat-value">10+</span>
+                <span class="stat-label">{{ 'report.assessment.calculations' | transloco }}</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table compact-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'report.metric' | transloco }}</th>
+                    <th>{{ 'report.value' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of assessmentRows(); track row.label) {
+                    <tr>
+                      <td>{{ row.label }}</td>
+                      <td>{{ row.value }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-card>
+
         <!-- INFO DEBUG DEL JUEGO -->
         <app-card>
           <div class="section">

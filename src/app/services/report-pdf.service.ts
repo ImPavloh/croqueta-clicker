@@ -465,7 +465,29 @@ export class ReportPdfService {
       }
     }
 
+    this.addPageFooters(doc, l);
     doc.save('croquetaclicker-report.pdf');
+  }
+
+  private addPageFooters(doc: jsPDF, labels: Record<string, string>): void {
+    const totalPages = doc.getNumberOfPages();
+
+    for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+      doc.setPage(pageNumber);
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const footerY = pageHeight - 18;
+      const pageLabel = `${labels['pageLabel'] ?? 'Page'} ${pageNumber} / ${totalPages}`;
+
+      doc.setDrawColor(215, 199, 160);
+      doc.line(40, footerY - 8, pageWidth - 40, footerY - 8);
+
+      doc.setFontSize(8);
+      doc.setTextColor(120, 101, 67);
+      doc.text(labels['generatedWith'] ?? 'Generated automatically', 40, footerY);
+      doc.text(pageLabel, pageWidth - 40, footerY, { align: 'right' });
+    }
   }
 
   private sectionTitle(doc: jsPDF, text: string, y: number, x: number): number {

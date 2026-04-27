@@ -248,6 +248,47 @@
   width: clamp(8rem, 18vw, 9.5rem);
 }
 
+.contracts-report-table {
+  min-width: 34rem;
+}
+
+.contracts-report-table th:first-child,
+.contracts-report-table td:first-child {
+  width: auto;
+  text-align: left;
+}
+
+.contracts-report-table th:nth-child(2),
+.contracts-report-table td:nth-child(2) {
+  width: clamp(8.5rem, 18vw, 11rem);
+}
+
+.contracts-report-table th:nth-child(3),
+.contracts-report-table td:nth-child(3) {
+  width: clamp(6rem, 14vw, 7.5rem);
+}
+
+.contract-report-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.contract-report-cell__title {
+  color: var(--report-text);
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.contract-report-cell__description {
+  margin: 0;
+  color: var(--report-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
 .data-table tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.35);
 }
@@ -643,6 +684,18 @@
 
   .wide-table {
     min-width: 32rem;
+  }
+
+  .contracts-report-table {
+    min-width: 28rem;
+  }
+
+  .contract-report-cell__title {
+    font-size: 0.8rem;
+  }
+
+  .contract-report-cell__description {
+    font-size: 0.7rem;
   }
 
   .section-title {

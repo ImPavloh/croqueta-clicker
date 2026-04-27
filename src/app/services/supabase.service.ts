@@ -274,11 +274,14 @@ export class SupabaseService {
     mode: LeaderboardMode = 'level',
   ): Promise<{ error: PostgrestError | null; data: LeaderboardEntry[] | null }> {
     const table = this.getLeaderboardTable(mode);
-    const { data, error } = await this.supabase
-      .from(table)
-      .select('user_id, username, score, meta, created_at')
-      .order('score', { ascending: false })
-      .limit(limit);
+    const { data, error } = await this.applyPublicLeaderboardFilters(
+      this.supabase
+        .from(table)
+        .select('user_id, username, score, meta, created_at')
+        .order('score', { ascending: false })
+        .limit(limit),
+      mode,
+    );
 
     return {
       error: error as PostgrestError | null,
@@ -292,15 +295,19 @@ export class SupabaseService {
     data: LeaderboardStats | null;
   }> {
     const table = this.getLeaderboardTable(mode);
-    const totalResp = await this.supabase
-      .from(table)
-      .select('user_id', { count: 'exact', head: true });
+    const totalResp = await this.applyPublicLeaderboardFilters(
+      this.supabase.from(table).select('user_id', { count: 'exact', head: true }),
+      mode,
+    );
 
     if (totalResp.error) {
       return { error: totalResp.error as PostgrestError, data: null };
     }
 
-    const aggResp = await this.supabase.from(table).select('avg:score, max:score, min:score');
+    const aggResp = await this.applyPublicLeaderboardFilters(
+      this.supabase.from(table).select('avg:score, max:score, min:score'),
+      mode,
+    );
 
     if (aggResp.error) {
       return { error: aggResp.error as PostgrestError, data: null };
@@ -314,13 +321,16 @@ export class SupabaseService {
     let lastUpdated: string | null = null;
 
     if (mode === 'contracts') {
-      const lastUpdateResp = await this.supabase
-        .from(table)
-        .select('current_state_date_key, created_at')
-        .order('current_state_date_key', { ascending: false })
-        .limit(1);
+      const filteredLastUpdateResp = await this.applyPublicLeaderboardFilters(
+        this.supabase
+          .from(table)
+          .select('current_state_date_key, created_at')
+          .order('current_state_date_key', { ascending: false })
+          .limit(1),
+        mode,
+      );
 
-      const latestRow = (lastUpdateResp.data ?? [])[0] as
+      const latestRow = (filteredLastUpdateResp.data ?? [])[0] as
         | {
             current_state_date_key?: string | null;
             created_at?: string | null;
@@ -329,14 +339,17 @@ export class SupabaseService {
 
       lastUpdated = latestRow?.current_state_date_key ?? latestRow?.created_at ?? null;
     } else {
-      const lastUpdateResp = await this.supabase
-        .from(table)
-        .select('updated_at')
-        .order('updated_at', { ascending: false })
-        .limit(1);
+      const filteredLastUpdateResp = await this.applyPublicLeaderboardFilters(
+        this.supabase
+          .from(table)
+          .select('updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(1),
+        mode,
+      );
 
       lastUpdated =
-        ((lastUpdateResp.data ?? [])[0] as { updated_at?: string | null } | undefined)
+        ((filteredLastUpdateResp.data ?? [])[0] as { updated_at?: string | null } | undefined)
           ?.updated_at ?? null;
     }
 
@@ -360,10 +373,13 @@ export class SupabaseService {
     min: number,
     max?: number,
   ): Promise<number> {
-    let query = this.supabase
-      .from(this.getLeaderboardTable(mode))
-      .select('user_id', { count: 'exact', head: true })
-      .gte('score', min);
+    let query = this.applyPublicLeaderboardFilters(
+      this.supabase
+        .from(this.getLeaderboardTable(mode))
+        .select('user_id', { count: 'exact', head: true })
+        .gte('score', min),
+      mode,
+    );
 
     if (typeof max === 'number') {
       query = query.lt('score', max);
@@ -423,6 +439,8 @@ export class SupabaseService {
       .select('user_id, username, score, meta, created_at', { count: 'exact' })
       .order('score', { ascending: false })
       .range(start, end);
+
+    request = this.applyPublicLeaderboardFilters(request, mode);
 
     if (query && query.trim().length > 0) request = request.ilike('username', `%${query}%`);
 
@@ -550,6 +568,16 @@ export class SupabaseService {
 
   private getLeaderboardTable(mode: LeaderboardMode): string {
     return mode === 'contracts' ? 'daily_contract_profiles' : 'leaderboard';
+  }
+
+  private applyPublicLeaderboardFilters(query: any, mode: LeaderboardMode): any {
+    let filtered = query.not('username', 'is', null).neq('username', '');
+
+    if (mode === 'contracts') {
+      filtered = filtered.gt('score', 0);
+    }
+
+    return filtered;
   }
 
   // Devuelve el cliente supabase
