@@ -176,6 +176,7 @@ export interface ReportPdfPayload {
   readonly labels: Readonly<Record<string, string>>;
   readonly debugInfo?: {
     readonly playerRows: string[][];
+    readonly assessmentRows?: string[][];
     readonly debugRows: string[][];
     readonly multiplayerRows: string[][];
     readonly contractMultiplayerRows?: string[][];

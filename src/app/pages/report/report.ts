@@ -324,6 +324,7 @@ export class Report implements OnInit {
       labels: this.buildPdfLabels(),
       debugInfo: {
         playerRows: this.playerRows().map((r) => [r.label, r.value]),
+        assessmentRows: this.assessmentRows().map((r) => [r.label, r.value]),
         debugRows: this.debugRows().map((r) => [r.label, r.value]),
         multiplayerRows: this.multiplayerRows().map((r) => [r.label, r.value]),
         contractMultiplayerRows: this.contractMultiplayerRows().map((r) => [r.label, r.value]),
@@ -415,6 +416,10 @@ export class Report implements OnInit {
         value: this.transloco.translate('report.assessment.filterCoverageValue'),
       },
       {
+        label: this.transloco.translate('report.assessment.catalogCoverage'),
+        value: this.transloco.translate('report.assessment.catalogCoverageValue'),
+      },
+      {
         label: this.transloco.translate('report.assessment.calculatedFields'),
         value: this.transloco.translate('report.assessment.calculatedFieldsValue'),
       },
@@ -480,6 +485,7 @@ export class Report implements OnInit {
       achievementsTitle: t('report.achievementsTable'),
       skinsTitle: t('report.skinsTable'),
       pageLabel: t('report.pageLabel'),
+      assessmentTitle: t('report.assessment.title'),
       upgradeDistributionTitle: t('report.upgradeLevelDistribution'),
       upgradeClickCurveTitle: t('report.upgradeClickCurve'),
       cumulativeUpgradeCurveTitle: t('report.upgradeCumulativeCurve'),

@@ -338,11 +338,13 @@ export class ReportService {
 
   getUpgradeLevelDistribution(): ChartItem[] {
     const buckets = [
-      { key: 'report.levelRange.0_10', min: 0, max: 11 },
-      { key: 'report.levelRange.11_25', min: 11, max: 26 },
-      { key: 'report.levelRange.26_50', min: 26, max: 51 },
+      { key: 'report.levelRange.0_20', min: 0, max: 21 },
+      { key: 'report.levelRange.21_50', min: 21, max: 51 },
       { key: 'report.levelRange.51_100', min: 51, max: 101 },
-      { key: 'report.levelRange.101_plus', min: 101 },
+      { key: 'report.levelRange.101_200', min: 101, max: 201 },
+      { key: 'report.levelRange.201_400', min: 201, max: 401 },
+      { key: 'report.levelRange.401_800', min: 401, max: 801 },
+      { key: 'report.levelRange.801_plus', min: 801 },
     ];
 
     return buckets.map((b) => {

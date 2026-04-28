@@ -28,10 +28,38 @@ function roundToNiceNumber(num: Decimal): Decimal {
   return num.dividedBy(denario).round().times(denario);
 }
 
+function roundToNiceInteger(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) return value;
+
+  const exponent = Math.floor(Math.log10(value));
+  const scale = Math.pow(10, Math.max(0, exponent - 2));
+  return Math.round(value / scale) * scale;
+}
+
+function getUpgradePriceMultiplier(level: number): number {
+  if (level <= 20) return 20;
+  if (level <= 35) return 40;
+  if (level <= 50) return 100;
+  if (level <= 80) return 400;
+  if (level <= 120) return 2_000;
+  if (level <= 200) return 10_000;
+  if (level <= 400) return 60_000;
+  if (level <= 800) return 400_000;
+  return 2_000_000;
+}
+
+function calculateBalancedUpgradePrice(clicks: number, level: number): Decimal {
+  return roundToNiceNumber(new Decimal(clicks).times(getUpgradePriceMultiplier(level)));
+}
+
+function calculateLateValue(baseValue: number, growth: number, step: number): number {
+  return roundToNiceInteger(baseValue * Math.pow(growth, step));
+}
+
 const precioBase = new Decimal(80);
 const levelBase = new Decimal(2);
 
-export const UPGRADES: UpgradeModel[] = [
+const CORE_UPGRADES: UpgradeModel[] = [
   // ============================================================
   // 🥇 EARLY GAME - (Niveles 1-35) - CLICKS DOMINAN
   // ============================================================
@@ -321,7 +349,7 @@ export const UPGRADES: UpgradeModel[] = [
     id: 31,
     name: 'upgrades.upgrade_31',
     image: '/assets/upgrades/general.webp',
-    price: calculatePrice(levelBase, precioBase, 150),
+    price: new Decimal('2e33'),
     clicks: 4_500_000_000_000,
     level: 150,
     exp: 900_000_000_000,
@@ -330,18 +358,60 @@ export const UPGRADES: UpgradeModel[] = [
     id: 32,
     name: 'upgrades.upgrade_32',
     image: '/assets/upgrades/general.webp',
-    price: calculatePrice(levelBase, precioBase, 200),
-    clicks: 50_000_000_000_000,
+    price: new Decimal('4e34'),
+    clicks: 140_000_000_000_000,
     level: 175,
-    exp: 5_000_000_000_000,
+    exp: 18_000_000_000_000,
   },
   {
     id: 33,
     name: 'upgrades.upgrade_33',
     image: '/assets/upgrades/general.webp',
-    price: calculatePrice(levelBase, precioBase, 300),
-    clicks: 500_000_000_000_000,
+    price: new Decimal('7e35'),
+    clicks: 4_200_000_000_000_000,
     level: 200,
-    exp: 50_000_000_000_000,
+    exp: 360_000_000_000_000,
   },
 ];
+
+const LATE_UPGRADE_META: Array<Pick<UpgradeModel, 'id' | 'name' | 'level'>> = [
+  { id: 34, name: 'upgrades.upgrade_34', level: 225 },
+  { id: 35, name: 'upgrades.upgrade_35', level: 250 },
+  { id: 36, name: 'upgrades.upgrade_36', level: 275 },
+  { id: 37, name: 'upgrades.upgrade_37', level: 300 },
+  { id: 38, name: 'upgrades.upgrade_38', level: 325 },
+  { id: 39, name: 'upgrades.upgrade_39', level: 350 },
+  { id: 40, name: 'upgrades.upgrade_40', level: 375 },
+  { id: 41, name: 'upgrades.upgrade_41', level: 400 },
+  { id: 42, name: 'upgrades.upgrade_42', level: 450 },
+  { id: 43, name: 'upgrades.upgrade_43', level: 500 },
+  { id: 44, name: 'upgrades.upgrade_44', level: 550 },
+  { id: 45, name: 'upgrades.upgrade_45', level: 600 },
+  { id: 46, name: 'upgrades.upgrade_46', level: 700 },
+  { id: 47, name: 'upgrades.upgrade_47', level: 800 },
+  { id: 48, name: 'upgrades.upgrade_48', level: 900 },
+  { id: 49, name: 'upgrades.upgrade_49', level: 1000 },
+  { id: 50, name: 'upgrades.upgrade_50', level: 1050 },
+];
+
+const BALANCED_CORE_UPGRADES: UpgradeModel[] = CORE_UPGRADES.map((upgrade) => ({
+  ...upgrade,
+  price: calculateBalancedUpgradePrice(upgrade.clicks, upgrade.level),
+}));
+
+const LAST_CORE_UPGRADE = BALANCED_CORE_UPGRADES[BALANCED_CORE_UPGRADES.length - 1];
+
+const LATE_UPGRADES: UpgradeModel[] = LATE_UPGRADE_META.map((upgrade, index) => ({
+  id: upgrade.id,
+  name: upgrade.name,
+  image: '/assets/upgrades/general.webp',
+  clicks: calculateLateValue(LAST_CORE_UPGRADE.clicks, 8, index + 1),
+  level: upgrade.level,
+  exp: calculateLateValue(LAST_CORE_UPGRADE.clicks * 0.08, 8, index + 1),
+  price: calculateBalancedUpgradePrice(
+    calculateLateValue(LAST_CORE_UPGRADE.clicks, 8, index + 1),
+    upgrade.level,
+  ),
+}));
+
+export const UPGRADES: UpgradeModel[] = [...BALANCED_CORE_UPGRADES, ...LATE_UPGRADES];

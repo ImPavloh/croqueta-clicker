@@ -1,6 +1,14 @@
 import { ProducerModel } from 'app/models/producer.model';
 
-export const PRODUCERS: ProducerModel[] = [
+function roundProgressionValue(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) return value;
+
+  const exponent = Math.floor(Math.log10(value));
+  const scale = Math.pow(10, Math.max(0, exponent - 2));
+  return Math.round(value / scale) * scale;
+}
+
+const BASE_PRODUCERS: ProducerModel[] = [
   // ============================================================
   // 🥚 EARLY GAME - Primeras fuentes automáticas de croquetas
   // ============================================================
@@ -197,3 +205,276 @@ export const PRODUCERS: ProducerModel[] = [
     exp: 2_000_000_000_000,
   },
 ];
+
+const ADVANCED_PRODUCER_META: Array<
+  Pick<ProducerModel, 'id' | 'name' | 'description' | 'image' | 'level'>
+> = [
+  {
+    id: 16,
+    name: 'producers.producer_16_name',
+    image: '/assets/producers/click.webp',
+    description: 'producers.producer_16_description',
+    level: 225,
+  },
+  {
+    id: 17,
+    name: 'producers.producer_17_name',
+    image: '/assets/producers/cocinero.webp',
+    description: 'producers.producer_17_description',
+    level: 250,
+  },
+  {
+    id: 18,
+    name: 'producers.producer_18_name',
+    image: '/assets/producers/freidora.webp',
+    description: 'producers.producer_18_description',
+    level: 275,
+  },
+  {
+    id: 19,
+    name: 'producers.producer_19_name',
+    image: '/assets/producers/fabrica.webp',
+    description: 'producers.producer_19_description',
+    level: 300,
+  },
+  {
+    id: 20,
+    name: 'producers.producer_20_name',
+    image: '/assets/producers/universidad.webp',
+    description: 'producers.producer_20_description',
+    level: 325,
+  },
+  {
+    id: 21,
+    name: 'producers.producer_21_name',
+    image: '/assets/producers/croquetabot.webp',
+    description: 'producers.producer_21_description',
+    level: 350,
+  },
+  {
+    id: 22,
+    name: 'producers.producer_22_name',
+    image: '/assets/producers/importadora.webp',
+    description: 'producers.producer_22_description',
+    level: 375,
+  },
+  {
+    id: 23,
+    name: 'producers.producer_23_name',
+    image: '/assets/producers/iglesia.webp',
+    description: 'producers.producer_23_description',
+    level: 400,
+  },
+  {
+    id: 24,
+    name: 'producers.producer_24_name',
+    image: '/assets/producers/portal.webp',
+    description: 'producers.producer_24_description',
+    level: 425,
+  },
+  {
+    id: 25,
+    name: 'producers.producer_25_name',
+    image: '/assets/producers/singularidad.webp',
+    description: 'producers.producer_25_description',
+    level: 450,
+  },
+  {
+    id: 26,
+    name: 'producers.producer_26_name',
+    image: '/assets/producers/crispy_cosmos.webp',
+    description: 'producers.producer_26_description',
+    level: 475,
+  },
+  {
+    id: 27,
+    name: 'producers.producer_27_name',
+    image: '/assets/producers/motor_cuantico.webp',
+    description: 'producers.producer_27_description',
+    level: 500,
+  },
+  {
+    id: 28,
+    name: 'producers.producer_28_name',
+    image: '/assets/producers/croqueta_fractal.webp',
+    description: 'producers.producer_28_description',
+    level: 525,
+  },
+  {
+    id: 29,
+    name: 'producers.producer_29_name',
+    image: '/assets/producers/croqueta_exe.webp',
+    description: 'producers.producer_29_description',
+    level: 550,
+  },
+  {
+    id: 30,
+    name: 'producers.producer_30_name',
+    image: '/assets/producers/tu.webp',
+    description: 'producers.producer_30_description',
+    level: 575,
+  },
+  {
+    id: 31,
+    name: 'producers.producer_31_name',
+    image: '/assets/producers/click.webp',
+    description: 'producers.producer_31_description',
+    level: 600,
+  },
+  {
+    id: 32,
+    name: 'producers.producer_32_name',
+    image: '/assets/producers/cocinero.webp',
+    description: 'producers.producer_32_description',
+    level: 625,
+  },
+  {
+    id: 33,
+    name: 'producers.producer_33_name',
+    image: '/assets/producers/freidora.webp',
+    description: 'producers.producer_33_description',
+    level: 650,
+  },
+  {
+    id: 34,
+    name: 'producers.producer_34_name',
+    image: '/assets/producers/fabrica.webp',
+    description: 'producers.producer_34_description',
+    level: 675,
+  },
+  {
+    id: 35,
+    name: 'producers.producer_35_name',
+    image: '/assets/producers/universidad.webp',
+    description: 'producers.producer_35_description',
+    level: 700,
+  },
+  {
+    id: 36,
+    name: 'producers.producer_36_name',
+    image: '/assets/producers/croquetabot.webp',
+    description: 'producers.producer_36_description',
+    level: 725,
+  },
+  {
+    id: 37,
+    name: 'producers.producer_37_name',
+    image: '/assets/producers/importadora.webp',
+    description: 'producers.producer_37_description',
+    level: 750,
+  },
+  {
+    id: 38,
+    name: 'producers.producer_38_name',
+    image: '/assets/producers/iglesia.webp',
+    description: 'producers.producer_38_description',
+    level: 775,
+  },
+  {
+    id: 39,
+    name: 'producers.producer_39_name',
+    image: '/assets/producers/portal.webp',
+    description: 'producers.producer_39_description',
+    level: 800,
+  },
+  {
+    id: 40,
+    name: 'producers.producer_40_name',
+    image: '/assets/producers/singularidad.webp',
+    description: 'producers.producer_40_description',
+    level: 825,
+  },
+  {
+    id: 41,
+    name: 'producers.producer_41_name',
+    image: '/assets/producers/crispy_cosmos.webp',
+    description: 'producers.producer_41_description',
+    level: 850,
+  },
+  {
+    id: 42,
+    name: 'producers.producer_42_name',
+    image: '/assets/producers/motor_cuantico.webp',
+    description: 'producers.producer_42_description',
+    level: 875,
+  },
+  {
+    id: 43,
+    name: 'producers.producer_43_name',
+    image: '/assets/producers/croqueta_fractal.webp',
+    description: 'producers.producer_43_description',
+    level: 900,
+  },
+  {
+    id: 44,
+    name: 'producers.producer_44_name',
+    image: '/assets/producers/croqueta_exe.webp',
+    description: 'producers.producer_44_description',
+    level: 925,
+  },
+  {
+    id: 45,
+    name: 'producers.producer_45_name',
+    image: '/assets/producers/tu.webp',
+    description: 'producers.producer_45_description',
+    level: 950,
+  },
+  {
+    id: 46,
+    name: 'producers.producer_46_name',
+    image: '/assets/producers/click.webp',
+    description: 'producers.producer_46_description',
+    level: 975,
+  },
+  {
+    id: 47,
+    name: 'producers.producer_47_name',
+    image: '/assets/producers/fabrica.webp',
+    description: 'producers.producer_47_description',
+    level: 1000,
+  },
+  {
+    id: 48,
+    name: 'producers.producer_48_name',
+    image: '/assets/producers/portal.webp',
+    description: 'producers.producer_48_description',
+    level: 1025,
+  },
+  {
+    id: 49,
+    name: 'producers.producer_49_name',
+    image: '/assets/producers/singularidad.webp',
+    description: 'producers.producer_49_description',
+    level: 1050,
+  },
+  {
+    id: 50,
+    name: 'producers.producer_50_name',
+    image: '/assets/producers/tu.webp',
+    description: 'producers.producer_50_description',
+    level: 1075,
+  },
+];
+
+const FINAL_BASE_PRODUCER = BASE_PRODUCERS[BASE_PRODUCERS.length - 1];
+
+const ADVANCED_PRODUCERS: ProducerModel[] = ADVANCED_PRODUCER_META.map((producer, index) => {
+  const tier = index + 1;
+  const growth = Math.pow(25, tier);
+  const pointsBase = roundProgressionValue(FINAL_BASE_PRODUCER.pointsBase * growth);
+
+  return {
+    id: producer.id,
+    name: producer.name,
+    image: producer.image,
+    priceBase: roundProgressionValue(FINAL_BASE_PRODUCER.priceBase * growth),
+    priceMult: Math.min(1.302 + tier * 0.002, 1.37),
+    pointsBase,
+    pointsSum: roundProgressionValue(pointsBase * 0.24),
+    description: producer.description,
+    level: producer.level,
+    exp: roundProgressionValue(pointsBase * 1.5),
+  };
+});
+
+export const PRODUCERS: ProducerModel[] = [...BASE_PRODUCERS, ...ADVANCED_PRODUCERS];

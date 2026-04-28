@@ -117,7 +117,8 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - `getProducersData()`, `getUpgradesData()`, `getAchievementsData()`, `getSkinsTableData()`: Datos para tablas.
     - `getProducerDistribution()`, `getProducerROIData()`, `getSkinUnlockByRarityDonut()`, `getAchievementStatusDistribution()`, `getSkinRarityDistribution()`: Datos para gráficos de barras y donuts.
     - `getUpgradeClickCurveData()` y `getUpgradeCumulativeCurveData()`: Datos para las nuevas curvas de línea y área del informe.
-    - `getEfficiencyData()`: Campos calculados (clicks/min, croquetas/min, ROI, eficiencia de upgrades).
+    - `getEfficiencyData()`: Campos calculados (clicks/min, croquetas/min, ROI, eficiencia de upgrades, completitud y coste acumulado).
+    - `getUpgradeLevelDistribution()`: Histograma por tramos de nivel adaptado al nuevo endgame (hasta `801+`).
     - `getDebugInfo()`: Información técnica (localStorage, idioma, versiones).
 
 - **`ReportPdfService`**:
@@ -126,6 +127,7 @@ A continuación se detalla la responsabilidad de cada servicio principal:
     - `exportReport(payload)`: Genera un PDF con jsPDF + AutoTable incluyendo tablas, gráficos y estadísticas.
     - Dibuja directamente en el PDF tablas, barras y curvas del dashboard, evitando depender del DOM para la exportación principal.
     - Representa las curvas de mejoras con escala logarítmica para que datos muy exponenciales sigan siendo legibles.
+    - Incluye también el bloque de cobertura del informe y mantiene pie y paginación por página.
 
 - **Internacionalización (i18n) con Transloco**:
   - `SmartMissingHandler` en `app.config.ts`: Silencia warnings de traducción durante los primeros 3 segundos (antes de que el JSON cargue), pero loguea claves genuinamente faltantes después.
@@ -135,9 +137,9 @@ A continuación se detalla la responsabilidad de cada servicio principal:
 
 Esta carpeta contiene los "blueprints" de todos los elementos del juego, lo que facilita el balance y la adición de nuevo contenido sin tocar la lógica de los servicios.
 
-- `producer.data.ts`: Define cada productor, su coste base, su producción, etc.
-- `upgrade.data.ts`: Define cada mejora de clic, su coste, el bono que otorga y el nivel requerido.
-- `skin.data.ts`: Define las skins, su rareza y sus requisitos de desbloqueo.
+- `producer.data.ts`: Define 50 productores, manteniendo intacto el early/mid game y ampliando el late/endgame con nuevos tiers.
+- `upgrade.data.ts`: Define 50 mejoras de clic con una curva de precio revisada para mantener competitiva la ruta activa sin bloquear el progreso.
+- `skin.data.ts`: Define el catálogo original de 33 skins, con rarezas y requisitos de desbloqueo ligados a nivel, croquetas, EXP y logros.
 - `achievements.data.ts`: Define todos los logros disponibles.
 - `news.data.ts`: Contiene los mensajes de noticias.
 - `tutorial.data.ts`: Define los mensajes del tutorial y sus condiciones de aparición.
@@ -168,11 +170,13 @@ El panel de informes (`src/app/pages/report/`) funciona como una página analít
 - **Vista del dashboard**:
   - Usa tarjetas reutilizables, tablas con filtros, badges de estado y gráficos SVG standalone.
   - Incluye gráficos de barras, donuts y componentes de tendencia (`trend-chart`) para representar progresiones y acumulados.
+  - La pestaña debug añade un bloque de cobertura del informe para resumir tablas, gráficos, filtros, campos calculados y la escala actual del catálogo.
   - En móvil se renderiza dentro de un panel de ruta específico del layout principal, en lugar de quedar oculto por la interfaz del clicker.
 
 - **Exportación PDF**:
   - Reutiliza el mismo conjunto de datos calculados por `ReportService`, pero no depende de capturas de pantalla del dashboard.
   - Genera tablas con `jspdf-autotable` y dibuja gráficos simplificados nativos en el canvas del PDF.
+  - Añade paginación, pie de página y el bloque de cobertura del informe para que el PDF sirva también como documento de defensa.
   - Esto hace que la exportación sea más estable, más ligera y más predecible que una captura rasterizada del informe.
 
 ## 4. Flujo de interacción típico (Ejemplo: Comprar una mejora)

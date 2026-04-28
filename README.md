@@ -25,16 +25,16 @@ Descarga el juego en Google Play:
 ### Sistema de juego completo
 
 - **Sistema de clicks**: Gana croquetas haciendo click (con efectos visuales y partículas)
-- **Productores automáticos**: 15 tipos de productores que generan croquetas por segundo (early, mid, late y endgame)
-- **Mejoras (Upgrades)**: 33 mejoras, diseñadas para mantener los clicks competitivos frente a los productores
+- **Productores automáticos**: 50 productores repartidos por tramos early, mid, late y ultra endgame
+- **Mejoras (Upgrades)**: 50 mejoras con escalado revisado para que la ruta de click siga siendo útil frente a la economía automática
 - **Sistema de niveles**: Gana experiencia y sube de nivel desbloqueando contenido
 - **Sistema de prestigio**: Reinicia el progreso económico al alcanzar el nivel mínimo para ganar croquetas doradas y un multiplicador global permanente
 - **Logros (Achievements)**: 30+ logros por desbloquear con diferentes categorías
 - **Croqueta dorada**: Evento especial aleatorio con bonificación x2
-- **Skins personalizables**: 33 skins desbloqueables para personalizar tu croqueta (comunes, raras, épicas y legendarias)
+- **Skins personalizables**: 33 skins desbloqueables, manteniendo el catálogo original del juego
 - **Música y efectos de sonido**: Audio dinámico que mejora la experiencia de juego
 - **Opciones de configuración**: Ajustes de audio, gráficos y rendimiento
-- **Informes y estadísticas**: Panel avanzado con tablas, donuts refinados, gráficos de barras, curvas de progreso, filtros interactivos, campos calculados y exportación a PDF
+- **Informes y estadísticas**: Panel avanzado con tablas, donuts refinados, gráficos de barras, curvas de progreso, filtros interactivos, campos calculados, bloque de cobertura analítica y exportación a PDF
 - **Estadísticas detalladas**: Panel con estadísticas de juego y progreso
 - **Multilenguaje**: Soporte para español e inglés
 - **Modo offline**: Juega sin conexión y sincroniza al volver online
@@ -71,6 +71,7 @@ Descarga el juego en Google Play:
 - **Audio dinámico**: Música y efectos de sonido con Web Audio API
 - **Efectos visuales**: Partículas con Pixi.js, animaciones suaves
 - **Progresión meta**: Prestigio persistente con bonus acumulativos y reducción de XP requerida según el nivel de prestigio
+- **Cobertura académica visible**: La pestaña debug del informe incluye un bloque de cobertura que resume tablas, gráficos, filtros, campos calculados y escala del catálogo
 - **Testing**: Tests unitarios con Vitest
 
 ---
@@ -116,6 +117,12 @@ La aplicación usa un layout persistente con el componente principal de juego (`
 4. **AutosaveService** guarda periódicamente el estado y maneja export/import; también guarda al cerrar o cambiar de visibilidad con `beforeunload`, `pagehide` y `visibilitychange`
 5. **SupabaseService** gestiona la sesión anónima, leaderboard y sincronización cuando el usuario está online
 6. **Datos de balance y contenido** (productores, upgrades, skins, logros) se encuentran en `src/app/data/*` y están desacoplados de la lógica y la UI
+
+### Cobertura analítica
+
+- Resume el estado del jugador, contratos diarios, eficiencia, progreso, skins, logros y datos multijugador.
+- Exporta el contenido a PDF con paginación, secciones numeradas y tablas/gráficos nativos.
+- Incluye un bloque de cobertura en la pestaña debug con el resumen de tablas, gráficos, filtros y métricas derivadas.
 
 ### Más información
 

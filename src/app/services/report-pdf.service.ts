@@ -36,6 +36,7 @@ export interface ReportPdfPayload {
   labels: Record<string, string>;
   debugInfo?: {
     playerRows: string[][];
+    assessmentRows?: string[][];
     debugRows: string[][];
     multiplayerRows: string[][];
     contractMultiplayerRows?: string[][];
@@ -281,6 +282,18 @@ export class ReportPdfService {
 
     //  debug
     cursorY = this.sectionTitle(doc, `2. ${l['debugTitle']}`, cursorY, margin);
+
+    if ((payload.debugInfo?.assessmentRows?.length ?? 0) > 0) {
+      cursorY = this.sectionTitle(doc, l['assessmentTitle'], cursorY, margin);
+      autoTable(doc, {
+        ...baseTableOptions,
+        startY: cursorY,
+        head: [[l['metricLabel'], l['valueLabel']]],
+        body: payload.debugInfo?.assessmentRows ?? [],
+        theme: 'grid',
+      });
+      cursorY = (doc as any).lastAutoTable.finalY + 12;
+    }
 
     autoTable(doc, {
       ...baseTableOptions,
