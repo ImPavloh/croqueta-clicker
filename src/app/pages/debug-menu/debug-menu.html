@@ -1,44 +1,115 @@
-<div class="p-4 gap-8 flex flex-col">
+<div class="debug-menu">
   <app-card>
-    <div class="w-full flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
+    <div class="debug-hero">
+      <div class="debug-intro">
+        <p class="debug-eyebrow">{{ 'debug.panelEyebrow' | transloco }}</p>
+        <h3>{{ 'debug.panelTitle' | transloco }}</h3>
+        <p class="debug-copy">{{ 'debug.panelDescription' | transloco }}</p>
+      </div>
+
+      <div class="debug-hero-grid">
+        <div class="debug-chip">
+          <span>{{ 'debug.shortcutLabel' | transloco }}</span>
+          <strong>{{ 'debug.shortcutValue' | transloco }}</strong>
+        </div>
+        <div class="debug-chip">
+          <span>{{ 'report.debug.mode' | transloco }}</span>
+          <strong>{{ 'report.debug.enabled' | transloco }}</strong>
+        </div>
+        <div class="debug-chip">
+          <span>{{ 'report.player.multiplier' | transloco }}</span>
+          <strong>x{{ summary().multiplier }}</strong>
+        </div>
+      </div>
+    </div>
+  </app-card>
+
+  <div class="debug-columns">
+    <app-card>
+      <div class="debug-section">
+        <div class="debug-section-head">
+          <h4>{{ 'debug.overviewTitle' | transloco }}</h4>
+          <p>{{ 'debug.overviewDescription' | transloco }}</p>
+        </div>
+
+        <div class="debug-metrics">
+          @for (metric of overviewMetrics(); track metric.labelKey) {
+            <div class="debug-metric">
+              <span>{{ metric.labelKey | transloco }}</span>
+              <strong>{{ metric.value }}</strong>
+            </div>
+          }
+        </div>
+      </div>
+    </app-card>
+
+    <app-card>
+      <div class="debug-section">
+        <div class="debug-section-head">
+          <h4>{{ 'debug.progressTitle' | transloco }}</h4>
+          <p>{{ 'debug.progressDescription' | transloco }}</p>
+        </div>
+
+        <div class="debug-metrics">
+          @for (metric of progressionMetrics(); track metric.labelKey) {
+            <div class="debug-metric">
+              <span>{{ metric.labelKey | transloco }}</span>
+              <strong>{{ metric.value }}</strong>
+            </div>
+          }
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <app-card>
+    <div class="debug-section">
+      <div class="debug-section-head debug-section-head--split">
+        <div>
+          <h4>{{ 'debug.inputTitle' | transloco }}</h4>
+          <p>{{ 'debug.inputDescription' | transloco }}</p>
+        </div>
+
+        <app-button variant="secondary" (click)="loadCurrentValues()">
+          {{ 'debug.loadCurrentValues' | transloco }}
+        </app-button>
+      </div>
+
+      <div class="debug-controls">
         <app-input
           [label]="'debug.croquetas' | transloco"
-          [value]="croquetas"
-          (valueChange)="croquetas = $event"
+          [value]="croquetas()"
+          (valueChange)="setCroquetasValue($event)"
           [type]="'number'"
           [placeholder]="'debug.croquetas' | transloco"
           [buttonText]="'debug.set' | transloco"
           (submit)="setCroquetas()"
         ></app-input>
-      </div>
-      <div class="flex flex-col gap-2">
+
         <app-input
           [label]="'debug.exp' | transloco"
-          [value]="exp"
-          (valueChange)="exp = $event"
+          [value]="exp()"
+          (valueChange)="setExpValue($event)"
           [type]="'number'"
           [placeholder]="'debug.exp' | transloco"
           [buttonText]="'debug.set' | transloco"
           (submit)="setExp()"
         ></app-input>
-      </div>
-      <div class="flex flex-col gap-2">
+
         <app-input
           [label]="'debug.cps' | transloco"
-          [value]="cps"
-          (valueChange)="cps = $event"
+          [value]="cps()"
+          (valueChange)="setCpsValue($event)"
           [type]="'number'"
           [placeholder]="'debug.cps' | transloco"
           [buttonText]="'debug.set' | transloco"
           (submit)="setCps()"
         ></app-input>
-      </div>
-      <div class="flex flex-col gap-2">
+
         <app-input
           [label]="'debug.cpc' | transloco"
-          [value]="cpc"
-          (valueChange)="cpc = $event"
+          [value]="cpc()"
+          (valueChange)="setCpcValue($event)"
           [type]="'number'"
           [placeholder]="'debug.cpc' | transloco"
           [buttonText]="'debug.set' | transloco"
@@ -47,12 +118,50 @@
       </div>
     </div>
   </app-card>
-  <app-card>
-    <div class="w-full flex flex-row justify-between">
-      <app-button (click)="unlockAllSkins()">{{ 'debug.unlockAllSkins' | transloco }}</app-button>
-      <app-button (click)="unlockAllAchievements()">{{
-        'debug.unlockAllAchievements' | transloco
-      }}</app-button>
-    </div>
-  </app-card>
+
+  <div class="debug-columns">
+    <app-card>
+      <div class="debug-section">
+        <div class="debug-section-head">
+          <h4>{{ 'debug.bulkTitle' | transloco }}</h4>
+          <p>{{ 'debug.bulkDescription' | transloco }}</p>
+        </div>
+
+        <div class="debug-actions">
+          <app-button variant="secondary" (click)="unlockAllSkins()">
+            {{ 'debug.unlockAllSkins' | transloco }}
+          </app-button>
+          <app-button variant="secondary" (click)="unlockAllAchievements()">
+            {{ 'debug.unlockAllAchievements' | transloco }}
+          </app-button>
+        </div>
+      </div>
+    </app-card>
+
+    <app-card>
+      <div class="debug-section debug-section--danger">
+        <div class="debug-section-head">
+          <h4>{{ 'debug.dangerTitle' | transloco }}</h4>
+          <p>{{ 'debug.dangerDescription' | transloco }}</p>
+        </div>
+
+        <p class="debug-danger-note">{{ 'debug.dangerWarning' | transloco }}</p>
+
+        @if (!resetArmed()) {
+          <app-button variant="danger" (click)="armReset()">
+            {{ 'debug.armReset' | transloco }}
+          </app-button>
+        } @else {
+          <div class="debug-actions debug-actions--danger">
+            <app-button variant="secondary" (click)="cancelReset()">
+              {{ 'debug.confirm.cancel' | transloco }}
+            </app-button>
+            <app-button variant="danger" (click)="resetGame()">
+              {{ 'debug.resetGame' | transloco }}
+            </app-button>
+          </div>
+        }
+      </div>
+    </app-card>
+  </div>
 </div>

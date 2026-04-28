@@ -10,12 +10,17 @@
       (click)="$event.stopPropagation()"
       [class.open]="!isClosing()"
       [class.closing]="isClosing()"
+      [class.modal-content--debug]="modalService.currentModal() === 'debug'"
+      [class.modal-content--confirm]="modalService.currentModal() === 'confirm-dialog'"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="app-modal-title"
     >
       <div class="modal-header">
-        <h2>{{ getModalTitle() }}</h2>
+        <h2 id="app-modal-title">{{ getModalTitle() }}</h2>
         <button class="close-btn" (click)="closeModal()">✕</button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" [class.modal-body--debug]="modalService.currentModal() === 'debug'">
         @switch (modalService.currentModal()) {
           <!-- Modals (pages) -->
           @case ('upgrades') {

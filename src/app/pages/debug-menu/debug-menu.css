@@ -1,1 +1,177 @@
-/* Contenido del CSS para el menú debug si es necesario */
+:host {
+  display: block;
+}
+
+.debug-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px;
+  color: #5c451f;
+}
+
+.debug-hero {
+  display: grid;
+  gap: 16px;
+}
+
+.debug-intro h3,
+.debug-section-head h4 {
+  margin: 0;
+  color: #5d4216;
+}
+
+.debug-intro h3 {
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+
+.debug-eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a6d17;
+}
+
+.debug-copy,
+.debug-section-head p,
+.debug-danger-note {
+  margin: 0;
+  line-height: 1.55;
+  color: #745a31;
+}
+
+.debug-hero-grid,
+.debug-metrics,
+.debug-controls,
+.debug-actions,
+.debug-columns {
+  display: grid;
+  gap: 12px;
+}
+
+.debug-hero-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.debug-chip,
+.debug-metric {
+  border-radius: 16px;
+  border: 1px solid rgba(184, 156, 90, 0.35);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(236, 220, 184, 0.78));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.debug-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.debug-chip span,
+.debug-metric span {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6933;
+}
+
+.debug-chip strong,
+.debug-metric strong {
+  color: #4d3410;
+}
+
+.debug-chip strong {
+  font-size: 1rem;
+}
+
+.debug-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.debug-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.debug-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.debug-section-head--split {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.debug-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.debug-metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 84px;
+  padding: 12px 14px;
+}
+
+.debug-metric strong {
+  font-size: 1.05rem;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.debug-controls {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.debug-actions {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.debug-actions--danger {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.debug-section--danger {
+  border-radius: 18px;
+  border: 2px dashed rgba(127, 29, 29, 0.25);
+  padding: 4px;
+}
+
+.debug-danger-note {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(127, 29, 29, 0.08);
+  color: #6f2416;
+}
+
+@media (max-width: 900px) {
+  .debug-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .debug-controls,
+  .debug-actions,
+  .debug-actions--danger,
+  .debug-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .debug-intro h3 {
+    font-size: 1.3rem;
+  }
+}
