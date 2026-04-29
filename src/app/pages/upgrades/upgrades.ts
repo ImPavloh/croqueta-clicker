@@ -47,6 +47,7 @@ export class Upgrades {
    * Reacciona a los cambios en el filtro y en los datos del juego.
    */
   filteredUpgrades = computed(() => {
+    this.shopControls.shopItemsVersion();
     this.optionsService.gameItemsVersion();
     const list = [...this.upgrades];
     const hideBought = this.shopControls.getShowBoughtFilter('upgrades')();

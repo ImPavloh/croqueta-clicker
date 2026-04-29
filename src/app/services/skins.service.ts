@@ -1,4 +1,4 @@
-import { Injectable, inject, effect } from '@angular/core';
+import { Injectable, inject, effect, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsService } from './achievements.service';
 import { OptionsService } from './options.service';
@@ -30,6 +30,9 @@ export class SkinsService {
 
   // skins desbloqueadas (tracking para notis)
   private unlockedSkins = new Set<number>();
+  private _unlockStateVersion = signal<number>(0);
+
+  readonly unlockStateVersion = this._unlockStateVersion.asReadonly();
 
   private queueSubject = new BehaviorSubject<SkinModel[]>([]);
   readonly queue$: Observable<SkinModel[]> = this.queueSubject.asObservable();
@@ -43,6 +46,7 @@ export class SkinsService {
         this.unlockedSkins.add(skin.id);
       }
     });
+    this.bumpUnlockStateVersion();
 
     this.playerStats.level$.subscribe(() => {
       this.checkUnlockedSkins();
@@ -208,19 +212,26 @@ export class SkinsService {
     this.skinsUsed.clear();
     this.unlockedSkins.clear();
     this.unlockedSkins.add(1); // la skin 1 siempre esta desbloqueada
+    this.bumpUnlockStateVersion();
   }
 
   public checkUnlockedSkins(): void {
+    let hasChanges = false;
     SKINS.forEach((skin) => {
       if (!this.unlockedSkins.has(skin.id) && this.isSkinUnlocked(skin)) {
         this.unlockedSkins.add(skin.id);
         this.notifySkinUnlock(skin);
+        hasChanges = true;
       }
     });
+
+    if (hasChanges) {
+      this.bumpUnlockStateVersion();
+    }
   }
 
   notifySkinUnlock(skin: SkinModel): void {
-    skin.timestamp = Date.now(); 
+    skin.timestamp = Date.now();
 
     const queue = this.queueSubject.getValue();
     const exists = queue.some((n) => n.id === skin.id && Date.now() - (n.timestamp || 0) < 5000);
@@ -239,11 +250,21 @@ export class SkinsService {
   }
 
   public unlockAllSkins(): void {
+    let hasChanges = false;
     SKINS.forEach((skin) => {
       if (!this.unlockedSkins.has(skin.id)) {
         this.unlockedSkins.add(skin.id);
         this.notifySkinUnlock(skin);
+        hasChanges = true;
       }
     });
+
+    if (hasChanges) {
+      this.bumpUnlockStateVersion();
+    }
+  }
+
+  private bumpUnlockStateVersion(): void {
+    this._unlockStateVersion.update((value) => value + 1);
   }
 }

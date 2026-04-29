@@ -3,7 +3,7 @@
 ![Angular](https://img.shields.io/badge/Angular-21.0-dd0031?style=flat&logo=angular)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.8.0-blue)
+![Version](https://img.shields.io/badge/Version-1.9.0-blue)
 
 <img src="public/assets/banners/banner_croqueta_clicker.webp" alt="Croqueta Clicker" width="450px" />
 
@@ -16,7 +16,7 @@ Visita **[croquetaclicker.whiteroot.studio](https://croquetaclicker.whiteroot.st
 Descarga el juego en Google Play:
 **[https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker](https://play.google.com/store/apps/details?id=com.whiterootstudios.croquetaclicker)**
 
-> _Juego desarrollado como proyecto de la asignatura "Desarrollo de Interfaces"._
+> _Juego desarrollado como proyecto de las asignaturas "Desarrollo de Interfaces" y "Ampliación de Interfaces"._
 
 ---
 
@@ -34,6 +34,7 @@ Descarga el juego en Google Play:
 - **Skins personalizables**: 33 skins desbloqueables, manteniendo el catálogo original del juego
 - **Música y efectos de sonido**: Audio dinámico que mejora la experiencia de juego
 - **Opciones de configuración**: Ajustes de audio, gráficos y rendimiento
+- **Centro de ayuda accesible**: Modal contextual de ayuda con guía rápida, accesible mediante `F1`, `?`, `Escape` y acceso visible desde Opciones
 - **Informes y estadísticas**: Panel avanzado con tablas, donuts refinados, gráficos de barras, curvas de progreso, filtros interactivos, campos calculados, bloque de cobertura analítica y exportación a PDF
 - **Estadísticas detalladas**: Panel con estadísticas de juego y progreso
 - **Multilenguaje**: Soporte para español e inglés
@@ -68,6 +69,7 @@ Descarga el juego en Google Play:
 - **Optimización de rutas**: RouteReuseStrategy personalizado con preload automático
 - **Gestión de números grandes**: Integración con break_infinity.js para números enormes
 - **Interfaz responsiva**: Diseño adaptado para móviles y ordenadores
+- **Accesibilidad práctica**: Atajos globales (`F1`, `F2`, `?`, `Escape`), ayuda contextual y etiquetas accesibles en botones clave
 - **Audio dinámico**: Música y efectos de sonido con Web Audio API
 - **Efectos visuales**: Partículas con Pixi.js, animaciones suaves
 - **Progresión meta**: Prestigio persistente con bonus acumulativos y reducción de XP requerida según el nivel de prestigio
@@ -123,6 +125,12 @@ La aplicación usa un layout persistente con el componente principal de juego (`
 - Resume el estado del jugador, contratos diarios, eficiencia, progreso, skins, logros y datos multijugador.
 - Exporta el contenido a PDF con paginación, secciones numeradas y tablas/gráficos nativos.
 - Incluye un bloque de cobertura en la pestaña debug con el resumen de tablas, gráficos, filtros y métricas derivadas.
+
+### Ayuda y accesibilidad
+
+- El proyecto incluye un **centro de ayuda contextual** accesible mediante `F1` o `?`, pensado para complementar los tooltips con una ayuda global más visible.
+- `F2` abre la superficie de opciones y `Escape` cierra el modal activo, mejorando la navegación por teclado tanto en escritorio como en móvil.
+- La ayuda se integra dentro de **Opciones**, donde también se muestra un resumen de atajos para que la accesibilidad quede visible dentro de la propia aplicación.
 
 ### Más información
 

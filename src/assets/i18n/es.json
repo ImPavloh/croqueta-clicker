@@ -221,6 +221,15 @@
     "showParticlesLabel": "Reproducir partículas:",
     "showFloatingPointsTooltip": "Muestra los puntos flotantes al hacer click.",
     "showFloatingPointsLabel": "Ver puntos flotantes:",
+    "helpTitle": "Ayuda y accesibilidad",
+    "helpTooltip": "Abre el centro de ayuda con atajos, guía rápida y accesos útiles.",
+    "helpButton": "Abrir centro de ayuda",
+    "helpShortcutTitle": "Atajos principales",
+    "helpShortcutHelp": "Abrir el centro de ayuda.",
+    "helpShortcutOptions": "Abrir Opciones rápidamente.",
+    "helpShortcutHelpAlt": "Abrir ayuda rápida desde teclado.",
+    "helpShortcutClose": "Cerrar el modal activo.",
+    "helpShortcutDebug": "Abrir el panel de debug.",
     "gameTitle": "Partida",
     "saveGameTooltip": "Guarda manually tu partida en el navegador.",
     "saveGameButton": "Guardar ahora",
@@ -837,7 +846,51 @@
     "contracts": "Contratos",
     "skins": "Skins",
     "report": "Informes",
-    "options": "Opciones"
+    "options": "Opciones",
+    "help": "Ayuda"
+  },
+  "help": {
+    "title": "Centro de ayuda",
+    "eyebrow": "Accesibilidad y guía rápida",
+    "introTitle": "Atajos, consejos y puntos clave del juego",
+    "introDescription": "Este panel reúne ayuda para orientarte rápido. Puedes abrirlo con F1 o con ? fuera de campos de texto y cerrarlo con Escape.",
+    "shortcutTitle": "Atajos útiles",
+    "shortcutDescription": "Accesos rápidos pensados para moverte mejor por la partida y abrir ayuda sin buscar botones.",
+    "guideTitle": "Qué mirar en cada momento",
+    "guideDescription": "Pequeñas pistas para entender mejor el flujo principal del juego y no perder tiempo en una run.",
+    "quickActionsTitle": "Accesos rápidos",
+    "quickActionsDescription": "Salta directamente a secciones que suelen resolver dudas o ayudarte a planificar la siguiente decisión.",
+    "openContracts": "Abrir contratos",
+    "openOptions": "Abrir opciones",
+    "openNews": "Abrir noticias",
+    "openReport": "Abrir informes",
+    "shortcuts": {
+      "openHelp": "Abrir o volver al centro de ayuda.",
+      "openOptions": "Abrir Opciones de forma rápida.",
+      "openHelpAlt": "Abrir ayuda rápida desde teclado sin tocar la interfaz.",
+      "closeModal": "Cerrar el modal o diálogo actual.",
+      "openDebug": "Abrir el panel interno de depuración."
+    },
+    "tips": {
+      "upgradesTitle": "Equilibra click y producción",
+      "upgradesDescription": "No apuestes todo a un solo lado: mejora el click para progresar activo y el CpS para que la run siga creciendo incluso sin pulsar tanto.",
+      "contractsTitle": "Revisa contratos cada día",
+      "contractsDescription": "Los contratos diarios empujan objetivos concretos, mejoran la racha y te ayudan a no quedarte atascado en la misma rutina.",
+      "prestigeTitle": "El prestigio es para cerrar ciclos",
+      "prestigeDescription": "Cuando el progreso se ralentiza, prestigiar te devuelve velocidad a largo plazo. Úsalo como reinicio estratégico, no como castigo.",
+      "reportTitle": "Los informes sirven para leer la run",
+      "reportDescription": "Si tienes debug activado, los informes te enseñan gráficos, tablas y comparativas útiles para defender balance, progreso y decisiones del jugador."
+    },
+    "accessibilityTitle": "Ayudas añadidas",
+    "accessibilityDescription": "Además de los tooltips ya existentes, el proyecto gana una capa de ayuda global y accesos más claros.",
+    "accessibilityItems": {
+      "keyboard": "F1 y ? abren la ayuda, y Escape cierra el modal activo.",
+      "visibleEntry": "Hay acceso visible a Ayuda desde opciones.",
+      "tooltips": "Los tooltips siguen explicando acciones concretas, pero ahora no son la única forma de orientarse."
+    }
+  },
+  "modal": {
+    "closeButton": "Cerrar modal"
   },
   "contracts": {
     "eyebrow": "Retención diaria",

@@ -179,6 +179,26 @@ El panel de informes (`src/app/pages/report/`) funciona como una página analít
   - Añade paginación, pie de página y el bloque de cobertura del informe para que el PDF sirva también como documento de defensa.
   - Esto hace que la exportación sea más estable, más ligera y más predecible que una captura rasterizada del informe.
 
+### 3.6. Ayuda contextual y accesibilidad
+
+El proyecto añade una capa de ayuda global que no depende únicamente de tooltips aislados:
+
+- **Centro de ayuda**:
+  - Se renderiza como modal contextual (`src/app/pages/help-center/`) y se integra dentro del sistema general de modales.
+  - Resume atajos de teclado, consejos de uso y accesos rápidos a secciones relevantes del juego.
+  - Su entrada visible se encuentra dentro de la pantalla de `Options`, porque conceptualmente funciona como ayuda de interfaz y no como página completa.
+
+- **Atajos globales**:
+  - `F1` y `?` abren el centro de ayuda.
+  - `F2` abre la superficie de opciones.
+  - `Escape` cierra el modal activo.
+  - `Ctrl + Shift + F12` mantiene el acceso al panel debug.
+
+- **Objetivo de UX/accesibilidad**:
+  - Ofrecer una referencia rápida para usuarios que no descubren toda la interfaz sólo con hover.
+  - Mejorar la navegación por teclado y la comprensión global del juego.
+  - Reforzar la defensa académica del proyecto al hacer visible una mejora específica de accesibilidad.
+
 ## 4. Flujo de interacción típico (Ejemplo: Comprar una mejora)
 
 1.  **Usuario**: Hace clic en el botón de compra de una mejora en la UI.

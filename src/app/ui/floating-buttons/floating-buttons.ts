@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { AudioService } from '@services/audio.service';
 import { ModalService } from '@services/modal.service';
 import { TimeService } from '@services/time.service';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-floating-buttons',
-  imports: [],
+  imports: [TranslocoModule],
   templateUrl: './floating-buttons.html',
   styleUrl: './floating-buttons.css',
 })

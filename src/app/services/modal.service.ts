@@ -6,6 +6,7 @@ export type ModalType =
   | 'contracts'
   | 'skins'
   | 'options'
+  | 'help'
   | 'debug'
   | 'username'
   | 'leaderboard'

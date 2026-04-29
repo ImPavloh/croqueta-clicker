@@ -3,7 +3,10 @@
   justify-content: space-between;
 
   background: linear-gradient(135deg, #f3eac2 0%, #e8dab8 50%, #f3eac2 100%);
-  box-shadow: #00000048 0px 2px 4px, #0000001e 0px 5px 10px -3px, #0000001f 0px -3px 0px inset,
+  box-shadow:
+    #00000048 0px 2px 4px,
+    #0000001e 0px 5px 10px -3px,
+    #0000001f 0px -3px 0px inset,
     0 0 0 2px #b89c5a;
 
   padding: 15px;

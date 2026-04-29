@@ -17,6 +17,7 @@ import { InputComponent } from '@ui/input/input';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { DebugMenuComponent } from '../../pages/debug-menu/debug-menu';
 import { Leaderboard } from '@ui/leaderboard/leaderboard';
+import { HelpCenterComponent } from '../../pages/help-center/help-center';
 
 @Component({
   selector: 'app-modal',
@@ -26,6 +27,7 @@ import { Leaderboard } from '@ui/leaderboard/leaderboard';
     Contracts,
     Skins,
     Options,
+    HelpCenterComponent,
     News,
     ButtonComponent,
     InputComponent,
@@ -70,6 +72,8 @@ export class Modal {
         return this.translocoService.translate('skins.title');
       case 'options':
         return this.translocoService.translate('options.title');
+      case 'help':
+        return this.translocoService.translate('help.title');
       case 'debug':
         return this.translocoService.translate('debug.title');
       case 'username':

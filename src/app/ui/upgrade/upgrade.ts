@@ -7,6 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AudioService } from '@services/audio.service';
 import { OptionsService } from '@services/options.service';
 import { DailyContractsService } from '@services/daily-contracts.service';
+import { ShopControlsService } from '@services/shop-controls.service';
 import Decimal from 'break_infinity.js';
 import { UpgradeModel } from '@models/upgrade.model';
 
@@ -33,6 +34,7 @@ export class Upgrade {
   private audioService = inject(AudioService);
   private optionsService = inject(OptionsService);
   private dailyContracts = inject(DailyContractsService);
+  private shopControls = inject(ShopControlsService);
 
   /** Configuración de la mejora (pasada desde el componente padre) */
   config = input.required<UpgradeModel>();
@@ -77,6 +79,7 @@ export class Upgrade {
       this.playerStats.upgradeExpPerClick(pointsClickDecimal);
 
       this.optionsService.setGameItem('upgrade_' + cfg.id + '_bought', 'true');
+      this.shopControls.notifyShopItemsChanged();
       this.dailyContracts.trackUpgradePurchase();
       this.playerStats.addExp(cfg.exp);
 

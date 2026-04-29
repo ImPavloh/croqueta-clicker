@@ -11,6 +11,7 @@
       [class.open]="!isClosing()"
       [class.closing]="isClosing()"
       [class.modal-content--debug]="modalService.currentModal() === 'debug'"
+      [class.modal-content--help]="modalService.currentModal() === 'help'"
       [class.modal-content--confirm]="modalService.currentModal() === 'confirm-dialog'"
       role="dialog"
       aria-modal="true"
@@ -18,9 +19,21 @@
     >
       <div class="modal-header">
         <h2 id="app-modal-title">{{ getModalTitle() }}</h2>
-        <button class="close-btn" (click)="closeModal()">✕</button>
+        <button
+          class="close-btn"
+          (click)="closeModal()"
+          [attr.aria-label]="'modal.closeButton' | transloco"
+          [attr.title]="'modal.closeButton' | transloco"
+        >
+          ✕
+        </button>
       </div>
-      <div class="modal-body" [class.modal-body--debug]="modalService.currentModal() === 'debug'">
+      <div
+        class="modal-body"
+        [class.modal-body--debug]="
+          modalService.currentModal() === 'debug' || modalService.currentModal() === 'help'
+        "
+      >
         @switch (modalService.currentModal()) {
           <!-- Modals (pages) -->
           @case ('upgrades') {
@@ -37,6 +50,9 @@
           }
           @case ('options') {
             <app-options />
+          }
+          @case ('help') {
+            <app-help-center />
           }
           @case ('debug') {
             <app-debug-menu />

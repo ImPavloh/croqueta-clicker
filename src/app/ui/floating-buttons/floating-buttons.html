@@ -1,54 +1,80 @@
 <div class="floating-buttons">
-  <button class="floating-btn upgrades-btn" (click)="openUpgrades()" title="Mejoras">
+  <button
+    class="floating-btn upgrades-btn"
+    (click)="openUpgrades()"
+    [attr.title]="'navbar.upgrades' | transloco"
+    [attr.aria-label]="'navbar.upgrades' | transloco"
+  >
     <img
       class="btn-icon"
       src="/assets/icons/upgrade.webp"
-      alt="Mejoras"
+      [attr.alt]="'navbar.upgrades' | transloco"
       loading="lazy"
       decoding="async"
     />
   </button>
-  <button class="floating-btn achievements-btn" (click)="openAchievements()" title="Logros">
+  <button
+    class="floating-btn achievements-btn"
+    (click)="openAchievements()"
+    [attr.title]="'navbar.achievements' | transloco"
+    [attr.aria-label]="'navbar.achievements' | transloco"
+  >
     <img
       class="btn-icon"
       src="/assets/icons/trophy.webp"
-      alt="Logros"
+      [attr.alt]="'navbar.achievements' | transloco"
       loading="lazy"
       decoding="async"
     />
   </button>
-  <button class="floating-btn skins-btn" (click)="openSkins()" title="Skins">
+  <button
+    class="floating-btn skins-btn"
+    (click)="openSkins()"
+    [attr.title]="'navbar.skins' | transloco"
+    [attr.aria-label]="'navbar.skins' | transloco"
+  >
     <img
       class="btn-icon"
       src="/assets/icons/palette.webp"
-      alt="Skins"
+      [attr.alt]="'navbar.skins' | transloco"
       loading="lazy"
       decoding="async"
     />
   </button>
-  <button class="floating-btn options-btn" (click)="openOptions()" title="Opciones">
+  <button
+    class="floating-btn options-btn"
+    (click)="openOptions()"
+    [attr.title]="'navbar.options' | transloco"
+    [attr.aria-label]="'navbar.options' | transloco"
+  >
     <img
       class="btn-icon"
       src="/assets/icons/settings.webp"
-      alt="Opciones"
+      [attr.alt]="'navbar.options' | transloco"
       loading="lazy"
       decoding="async"
     />
   </button>
-  <button class="floating-btn contracts-btn" (click)="openContracts()" title="Contratos diarios">
+  <button
+    class="floating-btn contracts-btn"
+    (click)="openContracts()"
+    [attr.title]="'contracts.title' | transloco"
+    [attr.aria-label]="'contracts.title' | transloco"
+  >
     <span class="btn-icon-text">📜</span>
   </button>
   @if (timeService.isCroquetaDay()) {
     <button
       class="floating-btn croqueta-day-btn"
       (click)="modalService.openModal('event-info')"
-      title="¡Día de la Croqueta!"
+      [attr.title]="'event.croquetaDay.title' | transloco"
+      [attr.aria-label]="'event.croquetaDay.title' | transloco"
     >
       <div class="croqueta-day-glow-mobile"></div>
       <img
         class="btn-icon croqueta-icon"
         src="/assets/skins/croqueta-dorada.webp"
-        alt="Event"
+        [attr.alt]="'event.croquetaDay.title' | transloco"
         loading="lazy"
         decoding="async"
       />

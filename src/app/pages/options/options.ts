@@ -36,6 +36,13 @@ import { DynamicControls } from '@ui/dynamic-controls/dynamic-controls';
  */
 export class Options {
   private shortNumberPipe = new ShortNumberPipe();
+  readonly helpShortcuts = [
+    { keys: 'F1', descriptionKey: 'options.helpShortcutHelp' },
+    { keys: 'F2', descriptionKey: 'options.helpShortcutOptions' },
+    { keys: '?', descriptionKey: 'options.helpShortcutHelpAlt' },
+    { keys: 'Esc', descriptionKey: 'options.helpShortcutClose' },
+    { keys: 'Ctrl + Shift + F12', descriptionKey: 'options.helpShortcutDebug' },
+  ];
 
   //Versión de la aplicación, obtenida desde el fichero package.json.
   version = PackageJson.version;
@@ -205,6 +212,10 @@ export class Options {
       cancelText: '',
       onConfirm: () => {},
     });
+  }
+
+  openHelpCenter() {
+    this.modalService.openModal('help');
   }
 
   // mostrar diálogo para exportar partida no un alert sino el modal:

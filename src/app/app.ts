@@ -165,6 +165,20 @@ export class App implements OnInit, OnDestroy {
     window.location.reload();
   }
 
+  openHelpCenter() {
+    this.modalService.openModal('help');
+  }
+
+  openOptionsSurface() {
+    if (this.isMobile) {
+      this.modalService.openModal('options');
+      return;
+    }
+
+    this.closeCurrentModal();
+    void this.router.navigateByUrl('/options');
+  }
+
   openDebugMenu() {
     if (!this.debugService.isDebugMode) {
       this.modalService.showConfirm({
@@ -232,8 +246,38 @@ export class App implements OnInit, OnDestroy {
       });
 
       this.renderer.listen(window, 'keydown', (event: KeyboardEvent) => {
+        const isHelpShortcut = event.key === 'F1';
+        const isOptionsShortcut = event.key === 'F2';
+        const isQuestionShortcut =
+          event.key === '?' && !event.ctrlKey && !event.altKey && !event.metaKey;
+
+        if (isHelpShortcut || (isQuestionShortcut && !this.isEditableTarget(event.target))) {
+          event.preventDefault();
+          this.ngZone.run(() => {
+            this.openHelpCenter();
+          });
+          return;
+        }
+
+        if (isOptionsShortcut && !this.isEditableTarget(event.target)) {
+          event.preventDefault();
+          this.ngZone.run(() => {
+            this.openOptionsSurface();
+          });
+          return;
+        }
+
+        if (event.key === 'Escape' && this.modalService.currentModal()) {
+          event.preventDefault();
+          this.ngZone.run(() => {
+            this.closeCurrentModal();
+          });
+          return;
+        }
+
         // Ctrl+Shift+F12
         if (event.ctrlKey && event.shiftKey && event.key === 'F12') {
+          event.preventDefault();
           this.ngZone.run(() => {
             this.openDebugMenu();
           });
@@ -301,6 +345,33 @@ export class App implements OnInit, OnDestroy {
     if (this.updateCheckIntervalId) {
       clearInterval(this.updateCheckIntervalId);
     }
+  }
+
+  private closeCurrentModal(): void {
+    if (!this.modalService.currentModal()) {
+      return;
+    }
+
+    if (this.modalService.currentModal() === 'confirm-dialog') {
+      this.modalService.cancel();
+      return;
+    }
+
+    this.modalService.closeModal();
+  }
+
+  private isEditableTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof HTMLElement)) {
+      return false;
+    }
+
+    const tagName = target.tagName;
+    return (
+      tagName === 'INPUT' ||
+      tagName === 'TEXTAREA' ||
+      tagName === 'SELECT' ||
+      target.isContentEditable
+    );
   }
 
   protected onSplashComplete(): void {

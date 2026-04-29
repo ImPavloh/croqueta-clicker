@@ -221,6 +221,15 @@
     "showParticlesLabel": "Play particles:",
     "showFloatingPointsTooltip": "Shows floating points when clicking.",
     "showFloatingPointsLabel": "View floating points:",
+    "helpTitle": "Help and accessibility",
+    "helpTooltip": "Open the help center with shortcuts, quick guidance and useful entries.",
+    "helpButton": "Open help center",
+    "helpShortcutTitle": "Main shortcuts",
+    "helpShortcutHelp": "Open the help center.",
+    "helpShortcutOptions": "Open Options quickly.",
+    "helpShortcutHelpAlt": "Open quick help from the keyboard.",
+    "helpShortcutClose": "Close the active modal.",
+    "helpShortcutDebug": "Open the debug panel.",
     "gameTitle": "Game",
     "saveGameTooltip": "Manually save your game in the browser.",
     "saveGameButton": "Save now",
@@ -837,7 +846,51 @@
     "contracts": "Contracts",
     "skins": "Skins",
     "report": "Reports",
-    "options": "Options"
+    "options": "Options",
+    "help": "Help"
+  },
+  "help": {
+    "title": "Help center",
+    "eyebrow": "Accessibility and quick guide",
+    "introTitle": "Shortcuts, tips and core game guidance",
+    "introDescription": "This panel brings together global guidance so the game is easier to understand without relying only on tooltips. Open it with F1 or ? outside text fields, and close it with Escape.",
+    "shortcutTitle": "Useful shortcuts",
+    "shortcutDescription": "Quick entries designed to make the run easier to navigate and to open help without hunting for buttons.",
+    "guideTitle": "What to check at each moment",
+    "guideDescription": "Short hints to understand the main game loop and avoid wasting time during a run.",
+    "quickActionsTitle": "Quick access",
+    "quickActionsDescription": "Jump straight to the sections that usually answer questions or help plan the next decision.",
+    "openContracts": "Open contracts",
+    "openOptions": "Open options",
+    "openNews": "Open news",
+    "openReport": "Open reports",
+    "shortcuts": {
+      "openHelp": "Open or return to the help center.",
+      "openOptions": "Open Options quickly.",
+      "openHelpAlt": "Open quick help from the keyboard without touching the interface.",
+      "closeModal": "Close the current modal or dialog.",
+      "openDebug": "Open the internal debug panel."
+    },
+    "tips": {
+      "upgradesTitle": "Balance clicks and production",
+      "upgradesDescription": "Do not invest in only one side: boost clicking for active progress and CpS so the run keeps growing even when you stop clicking for a moment.",
+      "contractsTitle": "Check daily contracts often",
+      "contractsDescription": "Daily contracts push concrete goals, improve your streak and help the run avoid falling into the same pattern every session.",
+      "prestigeTitle": "Prestige is for ending a cycle",
+      "prestigeDescription": "When progress starts slowing down, prestige gives long-term speed back. Use it as a strategic reset, not as a punishment.",
+      "reportTitle": "Reports help you read the run",
+      "reportDescription": "If debug mode is enabled, reports show charts, tables and comparisons that help defend balance, progression and player decisions."
+    },
+    "accessibilityTitle": "Added support",
+    "accessibilityDescription": "Besides the existing tooltips, the project now has a global help layer and clearer access points.",
+    "accessibilityItems": {
+      "keyboard": "F1 and ? open help, and Escape closes the active modal.",
+      "visibleEntry": "Help is available both in the navigation bar and in the mobile floating button.",
+      "tooltips": "Tooltips still explain specific actions, but they are no longer the only way to get oriented."
+    }
+  },
+  "modal": {
+    "closeButton": "Close modal"
   },
   "contracts": {
     "eyebrow": "Daily retention",

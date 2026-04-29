@@ -1,4 +1,4 @@
-import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkinsService } from '@services/skins.service';
 import { ButtonComponent } from '@ui/button/button';
@@ -6,6 +6,7 @@ import { AudioService } from '@services/audio.service';
 import { SkinModel } from 'app/models/skin.model';
 import { Tooltip } from '@ui/tooltip/tooltip';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-skin-card',
@@ -18,20 +19,22 @@ export class SkinCard {
   private skinsService = inject(SkinsService);
   private audioService = inject(AudioService);
   private translocoService = inject(TranslocoService);
+  private selectedSkinId = toSignal(this.skinsService.skinChanged$, {
+    initialValue: this.skinsService.skinId(),
+  });
 
   config = input.required<SkinModel>();
 
-  get isSelected(): boolean {
-    return this.skinsService.skinId() === this.config().id;
-  }
+  readonly isSelected = computed(() => this.selectedSkinId() === this.config().id);
 
-  get isUnlocked(): boolean {
+  readonly isUnlocked = computed(() => {
+    this.skinsService.unlockStateVersion();
     return this.skinsService.isSkinUnlocked(this.config());
-  }
+  });
 
-  get unlockText(): string {
+  readonly unlockText = computed(() => {
     const cfg = this.config();
-    if (this.isUnlocked || !cfg.unlockRequirement) {
+    if (this.isUnlocked() || !cfg.unlockRequirement) {
       return this.translocoService.translate(cfg.description);
     }
     const requirementText = this.skinsService.getUnlockRequirementText(cfg.unlockRequirement);
@@ -40,10 +43,10 @@ export class SkinCard {
     });
 
     return `${this.translocoService.translate(cfg.description)}\n\n${labeled}`;
-  }
+  });
 
   onClick() {
-    if (!this.isUnlocked) {
+    if (!this.isUnlocked()) {
       // SFX de error o bloqueado
       this.audioService.playSfx('/assets/sfx/click02.mp3', 0.5);
       return;

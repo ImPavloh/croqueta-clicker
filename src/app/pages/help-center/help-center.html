@@ -1,0 +1,71 @@
+<div class="help-center">
+  <app-card>
+    <div class="help-hero">
+      <p class="help-eyebrow">{{ 'help.eyebrow' | transloco }}</p>
+      <h3>{{ 'help.introTitle' | transloco }}</h3>
+      <p class="help-description">{{ 'help.introDescription' | transloco }}</p>
+
+      <div class="help-badges" [attr.aria-label]="'help.shortcutTitle' | transloco">
+        <span class="help-badge">F1</span>
+        <span class="help-badge">?</span>
+        <span class="help-badge">Esc</span>
+      </div>
+    </div>
+  </app-card>
+
+  <app-card>
+    <div class="help-section">
+      <div class="help-section-head">
+        <h4>{{ 'help.guideTitle' | transloco }}</h4>
+        <p>{{ 'help.guideDescription' | transloco }}</p>
+      </div>
+
+      <div class="help-tip-grid">
+        @for (tip of tips; track tip.titleKey) {
+          <div class="help-tip-card">
+            <strong>{{ tip.titleKey | transloco }}</strong>
+            <p>{{ tip.descriptionKey | transloco }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </app-card>
+
+  <app-card>
+    <div class="help-section">
+      <div class="help-section-head">
+        <h4>{{ 'help.shortcutTitle' | transloco }}</h4>
+        <p>{{ 'help.shortcutDescription' | transloco }}</p>
+      </div>
+
+      <div class="help-shortcuts">
+        @for (item of shortcuts; track item.keys) {
+          <div class="help-shortcut-row">
+            <kbd>{{ item.keys }}</kbd>
+            <span>{{ item.descriptionKey | transloco }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </app-card>
+
+  <app-card>
+    <div class="help-section">
+      <div class="help-section-head">
+        <h4>{{ 'help.quickActionsTitle' | transloco }}</h4>
+        <p>{{ 'help.quickActionsDescription' | transloco }}</p>
+      </div>
+
+      <div class="help-actions">
+        <app-button variant="secondary" (click)="openModal('options')">
+          {{ 'help.openOptions' | transloco }}
+        </app-button>
+        @if (isDebugMode()) {
+          <app-button variant="secondary" (click)="openReport()">
+            {{ 'help.openReport' | transloco }}
+          </app-button>
+        }
+      </div>
+    </div>
+  </app-card>
+</div>

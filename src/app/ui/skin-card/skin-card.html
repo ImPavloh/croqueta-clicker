@@ -1,11 +1,11 @@
 @if (config()) {
-  <app-tooltip [text]="unlockText" [position]="'bottom'">
+  <app-tooltip [text]="unlockText()" [position]="'bottom'">
     <app-button
       type="button"
       variant="tertiary"
-      [disabled]="!isUnlocked"
-      [hoverable]="isUnlocked"
-      [active]="isSelected"
+      [disabled]="!isUnlocked()"
+      [hoverable]="isUnlocked()"
+      [active]="isSelected()"
       (click)="onClick()"
       [noSound]="true"
       customClass="w-full flex flex-col items-center justify-start gap-2 p-2"
@@ -20,11 +20,11 @@
             height="128"
             loading="lazy"
             decoding="async"
-            [class.opacity-30]="!isUnlocked"
-            [class.grayscale]="!isUnlocked"
+            [class.opacity-30]="!isUnlocked()"
+            [class.grayscale]="!isUnlocked()"
           />
         </div>
-        @if (!isUnlocked) {
+        @if (!isUnlocked()) {
           <div class="absolute inset-0 flex items-center justify-center">
             <svg
               class="w-12 h-12 text-amber-900 opacity-80"
@@ -44,11 +44,11 @@
       <div class="text-center h-full mt-1">
         <h3
           class="text-lg lg:text-xl text-amber-900 text-shadow-amber-950 text-shadow-2xs truncate"
-          [class.opacity-50]="!isUnlocked"
+          [class.opacity-50]="!isUnlocked()"
         >
           {{ config().name | transloco }}
         </h3>
-        <p class="text-sm text-amber-700" [class.opacity-50]="!isUnlocked">
+        <p class="text-sm text-amber-700" [class.opacity-50]="!isUnlocked()">
           {{ config().rarity | transloco }}
         </p>
       </div>

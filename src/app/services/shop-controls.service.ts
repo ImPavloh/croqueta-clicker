@@ -31,6 +31,9 @@ export class ShopControlsService {
 
   /** Mapa de filtros por contexto (upgrades, producers) */
   private _showBoughtFilters = new Map<string, ReturnType<typeof signal>>();
+  private _shopItemsVersion = signal<number>(0);
+
+  readonly shopItemsVersion = this._shopItemsVersion.asReadonly();
 
   constructor() {
     this.loadFromStorage();
@@ -133,5 +136,9 @@ export class ShopControlsService {
    */
   public reset() {
     this._buyAmount.set(1);
+  }
+
+  public notifyShopItemsChanged() {
+    this._shopItemsVersion.update((value) => value + 1);
   }
 }
