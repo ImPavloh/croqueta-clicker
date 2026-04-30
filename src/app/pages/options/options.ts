@@ -39,6 +39,7 @@ export class Options {
   readonly helpShortcuts = [
     { keys: 'F1', descriptionKey: 'options.helpShortcutHelp' },
     { keys: 'F2', descriptionKey: 'options.helpShortcutOptions' },
+    { keys: 'Space / Enter', descriptionKey: 'options.helpShortcutClicker' },
     { keys: '?', descriptionKey: 'options.helpShortcutHelpAlt' },
     { keys: 'Esc', descriptionKey: 'options.helpShortcutClose' },
     { keys: 'Ctrl + Shift + F12', descriptionKey: 'options.helpShortcutDebug' },

@@ -289,6 +289,20 @@ export class PixiEngineService implements OnDestroy {
     return dx * dx + dy * dy <= radius * radius;
   }
 
+  emitCenterClick(touches: number = 1): boolean {
+    if (!this.croquetaSprite || !this.app) {
+      return false;
+    }
+
+    this.clickSubject.next({
+      x: this.croquetaSprite.x,
+      y: this.croquetaSprite.y,
+      touches,
+    });
+
+    return true;
+  }
+
   /**
    * Crea una textura circular usando canvas offscreen
    */

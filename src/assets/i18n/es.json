@@ -226,9 +226,10 @@
     "helpButton": "Abrir centro de ayuda",
     "helpShortcutTitle": "Atajos principales",
     "helpShortcutHelp": "Abrir el centro de ayuda.",
-    "helpShortcutOptions": "Abrir Opciones rápidamente.",
+    "helpShortcutOptions": "Abrir Opciones.",
+    "helpShortcutClicker": "Activar la croqueta principal.",
     "helpShortcutHelpAlt": "Abrir ayuda rápida desde teclado.",
-    "helpShortcutClose": "Cerrar el modal activo.",
+    "helpShortcutClose": "Cerrar el modal, panel rápido o ayuda activa.",
     "helpShortcutDebug": "Abrir el panel de debug.",
     "gameTitle": "Partida",
     "saveGameTooltip": "Guarda manually tu partida en el navegador.",
@@ -297,6 +298,8 @@
   },
   "leaderboard": {
     "title": "Clasificación",
+    "panelShowTooltip": "Abrir panel rápido de clasificación.",
+    "panelHideTooltip": "Cerrar panel rápido de clasificación.",
     "modeLevel": "Nivel",
     "modeContracts": "Contratos",
     "statsTitle": "Estadísticas",
@@ -715,8 +718,11 @@
     }
   },
   "clicker": {
-    "croquetitaHelp": "Haz click en Croquetita para recibir ayuda",
+    "croquetitaHelp": "Activa Croquetita para recibir ayuda",
     "croquetitaAlt": "Croquetita",
+    "mainActionTooltip": "Pulsa la croqueta principal para ganar croquetas. Si la enfocas, también puedes usar Espacio o Enter.",
+    "mainActionAriaLabel": "Croqueta principal. Actívala para ganar croquetas.",
+    "closeCroquetita": "Cerrar ayuda de Croquetita",
     "messageAlt": "Mensaje",
     "buyProducer": "¡Compra un productor para empezar a ganar croquetas automáticamente!",
     "cps": "¢ / seg",
@@ -867,8 +873,9 @@
     "shortcuts": {
       "openHelp": "Abrir o volver al centro de ayuda.",
       "openOptions": "Abrir Opciones de forma rápida.",
+      "clickCroquette": "Activar la croqueta principal cuando está enfocada.",
       "openHelpAlt": "Abrir ayuda rápida desde teclado sin tocar la interfaz.",
-      "closeModal": "Cerrar el modal o diálogo actual.",
+      "closeModal": "Cerrar el modal, panel rápido o ayuda activa.",
       "openDebug": "Abrir el panel interno de depuración."
     },
     "tips": {
@@ -884,7 +891,7 @@
     "accessibilityTitle": "Ayudas añadidas",
     "accessibilityDescription": "Además de los tooltips ya existentes, el proyecto gana una capa de ayuda global y accesos más claros.",
     "accessibilityItems": {
-      "keyboard": "F1 y ? abren la ayuda, y Escape cierra el modal activo.",
+      "keyboard": "F1 y ? abren la ayuda, Espacio o Enter activan la croqueta enfocada y Escape cierra el modal, panel rápido o ayuda activa.",
       "visibleEntry": "Hay acceso visible a Ayuda desde opciones.",
       "tooltips": "Los tooltips siguen explicando acciones concretas, pero ahora no son la única forma de orientarse."
     }
@@ -917,6 +924,8 @@
     "claimButton": "Reclamar",
     "claimedButton": "Reclamado",
     "open": "Ver contratos",
+    "panelShowTooltip": "Abrir panel rápido de contratos diarios.",
+    "panelHideTooltip": "Cerrar panel rápido de contratos diarios.",
     "widgetEyebrow": "Contratos de hoy",
     "widgetStreak": "Racha: {{count}}",
     "widgetWeek": "Semana: {{count}}/7",
@@ -1079,6 +1088,21 @@
     "title": "¡Bienvenido de vuelta!",
     "message": "Mientras no estabas se han producido {{amount}} croquetas.",
     "confirm": "Genial"
+  },
+  "event": {
+    "collectTooltip": "Capturar evento especial.",
+    "infoTooltip": "Abrir la información del Día de la Croqueta y su bonus x3.",
+    "croquetaDay.title": "¡Día de la croqueta!",
+    "croquetaDay.description": "¡Hoy es 16 de Enero, el Día Internacional de la Croqueta! Disfruta de una celebración muy crujiente.",
+    "croquetaDay.month": "de Enero",
+    "multiplier": "Multiplicador global",
+    "multiplier.desc": "Todos tus beneficios de clicks y productores se multiplican por 3 hoy.",
+    "tip.clicks": "Cada click vale el triple",
+    "tip.producers": "Todos los productores generan x3",
+    "tip.time": "¡Solo durante 24 horas!"
+  },
+  "splash": {
+    "skip": "Saltar animación inicial"
   },
   "report": {
     "title": "Informes y estadísticas",

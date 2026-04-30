@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 import { EventService } from '../../services/event.service';
 
 @Component({
   selector: 'app-event',
   templateUrl: './event.html',
   styleUrls: ['./event.css'],
-  imports: [],
+  imports: [TranslocoModule],
 })
 export class EventComponent {
   events;

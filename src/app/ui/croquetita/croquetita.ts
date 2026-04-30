@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(document:click)': 'onDocumentClick($event)',
+    '(document:keydown)': 'onDocumentKeydown($event)',
   },
 })
 export class Croquetita implements OnDestroy {
@@ -107,6 +108,23 @@ export class Croquetita implements OnDestroy {
 
     // cerrar el mensaje si se hace clic en cualquier otro lao
     this.close();
+  }
+
+  onDocumentKeydown(event: KeyboardEvent) {
+    if (!this.isOpen() || event.key !== 'Escape') {
+      return;
+    }
+
+    const target = event.target;
+    if (
+      target instanceof HTMLElement &&
+      (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    this.closeSound();
   }
 
   toggleHelper() {

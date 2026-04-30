@@ -16,6 +16,8 @@ import { AudioService } from '@services/audio.service';
 import { Subscription } from 'rxjs';
 import Decimal from 'break_infinity.js';
 import { SKINS } from '@data/skin.data';
+import { TranslocoModule } from '@jsverse/transloco';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 /**
  * Componente principal del juego que gestiona la croqueta clickeable.
@@ -24,7 +26,7 @@ import { SKINS } from '@data/skin.data';
  */
 @Component({
   selector: 'app-clicker',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule, Tooltip],
   templateUrl: './clicker.html',
   styleUrl: './clicker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -153,6 +155,23 @@ export class Clicker implements OnInit, OnDestroy {
       const y = touch.clientY - rect.top;
       this.processClick(x, y, containerWidth);
     });
+  }
+
+  onKeyboardActivate(event: KeyboardEvent) {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    if (event.repeat) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+
+    if (!this.pixiEngine.emitCenterClick()) {
+      this.handleCanvasClick(window.innerWidth / 2, window.innerHeight / 2);
+    }
   }
 
   /**

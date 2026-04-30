@@ -26,6 +26,7 @@ export class HelpCenterComponent {
   protected readonly shortcuts = [
     { keys: 'F1', descriptionKey: 'help.shortcuts.openHelp' },
     { keys: 'F2', descriptionKey: 'help.shortcuts.openOptions' },
+    { keys: 'Space / Enter', descriptionKey: 'help.shortcuts.clickCroquette' },
     { keys: '?', descriptionKey: 'help.shortcuts.openHelpAlt' },
     { keys: 'Esc', descriptionKey: 'help.shortcuts.closeModal' },
     { keys: 'Ctrl + Shift + F12', descriptionKey: 'help.shortcuts.openDebug' },

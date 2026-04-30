@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '@services/modal.service';
@@ -47,6 +47,9 @@ export class Modal {
   private supabase = inject(SupabaseService);
   private debugService = inject(DebugService);
   private usernameService = inject(UsernameService);
+  private host = inject(ElementRef<HTMLElement>);
+  private hadOpenModal = false;
+  private lastFocusedElement: HTMLElement | null = null;
 
   desiredName = signal('');
   usernameLoading = signal(false);
@@ -99,6 +102,41 @@ export class Modal {
 
   cancelAction() {
     this.modalService.cancel();
+  }
+
+  onModalKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Tab') {
+      return;
+    }
+
+    const container = this.getModalContent();
+    if (!container) {
+      return;
+    }
+
+    const focusable = this.getFocusableElements(container);
+    if (focusable.length === 0) {
+      event.preventDefault();
+      container.focus();
+      return;
+    }
+
+    const current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey) {
+      if (!current || current === first || !container.contains(current)) {
+        event.preventDefault();
+        last.focus();
+      }
+      return;
+    }
+
+    if (!current || current === last || !container.contains(current)) {
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   // todos los mensajes set hay que cambiarlos a traducciones
@@ -191,5 +229,56 @@ export class Modal {
       requestAnimationFrame(loop);
     };
     loop();
+
+    effect(() => {
+      const modal = this.modalService.currentModal();
+
+      if (modal) {
+        if (!this.hadOpenModal) {
+          this.lastFocusedElement =
+            document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          this.hadOpenModal = true;
+        }
+
+        requestAnimationFrame(() => this.focusInitialElement());
+        return;
+      }
+
+      if (this.hadOpenModal) {
+        this.hadOpenModal = false;
+        this.restoreFocus();
+      }
+    });
+  }
+
+  private focusInitialElement() {
+    const container = this.getModalContent();
+    if (!container) {
+      return;
+    }
+
+    const [firstFocusable] = this.getFocusableElements(container);
+    (firstFocusable ?? container).focus();
+  }
+
+  private restoreFocus() {
+    const previous = this.lastFocusedElement;
+    this.lastFocusedElement = null;
+
+    if (previous?.isConnected) {
+      previous.focus();
+    }
+  }
+
+  private getModalContent(): HTMLElement | null {
+    return this.host.nativeElement.querySelector('.modal-content');
+  }
+
+  private getFocusableElements(container: HTMLElement): HTMLElement[] {
+    return Array.from(
+      container.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((element) => !element.hasAttribute('disabled'));
   }
 }

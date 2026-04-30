@@ -25,11 +25,12 @@ import { PrestigeService } from '@services/prestige.service';
 import { HudPanelsService } from '@services/hud-panels.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { ButtonComponent } from '@ui/button/button';
+import { Tooltip } from '@ui/tooltip/tooltip';
 import type { LeaderboardMode } from '@models/leaderboard.model';
 
 @Component({
   selector: 'app-leaderboard',
-  imports: [CommonModule, TranslocoModule, FormsModule, ShortNumberPipe, ButtonComponent],
+  imports: [CommonModule, TranslocoModule, FormsModule, ShortNumberPipe, ButtonComponent, Tooltip],
   templateUrl: './leaderboard.html',
   styleUrl: './leaderboard.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +53,9 @@ export class Leaderboard implements OnInit {
   loading = signal(false);
   message = signal('');
   expanded = signal(false);
+  panelTooltipKey = computed(() =>
+    this.expanded() ? 'leaderboard.panelHideTooltip' : 'leaderboard.panelShowTooltip',
+  );
   nextUpdateRemaining = signal<number>(0);
   user = signal<any | null>(null);
   pendingCount = signal<number>(0);

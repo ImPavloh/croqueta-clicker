@@ -1,9 +1,10 @@
 import { Component, signal, OnInit, ChangeDetectionStrategy, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-splash',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoModule],
   templateUrl: './splash.html',
   styleUrl: './splash.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

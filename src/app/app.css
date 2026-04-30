@@ -35,10 +35,19 @@
   width: 90px;
   height: 90px;
   cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
+}
+
+.croqueta-day-indicator:focus-visible {
+  outline: 3px solid rgba(251, 191, 36, 0.95);
+  outline-offset: 4px;
+  border-radius: 999px;
 }
 
 .croqueta-day-indicator:hover {

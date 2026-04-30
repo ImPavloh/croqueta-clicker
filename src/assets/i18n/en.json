@@ -227,8 +227,9 @@
     "helpShortcutTitle": "Main shortcuts",
     "helpShortcutHelp": "Open the help center.",
     "helpShortcutOptions": "Open Options quickly.",
+    "helpShortcutClicker": "Trigger the main croquette when it has focus.",
     "helpShortcutHelpAlt": "Open quick help from the keyboard.",
-    "helpShortcutClose": "Close the active modal.",
+    "helpShortcutClose": "Close the active modal, quick panel or helper.",
     "helpShortcutDebug": "Open the debug panel.",
     "gameTitle": "Game",
     "saveGameTooltip": "Manually save your game in the browser.",
@@ -297,6 +298,8 @@
   },
   "leaderboard": {
     "title": "Leaderboard",
+    "panelShowTooltip": "Open the quick leaderboard panel.",
+    "panelHideTooltip": "Close the quick leaderboard panel.",
     "modeLevel": "Level",
     "modeContracts": "Contracts",
     "statsTitle": "Statistics",
@@ -715,8 +718,11 @@
     }
   },
   "clicker": {
-    "croquetitaHelp": "Click on Croquetita for help",
+    "croquetitaHelp": "Activate Croquetita for help",
     "croquetitaAlt": "Croquetita",
+    "mainActionTooltip": "Activate the main croquette to earn croquettes. When focused, you can also use Space or Enter.",
+    "mainActionAriaLabel": "Main croquette. Activate it to earn croquettes.",
+    "closeCroquetita": "Close Croquetita helper",
     "messageAlt": "Message",
     "buyProducer": "Buy a producer to start earning croquettes automatically!",
     "cps": "¢ / sec",
@@ -867,8 +873,9 @@
     "shortcuts": {
       "openHelp": "Open or return to the help center.",
       "openOptions": "Open Options quickly.",
+      "clickCroquette": "Trigger the main croquette when it is focused.",
       "openHelpAlt": "Open quick help from the keyboard without touching the interface.",
-      "closeModal": "Close the current modal or dialog.",
+      "closeModal": "Close the current modal, quick panel or helper.",
       "openDebug": "Open the internal debug panel."
     },
     "tips": {
@@ -884,8 +891,8 @@
     "accessibilityTitle": "Added support",
     "accessibilityDescription": "Besides the existing tooltips, the project now has a global help layer and clearer access points.",
     "accessibilityItems": {
-      "keyboard": "F1 and ? open help, and Escape closes the active modal.",
-      "visibleEntry": "Help is available both in the navigation bar and in the mobile floating button.",
+      "keyboard": "F1 and ? open help, Space or Enter trigger the focused croquette, and Escape closes the active modal, quick panel or helper.",
+      "visibleEntry": "Help is available from Options as a visible entry point.",
       "tooltips": "Tooltips still explain specific actions, but they are no longer the only way to get oriented."
     }
   },
@@ -917,6 +924,8 @@
     "claimButton": "Claim",
     "claimedButton": "Claimed",
     "open": "Open contracts",
+    "panelShowTooltip": "Open the quick daily contracts panel.",
+    "panelHideTooltip": "Close the quick daily contracts panel.",
     "widgetEyebrow": "Today's contracts",
     "widgetStreak": "Streak: {{count}}",
     "widgetWeek": "Week: {{count}}/7",
@@ -1079,6 +1088,21 @@
     "title": "Welcome back!",
     "message": "While you were away, {{amount}} croquettes were produced.",
     "confirm": "Awesome"
+  },
+  "event": {
+    "collectTooltip": "Collect special event.",
+    "infoTooltip": "Open the Croquette Day info and its x3 bonus details.",
+    "croquetaDay.title": "Croquette Day!",
+    "croquetaDay.description": "Today is January 16, International Croquette Day! Enjoy a very crispy celebration.",
+    "croquetaDay.month": "of January",
+    "multiplier": "Global multiplier",
+    "multiplier.desc": "All your click and producer gains are multiplied by 3 today.",
+    "tip.clicks": "Each click is worth triple",
+    "tip.producers": "All producers generate x3",
+    "tip.time": "Only for 24 hours!"
+  },
+  "splash": {
+    "skip": "Skip intro animation"
   },
   "report": {
     "title": "Reports & Statistics",

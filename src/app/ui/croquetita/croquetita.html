@@ -2,10 +2,14 @@
   <div class="absolute bottom-3 left-1.25 z-100">
     <!-- croquetita :3 -->
     <button
+      type="button"
       class="relative w-20 h-20 md:w-20 md:h-20 sm:w-15 sm:h-15 cursor-pointer flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105 will-change-transform"
       [class.croquetita-character]="true"
       (click)="toggleHelper()"
       [class.talking]="isOpen()"
+      [attr.aria-expanded]="isOpen()"
+      aria-controls="croquetita-dialog"
+      [attr.aria-label]="'clicker.croquetitaHelp' | transloco"
       [title]="'clicker.croquetitaHelp' | transloco"
     >
       <img
@@ -34,15 +38,23 @@
 
     @if (isOpen()) {
       <div
+        id="croquetita-dialog"
         class="absolute bottom-25 left-5 w-80 max-w-[90vw] border-[3px] border-[#f3eac2] rounded-[15px] p-3.75 transition-all duration-300 ease-in-out md:w-80 md:bottom-25 md:left-5 sm:w-70 sm:bottom-20 sm:left-0"
         [class.croquetita-dialog]="true"
         [class.animate]="isAnimating()"
+        role="dialog"
+        aria-modal="false"
+        [attr.aria-label]="'clicker.croquetitaHelp' | transloco"
       >
-        <span
+        <button
+          type="button"
           (click)="closeSound()"
-          class="absolute top-2 right-2.5 text-lg text-[#6b5633] cursor-pointer font-bold"
-          >X</span
+          class="croquetita-close absolute top-2 right-2.5 text-lg text-[#6b5633] cursor-pointer font-bold"
+          [attr.aria-label]="'clicker.closeCroquetita' | transloco"
+          [attr.title]="'clicker.closeCroquetita' | transloco"
         >
+          X
+        </button>
         <div class="text-[#faf6e6] text-xl text-balance md:text-xl sm:text-[13px]">
           {{ currentMessage() | transloco }}
         </div>

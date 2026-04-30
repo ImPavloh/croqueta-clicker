@@ -1,4 +1,13 @@
 <div class="relative flex justify-center items-center h-full w-full">
   <!-- La croqueta, lights y partículas se renderizan en PixiJS -->
-  <!-- Este div solo contiene el área clickeable (manejada por el canvas) -->
+  <!-- Botón de teclado para que el click principal del canvas siga siendo accesible -->
+  <app-tooltip [text]="'clicker.mainActionTooltip' | transloco" [position]="'bottom'">
+    <button
+      type="button"
+      class="croqueta-container croqueta-access-button"
+      (keydown)="onKeyboardActivate($event)"
+      [attr.aria-label]="'clicker.mainActionAriaLabel' | transloco"
+      [attr.title]="'clicker.mainActionTooltip' | transloco"
+    ></button>
+  </app-tooltip>
 </div>

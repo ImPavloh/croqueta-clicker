@@ -21,6 +21,8 @@ import {
   },
 })
 export class Tooltip implements OnDestroy {
+  private static nextId = 0;
+
   text = input<string>('');
   position = input<'top' | 'bottom' | 'left' | 'right'>('bottom');
   disabled = input<boolean>(false);
@@ -30,15 +32,27 @@ export class Tooltip implements OnDestroy {
   private tooltipEl?: HTMLElement;
   private host = inject(ElementRef<HTMLElement>);
   private renderer = inject(Renderer2);
+  private describedElement?: HTMLElement;
+  private readonly tooltipId = `cc-tooltip-${Tooltip.nextId++}`;
 
   onMouseEnter() {
-    if (this.disabled() || !this.text()) return;
-    this.showTooltip = true;
-    this.createTooltip();
-    this.updatePosition();
+    this.showTooltipNow();
   }
 
   onMouseLeave() {
+    this.destroyTooltip();
+  }
+
+  onFocusIn() {
+    this.showTooltipNow();
+  }
+
+  onFocusOut(event: FocusEvent) {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Node && this.host.nativeElement.contains(nextTarget)) {
+      return;
+    }
+
     this.destroyTooltip();
   }
 
@@ -52,11 +66,21 @@ export class Tooltip implements OnDestroy {
     this.destroyTooltip();
   }
 
+  private showTooltipNow() {
+    if (this.disabled() || !this.text()) return;
+    this.showTooltip = true;
+    this.createTooltip();
+    this.attachAriaDescription();
+    this.updatePosition();
+  }
+
   private createTooltip() {
     if (this.tooltipEl) return;
     const el = this.renderer.createElement('div');
     this.renderer.addClass(el, 'tooltip');
     this.renderer.addClass(el, `tooltip-${this.position()}`);
+    this.renderer.setAttribute(el, 'id', this.tooltipId);
+    this.renderer.setAttribute(el, 'role', 'tooltip');
     this.renderer.setProperty(el, 'textContent', this.text());
     this.renderer.setStyle(el, 'pointerEvents', 'none');
     this.renderer.setStyle(el, 'position', 'fixed');
@@ -67,6 +91,8 @@ export class Tooltip implements OnDestroy {
   }
 
   private destroyTooltip() {
+    this.detachAriaDescription();
+
     if (!this.tooltipEl) return;
     try {
       this.renderer.removeChild(document.body, this.tooltipEl);
@@ -110,5 +136,61 @@ export class Tooltip implements OnDestroy {
 
     this.renderer.setStyle(tt, 'left', `${Math.round(left)}px`);
     this.renderer.setStyle(tt, 'top', `${Math.round(top)}px`);
+  }
+
+  private attachAriaDescription() {
+    const activeElement = typeof document !== 'undefined' ? document.activeElement : null;
+    const target =
+      activeElement instanceof HTMLElement && this.host.nativeElement.contains(activeElement)
+        ? activeElement
+        : this.findFocusableTarget();
+
+    if (!target) {
+      return;
+    }
+
+    this.describedElement = target;
+    const current = target.getAttribute('aria-describedby')?.trim();
+
+    if (!current) {
+      this.renderer.setAttribute(target, 'aria-describedby', this.tooltipId);
+      return;
+    }
+
+    const ids = current.split(/\s+/);
+    if (!ids.includes(this.tooltipId)) {
+      this.renderer.setAttribute(target, 'aria-describedby', `${current} ${this.tooltipId}`);
+    }
+  }
+
+  private detachAriaDescription() {
+    const target = this.describedElement;
+    this.describedElement = undefined;
+
+    if (!target) {
+      return;
+    }
+
+    const current = target.getAttribute('aria-describedby')?.trim();
+    if (!current) {
+      return;
+    }
+
+    const nextIds = current
+      .split(/\s+/)
+      .filter((id) => id && id !== this.tooltipId)
+      .join(' ');
+
+    if (nextIds) {
+      this.renderer.setAttribute(target, 'aria-describedby', nextIds);
+    } else {
+      this.renderer.removeAttribute(target, 'aria-describedby');
+    }
+  }
+
+  private findFocusableTarget(): HTMLElement | null {
+    return this.host.nativeElement.querySelector(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    ) as HTMLElement | null;
   }
 }

@@ -1,3 +1,9 @@
-<div class="tooltip-host" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+<div
+  class="tooltip-host"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  (focusin)="onFocusIn()"
+  (focusout)="onFocusOut($event)"
+>
   <ng-content></ng-content>
 </div>

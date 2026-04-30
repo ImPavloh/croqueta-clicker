@@ -49,7 +49,9 @@ import { EventService } from '@services/event.service';
 import { TimeService } from '@services/time.service';
 import { FpsCounterComponent } from '@ui/fps-counter/fps-counter';
 import { PerformanceService } from '@services/performance.service';
+import { HudPanelsService } from '@services/hud-panels.service';
 import { filter } from 'rxjs/operators';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-root',
@@ -74,6 +76,7 @@ import { filter } from 'rxjs/operators';
     Leaderboard,
     DailyContractsPanel,
     EventComponent,
+    Tooltip,
     TutorialOverlayComponent,
     LanguageSelectionComponent,
     FpsCounterComponent,
@@ -95,6 +98,7 @@ export class App implements OnInit, OnDestroy {
 
   private perfEffect?: EffectRef;
   private injector = inject(Injector);
+  private hudPanels = inject(HudPanelsService);
   private routerSub?: Subscription;
 
   constructor(
@@ -267,7 +271,10 @@ export class App implements OnInit, OnDestroy {
           return;
         }
 
-        if (event.key === 'Escape' && this.modalService.currentModal()) {
+        if (
+          event.key === 'Escape' &&
+          (this.modalService.currentModal() || this.hudPanels.activePanel())
+        ) {
           event.preventDefault();
           this.ngZone.run(() => {
             this.closeCurrentModal();
@@ -348,16 +355,19 @@ export class App implements OnInit, OnDestroy {
   }
 
   private closeCurrentModal(): void {
-    if (!this.modalService.currentModal()) {
-      return;
-    }
-
     if (this.modalService.currentModal() === 'confirm-dialog') {
       this.modalService.cancel();
       return;
     }
 
-    this.modalService.closeModal();
+    if (this.modalService.currentModal()) {
+      this.modalService.closeModal();
+      return;
+    }
+
+    if (this.hudPanels.activePanel()) {
+      this.hudPanels.close();
+    }
   }
 
   private isEditableTarget(target: EventTarget | null): boolean {

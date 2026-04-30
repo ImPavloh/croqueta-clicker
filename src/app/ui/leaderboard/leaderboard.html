@@ -11,54 +11,68 @@
       [class.lp-active]="expanded()"
       [class.lp-inactive]="!expanded()"
     >
-      <div class="lp-header" (click)="togglePanel()">
-        <div class="lp-title">
-          <img
-            src="assets/icons/trophy.webp"
-            alt="Leaderboard"
-            class="lp-icon"
-            loading="lazy"
-            decoding="async"
-          />
-          <span>{{ 'leaderboard.title' | transloco }}</span>
-        </div>
-        <div class="lp-toggle">
-          @if (expanded()) {
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+      <app-tooltip [text]="panelTooltipKey() | transloco" [position]="'left'">
+        <button
+          type="button"
+          class="lp-header"
+          (click)="togglePanel()"
+          [attr.aria-expanded]="expanded()"
+          [attr.aria-label]="panelTooltipKey() | transloco"
+          aria-controls="leaderboard-panel-body"
+        >
+          <div class="lp-title">
+            <img
+              src="assets/icons/trophy.webp"
+              alt="Leaderboard"
               class="lp-icon"
-            >
-              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
-              <path d="M4 4l16 16" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          } @else {
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lp-icon"
-            >
-              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          }
-        </div>
-      </div>
+              loading="lazy"
+              decoding="async"
+            />
+            <span>{{ 'leaderboard.title' | transloco }}</span>
+          </div>
+          <div class="lp-toggle" aria-hidden="true">
+            @if (expanded()) {
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lp-icon"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <path d="M4 4l16 16" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            } @else {
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lp-icon"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            }
+          </div>
+        </button>
+      </app-tooltip>
 
-      <div class="lp-body" [attr.aria-hidden]="!expanded()" [class.lp-hidden]="!expanded()">
+      <div
+        id="leaderboard-panel-body"
+        class="lp-body"
+        [attr.aria-hidden]="!expanded()"
+        [class.lp-hidden]="!expanded()"
+      >
         <div class="lp-user-section">
           @if (username()) {
             <div class="lp-user-info">

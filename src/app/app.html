@@ -53,17 +53,24 @@
             <div></div>
           }
           @if (timeService.isCroquetaDay()) {
-            <div class="croqueta-day-indicator" (click)="modalService.openModal('event-info')">
-              <div class="indicator-glow"></div>
-              <div class="indicator-ring"></div>
-              <img
-                src="assets/skins/croqueta-dorada.webp"
-                class="indicator-img"
-                alt="Croqueta Day"
-                decoding="async"
-              />
-              <span class="indicator-badge">x3</span>
-            </div>
+            <app-tooltip [text]="'event.infoTooltip' | transloco" [position]="'left'">
+              <button
+                type="button"
+                class="croqueta-day-indicator"
+                (click)="modalService.openModal('event-info')"
+                [attr.aria-label]="'event.infoTooltip' | transloco"
+              >
+                <div class="indicator-glow"></div>
+                <div class="indicator-ring"></div>
+                <img
+                  src="assets/skins/croqueta-dorada.webp"
+                  class="indicator-img"
+                  alt="Croqueta Day"
+                  decoding="async"
+                />
+                <span class="indicator-badge">x3</span>
+              </button>
+            </app-tooltip>
           }
         }
         @if (isMobile) {

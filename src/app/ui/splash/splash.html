@@ -1,4 +1,10 @@
 @if (splashShown()) {
-<span class="splash" (click)="hideSplash()"></span>
-<span class="croqueta-splash"></span>
+  <button
+    type="button"
+    class="splash"
+    (click)="hideSplash()"
+    [attr.aria-label]="'splash.skip' | transloco"
+    [attr.title]="'splash.skip' | transloco"
+  ></button>
+  <span class="croqueta-splash"></span>
 }

@@ -12,10 +12,11 @@ import { AudioService } from '@services/audio.service';
 import { DailyContractsService } from '@services/daily-contracts.service';
 import { HudPanelsService } from '@services/hud-panels.service';
 import { DailyContractsWidget } from '@ui/daily-contracts-widget/daily-contracts-widget';
+import { Tooltip } from '@ui/tooltip/tooltip';
 
 @Component({
   selector: 'app-daily-contracts-panel',
-  imports: [TranslocoModule, DailyContractsWidget],
+  imports: [TranslocoModule, DailyContractsWidget, Tooltip],
   templateUrl: './daily-contracts-panel.html',
   styleUrl: './daily-contracts-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +24,9 @@ import { DailyContractsWidget } from '@ui/daily-contracts-widget/daily-contracts
 export class DailyContractsPanel implements OnDestroy {
   protected readonly contractsService = inject(DailyContractsService);
   protected readonly expanded = computed(() => this.hudPanels.activePanel() === 'contracts');
+  protected readonly panelTooltipKey = computed(() =>
+    this.expanded() ? 'contracts.panelHideTooltip' : 'contracts.panelShowTooltip',
+  );
 
   private readonly audioService = inject(AudioService);
   private readonly hudPanels = inject(HudPanelsService);

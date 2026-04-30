@@ -19,6 +19,19 @@
   backface-visibility: hidden;
 }
 
+.croqueta-access-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.croqueta-access-button:focus-visible {
+  outline: 4px solid rgba(251, 191, 36, 0.95);
+  outline-offset: 8px;
+  border-radius: 999px;
+}
+
 .croqueta-container:focus-within {
   outline: none;
 }
