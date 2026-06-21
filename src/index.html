@@ -15,6 +15,16 @@
     <!-- Precargar fuentes críticas para evitar FOUC -->
     <link rel="preload" href="/assets/fonts/chewy.woff2" as="font" type="font/woff2" crossorigin />
 
+    <!-- Precargar imágenes críticas del primer pintado -->
+    <link rel="preload" href="/assets/backgrounds/bg.webp" as="image" type="image/webp" />
+    <link
+      rel="preload"
+      href="/assets/skins/croqueta-normal.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
     <!-- Favicons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

@@ -184,7 +184,6 @@ export class Clicker implements OnInit, OnDestroy {
   private processClick(x?: number, y?: number, containerWidth = 500) {
     this.pointsService.addPointsPerClick(x, y);
     this.playerStats.addClick();
-    this.playerStats.checkLevelUp();
     this.recordClickTimestampAndCheck(); // cuenta clicks en los últimos 10s y desbloquea si toca
     this.resetNoClicksTimer(); // cada click cancela / reinicia el timer de 1h
     this.resetAfkTimer();

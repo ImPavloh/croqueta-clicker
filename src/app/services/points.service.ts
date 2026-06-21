@@ -17,6 +17,30 @@ interface Multiplier {
   id: number;
 }
 
+const FORMAT_UNITS: { value: Decimal; symbol: string }[] = [
+  { value: new Decimal(1e63), symbol: 'Vg' },
+  { value: new Decimal(1e60), symbol: 'Nv' },
+  { value: new Decimal(1e57), symbol: 'Od' },
+  { value: new Decimal(1e54), symbol: 'Sd' },
+  { value: new Decimal(1e51), symbol: 'Sxd' },
+  { value: new Decimal(1e48), symbol: 'Qnd' },
+  { value: new Decimal(1e45), symbol: 'Qtd' },
+  { value: new Decimal(1e42), symbol: 'Trd' },
+  { value: new Decimal(1e39), symbol: 'Dod' },
+  { value: new Decimal(1e36), symbol: 'Und' },
+  { value: new Decimal(1e33), symbol: 'Dc' },
+  { value: new Decimal(1e30), symbol: 'No' },
+  { value: new Decimal(1e27), symbol: 'Oc' },
+  { value: new Decimal(1e24), symbol: 'Sp' },
+  { value: new Decimal(1e21), symbol: 'Sx' },
+  { value: new Decimal(1e18), symbol: 'Qi' },
+  { value: new Decimal(1e15), symbol: 'Qa' },
+  { value: new Decimal(1e12), symbol: 'T' },
+  { value: new Decimal(1e9), symbol: 'B' },
+  { value: new Decimal(1e6), symbol: 'M' },
+  { value: new Decimal(1e3), symbol: 'K' },
+];
+
 @Injectable({
   providedIn: 'root',
 })
@@ -327,32 +351,7 @@ export class PointsService {
     const sign = num.lt(0) ? '-' : '';
     const abs = num.abs();
 
-    // Escalas con sufijos
-    const units: { value: Decimal; symbol: string }[] = [
-      { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
-      { value: new Decimal(1e60), symbol: 'Nv' }, // novendecillón
-      { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
-      { value: new Decimal(1e54), symbol: 'Sd' }, // septendecillón
-      { value: new Decimal(1e51), symbol: 'Sxd' }, // sexdecillón
-      { value: new Decimal(1e48), symbol: 'Qnd' }, // quindecillón
-      { value: new Decimal(1e45), symbol: 'Qtd' }, // cuatordecillón
-      { value: new Decimal(1e42), symbol: 'Trd' }, // tredecillón
-      { value: new Decimal(1e39), symbol: 'Dod' }, // duodecillón
-      { value: new Decimal(1e36), symbol: 'Und' }, // undecillón
-      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
-      { value: new Decimal(1e30), symbol: 'No' }, // nonillón
-      { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
-      { value: new Decimal(1e24), symbol: 'Sp' }, // septillón
-      { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
-      { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
-      { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
-      { value: new Decimal(1e12), symbol: 'T' }, // trillón
-      { value: new Decimal(1e9), symbol: 'B' }, // mil millones (billón)
-      { value: new Decimal(1e6), symbol: 'M' }, // millón
-      { value: new Decimal(1e3), symbol: 'K' }, // mil
-    ];
-
-    for (const u of units) {
+    for (const u of FORMAT_UNITS) {
       if (abs.gte(u.value)) {
         const normalized = abs.div(u.value);
         const decimals = normalized.lt(10)

@@ -4,7 +4,6 @@ import { Upgrades } from './pages/upgrades/upgrades';
 import { Achievements } from './pages/achievements/achievements';
 import { Options } from './pages/options/options';
 import { Skins } from './pages/skins/skins';
-import { Report } from './pages/report/report';
 
 export const routes: Routes = [
   { path: '', component: Upgrades },
@@ -16,6 +15,10 @@ export const routes: Routes = [
   },
   { path: 'options', component: Options },
   { path: 'skins', component: Skins },
-  { path: 'report', component: Report },
+  {
+    path: 'report',
+    loadComponent: () => import('./pages/report/report').then((module) => module.Report),
+    data: { preload: false },
+  },
   { path: '**', redirectTo: '' },
 ];

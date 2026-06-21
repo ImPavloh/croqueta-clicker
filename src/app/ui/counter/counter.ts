@@ -1,11 +1,9 @@
-import { Component, effect, signal, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PointsService } from '@services/points.service';
 import { SkinsService } from '@services/skins.service';
 import { ShortNumberPipe } from '@pipes/short-number.pipe';
 import { SKINS } from '@data/skin.data';
-import Decimal from 'break_infinity.js';
-import { Subscription } from 'rxjs';
 
 import { TranslocoModule } from '@jsverse/transloco';
 
@@ -20,55 +18,27 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrl: './counter.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Counter implements OnDestroy {
+export class Counter {
   /** Lista de todas las skins disponibles */
   skins = SKINS;
-
-  /** Valor mostrado en el contador (puede diferir temporalmente del valor real durante animaciones) */
-  displayPoints = signal(new Decimal(0));
 
   /** Indica si hay una animación de puntos en curso */
   isAnimating = signal(false);
 
-  /** Suscripción a eventos de clic para animaciones */
-  private clickSubscription: Subscription | null = null;
-
-  constructor(
-    public pointsService: PointsService,
-    private skinsService: SkinsService,
-  ) {
-    this.displayPoints.set(this.pointsService.points());
-
-    // actualizar sin animación (puntos automáticos)
-    effect(() => {
-      const currentPoints = this.pointsService.points();
-      if (!this.isAnimating()) {
-        this.displayPoints.set(currentPoints);
-      }
-    });
-  }
-
-  /**
-   * Obtiene el label personalizado del contador según la skin activa.
-   * Aplica singular/plural automáticamente.
-   * @returns Clave de traducción del label
-   */
-  getCounterLabel(): string {
+  counterLabel = computed(() => {
     const currentSkinId = this.skinsService.skinId();
     const skin = this.skins.find((s) => s.id === currentSkinId);
     const baseLabel = skin?.counterLabel || 'clicker.croquetas';
-    const points = this.displayPoints();
 
-    if (points.eq(1)) {
+    if (this.pointsService.displayPoints() === '1') {
       return baseLabel.endsWith('s') ? baseLabel.slice(0, -1) : baseLabel;
     }
 
     return baseLabel;
-  }
+  });
 
-  ngOnDestroy(): void {
-    if (this.clickSubscription) {
-      this.clickSubscription.unsubscribe();
-    }
-  }
+  constructor(
+    public pointsService: PointsService,
+    private skinsService: SkinsService,
+  ) {}
 }

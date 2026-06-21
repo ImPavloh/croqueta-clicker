@@ -4,15 +4,11 @@ import {
   provideZonelessChangeDetection,
   isDevMode,
 } from '@angular/core';
-import {
-  provideRouter,
-  withPreloading,
-  PreloadAllModules,
-  RouteReuseStrategy,
-} from '@angular/router';
+import { provideRouter, withPreloading, RouteReuseStrategy } from '@angular/router';
 
 import { routes } from './app.routes';
 import { RouteReuse } from './config/route-reuse';
+import { SelectivePreloadStrategy } from './config/selective-preload';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
@@ -42,7 +38,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideRouter(routes, withPreloading(SelectivePreloadStrategy)),
+    SelectivePreloadStrategy,
     { provide: RouteReuseStrategy, useClass: RouteReuse },
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

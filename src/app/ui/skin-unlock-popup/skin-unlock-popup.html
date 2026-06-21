@@ -10,7 +10,7 @@
           <div class="skin-description">{{ skin.description | transloco }}</div>
         </div>
         <div class="icon">
-          <img [src]="skin.image" [alt]="skin.name | transloco" />
+          <img [src]="skin.image" [alt]="skin.name | transloco" decoding="async" />
           <div class="icon-glow"></div>
         </div>
         @if (skin.rarity) {

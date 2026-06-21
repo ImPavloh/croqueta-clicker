@@ -11,28 +11,45 @@
       }
     },
     {
-      "name": "assets",
+      "name": "critical-assets",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "/assets/fonts/*.woff2",
+          "/assets/fonts/*.woff",
+          "/assets/fonts/*.ttf",
+          "/assets/fonts/*.otf",
+          "/assets/i18n/*.json",
+          "/assets/backgrounds/bg.webp",
+          "/assets/skins/croqueta-normal.webp",
+          "/assets/skins/croqueta-normal-mid.webp",
+          "/assets/skins/croqueta-normal-low.webp",
+          "/assets/skins/croqueta-dorada.webp",
+          "/assets/effects/*.webp",
+          "/assets/logo/*.webp",
+          "/assets/icons/**",
           "/assets/**/*.svg",
-          "/assets/**/*.cur",
-          "/assets/**/*.jpg",
-          "/assets/**/*.jpeg",
+          "/assets/**/*.cur"
+        ]
+      }
+    },
+    {
+      "name": "media-and-extras",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**/*.webp",
           "/assets/**/*.png",
           "/assets/**/*.apng",
-          "/assets/**/*.webp",
           "/assets/**/*.avif",
+          "/assets/**/*.jpg",
+          "/assets/**/*.jpeg",
           "/assets/**/*.gif",
-          "/assets/**/*.otf",
-          "/assets/**/*.ttf",
-          "/assets/**/*.woff",
-          "/assets/**/*.woff2",
           "/assets/**/*.mp3",
           "/assets/**/*.ogg",
-          "/assets/**/*.wav",
-          "/assets/i18n/*.json"
+          "/assets/**/*.wav"
         ]
       }
     }

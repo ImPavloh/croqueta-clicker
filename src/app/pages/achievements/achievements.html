@@ -41,6 +41,10 @@
               [src]="item.icon"
               [alt]="item.title"
               class="w-8 h-8 object-contain rounded drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] transition-[filter] duration-300"
+              width="32"
+              height="32"
+              loading="lazy"
+              decoding="async"
               [class.grayscale]="!item.unlocked"
               [class.opacity-50]="!item.unlocked"
             />

@@ -5,6 +5,30 @@ const TEN = new Decimal(10);
 const HUNDRED = new Decimal(100);
 const TEN_THOUSAND = new Decimal(10000);
 
+const UNITS: { value: Decimal; symbol: string }[] = [
+  { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
+  { value: new Decimal(1e60), symbol: 'Nv' }, // novendecillón
+  { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
+  { value: new Decimal(1e54), symbol: 'Sd' }, // septendecillón
+  { value: new Decimal(1e51), symbol: 'Sxd' }, // sexdecillón
+  { value: new Decimal(1e48), symbol: 'Qnd' }, // quindecillón
+  { value: new Decimal(1e45), symbol: 'Qtd' }, // cuatordecillón
+  { value: new Decimal(1e42), symbol: 'Trd' }, // tredecillón
+  { value: new Decimal(1e39), symbol: 'Dod' }, // duodecillón
+  { value: new Decimal(1e36), symbol: 'Und' }, // undecillón
+  { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
+  { value: new Decimal(1e30), symbol: 'No' }, // nonillón
+  { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
+  { value: new Decimal(1e24), symbol: 'Sp' }, // septillón
+  { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
+  { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
+  { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
+  { value: new Decimal(1e12), symbol: 'T' }, // trillón
+  { value: new Decimal(1e9), symbol: 'B' }, // mil millones (billón)
+  { value: new Decimal(1e6), symbol: 'M' }, // millón
+  { value: new Decimal(1e3), symbol: 'K' }, // mil
+];
+
 /**
  * Pipe para formatear números grandes en notación abreviada.
  * Convierte números como 1000000 a "1M", 1000000000 a "1B", etc.
@@ -34,31 +58,6 @@ export class ShortNumberPipe implements PipeTransform {
 
     const sign = num.lt(0) ? '-' : '';
     const abs = num.abs();
-
-    // Escalas con sufijos
-    const UNITS: { value: Decimal; symbol: string }[] = [
-      { value: new Decimal(1e63), symbol: 'Vg' }, // vigintillón
-      { value: new Decimal(1e60), symbol: 'Nv' }, // novendecillón
-      { value: new Decimal(1e57), symbol: 'Od' }, // octodecillón
-      { value: new Decimal(1e54), symbol: 'Sd' }, // septendecillón
-      { value: new Decimal(1e51), symbol: 'Sxd' }, // sexdecillón
-      { value: new Decimal(1e48), symbol: 'Qnd' }, // quindecillón
-      { value: new Decimal(1e45), symbol: 'Qtd' }, // cuatordecillón
-      { value: new Decimal(1e42), symbol: 'Trd' }, // tredecillón
-      { value: new Decimal(1e39), symbol: 'Dod' }, // duodecillón
-      { value: new Decimal(1e36), symbol: 'Und' }, // undecillón
-      { value: new Decimal(1e33), symbol: 'Dc' }, // decillón
-      { value: new Decimal(1e30), symbol: 'No' }, // nonillón
-      { value: new Decimal(1e27), symbol: 'Oc' }, // octillón
-      { value: new Decimal(1e24), symbol: 'Sp' }, // septillón
-      { value: new Decimal(1e21), symbol: 'Sx' }, // sextillón
-      { value: new Decimal(1e18), symbol: 'Qi' }, // quintillón
-      { value: new Decimal(1e15), symbol: 'Qa' }, // cuatrillón
-      { value: new Decimal(1e12), symbol: 'T' }, // trillón
-      { value: new Decimal(1e9), symbol: 'B' }, // mil millones (billón)
-      { value: new Decimal(1e6), symbol: 'M' }, // millón
-      { value: new Decimal(1e3), symbol: 'K' }, // mil
-    ];
 
     for (const u of UNITS) {
       if (abs.gte(u.value)) {
