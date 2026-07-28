@@ -25,6 +25,9 @@ export class AutosaveService implements OnDestroy {
   private readonly AUTOSAVE_INTERVAL = 60000; // 1min
   private isImporting = false;
   private readonly boundSaveAll = this.saveAll.bind(this);
+  private readonly boundVisibilitySave = () => {
+    if (document.visibilityState === 'hidden') this.saveAll();
+  };
 
   // Debounce save logic
   private saveRequestSubject = new Subject<void>();
@@ -59,9 +62,7 @@ export class AutosaveService implements OnDestroy {
       window.addEventListener('beforeunload', this.boundSaveAll);
       // Safari (iOS) suele no disparar beforeunload, usar pagehide y visibilitychange
       window.addEventListener('pagehide', this.boundSaveAll);
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') this.saveAll();
-      });
+      document.addEventListener('visibilitychange', this.boundVisibilitySave);
     }
   }
 
@@ -148,6 +149,7 @@ export class AutosaveService implements OnDestroy {
     if (typeof window !== 'undefined') {
       window.removeEventListener('beforeunload', this.boundSaveAll);
       window.removeEventListener('pagehide', this.boundSaveAll);
+      document.removeEventListener('visibilitychange', this.boundVisibilitySave);
     }
   }
 }

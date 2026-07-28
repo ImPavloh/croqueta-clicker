@@ -4,10 +4,11 @@
   role="button"
   tabindex="0"
   aria-label="Noticias"
+  aria-haspopup="dialog"
   (keydown.enter)="openNewsModal()"
-  (keydown.space)="openNewsModal()"
+  (keydown.space)="$event.preventDefault(); openNewsModal()"
 >
-  <div class="opacity-overlay">
+  <div class="opacity-overlay" aria-hidden="true">
     <div class="newsline-content">
       @for (item of displayItems(); track $index) {
         <span>{{ item }}</span>

@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, Injector, effect } from '@angular/core';
+import { Injectable, signal, inject, Injector, effect, OnDestroy } from '@angular/core';
 import Decimal from 'break_infinity.js';
 import { FloatingService } from './floating.service';
 import { OptionsService } from './options.service';
@@ -44,7 +44,7 @@ const FORMAT_UNITS: { value: Decimal; symbol: string }[] = [
 @Injectable({
   providedIn: 'root',
 })
-export class PointsService {
+export class PointsService implements OnDestroy {
   private optionsService = inject(OptionsService);
   private injector = inject(Injector);
   private modalService = inject(ModalService);
@@ -65,6 +65,9 @@ export class PointsService {
   private multiplierIdCounter = 0;
   private isInitializing = true;
   private lastSaveTime: number = 0;
+  private offlineCheckTimeout?: ReturnType<typeof setTimeout>;
+  private initializationTimeout?: ReturnType<typeof setTimeout>;
+  private productionInterval?: ReturnType<typeof setInterval>;
 
   // Configurable offline threshold
   private readonly OFFLINE_THRESHOLD_MS = 600000; // 10 minute
@@ -87,12 +90,12 @@ export class PointsService {
 
     effect(() => {
       const pts = this._points();
-      this.gameBridge.updatePoints(pts.toNumber());
+      this.gameBridge.updatePoints(pts);
     });
 
     effect(() => {
       const cps = this._pointsPerSecond();
-      this.gameBridge.updatePointsPerSecond(cps.toNumber());
+      this.gameBridge.updatePointsPerSecond(cps);
     });
 
     effect(() => {
@@ -101,16 +104,16 @@ export class PointsService {
     });
 
     // Defer check to ensure app is fully initialized and avoid potential constructor race conditions
-    setTimeout(() => {
+    this.offlineCheckTimeout = setTimeout(() => {
       this.checkOfflineProgress();
     }, 1000);
 
-    setTimeout(() => {
+    this.initializationTimeout = setTimeout(() => {
       this.isInitializing = false;
     }, 2000);
 
     if (typeof window !== 'undefined') {
-      setInterval(() => this.addPointPerSecond(), 1000);
+      this.productionInterval = setInterval(() => this.addPointPerSecond(), 1000);
     }
   }
 
@@ -393,5 +396,12 @@ export class PointsService {
     } catch {
       return `${sign}${abs.toString()}`;
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.offlineCheckTimeout) clearTimeout(this.offlineCheckTimeout);
+    if (this.initializationTimeout) clearTimeout(this.initializationTimeout);
+    if (this.productionInterval) clearInterval(this.productionInterval);
+    this.clickEvent$.complete();
   }
 }

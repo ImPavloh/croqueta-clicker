@@ -9,6 +9,7 @@ import type { LeaderboardStats, LeaderboardStatsBucket } from '@models/report.mo
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
+  private static readonly AUTH_RETRY_ATTEMPTS = 3;
   private supabase: SupabaseClient;
   private _debugService: any | null = null;
 
@@ -51,7 +52,7 @@ export class SupabaseService {
 
   // Crea una sesión anónima
   async signInAnonymously() {
-    return this.supabase.auth.signInAnonymously();
+    return this.withNavigatorLockRetry(() => this.supabase.auth.signInAnonymously());
   }
 
   async signOut() {
@@ -59,11 +60,31 @@ export class SupabaseService {
   }
 
   getUser() {
-    return this.supabase.auth.getUser();
+    return this.withNavigatorLockRetry(() => this.supabase.auth.getUser());
   }
 
   getSession() {
-    return this.supabase.auth.getSession();
+    return this.withNavigatorLockRetry(() => this.supabase.auth.getSession());
+  }
+
+  private async withNavigatorLockRetry<T>(operation: () => Promise<T>): Promise<T> {
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt < SupabaseService.AUTH_RETRY_ATTEMPTS; attempt++) {
+      try {
+        return await operation();
+      } catch (error) {
+        lastError = error;
+        if (!this.isNavigatorLockError(error)) throw error;
+      }
+    }
+
+    throw lastError;
+  }
+
+  private isNavigatorLockError(error: unknown): boolean {
+    const message = error instanceof Error ? error.message : String(error);
+    return /navigator\s*lock|navigatorlock|lock.*(?:timeout|busy|acquire)/i.test(message);
   }
 
   // Actualiza el nombre del usuario autenticado

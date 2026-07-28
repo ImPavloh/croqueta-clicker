@@ -8,6 +8,8 @@ import { PlayerStats } from '@services/player-stats.service';
 import { PointsService } from '@services/points.service';
 import { AudioService } from '@services/audio.service';
 import { OptionsService } from '@services/options.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
+import { ShopControlsService } from '@services/shop-controls.service';
 
 // SIMULACIÓN DE SERVICIOS (MOCKS)
 // mocks para cada servicio inyectado en Upgrade
@@ -32,6 +34,15 @@ const mockAudioService = {
 const mockOptionsService = {
   getGameItem: vi.fn().mockReturnValue(null),
   setGameItem: vi.fn(),
+  gameItemsVersion: vi.fn().mockReturnValue(0),
+};
+
+const mockDailyContractsService = {
+  trackUpgradePurchase: vi.fn(),
+};
+
+const mockShopControlsService = {
+  notifyShopItemsChanged: vi.fn(),
 };
 
 // Mock de configuración mínima requerida por el componente
@@ -59,6 +70,8 @@ describe('Upgrade', () => {
         { provide: PointsService, useValue: mockPointsService },
         { provide: AudioService, useValue: mockAudioService },
         { provide: OptionsService, useValue: mockOptionsService },
+        { provide: DailyContractsService, useValue: mockDailyContractsService },
+        { provide: ShopControlsService, useValue: mockShopControlsService },
       ],
     }).compileComponents();
   });
@@ -78,8 +91,8 @@ describe('Upgrade', () => {
 
     // Verifica que la inicialización de estado funcione correctamente
     // El nivel de mockPlayerStats es 0 y mockConfig level es 0, por lo tanto unlocked tiene que ser true
-    expect(component.unlocked).toBe(true);
+    expect(component.unlocked()).toBe(true);
     // Por defecto bought debe ser false (ya que mockOptionsService devuelve null)
-    expect(component.bought).toBe(false);
+    expect(component.bought()).toBe(false);
   });
 });

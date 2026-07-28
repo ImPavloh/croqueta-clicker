@@ -30,7 +30,7 @@ export class DailyContractsService implements OnDestroy {
   private playerStats = inject(PlayerStats);
   private injector = inject(Injector);
   private level = toSignal(this.playerStats.level$, {
-    initialValue: this.playerStats._level.value,
+    initialValue: 0,
   });
 
   private readonly storageKey = 'dailyContractsState';
@@ -44,6 +44,7 @@ export class DailyContractsService implements OnDestroy {
   private onlineListener?: () => void;
   private authSubscription?: { unsubscribe(): void };
   private isHydratingRemote = false;
+  private isDestroyed = false;
 
   private get pointsService(): PointsService {
     return this.injector.get(PointsService);
@@ -126,7 +127,7 @@ export class DailyContractsService implements OnDestroy {
 
   trackPrestige(): void {
     this.incrementMetric('prestiges', 1);
-    this.updateObserved({ level: this.playerStats._level.value });
+    this.updateObserved({ level: this.level() });
   }
 
   getSnapshot(): DailyContractsState {
@@ -204,6 +205,7 @@ export class DailyContractsService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.isDestroyed = true;
     if (this.resetTimerId) {
       clearInterval(this.resetTimerId);
     }
@@ -217,7 +219,7 @@ export class DailyContractsService implements OnDestroy {
       window.removeEventListener('online', this.onlineListener);
     }
     this.authSubscription?.unsubscribe();
-    this.persistState();
+    this.persistState(false);
   }
 
   private setupObservers(): void {
@@ -315,7 +317,7 @@ export class DailyContractsService implements OnDestroy {
       const authState = this.supabaseService
         .getClient()
         .auth.onAuthStateChange((_event, session) => {
-          if (session?.user) {
+          if (session?.user && !this.isDestroyed) {
             void this.hydrateFromRemote();
           }
         });
@@ -324,7 +326,7 @@ export class DailyContractsService implements OnDestroy {
 
     if (typeof window !== 'undefined') {
       this.onlineListener = () => {
-        void this.hydrateFromRemote();
+        if (!this.isDestroyed) void this.hydrateFromRemote();
       };
       window.addEventListener('online', this.onlineListener);
     }
@@ -333,7 +335,7 @@ export class DailyContractsService implements OnDestroy {
   }
 
   private async hydrateFromRemote(): Promise<void> {
-    if (this.isHydratingRemote) {
+    if (this.isDestroyed || this.isHydratingRemote) {
       return;
     }
 
@@ -344,6 +346,8 @@ export class DailyContractsService implements OnDestroy {
     this.isHydratingRemote = true;
     try {
       const remote = await this.supabaseService.getDailyContractsState();
+      if (this.isDestroyed) return;
+
       if (remote.data) {
         const merged = this.mergeStates(this._state(), remote.data);
         this._state.set(this.normalizeState(merged));
@@ -353,6 +357,8 @@ export class DailyContractsService implements OnDestroy {
       }
 
       await this.pushRemoteState();
+    } catch {
+      // La sincronización remota es opcional, se reintentará al volver a estar online
     } finally {
       this.isHydratingRemote = false;
     }
@@ -462,7 +468,7 @@ export class DailyContractsService implements OnDestroy {
   }
 
   private queueRemoteSync(): void {
-    if (this.isHydratingRemote || this.remoteSyncTimerId) {
+    if (this.isDestroyed || this.isHydratingRemote || this.remoteSyncTimerId) {
       return;
     }
 
@@ -473,6 +479,10 @@ export class DailyContractsService implements OnDestroy {
   }
 
   private async pushRemoteState(): Promise<void> {
+    if (this.isDestroyed) {
+      return;
+    }
+
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       return;
     }
@@ -642,7 +652,7 @@ export class DailyContractsService implements OnDestroy {
     ).length;
 
     return {
-      level: this.playerStats._level.value,
+      level: this.level(),
       prestigeLevel: this.prestigeService.prestigeLevel(),
       croquetasPerSecond: this.safeDecimalToNumber(this.pointsService.getPointsPerSecond()),
       remainingUpgrades,
@@ -664,7 +674,7 @@ export class DailyContractsService implements OnDestroy {
   private createObservedSnapshot(): DailyContractsObservedState {
     return {
       totalClicks: this.playerStats.totalClicks(),
-      level: this.playerStats._level.value,
+      level: this.level(),
     };
   }
 
@@ -832,7 +842,7 @@ export class DailyContractsService implements OnDestroy {
   }
 
   private scheduleSave(): void {
-    if (this.saveTimerId) {
+    if (this.isDestroyed || this.saveTimerId) {
       return;
     }
 

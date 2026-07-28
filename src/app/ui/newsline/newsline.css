@@ -99,6 +99,22 @@
   cursor: pointer;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .newsline-content {
+    animation: none;
+    transform: none;
+  }
+
+  .newsline-content span:not(.separator) {
+    animation: none;
+    opacity: 1;
+  }
+
+  .newsline-container {
+    transition: none;
+  }
+}
+
 @media (max-width: 1344px) {
   .newsline-container {
     box-shadow: #00000048 0px 2px 4px, #0000001e 0px 5px 10px -3px, #0000001f 0px -3px 0px inset;

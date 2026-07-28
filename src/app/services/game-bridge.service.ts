@@ -1,4 +1,5 @@
-import { Injectable, signal, NgZone, inject } from '@angular/core';
+import { Injectable, signal, NgZone, inject, OnDestroy } from '@angular/core';
+import Decimal from 'break_infinity.js';
 
 /**
  * Puente entre el Game Loop y la UI de Angular
@@ -6,14 +7,14 @@ import { Injectable, signal, NgZone, inject } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class GameBridgeService {
+export class GameBridgeService implements OnDestroy {
   private ngZone = inject(NgZone);
 
   private readonly UI_UPDATE_INTERVAL_MS = 50;
   private lastUiUpdate = 0;
 
-  private rawPoints = 0;
-  private rawPointsPerSecond = 0;
+  private rawPoints = new Decimal(0);
+  private rawPointsPerSecond = new Decimal(0);
   private rawMultiplier = 1;
 
   private _displayPoints = signal<string>('0');
@@ -60,16 +61,16 @@ export class GameBridgeService {
   /**
    * Actualiza los puntos desde el game loop
    */
-  updatePoints(value: number): void {
-    this.rawPoints = value;
+  updatePoints(value: Decimal | number | string): void {
+    this.rawPoints = value instanceof Decimal ? value : new Decimal(value);
     this.hasPendingChanges = true;
   }
 
   /**
    * Actualiza los puntos por segundo desde el game loop
    */
-  updatePointsPerSecond(value: number): void {
-    this.rawPointsPerSecond = value;
+  updatePointsPerSecond(value: Decimal | number | string): void {
+    this.rawPointsPerSecond = value instanceof Decimal ? value : new Decimal(value);
     this.hasPendingChanges = true;
   }
 
@@ -84,9 +85,14 @@ export class GameBridgeService {
   /**
    * Actualiza múltiples valores a la vez
    */
-  updateAll(points: number, pointsPerSecond: number, multiplier?: number): void {
-    this.rawPoints = points;
-    this.rawPointsPerSecond = pointsPerSecond;
+  updateAll(
+    points: Decimal | number | string,
+    pointsPerSecond: Decimal | number | string,
+    multiplier?: number,
+  ): void {
+    this.rawPoints = points instanceof Decimal ? points : new Decimal(points);
+    this.rawPointsPerSecond =
+      pointsPerSecond instanceof Decimal ? pointsPerSecond : new Decimal(pointsPerSecond);
     if (multiplier !== undefined) {
       this.rawMultiplier = multiplier;
     }
@@ -108,40 +114,42 @@ export class GameBridgeService {
    * Formatea números grandes para mostrar en UI.
    * Escalas alineadas con PointsService.formatPoints() para consistencia.
    */
-  private static readonly UNITS: [number, string][] = [
-    [1e63, 'Vg'],
-    [1e60, 'Nv'],
-    [1e57, 'Od'],
-    [1e54, 'Sd'],
-    [1e51, 'Sxd'],
-    [1e48, 'Qnd'],
-    [1e45, 'Qtd'],
-    [1e42, 'Trd'],
-    [1e39, 'Dod'],
-    [1e36, 'Und'],
-    [1e33, 'Dc'],
-    [1e30, 'No'],
-    [1e27, 'Oc'],
-    [1e24, 'Sp'],
-    [1e21, 'Sx'],
-    [1e18, 'Qi'],
-    [1e15, 'Qa'],
-    [1e12, 'T'],
-    [1e9, 'B'],
-    [1e6, 'M'],
-    [1e3, 'K'],
+  private static readonly UNITS: readonly (readonly [Decimal, string])[] = [
+    [new Decimal('1e63'), 'Vg'],
+    [new Decimal('1e60'), 'Nv'],
+    [new Decimal('1e57'), 'Od'],
+    [new Decimal('1e54'), 'Sd'],
+    [new Decimal('1e51'), 'Sxd'],
+    [new Decimal('1e48'), 'Qnd'],
+    [new Decimal('1e45'), 'Qtd'],
+    [new Decimal('1e42'), 'Trd'],
+    [new Decimal('1e39'), 'Dod'],
+    [new Decimal('1e36'), 'Und'],
+    [new Decimal('1e33'), 'Dc'],
+    [new Decimal('1e30'), 'No'],
+    [new Decimal('1e27'), 'Oc'],
+    [new Decimal('1e24'), 'Sp'],
+    [new Decimal('1e21'), 'Sx'],
+    [new Decimal('1e18'), 'Qi'],
+    [new Decimal('1e15'), 'Qa'],
+    [new Decimal('1e12'), 'T'],
+    [new Decimal('1e9'), 'B'],
+    [new Decimal('1e6'), 'M'],
+    [new Decimal('1e3'), 'K'],
   ];
 
-  private formatNumber(value: number): string {
-    if (value < 1000) return Math.floor(value).toString();
+  private formatNumber(value: Decimal): string {
+    const abs = value.abs();
+    const sign = value.lt(0) ? '-' : '';
 
-    const abs = Math.abs(value);
-    const sign = value < 0 ? '-' : '';
+    if (abs.lt(1000)) {
+      return `${sign}${abs.floor().toString()}`;
+    }
 
     for (const [threshold, suffix] of GameBridgeService.UNITS) {
-      if (abs >= threshold) {
-        const normalized = abs / threshold;
-        const decimals = normalized < 10 ? 2 : normalized < 100 ? 1 : 0;
+      if (abs.gte(threshold)) {
+        const normalized = abs.div(threshold);
+        const decimals = normalized.lt(10) ? 2 : normalized.lt(100) ? 1 : 0;
         const formatted = normalized
           .toFixed(decimals)
           .replace(/\.0+$/, '')
@@ -150,20 +158,20 @@ export class GameBridgeService {
       }
     }
 
-    return Math.floor(value).toString();
+    return `${sign}${abs.floor().toString()}`;
   }
 
   /**
    * Obtiene el valor raw de puntos (para cálculos internos)
    */
-  getRawPoints(): number {
+  getRawPoints(): Decimal {
     return this.rawPoints;
   }
 
   /**
    * Obtiene el valor raw de puntos por segundo
    */
-  getRawPointsPerSecond(): number {
+  getRawPointsPerSecond(): Decimal {
     return this.rawPointsPerSecond;
   }
 

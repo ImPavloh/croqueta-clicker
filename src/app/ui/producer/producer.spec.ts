@@ -9,6 +9,7 @@ import { PointsService } from '@services/points.service';
 import { AudioService } from '@services/audio.service';
 import { ShopControlsService } from '@services/shop-controls.service';
 import { OptionsService } from '@services/options.service';
+import { DailyContractsService } from '@services/daily-contracts.service';
 
 // mocks para cada servicio inyectado en Producer
 const mockPlayerStats = {
@@ -38,6 +39,11 @@ const mockShopControlsService = {
 const mockOptionsService = {
   getGameItem: vi.fn(),
   setGameItem: vi.fn(),
+  gameItemsVersion: vi.fn().mockReturnValue(0),
+};
+
+const mockDailyContractsService = {
+  trackProducerPurchase: vi.fn(),
 };
 
 // Mock de configuración mínima requerida por el componente
@@ -69,6 +75,7 @@ describe('Producer', () => {
         { provide: AudioService, useValue: mockAudioService },
         { provide: ShopControlsService, useValue: mockShopControlsService },
         { provide: OptionsService, useValue: mockOptionsService },
+        { provide: DailyContractsService, useValue: mockDailyContractsService },
       ],
     }).compileComponents();
   });
@@ -87,8 +94,8 @@ describe('Producer', () => {
     expect(component).toBeTruthy();
 
     // comprobar que las inicializaciones básicas ocurrieron
-    expect(component.unlocked).toBe(true);
-    expect(component.price.toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
+    expect(component.unlocked()).toBe(true);
+    expect(component.price().toNumber()).toBeGreaterThan(0); // Verificar que calculateBulkPrice se ejecutó
   });
 
   it('renders locked state with required level when not unlocked', () => {
@@ -99,7 +106,7 @@ describe('Producer', () => {
 
     fixture.detectChanges();
 
-    expect(component.unlocked).toBe(false);
+    expect(component.unlocked()).toBe(false);
 
     const el = fixture.nativeElement as HTMLElement;
     const locked =
